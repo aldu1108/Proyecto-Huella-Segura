@@ -1,0 +1,2 @@
+Representan las entidades de negocio (Usuario, Mascota, Gasto, etc.).
+Encapsulan datos y reglas de negocio.

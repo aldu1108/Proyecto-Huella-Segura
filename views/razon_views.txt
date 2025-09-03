@@ -1,0 +1,1 @@
+VIEWS Contiene las vistas (pantallas) accesibles por el usuario.

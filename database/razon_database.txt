@@ -1,0 +1,7 @@
+Archivos de definición de la base de datos.
+
+schema.sql: creación de tablas, relaciones, índices.
+
+seed.sql: datos iniciales para pruebas (usuarios demo, mascotas, etc.).
+
+Razón: Mantener scripts SQL versionados permite reconstruir la BD fácilmente.

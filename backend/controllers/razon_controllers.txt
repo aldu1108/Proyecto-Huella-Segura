@@ -1,0 +1,1 @@
+CONTROLLERS Contiene Controladores que coordinan vistas ↔ modelos (ej: UserController.php gestiona login/registro).
