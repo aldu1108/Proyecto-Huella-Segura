@@ -1,9 +1,8 @@
 <?php
 session_start();
-/*require_once '../config.php'; */                                                 /* PENDIENTE A HACER */
 require_once '../reutilizables/header.php';
 require_once '../reutilizables/bottom_nav.php';
-/*
+
 // Verificar si está logueado
 if (!isset($_SESSION['user_id'])) {
     header('Location: /auth/login.php');
@@ -158,8 +157,346 @@ $lost_pets = [
                 </div>
                 
                 <div class="pets-grid">
-                    <?php /* foreach ($pets as $pet): */ ?>                                                                          <!--PENDIENTE A HACER-->
-                        <div class="pet-card" onclick="openPetProfile(<?php /* echo $pet['id']; */ ?>)">                             <!--PENDIENTE A HACER-->
+                    <!-- Pet Card Demo 1 -->
+                    <div class="pet-card" onclick="openPetProfile(1)">
+                        <div class="pet-image">
+                            <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Max" onerror="this.style.background='linear-gradient(135deg, #f3c623, #f7d794)'; this.innerHTML='🐕';">
+                            <div class="pet-status active"></div>
+                        </div>
+                        <div class="pet-info">
+                            <h4>Max</h4>
+                            <p class="pet-breed">Golden Retriever</p>
+                            <p class="pet-age">3 años</p>
+                        </div>
+                        <div class="pet-next-event">
+                            <span class="event-text">Vacuna anual - 14:00 Urgente</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Pet Card Demo 2 -->
+                    <div class="pet-card" onclick="openPetProfile(2)">
+                        <div class="pet-image">
+                            <img src="https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Luna" onerror="this.style.background='linear-gradient(135deg, #f3c623, #f7d794)'; this.innerHTML='🐱';">
+                            <div class="pet-status active"></div>
+                        </div>
+                        <div class="pet-info">
+                            <h4>Luna</h4>
+                            <p class="pet-breed">Gato Persa</p>
+                            <p class="pet-age">2 años</p>
+                        </div>
+                        <div class="pet-next-event">
+                            <span class="event-text">Medicina para alergias - 18:30</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Pet Card -->
+                    <div class="pet-card add-pet-card" onclick="addNewPet()">
+                        <div class="add-pet-content">
+                            <div class="add-pet-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </div>
+                            <h4>Agregar Mascota</h4>
+                            <p>Registra una nueva mascota</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Adoption Banner -->
+            <section class="adoption-banner">
+                <div class="adoption-content">
+                    <div class="adoption-text">
+                        <div class="adoption-icon">❤️</div>
+                        <div>
+                            <h4>¿Buscas una nueva mascota?</h4>
+                            <p>Hay mascotas esperando un hogar. La adopción es amor puro.</p>
+                        </div>
+                    </div>
+                    <div class="adoption-pets">
+                        <span class="pet-emoji">🐕</span>
+                        <span class="pet-emoji">🐱</span>
+                    </div>
+                </div>
+                <button class="adoption-btn" onclick="viewAdoptions()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    Ver Mascotas en Adopción
+                </button>
+            </section>
+
+            <!-- Calendar Section -->
+            <section class="calendar-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <h3>Calendario de Cuidados</h3>
+                    </div>
+                    <span class="events-count">5 eventos programados</span>
+                </div>
+                
+                <div class="calendar-widget">
+                    <div class="calendar-header">
+                        <button class="nav-btn" onclick="previousMonth()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15,18 9,12 15,6"></polyline>
+                            </svg>
+                        </button>
+                        <h4>septiembre de 2025</h4>
+                        <button class="nav-btn" onclick="nextMonth()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9,6 15,12 9,18"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div id="miniCalendar" class="mini-calendar"></div>
+                    
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot has-events"></div>
+                            <span>Días con eventos programados</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Today's Events -->
+            <section class="today-events-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12,6 12,12 16,14"></polyline>
+                        </svg>
+                        <h3>Hoy</h3>
+                    </div>
+                    <span class="events-badge">2</span>
+                </div>
+                
+                <div class="events-list">
+                    <div class="event-item priority-urgent" onclick="openReminder('Max')">
+                        <div class="event-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 14l-1.5-1.5L15 15l-2.5-2.5L10 15l-2.5-2.5L5 15l1.5 1.5L5 18h14l-1.5-1.5L19 14z"/>
+                            </svg>
+                        </div>
+                        <div class="event-info">
+                            <div class="event-header">
+                                <span class="pet-name">Max</span>
+                                <span class="event-time">14:00</span>
+                            </div>
+                            <div class="event-task">Vacuna</div>
+                            <div class="event-priority">Urgente</div>
+                        </div>
+                        <button class="event-action">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9,18 15,12 9,6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="event-item priority-medium" onclick="openReminder('Luna')">
+                        <div class="event-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 12c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM9 12c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/>
+                            </svg>
+                        </div>
+                        <div class="event-info">
+                            <div class="event-header">
+                                <span class="pet-name">Luna</span>
+                                <span class="event-time">18:30</span>
+                            </div>
+                            <div class="event-task">Medicina</div>
+                        </div>
+                        <button class="event-action">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9,18 15,12 9,6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Events -->
+            <section class="upcoming-events-section">
+                <div class="section-header">
+                    <h3>Próximos eventos esta semana</h3>
+                </div>
+                
+                <div class="upcoming-events-list">
+                    <div class="upcoming-event priority-high">
+                        <div class="event-indicator"></div>
+                        <div class="event-content">
+                            <div class="event-pet">Max</div>
+                            <div class="event-type">Vacuna</div>
+                            <div class="event-date">Mañana</div>
+                        </div>
+                    </div>
+                    
+                    <div class="upcoming-event priority-medium">
+                        <div class="event-indicator"></div>
+                        <div class="event-content">
+                            <div class="event-pet">Luna</div>
+                            <div class="event-type">Medicina</div>
+                            <div class="event-date">mié, 3 sept</div>
+                        </div>
+                    </div>
+                    
+                    <div class="upcoming-event priority-low">
+                        <div class="event-indicator"></div>
+                        <div class="event-content">
+                            <div class="event-pet">Max</div>
+                            <div class="event-type">Cita veterinario</div>
+                            <div class="event-date">lun, 8 sept</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Urgent Reminders -->
+            <section class="urgent-reminders-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <h3>Recordatorios Urgentes</h3>
+                    </div>
+                    <span class="urgent-count">2 para hoy</span>
+                </div>
+                
+                <div class="urgent-list">
+                    <!-- Para hoy -->
+                    <div class="urgent-group">
+                        <h4 class="urgent-group-title">• Para hoy</h4>
+                        <div class="urgent-item">
+                            <div class="urgent-content">
+                                <div class="urgent-header">
+                                    <span class="urgent-pet">Max</span>
+                                    <span class="urgent-task">Vacuna</span>
+                                </div>
+                                <div class="urgent-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    14:00
+                                    <span class="urgent-badge">Urgente</span>
+                                </div>
+                            </div>
+                            <button class="urgent-action">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="urgent-item">
+                            <div class="urgent-content">
+                                <div class="urgent-header">
+                                    <span class="urgent-pet">Luna</span>
+                                    <span class="urgent-task">Medicina</span>
+                                </div>
+                                <div class="urgent-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    18:30
+                                </div>
+                            </div>
+                            <button class="urgent-action">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Próximamente -->
+                    <div class="urgent-group">
+                        <h4 class="urgent-group-title">• Próximamente</h4>
+                        <div class="upcoming-item">
+                            <div class="upcoming-content">
+                                <div class="upcoming-header">
+                                    <span class="upcoming-date">📅</span>
+                                    <span class="upcoming-text">Mañana</span>
+                                    <span class="upcoming-pet">Max</span>
+                                    <span class="upcoming-task">Cita veterinario</span>
+                                </div>
+                                <div class="upcoming-time">10:00</div>
+                            </div>
+                            <button class="upcoming-action">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="view-all-reminders" onclick="viewAllReminders()">
+                    Ver todos los recordatorios
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </button>
+            </section>
+
+            <!-- Lost Pets Section -->
+            <section class="lost-pets-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <h3>Mascotas Perdidas</h3>
+                    </div>
+                    <a href="/lost-pets" class="view-all-link">Ver todas</a>
+                </div>
+                
+                <div class="lost-pets-list">
+                    <div class="lost-pet-item">
+                        <div class="lost-pet-image">
+                            <img src="https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Buddy" onerror="this.style.background='linear-gradient(135deg, #dc3545, #c82333)'; this.innerHTML='🐕';">
+                            <div class="lost-badge">PERDIDO</div>
+                        </div>
+                        <div class="lost-pet-info">
+                            <h4>Buddy</h4>
+                            <p class="lost-breed">Perro Labrador</p>
+                            <div class="lost-details">
+                                <span class="lost-location">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Parque del Retiro
+                                </span>
+                                <span class="lost-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    Hace 3 días
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lost-pet-item">
+                        <div class="lost-pet-image">
+                            <img src="https://images.pexels.com/photos/416160/pexels-photo-416160.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Mimi" onerror="this.style.background='linear-gradient(135deg, #dc3545, #c82333)'; this.innerHTML='🐱';">
                             <div class="pet-image">
                                 <!--<img src="<?php /* echo $pet['image']; */ ?>" alt="<?php /* echo $pet['name']; */ ?>" onerror="this.src='/frontend/img/placeholder-pet.jpg'"> -->                         <!--PENDIENTE A HACER-->
                                 <div class="pet-status active"></div>
@@ -391,8 +728,8 @@ $lost_pets = [
                                         </svg>
                                         <?php /* echo htmlspecialchars($reminder['time']); */ ?>                                                            <!--PENDIENTE A HACER-->
                                         <?php /* if ($reminder['priority'] === 'urgent'): */ ?>                                                             <!--PENDIENTE A HACER-->
-                                                <span class="urgent-badge">Urgente</span>
-                                        <?php /* endif; */ ?>                                                                                               <!--PENDIENTE A HACER-->
+                            <h4>Mimi</h4>
+                            <p class="lost-breed">Gato Siamés</p>
                                     </div>
                                 </div>
                                 <button class="urgent-action">
@@ -464,14 +801,14 @@ $lost_pets = [
                                             <circle cx="12" cy="10" r="3"></circle>
                                         </svg>
                                         <?php /* echo htmlspecialchars($lost_pet['location']); */ ?>                                                                                                    <!--PENDIENTE A HACER-->
-                                    </span>
+                                    Gran Vía
                                     <span class="lost-time">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <polyline points="12,6 12,12 16,14"></polyline>
                                         </svg>
                                         Hace <?php /* echo $lost_pet['days']; */ ?> días                                                                                                                <!--PENDIENTE A HACER-->
-                                    </span>
+                                    Hace 5 días
                                 </div>
                             </div>
                         </div>
@@ -487,7 +824,6 @@ $lost_pets = [
                             <p>Tu ayuda puede ser crucial para reunir a una familia con su mascota.</p>
                         </div>
                     </div>
-                    <button class="help-btn" onclick="viewAllLostPets()">
                         Ver Todas las Mascotas Perdidas
                     </button>
                 </div>
@@ -506,9 +842,9 @@ $lost_pets = [
         </div>
     </main>
 
-    <?php /* renderBottomNav('home'); */ ?>
+    <?php renderBottomNav('home'); ?>
 
-    <script src="../frontend/js/dashboard.js"></script>
+    <script src="../frontend/js/app.js"></script>
     <script>
         // JavaScript functions
         function toggleMenu() {
