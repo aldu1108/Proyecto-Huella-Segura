@@ -1,1333 +1,632 @@
-/* Dashboard Styles - Mobile First */
-
-.main-content {
-    padding-top: 1rem;
-    padding-bottom: 120px;
-    /* Space for bottom nav */
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-/* Welcome Banner */
-.welcome-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.welcome-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="40">🐾</text></svg>') no-repeat;
-    opacity: 0.2;
-    transform: rotate(15deg);
-}
-
-.banner-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-}
-
-.banner-text h2 {
-    margin: 0 0 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.banner-text p {
-    margin: 0;
-    opacity: 0.9;
-    font-size: 0.95rem;
-}
-
-.quick-action-btn {
-    position: relative;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.quick-action-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
-}
-
-.notification-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #ff4757;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    min-width: 18px;
-    text-align: center;
-    line-height: 1;
-    animation: pulse 2s infinite;
-}
-
-/* Search Section */
-.search-section {
-    margin-bottom: 1.5rem;
-}
-
-.search-container-main {
-    position: relative;
-}
-
-.search-bar-main {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 16px;
-    padding: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-.search-bar-main:focus-within {
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
-    border-color: #f3c623;
-}
-
-.search-icon {
-    color: #6c757d;
-    margin-right: 1rem;
-    flex-shrink: 0;
-}
-
-.search-input-main {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    background: transparent;
-}
-
-.search-input-main::placeholder {
-    color: #adb5bd;
-}
-
-.filter-btn-main {
-    background: #f8f9fa;
-    border: none;
-    border-radius: 12px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6c757d;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-left: 1rem;
-}
-
-.filter-btn-main:hover {
-    background: #e9ecef;
-    color: #495057;
-}
-
-/* Section Headers */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.section-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: #495057;
-}
-
-.section-title h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.section-title svg {
-    color: #6c757d;
-}
-
-.add-btn {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
-}
-
-.add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-}
-
-/* Pets Section */
-.pets-section {
-    margin-bottom: 2rem;
-}
-
-.pets-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-}
-
-.pet-card {
-    background: white;
-    border-radius: 16px;
-    padding: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f3f4;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.pet-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-}
-
-.pet-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #f3c623, #f7d794);
-}
-
-.pet-image {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 1rem;
-    float: left;
-    margin-right: 1rem;
-}
-
-.pet-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.pet-status {
-    position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid white;
-}
-
-.pet-status.active {
-    background: #28a745;
-}
-
-.pet-info {
-    overflow: hidden;
-}
-
-.pet-info h4 {
-    margin: 0 0 0.25rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.pet-breed {
-    margin: 0 0 0.25rem;
-    color: #6c757d;
-    font-size: 0.9rem;
-}
-
-.pet-age {
-    margin: 0;
-    color: #8e9ba5;
-    font-size: 0.85rem;
-}
-
-.pet-next-event {
-    clear: both;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-    border-radius: 8px;
-    border-left: 4px solid #f39c12;
-}
-
-.event-text {
-    font-size: 0.8rem;
-    color: #856404;
-    font-weight: 500;
-}
-
-/* Adoption Banner */
-.adoption-banner {
-    background: linear-gradient(135deg, #ff7675, #fd79a8);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.adoption-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.adoption-text {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.adoption-icon {
-    font-size: 2rem;
-    animation: heartbeat 2s ease-in-out infinite;
-}
-
-.adoption-text h4 {
-    margin: 0 0 0.25rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.adoption-text p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
-
-.adoption-pets {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.pet-emoji {
-    font-size: 1.5rem;
-    animation: bounce 2s infinite;
-}
-
-.pet-emoji:nth-child(2) {
-    animation-delay: 0.5s;
-}
-
-.adoption-btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    width: 100%;
-    justify-content: center;
-}
-
-.adoption-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-}
-
-/* Calendar Section */
-.calendar-section {
-    margin-bottom: 2rem;
-}
-
-.events-count {
-    background: #e3f2fd;
-    color: #1976d2;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.calendar-widget {
-    background: white;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f3f4;
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.calendar-header h4 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.nav-btn {
-    background: #f8f9fa;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #6c757d;
-}
-
-.nav-btn:hover {
-    background: #e9ecef;
-    color: #495057;
-}
-
-.calendar-subheader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #f1f3f4;
-}
-
-.month-nav {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #6c757d;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.month-nav:hover {
-    background: #f8f9fa;
-    color: #495057;
-}
-
-.month-year {
-    font-weight: 600;
-    color: #333;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.25rem;
-    margin-bottom: 1rem;
-}
-
-.day-header {
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #6c757d;
-    padding: 0.5rem 0;
-}
-
-.day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-}
-
-.day:hover {
-    background: #f8f9fa;
-}
-
-.day.prev-month,
-.day.next-month {
-    color: #adb5bd;
-}
-
-.day.today {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    font-weight: 600;
-}
-
-.day.has-event::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
-    background: #f39c12;
-    border-radius: 50%;
-}
-
-.day.today.has-event::after {
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.calendar-legend {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #f1f3f4;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: #6c757d;
-}
-
-.legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-}
-
-.legend-dot.has-events {
-    background: #f39c12;
-}
-
-/* Today's Events */
-.today-events-section {
-    margin-bottom: 2rem;
-}
-
-.events-badge {
-    background: #dc3545;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    min-width: 20px;
-    text-align: center;
-}
-
-.events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.event-item {
-    background: white;
-    border-radius: 12px;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-left: 4px solid transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.event-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.event-item.priority-urgent {
-    border-left-color: #dc3545;
-    background: linear-gradient(135deg, #ffffff, #fff5f5);
-}
-
-.event-item.priority-medium {
-    border-left-color: #ffc107;
-    background: linear-gradient(135deg, #ffffff, #fffbf0);
-}
-
-.event-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.event-item.priority-urgent .event-icon {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    color: white;
-}
-
-.event-item.priority-medium .event-icon {
-    background: linear-gradient(135deg, #ffc107, #e0a800);
-    color: white;
-}
-
-.event-info {
-    flex: 1;
-}
-
-.event-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.25rem;
-}
-
-.pet-name {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.95rem;
-}
-
-.event-time {
-    color: #6c757d;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.event-task {
-    color: #495057;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-}
-
-.event-priority {
-    background: #dc3545;
-    color: white;
-    padding: 0.125rem 0.5rem;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    display: inline-block;
-}
-
-.event-action {
-    background: #f8f9fa;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #6c757d;
-}
-
-.event-action:hover {
-    background: #e9ecef;
-    color: #495057;
-}
-
-/* Upcoming Events */
-.upcoming-events-section {
-    margin-bottom: 2rem;
-}
-
-.upcoming-events-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.upcoming-event {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: white;
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border-left: 4px solid transparent;
-}
-
-.upcoming-event.priority-high {
-    border-left-color: #28a745;
-    background: linear-gradient(135deg, #ffffff, #f8fff9);
-}
-
-.upcoming-event.priority-medium {
-    border-left-color: #ffc107;
-    background: linear-gradient(135deg, #ffffff, #fffbf0);
-}
-
-.upcoming-event.priority-low {
-    border-left-color: #17a2b8;
-    background: linear-gradient(135deg, #ffffff, #f0fdff);
-}
-
-.event-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.upcoming-event.priority-high .event-indicator {
-    background: #28a745;
-}
-
-.upcoming-event.priority-medium .event-indicator {
-    background: #ffc107;
-}
-
-.upcoming-event.priority-low .event-indicator {
-    background: #17a2b8;
-}
-
-.event-content {
-    flex: 1;
-}
-
-.event-pet {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.95rem;
-    margin-bottom: 0.25rem;
-}
-
-.event-type {
-    color: #495057;
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
-}
-
-.event-date {
-    color: #6c757d;
-    font-size: 0.8rem;
-}
-
-/* Urgent Reminders */
-.urgent-reminders-section {
-    margin-bottom: 2rem;
-}
-
-.urgent-count {
-    background: #fff3cd;
-    color: #856404;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.urgent-list {
-    background: white;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f3f4;
-    margin-bottom: 1rem;
-}
-
-.urgent-group {
-    margin-bottom: 1.5rem;
-}
-
-.urgent-group:last-child {
-    margin-bottom: 0;
-}
-
-.urgent-group-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #495057;
-    margin: 0 0 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.urgent-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: linear-gradient(135deg, #fff5f5, #ffffff);
-    border-radius: 12px;
-    margin-bottom: 0.75rem;
-    border-left: 4px solid #dc3545;
-}
-
-.urgent-item:last-child {
-    margin-bottom: 0;
-}
-
-.urgent-content {
-    flex: 1;
-}
-
-.urgent-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.urgent-pet {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.95rem;
-}
-
-.urgent-task {
-    color: #495057;
-    font-size: 0.9rem;
-}
-
-.urgent-time {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: #6c757d;
-}
-
-.urgent-badge {
-    background: #dc3545;
-    color: white;
-    padding: 0.125rem 0.5rem;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    margin-left: 0.5rem;
-}
-
-.urgent-action {
-    background: #f8f9fa;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #6c757d;
-}
-
-.urgent-action:hover {
-    background: #e9ecef;
-    color: #495057;
-}
-
-.upcoming-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: linear-gradient(135deg, #fffbf0, #ffffff);
-    border-radius: 12px;
-    margin-bottom: 0.75rem;
-    border-left: 4px solid #ffc107;
-}
-
-.upcoming-content {
-    flex: 1;
-}
-
-.upcoming-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-    font-size: 0.9rem;
-}
-
-.upcoming-text {
-    font-weight: 600;
-    color: #333;
-}
-
-.upcoming-pet {
-    color: #495057;
-}
-
-.upcoming-task {
-    color: #6c757d;
-}
-
-.upcoming-time {
-    color: #856404;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.upcoming-action {
-    background: #f8f9fa;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #6c757d;
-}
-
-.upcoming-action:hover {
-    background: #e9ecef;
-    color: #495057;
-}
-
-.view-all-reminders {
-    background: transparent;
-    border: 2px solid #6c757d;
-    color: #6c757d;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.view-all-reminders:hover {
-    background: #6c757d;
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Lost Pets Section */
-.lost-pets-section {
-    margin-bottom: 2rem;
-}
-
-.view-all-link {
-    color: #6c757d;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.view-all-link:hover {
-    color: #f3c623;
-}
-
-.lost-pets-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.lost-pet-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: white;
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border-left: 4px solid #dc3545;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.lost-pet-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.lost-pet-image {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.lost-pet-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.lost-badge {
-    position: absolute;
-    top: -4px;
-    right: -8px;
-    background: #dc3545;
-    color: white;
-    font-size: 0.6rem;
-    font-weight: bold;
-    padding: 0.125rem 0.375rem;
-    border-radius: 8px;
-    transform: rotate(15deg);
-}
-
-.lost-pet-info {
-    flex: 1;
-}
-
-.lost-pet-info h4 {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.lost-breed {
-    margin: 0 0 0.5rem;
-    color: #6c757d;
-    font-size: 0.85rem;
-}
-
-.lost-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.lost-location,
-.lost-time {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    font-size: 0.8rem;
-    color: #8e9ba5;
-}
-
-.lost-location svg,
-.lost-time svg {
-    flex-shrink: 0;
-}
-
-/* Help Banner */
-.help-banner {
-    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid #f0e68c;
-}
-
-.help-content {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.help-icon {
-    font-size: 2rem;
-    animation: pulse 2s infinite;
-}
-
-.help-text h4 {
-    margin: 0 0 0.25rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #856404;
-}
-
-.help-text p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #6c5f00;
-}
-
-.help-btn {
-    background: #f39c12;
-    border: none;
-    color: white;
-    border-radius: 12px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.help-btn:hover {
-    background: #e67e22;
-    transform: translateY(-2px);
-}
-
-/* Report Section */
-.report-section {
-    margin-bottom: 2rem;
-}
-
-.report-btn {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    border: none;
-    color: white;
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    transition: all 0.3s ease;
-    width: 100%;
-    box-shadow: 0 4px 20px rgba(220, 53, 69, 0.3);
-}
-
-.report-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(220, 53, 69, 0.4);
-}
-
-/* Animations */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.05);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes heartbeat {
-    0% {
-        transform: scale(1);
-    }
-
-    14% {
-        transform: scale(1.1);
-    }
-
-    28% {
-        transform: scale(1);
-    }
-
-    42% {
-        transform: scale(1.1);
-    }
-
-    70% {
-        transform: scale(1);
-    }
-}
-
-@keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        transform: translateY(0);
-    }
-
-    40% {
-        transform: translateY(-10px);
-    }
-
-    60% {
-        transform: translateY(-5px);
-    }
-}
-
-/* Responsive Design */
-@media (min-width: 640px) {
-    .pets-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .banner-content {
-        align-items: flex-start;
-    }
-
-    .banner-text h2 {
-        font-size: 1.75rem;
-    }
-
-    .lost-details {
-        flex-direction: row;
-        gap: 1rem;
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        padding: 0 2rem;
-    }
-
-    .main-content {
-        padding-top: 1.5rem;
-    }
-
-    .welcome-banner {
-        padding: 2rem;
-    }
-
-    .banner-text h2 {
-        font-size: 2rem;
-    }
-
-    .calendar-widget {
-        padding: 2rem;
-    }
-
-    .urgent-list {
-        padding: 2rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    .pets-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .main-content {
-        padding-bottom: 2rem;
-        /* No bottom nav on desktop */
-    }
-
-    .container {
-        display: grid;
-        grid-template-columns: 1fr 300px;
-        gap: 2rem;
-        align-items: start;
-    }
-
-    .main-grid {
-        display: contents;
-    }
-
-    /* Sidebar layout for desktop */
-    .calendar-section,
-    .urgent-reminders-section {
-        grid-column: 2;
-    }
-}
-
-@media (min-width: 1200px) {
-    .pets-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    .main-content {
-        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    }
-
-    .pet-card,
-    .calendar-widget,
-    .urgent-list,
-    .event-item,
-    .upcoming-event,
-    .lost-pet-item {
-        background: #2d2d2d;
-        color: #f8f9fa;
-        border-color: #404040;
-    }
-
-    .section-title h3,
-    .pet-info h4,
-    .urgent-pet,
-    .event-pet {
-        color: #f8f9fa;
-    }
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Focus styles for keyboard navigation */
-.pet-card:focus,
-.event-item:focus,
-.lost-pet-item:focus,
-.urgent-action:focus,
-.event-action:focus {
-    outline: 2px solid #f3c623;
-    outline-offset: 2px;
-}
+<?php
+session_start();
+require_once '../reutilizables/header.php';
+require_once '../reutilizables/bottom_nav.php';
+
+// Verificar si está logueado
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /auth/login.php');
+    exit;
+}
+
+// Datos simulados para el dashboard
+$pets = [
+    [
+        'id' => 1,
+        'name' => 'Max',
+        'breed' => 'Golden Retriever',
+        'age' => '3 años',
+        'image' => '/frontend/img/pets/max.jpg',
+        'next_event' => 'Vacuna anual - 14:00 Urgente'
+    ],
+    [
+        'id' => 2,
+        'name' => 'Luna',
+        'breed' => 'Gato Persa',
+        'age' => '2 años',
+        'image' => '/frontend/img/pets/luna.jpg',
+        'next_event' => 'Medicina para alergias - 18:30'
+    ]
+];
+
+$calendar_events = [
+    ['date' => '1', 'has_events' => true],
+    ['date' => '2', 'has_events' => false],
+    ['date' => '3', 'has_events' => true],
+    ['date' => '8', 'has_events' => true]
+];
+
+$upcoming_events = [
+    [
+        'pet' => 'Max',
+        'type' => 'Vacuna',
+        'date' => 'Mañana',
+        'priority' => 'high'
+    ],
+    [
+        'pet' => 'Luna',
+        'type' => 'Medicina',
+        'date' => 'mié, 3 sept',
+        'priority' => 'medium'
+    ],
+    [
+        'pet' => 'Max',
+        'type' => 'Cita veterinario',
+        'date' => 'lun, 8 sept',
+        'priority' => 'low'
+    ]
+];
+
+$reminders_today = [
+    [
+        'pet' => 'Max',
+        'task' => 'Vacuna',
+        'time' => '14:00',
+        'priority' => 'urgent'
+    ],
+    [
+        'pet' => 'Luna',
+        'task' => 'Medicina',
+        'time' => '18:30',
+        'priority' => 'medium'
+    ]
+];
+
+$lost_pets = [
+    [
+        'name' => 'Buddy',
+        'breed' => 'Perro Labrador',
+        'location' => 'Parque del Retiro',
+        'days' => 3,
+        'image' => '/frontend/img/lost_pets/buddy.jpg'
+    ],
+    [
+        'name' => 'Mimi',
+        'breed' => 'Gato Siamés',
+        'location' => 'Gran Vía',
+        'days' => 5,
+        'image' => '/frontend/img/lost_pets/mimi.jpg'
+    ]
+];
+*/
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PetCare</title>
+    <link rel="stylesheet" href="../frontend/css/global.css">
+    <link rel="stylesheet" href="../frontend/css/dashboard.css">
+</head>
+<body>
+    <?php /* renderHeader("PetCare", true, true, true); */ ?>                       <!-- PENDIENTE A HACER -->
+    
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="banner-content">
+                    <div class="banner-text">
+                        <h2>¡Hola! 👋</h2>
+                        <p>¿Cómo están tus mascotas hoy?</p>
+                    </div>
+                    <div class="banner-actions">
+                        <button class="quick-action-btn" onclick="showNotifications()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span class="notification-badge">2</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Bar -->
+            <section class="search-section">
+                <div class="search-container-main">
+                    <div class="search-bar-main">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <input type="text" class="search-input-main" placeholder="Buscar mascotas, veterinarios, recordatorios...">
+                        <button class="filter-btn-main">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Pets Section -->
+            <section class="pets-section">
+                <div class="section-header">
+                    <h3>Mis Mascotas</h3>
+                    <button class="add-btn" onclick="addNewPet()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Agregar
+                    </button>
+                </div>
+                
+                <div class="pets-grid">
+                    <!-- Pet Card Demo 1 -->
+                    <div class="pet-card" onclick="openPetProfile(1)">
+                        <div class="pet-image">
+                            <img src="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Max" onerror="this.style.background='linear-gradient(135deg, #f3c623, #f7d794)'; this.innerHTML='🐕';">
+                            <div class="pet-status active"></div>
+                        </div>
+                        <div class="pet-info">
+                            <h4>Max</h4>
+                            <p class="pet-breed">Golden Retriever</p>
+                            <p class="pet-age">3 años</p>
+                        </div>
+                        <div class="pet-next-event">
+                            <span class="event-text">Vacuna anual - 14:00 Urgente</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Pet Card Demo 2 -->
+                    <div class="pet-card" onclick="openPetProfile(2)">
+                        <div class="pet-image">
+                            <img src="https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Luna" onerror="this.style.background='linear-gradient(135deg, #f3c623, #f7d794)'; this.innerHTML='🐱';">
+                            <div class="pet-status active"></div>
+                        </div>
+                        <div class="pet-info">
+                            <h4>Luna</h4>
+                            <p class="pet-breed">Gato Persa</p>
+                            <p class="pet-age">2 años</p>
+                        </div>
+                        <div class="pet-next-event">
+                            <span class="event-text">Medicina para alergias - 18:30</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Pet Card -->
+                    <div class="pet-card add-pet-card" onclick="addNewPet()">
+                        <div class="add-pet-content">
+                            <div class="add-pet-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </div>
+                            <h4>Agregar Mascota</h4>
+                            <p>Registra una nueva mascota</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Adoption Banner -->
+            <section class="adoption-banner">
+                <div class="adoption-content">
+                    <div class="adoption-text">
+                        <div class="adoption-icon">❤️</div>
+                        <div>
+                            <h4>¿Buscas una nueva mascota?</h4>
+                            <p>Hay mascotas esperando un hogar. La adopción es amor puro.</p>
+                        </div>
+                    </div>
+                    <div class="adoption-pets">
+                        <span class="pet-emoji">🐕</span>
+                        <span class="pet-emoji">🐱</span>
+                    </div>
+                </div>
+                <button class="adoption-btn" onclick="viewAdoptions()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    Ver Mascotas en Adopción
+                </button>
+            </section>
+
+            <!-- Calendar Section -->
+            <section class="calendar-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <h3>Calendario de Cuidados</h3>
+                    </div>
+                    <span class="events-count">5 eventos programados</span>
+                </div>
+                
+                <div class="calendar-widget">
+                    <div class="calendar-header">
+                        <button class="nav-btn" onclick="previousMonth()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15,18 9,12 15,6"></polyline>
+                            </svg>
+                        </button>
+                        <h4>septiembre de 2025</h4>
+                        <button class="nav-btn" onclick="nextMonth()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9,6 15,12 9,18"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div id="miniCalendar" class="mini-calendar"></div>
+                    
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot has-events"></div>
+                            <span>Días con eventos programados</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Today's Events -->
+            <section class="today-events-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12,6 12,12 16,14"></polyline>
+                        </svg>
+                        <h3>Hoy</h3>
+                    </div>
+                    <span class="events-badge">2</span>
+                </div>
+                
+                <div class="events-list">
+                    <div class="event-item priority-urgent" onclick="openReminder('Max')">
+                        <div class="event-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 14l-1.5-1.5L15 15l-2.5-2.5L10 15l-2.5-2.5L5 15l1.5 1.5L5 18h14l-1.5-1.5L19 14z"/>
+                            </svg>
+                        </div>
+                        <div class="event-info">
+                            <div class="event-header">
+                                <span class="pet-name">Max</span>
+                                <span class="event-time">14:00</span>
+                            </div>
+                            <div class="event-task">Vacuna</div>
+                            <div class="event-priority">Urgente</div>
+                        </div>
+                        <button class="event-action">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9,18 15,12 9,6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="event-item priority-medium" onclick="openReminder('Luna')">
+                        <div class="event-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 12c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM9 12c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z"/>
+                            </svg>
+                        </div>
+                        <div class="event-info">
+                            <div class="event-header">
+                                <span class="pet-name">Luna</span>
+                                <span class="event-time">18:30</span>
+                            </div>
+                            <div class="event-task">Medicina</div>
+                        </div>
+                        <button class="event-action">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9,18 15,12 9,6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Events -->
+            <section class="upcoming-events-section">
+                <div class="section-header">
+                    <h3>Próximos eventos esta semana</h3>
+                </div>
+                
+                <div class="upcoming-events-list">
+                    <div class="upcoming-event priority-high">
+                        <div class="event-indicator"></div>
+                        <div class="event-content">
+                            <div class="event-pet">Max</div>
+                            <div class="event-type">Vacuna</div>
+                            <div class="event-date">Mañana</div>
+                        </div>
+                    </div>
+                    
+                    <div class="upcoming-event priority-medium">
+                        <div class="event-indicator"></div>
+                        <div class="event-content">
+                            <div class="event-pet">Luna</div>
+                            <div class="event-type">Medicina</div>
+                            <div class="event-date">mié, 3 sept</div>
+                        </div>
+                    </div>
+                    
+                    <div class="upcoming-event priority-low">
+                        <div class="event-indicator"></div>
+                        <div class="event-content">
+                            <div class="event-pet">Max</div>
+                            <div class="event-type">Cita veterinario</div>
+                            <div class="event-date">lun, 8 sept</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Urgent Reminders -->
+            <section class="urgent-reminders-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <h3>Recordatorios Urgentes</h3>
+                    </div>
+                    <span class="urgent-count">2 para hoy</span>
+                </div>
+                
+                <div class="urgent-list">
+                    <!-- Para hoy -->
+                    <div class="urgent-group">
+                        <h4 class="urgent-group-title">• Para hoy</h4>
+                        <div class="urgent-item">
+                            <div class="urgent-content">
+                                <div class="urgent-header">
+                                    <span class="urgent-pet">Max</span>
+                                    <span class="urgent-task">Vacuna</span>
+                                </div>
+                                <div class="urgent-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    14:00
+                                    <span class="urgent-badge">Urgente</span>
+                                </div>
+                            </div>
+                            <button class="urgent-action">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="urgent-item">
+                            <div class="urgent-content">
+                                <div class="urgent-header">
+                                    <span class="urgent-pet">Luna</span>
+                                    <span class="urgent-task">Medicina</span>
+                                </div>
+                                <div class="urgent-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    18:30
+                                </div>
+                            </div>
+                            <button class="urgent-action">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Próximamente -->
+                    <div class="urgent-group">
+                        <h4 class="urgent-group-title">• Próximamente</h4>
+                        <div class="upcoming-item">
+                            <div class="upcoming-content">
+                                <div class="upcoming-header">
+                                    <span class="upcoming-date">📅</span>
+                                    <span class="upcoming-text">Mañana</span>
+                                    <span class="upcoming-pet">Max</span>
+                                    <span class="upcoming-task">Cita veterinario</span>
+                                </div>
+                                <div class="upcoming-time">10:00</div>
+                            </div>
+                            <button class="upcoming-action">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="view-all-reminders" onclick="viewAllReminders()">
+                    Ver todos los recordatorios
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </button>
+            </section>
+
+            <!-- Lost Pets Section -->
+            <section class="lost-pets-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                        <h3>Mascotas Perdidas</h3>
+                    </div>
+                    <a href="/lost-pets" class="view-all-link">Ver todas</a>
+                </div>
+                
+                <div class="lost-pets-list">
+                    <div class="lost-pet-item">
+                        <div class="lost-pet-image">
+                            <img src="https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Buddy" onerror="this.style.background='linear-gradient(135deg, #dc3545, #c82333)'; this.innerHTML='🐕';">
+                            <div class="lost-badge">PERDIDO</div>
+                        </div>
+                        <div class="lost-pet-info">
+                            <h4>Buddy</h4>
+                            <p class="lost-breed">Perro Labrador</p>
+                            <div class="lost-details">
+                                <span class="lost-location">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Parque del Retiro
+                                </span>
+                                <span class="lost-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    Hace 3 días
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lost-pet-item">
+                        <div class="lost-pet-image">
+                            <img src="https://images.pexels.com/photos/416160/pexels-photo-416160.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop" alt="Mimi" onerror="this.style.background='linear-gradient(135deg, #dc3545, #c82333)'; this.innerHTML='🐱';">
+                            <div class="lost-badge">PERDIDO</div>
+                        </div>
+                        <div class="lost-pet-info">
+                            <h4>Mimi</h4>
+                            <p class="lost-breed">Gato Siamés</p>
+                            <div class="lost-details">
+                                <span class="lost-location">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Gran Vía
+                                </span>
+                                <span class="lost-time">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12,6 12,12 16,14"></polyline>
+                                    </svg>
+                                    Hace 5 días
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Help Banner -->
+                <div class="help-banner">
+                    <div class="help-content">
+                        <div class="help-icon">💡</div>
+                        <div class="help-text">
+                            <h4>¿Has visto alguna mascota perdida?</h4>
+                            <p>Tu ayuda puede ser crucial para reunir a una familia con su mascota.</p>
+                        </div>
+                    </div>
+                    <button class="help-btn" onclick="viewAllLostPets()">
+                        Ver Todas las Mascotas Perdidas
+                    </button>
+                </div>
+            </section>
+
+            <!-- Report Lost Pet Button -->
+            <section class="report-section">
+                <button class="report-btn" onclick="reportLostPet()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    ¡Reportar Mascota Perdida!
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <?php renderBottomNav('home'); ?>
+
+    <script src="../frontend/js/app.js"></script>
+    <script>
+        // JavaScript functions
+        function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            sideMenu.classList.toggle('active');
+        }
+
+        function toggleSearch() {
+            const searchContainer = document.getElementById('searchContainer');
+            const searchInput = document.getElementById('searchInput');
+            searchContainer.classList.toggle('active');
+            if (searchContainer.classList.contains('active')) {
+                searchInput.focus();
+            }
+        }
+
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'PetCare',
+                    text: 'Tu compañero para el cuidado de mascotas',
+                    url: window.location.href
+                });
+            }
+        }
+
+        function showFilters() {
+            alert('Filtros próximamente');
+        }
+
+        function showNotifications() {
+            alert('Tienes 2 recordatorios pendientes');
+        }
+
+        function addNewPet() {
+            window.location.href = '/pets/add';
+        }
+
+        function openPetProfile(petId) {
+            window.location.href = `/pets/${petId}`;
+        }
+
+        function viewAdoptions() {
+            window.location.href = '/adoptions';
+        }
+
+        function previousMonth() {
+            console.log('Previous month');
+        }
+
+        function nextMonth() {
+            console.log('Next month');
+        }
+
+        function openReminder(pet) {
+            alert(`Abrir recordatorio para ${pet}`);
+        }
+
+        function viewAllReminders() {
+            window.location.href = '/reminders';
+        }
+
+        function viewAllLostPets() {
+            window.location.href = '/lost-pets';
+        }
+
+        function reportLostPet() {
+            window.location.href = '/lost-pets/report';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any initialization code here
+        });
+    </script>
+</body>
+</html>
