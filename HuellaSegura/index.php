@@ -3,6 +3,7 @@ include_once('config/conexion.php');
 session_start();
 
 // Verificar si hay sesión activa
+
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit();
@@ -32,150 +33,126 @@ $resultado_citas = $conexion->query($consulta_citas);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - PetCare</title>
+    <title>Inicio - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header-petcare">
-        <nav class="nav-principal">
-            <button class="btn-menu" id="menuHamburguesa">☰</button>
-            <div class="logo-container">
-                <h1 class="logo">PetCare 🐾</h1>
-            </div>
-            <div class="nav-icons">
-                <button class="btn-icon">🔍</button>
-                <button class="btn-icon">⚡</button>
-            </div>
-        </nav>
-        
-        <!-- Menú lateral -->
-        <div class="menu-lateral" id="menuLateral">
-            <div class="menu-options">
-                <a href="index.php" class="menu-item">🏠 Inicio</a>
-                <a href="mis-mascotas.php" class="menu-item">🐕 Mis Mascotas</a>
-                <a href="mascotas-perdidas.php" class="menu-item">🔍 Mascotas Perdidas</a>
-                <a href="adopciones.php" class="menu-item">❤️ Adopciones</a>
-                <a href="comunidad.php" class="menu-item">👥 Comunidad</a>
-                <a href="veterinaria.php" class="menu-item">🏥 Veterinaria</a>
-                <a href="logout.php" class="menu-item">🚪 Cerrar Sesión</a>
-            </div>
-        </div>
+    <header>
+        <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
 
-    <!-- Contenido principal -->
-    <main class="main-content">
-        <!-- Próximos eventos esta semana -->
-        <section class="eventos-semana">
-            <h2>Próximos eventos esta semana</h2>
-            <div class="eventos-cards">
-                <div class="evento-card">
-                    <div class="evento-icon">🐕</div>
-                    <div class="evento-info">
-                        <h4>Max</h4>
-                        <p>Mañana</p>
+  
+    <div class="contenedor-principal">
+        <!-- Saludo personalizado -->
+        <div class="saludo-usuario">
+            <h2>¡Hola, <?php echo $nombre_usuario; ?>! 👋</h2>
+        </div>
+
+        <!-- Sección Mis Mascotas -->
+        <section class="seccion-mis-mascotas">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 class="titulo-seccion">Mis Mascotas</h3>
+                <button class="boton-agregar-mascota" onclick="window.location.href='mis-mascotas.php'">+ Agregar</button>
+            </div>
+            
+            <div class="contenedor-mascotas">
+                <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
+                    <?php while($mascota = $resultado_mascotas->fetch_assoc()): ?>
+                        <div class="tarjeta-mascota">
+                            <img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" 
+                                 alt="<?php echo $mascota['nombre_mascota']; ?>" class="foto-mascota">
+                            <div class="info-mascota">
+                                <h3><?php echo $mascota['nombre_mascota']; ?></h3>
+                                <p><?php echo ucfirst($mascota['tipo']); ?> • <?php echo $mascota['edad_mascota']; ?> años</p>
+                                <p>Sexo: <?php echo ucfirst($mascota['sexo']); ?></p>
+                            </div>
+                            <button class="boton-ver-perfil" onclick="window.location.href='perfil-mascota.php?id=<?php echo $mascota['id_mascota']; ?>'">
+                                Ver Perfil Completo
+                            </button>
+                        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="mensaje-sin-mascotas">
+                        <p>¡Todavía no tienes mascotas registradas!</p>
+                        <button class="boton-agregar-mascota" onclick="window.location.href='mis-mascotas.php'">
+                            Agregar Primera Mascota
+                        </button>
                     </div>
-                </div>
-                <div class="evento-card">
-                    <div class="evento-icon">🌙</div>
-                    <div class="evento-info">
-                        <h4>Luna</h4>
-                        <p>mié, 10 sept</p>
-                    </div>
-                </div>
-                <div class="evento-card">
-                    <div class="evento-icon">🐕</div>
-                    <div class="evento-info">
-                        <h4>Max</h4>
-                        <p>lun, 15 sept</p>
-                    </div>
-                </div>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Sugerencia de adopción -->
+            <div class="sugerencia-adopcion">
+                <h4>¿Buscas una nueva mascota?</h4>
+                <p>Hay mascotas esperando un hogar. La adopción es amor puro.</p>
+                <button class="boton-ver-adopciones" onclick="window.location.href='adopciones.php'">
+                    ❤️ Ver Mascotas en Adopción
+                </button>
             </div>
         </section>
 
-        <!-- Recordatorios Urgentes -->
-        <section class="recordatorios-urgentes">
-            <div class="section-header">
-                <h3>🔔 Recordatorios Urgentes</h3>
-                <span class="count">2 para hoy</span>
+        <!-- Calendario de Cuidados -->
+        <section class="seccion-calendario">
+            <div class="encabezado-calendario">
+                <h3 class="titulo-calendario">📅 Calendario de Cuidados</h3>
+                <div class="navegacion-calendario">
+                    <button class="boton-calendario">◀</button>
+                    <span>septiembre de 2025</span>
+                    <button class="boton-calendario">▶</button>
+                </div>
+                <span class="eventos-programados">5 eventos programados</span>
             </div>
             
-            <div class="urgente-list">
-                <div class="urgente-item urgente">
-                    <div class="urgente-info">
-                        <span class="mascota-name">Max • Vacuna</span>
-                        <span class="urgente-time">🕐 14:00</span>
-                        <span class="urgente-label">Urgente</span>
-                    </div>
+            <!-- Mini calendario visual -->
+            <div class="mini-calendario">
+                <div class="dias-semana">
+                    <span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
                 </div>
+                <div class="dias-mes">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+                    <span class="dia-actual">8</span><span class="dia-evento">9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span>
+                    <span class="dia-evento">15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span>
+                </div>
+            </div>
+            
+            <div class="eventos-hoy">
+                <h4>📍 Hoy - <span style="color: #e74c3c;">3</span></h4>
                 
-                <div class="urgente-item">
-                    <div class="urgente-info">
-                        <span class="mascota-name">Luna • Medicina</span>
-                        <span class="urgente-time">🕐 18:30</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="proximamente">
-                <h4>📅 Próximamente</h4>
-                <div class="proximo-item">
-                    <span class="proximo-info">🌅 Mañana • Max • Cita veterinario</span>
-                    <span class="proximo-time">10:00</span>
-                </div>
-            </div>
-            
-            <a href="#" class="ver-todos">Ver todos los recordatorios →</a>
-        </section>
-
-        <!-- Mascotas Perdidas -->
-        <section class="mascotas-perdidas">
-            <div class="section-header">
-                <h3>🔍 Mascotas Perdidas</h3>
-                <a href="mascotas-perdidas.php" class="ver-todas">Ver todas</a>
-            </div>
-            
-            <button class="btn-reporte-perdida">
-                ⚠️ ¡Reportar Mascota Perdida!
-            </button>
-            
-            <div class="perdidas-list">
-                <div class="perdida-item">
-                    <img src="imagenes/buddy.jpg" alt="Buddy" class="perdida-photo">
-                    <div class="perdida-info">
-                        <h4>Buddy</h4>
-                        <p>Perro Labrador</p>
-                        <p>📍 Parque del Retiro • Hace 3 días</p>
-                    </div>
-                    <span class="perdida-status">PERDIDO</span>
-                </div>
+                <?php if ($resultado_citas && $resultado_citas->num_rows > 0): ?>
+                    <?php while($cita = $resultado_citas->fetch_assoc()): ?>
+                        <div class="evento-item <?php echo $cita['estado'] == 'urgente' ? 'evento-urgente' : 'evento-medio'; ?>">
+                            <span class="icono-evento">💉</span>
+                            <div class="info-evento">
+                                <strong><?php echo $cita['motivo']; ?></strong>
+                                <p><?php echo $cita['nombre_mascota']; ?> • <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                            </div>
+                            <span class="etiqueta-urgencia"><?php echo ucfirst($cita['estado']); ?></span>
+                        </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
                 
-                <div class="perdida-item">
-                    <div class="perdida-placeholder"></div>
-                    <div class="perdida-info">
-                        <h4>Mimi</h4>
-                        <p>Gato Siamés</p>
-                        <p>📍 Gran Vía • Hace 5 días</p>
-                    </div>
-                    <span class="perdida-status">PERDIDO</span>
-                </div>
-            </div>
-            
-            <div class="perdidas-help">
-                <h4>❓ ¿Has visto alguna mascota perdida?</h4>
-                <p>Tu ayuda puede ser crucial para reunir a una familia con su mascota.</p>
-                <a href="#" class="btn-help">Ver Todas las Mascotas Perdidas</a>
+                <?php if ($resultado_eventos && $resultado_eventos->num_rows > 0): ?>
+                    <?php while($evento = $resultado_eventos->fetch_assoc()): ?>
+                        <div class="evento-item">
+                            <span class="icono-evento">📋</span>
+                            <div class="info-evento">
+                                <strong><?php echo $evento['titulo']; ?></strong>
+                                <p><?php echo substr($evento['descripcion'], 0, 50); ?>...</p>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
             </div>
         </section>
-    </main>
+    </div>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn">❤️</button>
-        <button class="nav-btn">🔍</button>
-        <button class="nav-btn active">🏠</button>
-        <button class="nav-btn">👥</button>
-        <button class="nav-btn">🏥</button>
+    <nav class="navegacion-inferior">
+        <button class="boton-nav-inferior" onclick="window.location.href='adopciones.php'">❤️</button>
+        <button class="boton-nav-inferior" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
+        <button class="boton-nav-inferior" onclick="window.location.href='index.php'">🏠</button>
+        <button class="boton-nav-inferior" onclick="window.location.href='comunidad.php'">👥</button>
+        <button class="boton-nav-inferior" onclick="window.location.href='veterinaria.php'">🏥</button>
     </nav>
 
     <script src="js/scripts.js"></script>
