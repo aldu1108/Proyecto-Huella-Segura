@@ -1,1 +1,0 @@
-db.php: configuración de la base de datos (host, usuario, contraseña).

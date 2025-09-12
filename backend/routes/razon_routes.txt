@@ -1,2 +1,0 @@
-ROUTES Contiene Archivos que definen las acciones disponibles (ej: user.php?action=login).
-Actúan como API interna.
