@@ -1,18 +1,32 @@
 // Scripts básicos para Huella Segura
 
-// Funcionalidad del menú hamburguesa
+// Funcionalidad del menú hamburguesa - VERSIÓN CORREGIDA
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Inicializando menú hamburguesa...');
+    
     const menuHamburguesa = document.getElementById('menuHamburguesa');
     const menuLateral = document.getElementById('menuLateral');
     
     if (menuHamburguesa && menuLateral) {
-        menuHamburguesa.addEventListener('click', function() {
+        console.log('Elementos del menú encontrados');
+        
+        // Asegurar que el menú esté oculto inicialmente
+        menuLateral.style.display = 'none';
+        
+        menuHamburguesa.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('Click en menú hamburguesa');
+            
             if (menuLateral.style.display === 'none' || menuLateral.style.display === '') {
                 menuLateral.style.display = 'block';
                 menuLateral.classList.add('activo');
+                console.log('Menú mostrado');
             } else {
                 menuLateral.style.display = 'none';
                 menuLateral.classList.remove('activo');
+                console.log('Menú ocultado');
             }
         });
 
@@ -23,10 +37,182 @@ document.addEventListener('DOMContentLoaded', function() {
                 menuLateral.classList.remove('activo');
             }
         });
+        
+        // Cerrar menú al hacer clic en una opción
+        const opcionesMenu = menuLateral.querySelectorAll('.opcion-menu');
+        opcionesMenu.forEach(function(opcion) {
+            opcion.addEventListener('click', function() {
+                menuLateral.style.display = 'none';
+                menuLateral.classList.remove('activo');
+            });
+        });
+        
+    } else {
+        console.error('No se encontraron los elementos del menú hamburguesa');
+        console.log('menuHamburguesa:', menuHamburguesa);
+        console.log('menuLateral:', menuLateral);
     }
 });
 
-// Función para mostrar mensajes de confirmación
+// Funciones adicionales para otros componentes
+function toggleBusqueda() {
+    console.log('Toggle búsqueda');
+    
+    // Buscar barra de búsqueda existente
+    const barraBusqueda = document.querySelector('.barra-busqueda');
+    if (barraBusqueda) {
+        barraBusqueda.focus();
+        barraBusqueda.select();
+    } else {
+        // Crear barra de búsqueda dinámica
+        mostrarBarraBusquedaDinamica();
+    }
+}
+
+function toggleNotificaciones() {
+    console.log('Toggle notificaciones');
+    mostrarMensaje('No tienes notificaciones nuevas', 'info');
+}
+
+function mostrarBarraBusquedaDinamica() {
+    // Verificar si ya existe
+    const existente = document.querySelector('.barra-busqueda-flotante');
+    if (existente) {
+        existente.remove();
+        return;
+    }
+    
+    // Crear barra de búsqueda flotante
+    const barraBusqueda = document.createElement('div');
+    barraBusqueda.className = 'barra-busqueda-flotante';
+    barraBusqueda.innerHTML = `
+        <input type="text" placeholder="Buscar..." class="input-busqueda-flotante">
+        <button class="cerrar-busqueda">✕</button>
+    `;
+    
+    // Estilos inline para la barra flotante
+    barraBusqueda.style.cssText = `
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        padding: 1rem;
+        border-radius: 25px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        z-index: 3000;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        min-width: 300px;
+        animation: slideDown 0.3s ease;
+    `;
+    
+    document.body.appendChild(barraBusqueda);
+    
+    // Estilos para el input y botón
+    const input = barraBusqueda.querySelector('.input-busqueda-flotante');
+    input.style.cssText = `
+        border: none;
+        outline: none;
+        flex: 1;
+        font-size: 1rem;
+        padding: 0.5rem;
+        border-radius: 15px;
+        background: #f8f9fa;
+    `;
+    
+    const botonCerrar = barraBusqueda.querySelector('.cerrar-busqueda');
+    botonCerrar.style.cssText = `
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        transition: background-color 0.3s;
+    `;
+    
+    // Focus automático
+    input.focus();
+    
+    // Event listeners
+    botonCerrar.addEventListener('click', () => {
+        barraBusqueda.remove();
+    });
+    
+    botonCerrar.addEventListener('mouseenter', () => {
+        botonCerrar.style.backgroundColor = '#f0f0f0';
+    });
+    
+    botonCerrar.addEventListener('mouseleave', () => {
+        botonCerrar.style.backgroundColor = 'transparent';
+    });
+    
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            barraBusqueda.remove();
+        } else if (e.key === 'Enter') {
+            if (input.value.trim()) {
+                console.log('Buscar:', input.value);
+                mostrarMensaje(`Buscando: ${input.value}`, 'info');
+                // Aquí podrías redirigir a una página de búsqueda
+                // window.location.href = `buscar.php?q=${encodeURIComponent(input.value)}`;
+            }
+            barraBusqueda.remove();
+        }
+    });
+    
+    // Cerrar al hacer clic fuera
+    setTimeout(() => {
+        document.addEventListener('click', function cerrarBusqueda(e) {
+            if (!barraBusqueda.contains(e.target)) {
+                if (document.body.contains(barraBusqueda)) {
+                    barraBusqueda.remove();
+                }
+                document.removeEventListener('click', cerrarBusqueda);
+            }
+        });
+    }, 100);
+}
+
+// Variables globales para el menú
+let menuHamburguesaInstance;
+
+// Inicializar el menú hamburguesa cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    menuHamburguesaInstance = new MenuHamburguesa();
+    
+    // Hacer disponible globalmente para debugging
+    window.menuHamburguesa = menuHamburguesaInstance;
+    
+    // Agregar animación CSS para la barra de búsqueda
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+
+// Función para obtener la instancia del menú (útil para otros scripts)
+function getMenuHamburguesa() {
+    return menuHamburguesaInstance;
+}
 function mostrarMensaje(texto, tipo = 'info') {
     const mensaje = document.createElement('div');
     mensaje.className = 'mensaje-flotante mensaje-' + tipo;
@@ -40,6 +226,7 @@ function mostrarMensaje(texto, tipo = 'info') {
     mensaje.style.color = 'white';
     mensaje.style.zIndex = '9999';
     mensaje.style.maxWidth = '300px';
+    mensaje.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
     
     // Colores según tipo
     switch(tipo) {
@@ -58,10 +245,23 @@ function mostrarMensaje(texto, tipo = 'info') {
     
     document.body.appendChild(mensaje);
     
+    // Animación de entrada
+    mensaje.style.transform = 'translateX(100%)';
+    mensaje.style.transition = 'transform 0.3s ease';
+    
+    setTimeout(() => {
+        mensaje.style.transform = 'translateX(0)';
+    }, 10);
+    
     // Remover después de 3 segundos
     setTimeout(function() {
         if (mensaje.parentNode) {
-            mensaje.parentNode.removeChild(mensaje);
+            mensaje.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (mensaje.parentNode) {
+                    mensaje.parentNode.removeChild(mensaje);
+                }
+            }, 300);
         }
     }, 3000);
 }
@@ -195,20 +395,22 @@ function obtenerUbicacion(callback) {
 function configurarLazyLoading() {
     const imagenes = document.querySelectorAll('img[data-src]');
     
-    const observador = new IntersectionObserver(function(entradas) {
-        entradas.forEach(function(entrada) {
-            if (entrada.isIntersecting) {
-                const img = entrada.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                observador.unobserve(img);
-            }
+    if ('IntersectionObserver' in window) {
+        const observador = new IntersectionObserver(function(entradas) {
+            entradas.forEach(function(entrada) {
+                if (entrada.isIntersecting) {
+                    const img = entrada.target;
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    observador.unobserve(img);
+                }
+            });
         });
-    });
-    
-    imagenes.forEach(function(img) {
-        observador.observe(img);
-    });
+        
+        imagenes.forEach(function(img) {
+            observador.observe(img);
+        });
+    }
 }
 
 // Inicializar lazy loading cuando carga la página
@@ -299,6 +501,21 @@ function copiarAlPortapapeles(texto) {
 // Función para formatear números
 function formatearNumero(numero) {
     return new Intl.NumberFormat('es-ES').format(numero);
+}
+
+// Funciones específicas para modales
+function mostrarFormulario() {
+    const modal = document.getElementById('modalAgregarMascota');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+function cerrarFormulario() {
+    const modal = document.getElementById('modalAgregarMascota');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 console.log('Huella Segura - Scripts cargados correctamente');
