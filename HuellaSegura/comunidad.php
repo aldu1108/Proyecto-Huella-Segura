@@ -1,6 +1,7 @@
 <?php
 include_once('config/conexion.php');
 session_start();
+include_once('includes/menu_hamburguesa.php');
 
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -38,30 +39,9 @@ $resultado_eventos = $conexion->query($consulta_eventos);
     <title>Comunidad - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
-    <header class="cabecera-principal">
-        <nav class="navegacion-principal">
-            <button class="boton-menu-hamburguesa" id="menuHamburguesa">☰</button>
-            <div class="logo-contenedor">
-                <h1 class="logo-texto">PetCare</h1>
-            </div>
-            <div class="iconos-derecha">
-                <button class="boton-buscar">🔍</button>
-                <button class="boton-compartir">⚡</button>
-            </div>
-        </nav>
-        
-        <div class="menu-lateral" id="menuLateral">
-            <div class="opciones-menu">
-                <a href="index.php" class="opcion-menu">🏠 Inicio</a>
-                <a href="mis-mascotas.php" class="opcion-menu">🐕 Mis Mascotas</a>
-                <a href="mascotas-perdidas.php" class="opcion-menu">🔍 Mascotas Perdidas</a>
-                <a href="adopciones.php" class="opcion-menu">❤️ Adopciones</a>
-                <a href="comunidad.php" class="opcion-menu">👥 Comunidad</a>
-                <a href="veterinaria.php" class="opcion-menu">🏥 Veterinaria</a>
-                <a href="logout.php" class="opcion-menu">🚪 Cerrar Sesión</a>
-            </div>
-        </div>
+<body>    
+    <header>
+        <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
 
     <div class="contenedor-principal">
@@ -273,47 +253,6 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         <button class="boton-nav-inferior" onclick="window.location.href='comunidad.php'">👥</button>
         <button class="boton-nav-inferior" onclick="window.location.href='veterinaria.php'">🏥</button>
     </nav>
-
-    <script>
-        // Menú hamburguesa
-        document.getElementById('menuHamburguesa').addEventListener('click', function() {
-            const menu = document.getElementById('menuLateral');
-            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
-        });
-
-        // Navegación entre secciones
-        document.querySelectorAll('.boton-seccion').forEach(button => {
-            button.addEventListener('click', function() {
-                const seccion = this.dataset.seccion;
-                
-                // Remover clase activo de todos los botones
-                document.querySelectorAll('.boton-seccion').forEach(btn => btn.classList.remove('activo'));
-                this.classList.add('activo');
-                
-                // Ocultar todas las secciones
-                document.querySelectorAll('.seccion-feed, .seccion-eventos, .seccion-grupos').forEach(sec => sec.style.display = 'none');
-                
-                // Mostrar sección seleccionada
-                document.getElementById('seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1)).style.display = 'block';
-            });
-        });
-
-        // Modal evento
-        function mostrarFormularioEvento() {
-            document.getElementById('modalEvento').style.display = 'flex';
-        }
-
-        function cerrarFormularioEvento() {
-            document.getElementById('modalEvento').style.display = 'none';
-        }
-
-        // Cerrar modal al hacer clic fuera
-        document.getElementById('modalEvento').addEventListener('click', function(e) {
-            if (e.target === this) {
-                cerrarFormularioEvento();
-            }
-        });
-    </script>
 
     <style>
         /* Estilos específicos para comunidad */
@@ -707,5 +646,6 @@ $resultado_eventos = $conexion->query($consulta_eventos);
             }
         }
     </style>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
