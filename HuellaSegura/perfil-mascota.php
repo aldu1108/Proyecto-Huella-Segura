@@ -2,573 +2,468 @@
 include_once('config/conexion.php');
 session_start();
 
-$mensaje_error = "";
-$mensaje_exito = "";
-
-// Verificar si ya hay sesión activa
-if (isset($_SESSION['usuario_id'])) {
-    header("Location: index.php");
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
     exit();
 }
 
-// Procesar formulario de registro de veterinario
-if ($_POST) {
-    $nombre = $_POST['nombre_usuario'];
-    $apellido = $_POST['apellido_usuario'];
-    $email = $_POST['email_usuario'];
-    $telefono = $_POST['telefono_usuario'];
-    $contraseña = $_POST['contraseña_usuario'];
-    $confirmar_contraseña = $_POST['confirmar_contraseña'];
-    
-    // Datos específicos de veterinario
-    $especialidad = $_POST['especialidad'];
-    $clinica = $_POST['clinica'];
-    $numero_colegiado = $_POST['numero_colegiado'];
-    $horarios_atencion = $_POST['horarios_atencion'];
-    
-    // Validaciones básicas
-    if (empty($nombre) || empty($apellido) || empty($email) || empty($contraseña) || empty($especialidad) || empty($numero_colegiado)) {
-        $mensaje_error = "Por favor complete todos los campos obligatorios";
-    } elseif ($contraseña != $confirmar_contraseña) {
-        $mensaje_error = "Las contraseñas no coinciden";
-    } elseif (strlen($contraseña) < 6) {
-        $mensaje_error = "La contraseña debe tener al menos 6 caracteres";
-    } else {
-        // Verificar si el email ya existe
-        $consulta_email = "SELECT id_usuario FROM usuarios WHERE email_usuario = '$email'";
-        $resultado_email = $conexion->query($consulta_email);
-        
-        if ($resultado_email && $resultado_email->num_rows > 0) {
-            $mensaje_error = "Ya existe una cuenta con este correo electrónico";
-        } else {
-            // Insertar nuevo usuario
-            $consulta_usuario = "INSERT INTO usuarios (email_usuario, contraseña_usuario, telefono_usuario, nombre_usuario, apellido_usuario, foto_usuario, estado) 
-                                 VALUES ('$email', '$contraseña', '$telefono', '$nombre', '$apellido', 'veterinario-default.jpg', 'activo')";
-            
-            if ($conexion->query($consulta_usuario)) {
-                $usuario_id = $conexion->insert_id;
-                
-                // Insertar datos de veterinario (certificado = 0 hasta verificación)
-                $consulta_veterinario = "INSERT INTO veterinario (certificado, especialidad, clinica, horarios_de_atencion, id_usuario) 
-                                        VALUES (0, '$especialidad', '$clinica', '$horarios_atencion', $usuario_id)";
-                
-                if ($conexion->query($consulta_veterinario)) {
-                    $mensaje_exito = "Registro exitoso. Tu cuenta está pendiente de verificación profesional.";
-                } else {
-                    $mensaje_error = "Error al registrar datos veterinarios.";
-                }
-            } else {
-                $mensaje_error = "Error al crear la cuenta. Intenta de nuevo.";
-            }
-        }
-    }
+$usuario_id = $_SESSION['usuario_id'];
+$mascota_id = isset($_GET['id']) ? $_GET['id'] : 0;
+
+// Obtener información de la mascota
+$consulta_mascota = "SELECT * FROM mascotas WHERE id_mascota = $mascota_id AND id_usuario = $usuario_id AND estado = 'activo'";
+$resultado_mascota = $conexion->query($consulta_mascota);
+
+if (!$resultado_mascota || $resultado_mascota->num_rows == 0) {
+    header("Location: mis-mascotas.php");
+    exit();
 }
+
+$mascota = $resultado_mascota->fetch_assoc();
+
+// Obtener historial médico
+$consulta_historial = "SELECT * FROM historial_medico WHERE id_mascota = $mascota_id ORDER BY fecha DESC LIMIT 10";
+$resultado_historial = $conexion->query($consulta_historial);
+
+// Obtener próximas citas
+$fecha_hoy = date('Y-m-d');
+$consulta_citas = "SELECT * FROM citas_veterinarias WHERE id_mascota = $mascota_id AND fecha >= '$fecha_hoy' ORDER BY fecha ASC LIMIT 5";
+$resultado_citas = $conexion->query($consulta_citas);
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Veterinario - Huella Segura</title>
+    <title><?php echo $mascota['nombre_mascota']; ?> - Perfil - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="veterinario-body">
-    <div class="cabecera-principal">
-        <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
-            <p class="logo-subtitulo">Registro Profesional Veterinario</p>
+<body>
+    <!-- Header -->
+    <header class="header-petcare">
+        <nav class="nav-principal">
+            <button class="btn-menu" id="menuHamburguesa">☰</button>
+            <div class="logo-container">
+                <h1 class="logo">PetCare 🐾</h1>
+            </div>
+            <div class="nav-icons">
+                <button class="btn-icon">🔍</button>
+                <button class="btn-icon">⚡</button>
+            </div>
+        </nav>
+        
+        <!-- Menú lateral -->
+        <div class="menu-lateral" id="menuLateral">
+            <div class="menu-options">
+                <a href="index.php" class="menu-item">🏠 Inicio</a>
+                <a href="mis-mascotas.php" class="menu-item">🐕 Mis Mascotas</a>
+                <a href="mascotas-perdidas.php" class="menu-item">🔍 Mascotas Perdidas</a>
+                <a href="adopciones.php" class="menu-item">❤️ Adopciones</a>
+                <a href="comunidad.php" class="menu-item">👥 Comunidad</a>
+                <a href="veterinaria.php" class="menu-item">🏥 Veterinaria</a>
+                <a href="logout.php" class="menu-item">🚪 Cerrar Sesión</a>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <div class="contenedor-registro-veterinario">
-        <div class="encabezado-veterinario-registro">
-            <h2 class="titulo-registro">Registro Veterinario</h2>
-            <p class="subtitulo-registro">Únete a nuestra red de profesionales certificados</p>
-        </div>
-        
-        <?php if (!empty($mensaje_error)): ?>
-            <div class="mensaje-error">
-                ⚠️ <?php echo $mensaje_error; ?>
-            </div>
-        <?php endif; ?>
-        
-        <?php if (!empty($mensaje_exito)): ?>
-            <div class="mensaje-exito">
-                ✅ <?php echo $mensaje_exito; ?>
-                <br><a href="login-veterinario.php">Ir a Iniciar Sesión</a>
-            </div>
-        <?php endif; ?>
-        
-        <form method="POST" action="" enctype="multipart/form-data" class="form-veterinario">
-            <div class="seccion-formulario">
-                <h3>Información Personal</h3>
-                
-                <div class="fila-inputs">
-                    <div class="grupo-input">
-                        <label>Nombre *</label>
-                        <input type="text" name="nombre_usuario" required value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>">
-                    </div>
-                    
-                    <div class="grupo-input">
-                        <label>Apellido *</label>
-                        <input type="text" name="apellido_usuario" required value="<?php echo isset($_POST['apellido_usuario']) ? $_POST['apellido_usuario'] : ''; ?>">
-                    </div>
-                </div>
-                
-                <div class="grupo-input">
-                    <label>Correo Electrónico Profesional *</label>
-                    <input type="email" name="email_usuario" required value="<?php echo isset($_POST['email_usuario']) ? $_POST['email_usuario'] : ''; ?>">
-                </div>
-                
-                <div class="grupo-input">
-                    <label>Teléfono de Contacto</label>
-                    <input type="tel" name="telefono_usuario" value="<?php echo isset($_POST['telefono_usuario']) ? $_POST['telefono_usuario'] : ''; ?>">
-                </div>
-                
-                <div class="fila-inputs">
-                    <div class="grupo-input">
-                        <label>Contraseña *</label>
-                        <input type="password" name="contraseña_usuario" required>
-                    </div>
-                    
-                    <div class="grupo-input">
-                        <label>Confirmar Contraseña *</label>
-                        <input type="password" name="confirmar_contraseña" required>
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Header de la mascota -->
+        <section class="mascota-header">
+            <div class="mascota-info-principal">
+                <img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" 
+                     alt="<?php echo $mascota['nombre_mascota']; ?>" class="mascota-foto-grande">
+                <div class="mascota-datos">
+                    <h1><?php echo $mascota['nombre_mascota']; ?> 💡</h1>
+                    <p class="mascota-tipo">Perro • Golden Retriever</p>
+                    <div class="mascota-stats">
+                        <span class="stat">🎂 <?php echo $mascota['edad_mascota']; ?> años</span>
+                        <span class="stat">⚖️ 28 kg</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="seccion-formulario">
-                <h3>Información Profesional</h3>
-                
-                <div class="grupo-input">
-                    <label>Especialidad *</label>
-                    <select name="especialidad" required>
-                        <option value="">Seleccionar especialidad</option>
-                        <option value="Medicina General">Medicina General</option>
-                        <option value="Cirugía">Cirugía</option>
-                        <option value="Cardiología">Cardiología</option>
-                        <option value="Dermatología">Dermatología</option>
-                        <option value="Neurología">Neurología</option>
-                        <option value="Oncología">Oncología</option>
-                        <option value="Oftalmología">Oftalmología</option>
-                        <option value="Traumatología">Traumatología</option>
-                        <option value="Medicina Exótica">Medicina Exótica</option>
-                        <option value="Urgencias">Urgencias</option>
-                    </select>
-                </div>
-                
-                <div class="grupo-input">
-                    <label>Clínica/Hospital *</label>
-                    <input type="text" name="clinica" placeholder="Nombre de la clínica donde trabajas" required value="<?php echo isset($_POST['clinica']) ? $_POST['clinica'] : ''; ?>">
-                </div>
-                
-                <div class="grupo-input">
-                    <label>Número de Colegiado *</label>
-                    <input type="text" name="numero_colegiado" placeholder="Número de registro profesional" required value="<?php echo isset($_POST['numero_colegiado']) ? $_POST['numero_colegiado'] : ''; ?>">
-                </div>
-                
-                <div class="grupo-input">
-                    <label>Horarios de Atención</label>
-                    <textarea name="horarios_atencion" rows="3" placeholder="Ej: Lunes a Viernes 9:00-18:00, Sábados 9:00-14:00"><?php echo isset($_POST['horarios_atencion']) ? $_POST['horarios_atencion'] : ''; ?></textarea>
-                </div>
-            </div>
-
-            <div class="seccion-formulario">
-                <h3>Documentación (Próximamente)</h3>
-                <div class="documentos-pendientes">
-                    <p>📋 Título universitario (PDF)</p>
-                    <p>📋 Certificado de colegiado (PDF)</p>
-                    <p>📋 Foto de perfil profesional</p>
-                    <small>Podrás subir estos documentos después del registro para completar la verificación</small>
-                </div>
-            </div>
-
-            <div class="verificaciones-veterinario">
-                <div class="verificacion-item">
-                    <input type="checkbox" id="terminos-vet" required>
-                    <label for="terminos-vet">Acepto los <a href="terminos.php">términos y condiciones</a> y la <a href="privacidad.php">política de privacidad</a></label>
-                </div>
-                
-                <div class="verificacion-item">
-                    <input type="checkbox" id="codigo-etica" required>
-                    <label for="codigo-etica">Me comprometo a seguir el código de ética veterinario</label>
-                </div>
-                
-                <div class="verificacion-item">
-                    <input type="checkbox" id="informacion-veraz" required>
-                    <label for="informacion-veraz">Confirmo que toda la información proporcionada es veraz</label>
-                </div>
-            </div>
+        <!-- Información detallada -->
+        <section class="informacion-detallada">
+            <h3>Información Detallada</h3>
             
-            <button type="submit" class="boton-registro-veterinario">Registrarse como Veterinario</button>
-        </form>
-        
-        <div class="proceso-verificacion">
-            <h4>Proceso de Verificación</h4>
-            <div class="pasos-verificacion">
-                <div class="paso-verificacion">
-                    <span class="numero-paso">1</span>
-                    <div>
-                        <strong>Registro</strong>
-                        <p>Completa el formulario con tu información</p>
-                    </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Fecha de nacimiento:</label>
+                    <span><?php echo date('d/m/Y', strtotime($mascota['cumpleanos_mascota'] ?? '2021-03-15')); ?></span>
                 </div>
                 
-                <div class="paso-verificacion">
-                    <span class="numero-paso">2</span>
-                    <div>
-                        <strong>Documentación</strong>
-                        <p>Sube tu título y certificados</p>
-                    </div>
+                <div class="info-item">
+                    <label>Color:</label>
+                    <span>Dorado</span>
                 </div>
                 
-                <div class="paso-verificacion">
-                    <span class="numero-paso">3</span>
-                    <div>
-                        <strong>Verificación</strong>
-                        <p>Nuestro equipo revisa tu información (24-48h)</p>
-                    </div>
+                <div class="info-item">
+                    <label>Microchip:</label>
+                    <span>982123456789012</span>
                 </div>
                 
-                <div class="paso-verificacion">
-                    <span class="numero-paso">4</span>
-                    <div>
-                        <strong>Activación</strong>
-                        <p>Accede a tu panel profesional</p>
+                <div class="info-item">
+                    <label>Propietario:</label>
+                    <span>Juan Pérez</span>
+                </div>
+            </div>
+
+            <div class="descripcion">
+                <label>Descripción:</label>
+                <p><?php echo $mascota['nombre_mascota']; ?> es una perra muy cariñosa y juguetona. Le encanta nadar y jugar en el parque. Es muy obediente y sociable con otros perros.</p>
+            </div>
+        </section>
+
+        <!-- Seguimiento de peso -->
+        <section class="seguimiento-peso">
+            <h3>Seguimiento de Peso</h3>
+            
+            <!-- Gráfico simulado -->
+            <div class="grafico-peso">
+                <div class="grafico-container">
+                    <canvas id="pesoChart" width="400" height="200"></canvas>
+                    <!-- Simulación de gráfico con CSS -->
+                    <div class="peso-timeline">
+                        <div class="peso-point" style="left: 10%; bottom: 20%;">
+                            <span class="peso-value">22kg</span>
+                            <span class="peso-date">2023-01</span>
+                        </div>
+                        <div class="peso-point" style="left: 30%; bottom: 40%;">
+                            <span class="peso-value">24kg</span>
+                            <span class="peso-date">2023-03</span>
+                        </div>
+                        <div class="peso-point" style="left: 50%; bottom: 60%;">
+                            <span class="peso-value">26kg</span>
+                            <span class="peso-date">2023-06</span>
+                        </div>
+                        <div class="peso-point" style="left: 70%; bottom: 70%;">
+                            <span class="peso-value">27kg</span>
+                            <span class="peso-date">2023-09</span>
+                        </div>
+                        <div class="peso-point active" style="left: 90%; bottom: 80%;">
+                            <span class="peso-value">28kg</span>
+                            <span class="peso-date">2024-01</span>
+                        </div>
+                        <!-- Línea de conexión -->
+                        <svg class="peso-line">
+                            <polyline points="10,160 120,120 200,80 280,60 360,40" stroke="#D35400" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Eje Y (peso) -->
+                    <div class="eje-y">
+                        <span class="eje-label" style="bottom: 90%;">30</span>
+                        <span class="eje-label" style="bottom: 70%;">26</span>
+                        <span class="eje-label" style="bottom: 50%;">23</span>
+                        <span class="eje-label" style="bottom: 30%;">20</span>
+                        <span class="eje-label" style="bottom: 10%;">kg</span>
+                    </div>
+                    
+                    <!-- Eje X (tiempo) -->
+                    <div class="eje-x">
+                        <span class="eje-label" style="left: 10%;">2023-01</span>
+                        <span class="eje-label" style="left: 30%;">2023-03</span>
+                        <span class="eje-label" style="left: 50%;">2023-06</span>
+                        <span class="eje-label" style="left: 70%;">2023-09</span>
+                        <span class="eje-label" style="left: 90%;">2024-01</span>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="beneficios-veterinario">
-            <h4>Beneficios de Unirte a PetCare</h4>
-            <div class="lista-beneficios">
-                <div class="beneficio-item">
-                    <span class="icono-beneficio">📊</span>
-                    <div>
-                        <strong>Panel de Control Profesional</strong>
-                        <p>Gestiona citas, historiales y pacientes desde una plataforma integral</p>
+        <!-- Historial Médico -->
+        <section class="historial-medico">
+            <div class="section-header">
+                <h3>Historial Médico</h3>
+                <button class="btn-veterinarios">🩺 Veterinarios</button>
+            </div>
+
+            <div class="historial-list">
+                <!-- Consulta General -->
+                <div class="historial-item">
+                    <div class="historial-date">2024-01-15</div>
+                    <div class="historial-content">
+                        <h4>Consulta General</h4>
+                        <p><strong>Dr. María González</strong></p>
+                        <p>Clínica Veterinaria San Martín</p>
+                        <p><strong>Diagnóstico:</strong> Estado de salud excelente</p>
+                        <p><strong>Tratamiento:</strong> Vacunación anual completa</p>
+                        <p><strong>Notas:</strong> Peso ideal, muy activo y saludable</p>
                     </div>
                 </div>
-                
-                <div class="beneficio-item">
-                    <span class="icono-beneficio">👥</span>
-                    <div>
-                        <strong>Red de Clientes</strong>
-                        <p>Conecta con dueños de mascotas en tu área</p>
+
+                <!-- Cirugía -->
+                <div class="historial-item">
+                    <div class="historial-date">2023-09-20</div>
+                    <div class="historial-content">
+                        <h4>Cirugía</h4>
+                        <p><strong>Dr. Carlos Rodríguez</strong></p>
+                        <p>Hospital Veterinario Central</p>
+                        <p><strong>Diagnóstico:</strong> Esterilización</p>
+                        <p><strong>Tratamiento:</strong> Cirugía de esterilización exitosa</p>
+                        <p><strong>Notas:</strong> Recuperación rápida, sin complicaciones</p>
                     </div>
                 </div>
-                
-                <div class="beneficio-item">
-                    <span class="icono-beneficio">📱</span>
-                    <div>
-                        <strong>Herramientas Digitales</strong>
-                        <p>Recordatorios automáticos, historial digital y comunicación directa</p>
-                    </div>
-                </div>
-                
-                <div class="beneficio-item">
-                    <span class="icono-beneficio">🏆</span>
-                    <div>
-                        <strong>Perfil Profesional</strong>
-                        <p>Construye tu reputación con reseñas y certificaciones verificadas</p>
+
+                <!-- Emergencia -->
+                <div class="historial-item">
+                    <div class="historial-date">2023-06-10</div>
+                    <div class="historial-content">
+                        <h4>Emergencia</h4>
+                        <p><strong>Dra. Ana López</strong></p>
+                        <p>Urgencias Veterinarias 24h</p>
+                        <p><strong>Diagnóstico:</strong> Gastroenteritis leve</p>
+                        <p><strong>Tratamiento:</strong> Tratamiento con probióticos y dieta blanda</p>
+                        <p><strong>Notas:</strong> Mejoría completa en 3 días</p>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="enlaces-adicionales">
-            <a href="login-veterinario.php" class="enlace-volver">← Ya tengo cuenta veterinaria</a>
-            <a href="login.php" class="enlace-normal">Registro normal (no veterinario)</a>
-        </div>
-    </div>
 
+            <button class="btn-agregar-visita">+ Agregar Visita Médica</button>
+        </section>
+
+        <!-- Próximas Citas -->
+        <section class="proximas-citas">
+            <h3>Próximas Citas</h3>
+            
+            <div class="cita-proxima">
+                <div class="cita-fecha">
+                    <div class="fecha-dia">15</div>
+                    <div class="fecha-mes">Feb 2024</div>
+                    <div class="fecha-hora">10:30 AM</div>
+                </div>
+                <div class="cita-info">
+                    <h4>Vacunación Anual</h4>
+                    <p>Dr. María González</p>
+                    <p>📍 Clínica Veterinaria San Martín</p>
+                </div>
+            </div>
+
+            <button class="btn-nueva-cita">📅 Agendar Nueva Cita</button>
+        </section>
+
+        <!-- Contacto de Emergencia -->
+        <section class="contacto-emergencia">
+            <h3>❤️ Contacto de Emergencia</h3>
+            <div class="emergencia-info">
+                <p><strong>Teléfono:</strong> +34 123 456 789</p>
+                <p><strong>Hospital 24h:</strong> Urgencias Veterinarias Central</p>
+                <button class="btn-llamar">📞 Llamar</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navegación inferior -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='adopciones.php'">❤️</button>
+        <button class="nav-btn" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
+        <button class="nav-btn" onclick="window.location.href='index.php'">🏠</button>
+        <button class="nav-btn" onclick="window.location.href='comunidad.php'">👥</button>
+        <button class="nav-btn active" onclick="window.location.href='veterinaria.php'">🏥</button>
+    </nav>
+
+    <script src="js/scripts.js"></script>
     <style>
-        .veterinario-body {
-            background: linear-gradient(135deg, #8d6e63 0%, #5d4e75 100%);
-            min-height: 100vh;
-        }
-
-        .contenedor-registro-veterinario {
-            max-width: 800px;
-            margin: 2rem auto;
-            background-color: white;
+        /* Estilos específicos para perfil de mascota */
+        .mascota-header {
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .encabezado-veterinario-registro {
-            background: linear-gradient(135deg, #6a4c93, #8d6e63);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .titulo-registro {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-veterinario {
-            padding: 2rem;
-        }
-
-        .seccion-formulario {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .seccion-formulario:last-child {
-            border-bottom: none;
-        }
-
-        .seccion-formulario h3 {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #3498db;
-        }
-
-        .fila-inputs {
+        .mascota-info-principal {
             display: flex;
-            gap: 1rem;
+            gap: 20px;
+            align-items: center;
         }
 
-        .fila-inputs .grupo-input {
-            flex: 1;
+        .mascota-foto-grande {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
-        .grupo-input {
-            margin-bottom: 1.5rem;
+        .mascota-datos h1 {
+            color: #D35400;
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
-        .grupo-input label {
+        .mascota-tipo {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .mascota-stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .informacion-detallada {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-item label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .info-item span {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .descripcion label {
+            color: #666;
+            font-size: 12px;
             display: block;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .seguimiento-peso {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .grafico-container {
+            position: relative;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .peso-timeline {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .peso-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #D35400;
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+            cursor: pointer;
+        }
+
+        .peso-point.active {
+            background: #E74C3C;
+            width: 16px;
+            height: 16px;
+        }
+
+        .peso-value {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
             font-weight: bold;
+            color: #D35400;
+            border: 1px solid #D35400;
         }
 
-        .grupo-input input, .grupo-input select, .grupo-input textarea {
+        .peso-date {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #666;
+        }
+
+        .peso-line {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 1rem;
-            border: 2px solid #e8e8e8;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            height: 100%;
+            pointer-events: none;
         }
 
-        .grupo-input input:focus, .grupo-input select:focus, .grupo-input textarea:focus {
-            outline: none;
-            border-color: #8d6e63;
+        .eje-y, .eje-x {
+            position: absolute;
         }
 
-        .documentos-pendientes {
-            background-color: #fff3cd;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #ffc107;
+        .eje-y {
+            left: -30px;
+            top: 0;
+            height: 100%;
         }
 
-        .documentos-pendientes p {
-            margin-bottom: 0.5rem;
-            color: #856404;
-        }
-
-        .verificaciones-veterinario {
-            background-color: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-
-        .verificacion-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .verificacion-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .verificacion-item input[type="checkbox"] {
-            width: auto;
-            margin-top: 0.2rem;
-        }
-
-        .verificacion-item label {
-            color: #2c3e50;
-            line-height: 1.4;
-        }
-
-        .verificacion-item a {
-            color: #8d6e63;
-            text-decoration: none;
-        }
-
-        .boton-registro-veterinario {
+        .eje-x {
+            bottom: -30px;
+            left: 0;
             width: 100%;
-            background: linear-gradient(135deg, #8d6e63, #6a4c93);
+        }
+
+        .eje-label {
+            position: absolute;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .historial-medico {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-veterinarios {
+            background: #D35400;
             color: white;
             border: none;
-            padding: 1.2rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 10px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
             cursor: pointer;
-            margin-bottom: 2rem;
-            transition: transform 0.3s;
         }
 
-        .boton-registro-veterinario:hover {
-            transform: translateY(-2px);
+        .historial-list {
+            margin: 20px 0;
         }
 
-        .proceso-verificacion {
-            background-color: #f8f9fa;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .proceso-verificacion h4 {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .pasos-verificacion {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-
-        .paso-verificacion {
+        .historial-item {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-align: center;
-        }
-
-        .numero-paso {
-            background-color: #3498db;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .beneficios-veterinario {
-            background-color: #e8f5e8;
-            padding: 2rem;
-        }
-
-        .beneficios-veterinario h4 {
-            color: #27ae60;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .lista-beneficios {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .beneficio-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background-color: white;
-            border-radius: 8px;
-        }
-
-        .icono-beneficio {
-            font-size: 2rem;
-            width: 50px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .enlaces-adicionales {
-            padding: 2rem;
-            text-align: center;
-            border-top: 2px solid #f0f0f0;
-        }
-
-        .enlace-volver, .enlace-normal {
-            color: #8d6e63;
-            text-decoration: none;
-            margin: 0 1rem;
-            font-size: 1rem;
-        }
-
-        .enlace-volver:hover, .enlace-normal:hover {
-            text-decoration: underline;
-        }
-
-        .mensaje-error, .mensaje-exito {
-            padding: 1rem;
-            margin: 1rem 2rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .mensaje-error {
-            background-color: #ffebee;
-            color: #c62828;
-            border: 2px solid #e74c3c;
-        }
-
-        .mensaje-exito {
-            background-color: #e8f5e8;
-            color: #2e7d32;
-            border: 2px solid #27ae60;
-        }
-
-        .mensaje-exito a {
-            color: #27ae60;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            .contenedor-registro-veterinario {
-                margin: 1rem;
-                border-radius: 0;
-            }
-            
-            .form-veterinario {
-                padding: 1rem;
-            }
-            
-            .fila-inputs {
-                flex-direction: column;
-            }
-            
-            .pasos-verificacion {
-                grid-template-columns: 1fr;
-            }
-            
-            .paso-verificacion {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .enlaces-adicionales {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
-</body>
-</html>
+            gap: 16px;
+            padding: 16px;
+            border-left: 4px solid #e8e8

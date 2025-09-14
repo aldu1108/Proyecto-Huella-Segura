@@ -2,7 +2,6 @@
 include_once('config/conexion.php');
 include_once('includes/funciones.php');
 session_start();
-include_once('includes/menu_hamburguesa.php');
 
 // Verificar si hay sesión activa
 if (!isset($_SESSION['usuario_id'])) {
@@ -15,33 +14,33 @@ $usuario_id = $_SESSION['usuario_id'];
 // Obtener citas veterinarias del usuario
 $fecha_hoy = date('Y-m-d');
 $consulta_citas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad,
-                    u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
-                    FROM citas_veterinarias c 
-                    JOIN mascotas m ON c.id_mascota = m.id_mascota 
-                    LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
-                    LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                    WHERE m.id_usuario = $usuario_id 
-                    ORDER BY c.fecha DESC LIMIT 10";
+                   u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+                   FROM citas_veterinarias c 
+                   JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                   LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
+                   LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                   WHERE m.id_usuario = $usuario_id 
+                   ORDER BY c.fecha DESC LIMIT 10";
 $resultado_citas = $conexion->query($consulta_citas);
 
 // Obtener historial médico
 $consulta_historial = "SELECT h.*, m.nombre_mascota, m.tipo,
-                        u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
-                        FROM historiales_medicos h 
-                        JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                        LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
-                        LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                        WHERE m.id_usuario = $usuario_id 
-                        ORDER BY h.fecha DESC LIMIT 5";
+                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+                       FROM historiales_medicos h 
+                       JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                       LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
+                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                       WHERE m.id_usuario = $usuario_id 
+                       ORDER BY h.fecha DESC LIMIT 5";
 $resultado_historial = $conexion->query($consulta_historial);
 
 // Obtener próximas citas
 $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad
-                    FROM citas_veterinarias c 
-                    JOIN mascotas m ON c.id_mascota = m.id_mascota 
-                    LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
-                    WHERE m.id_usuario = $usuario_id AND c.fecha >= '$fecha_hoy' 
-                    ORDER BY c.fecha ASC LIMIT 3";
+                      FROM citas_veterinarias c 
+                      JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                      LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
+                      WHERE m.id_usuario = $usuario_id AND c.fecha >= '$fecha_hoy' 
+                      ORDER BY c.fecha ASC LIMIT 3";
 $resultado_proximas = $conexion->query($consulta_proximas);
 
 // Obtener mascotas para el selector
@@ -56,10 +55,32 @@ $resultado_mascotas = $conexion->query($consulta_mascotas);
     <title>Área Veterinaria - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>    
-    <header>
-        <?php include_once('includes/menu_hamburguesa.php'); ?>
+<body>
+    <header class="cabecera-principal">
+        <nav class="navegacion-principal">
+            <button class="boton-menu-hamburguesa" id="menuHamburguesa">☰</button>
+            <div class="logo-contenedor">
+                <h1 class="logo-texto">PetCare</h1>
+            </div>
+            <div class="iconos-derecha">
+                <button class="boton-buscar">🔍</button>
+                <button class="boton-compartir">⚡</button>
+            </div>
+        </nav>
+        
+        <div class="menu-lateral" id="menuLateral">
+            <div class="opciones-menu">
+                <a href="index.php" class="opcion-menu">🏠 Inicio</a>
+                <a href="mis-mascotas.php" class="opcion-menu">🐕 Mis Mascotas</a>
+                <a href="mascotas-perdidas.php" class="opcion-menu">🔍 Mascotas Perdidas</a>
+                <a href="adopciones.php" class="opcion-menu">❤️ Adopciones</a>
+                <a href="comunidad.php" class="opcion-menu">👥 Comunidad</a>
+                <a href="veterinaria.php" class="opcion-menu">🏥 Veterinaria</a>
+                <a href="logout.php" class="opcion-menu">🚪 Cerrar Sesión</a>
+            </div>
+        </div>
     </header>
+
     <div class="contenedor-principal">
         <!-- Header del área veterinaria -->
         <section class="header-veterinaria">

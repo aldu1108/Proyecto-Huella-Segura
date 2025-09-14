@@ -1,7 +1,6 @@
 <?php
 include_once('config/conexion.php');
 session_start();
-include_once('includes/menu_hamburguesa.php');
 
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -13,9 +12,8 @@ $consulta_perdidas = "SELECT COUNT(*) as total FROM publicacion_perdida pp
                       JOIN publicaciones p ON pp.id_publicacion = p.id_anuncio 
                       WHERE p.estado = 'activo'";
 $resultado_perdidas = $conexion->query($consulta_perdidas);
-$total_perdidas = $resultado_perdidas->fetch_assoc()['total'];
+$total_perdidas = $resultado_perdidas ? $resultado_perdidas->fetch_assoc()['total'] : 2;
 
-// Para el ejemplo, definiremos algunas estadísticas estáticas
 $total_encontradas = 1;
 $total_recompensa = 2;
 
@@ -34,28 +32,48 @@ $resultado_reportes = $conexion->query($consulta_reportes);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mascotas Perdidas - Huella Segura</title>
+    <title>Mascotas Perdidas - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <header>
-        <?php include_once('includes/menu_hamburguesa.php'); ?>
+    <!-- Header -->
+    <header class="header-petcare">
+        <nav class="nav-principal">
+            <button class="btn-menu" id="menuHamburguesa">☰</button>
+            <div class="logo-container">
+                <h1 class="logo">Huella Segura 🐾</h1>
+            </div>
+            <div class="nav-icons">
+                <button class="btn-icon">🔍</button>
+                <button class="btn-icon">⚡</button>
+            </div>
+        </nav>
+        
+        <!-- Menú lateral -->
+        <div class="menu-lateral" id="menuLateral">
+            <div class="menu-options">
+                <a href="index.php" class="menu-item">🏠 Inicio</a>
+                <a href="mis-mascotas.php" class="menu-item">🐕 Mis Mascotas</a>
+                <a href="mascotas-perdidas.php" class="menu-item">🔍 Mascotas Perdidas</a>
+                <a href="adopciones.php" class="menu-item">❤️ Adopciones</a>
+                <a href="comunidad.php" class="menu-item">👥 Comunidad</a>
+                <a href="veterinaria.php" class="menu-item">🏥 Veterinaria</a>
+                <a href="logout.php" class="menu-item">🚪 Cerrar Sesión</a>
+            </div>
+        </div>
     </header>
 
-    <div class="contenedor-principal">
-        <!-- Alertas de emergencia -->
-        <div class="alertas-contenedor">
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Alertas superiores -->
+        <div class="alertas-superiores">
             <div class="alerta-emergencia">
                 <h3>⚠️ Emergencia</h3>
                 <p><strong><?php echo $total_perdidas; ?> mascotas perdidas</strong></p>
                 <p>Tu ayuda es crucial</p>
             </div>
             
-            <div class="alerta-adopcion">
-                <h3>❤️ Adopción</h3>
-                <p><strong>3 mascotas disponibles</strong></p>
-                <p>1 adopción urgente</p>
-            </div>
+
         </div>
 
         <!-- Sección mascotas perdidas -->
@@ -88,7 +106,7 @@ $resultado_reportes = $conexion->query($consulta_reportes);
             <!-- Consejos rápidos -->
             <div class="consejos-rapidos">
                 <h4>⚡ Actúa rápido:</h4>
-                <ul style="margin-left: 2rem; color: #666;">
+                <ul>
                     <li>Las primeras 24 horas son cruciales</li>
                     <li>Comparte en redes sociales automáticamente</li>
                     <li>Alerta a la comunidad local</li>
@@ -101,15 +119,8 @@ $resultado_reportes = $conexion->query($consulta_reportes);
                 
                 <div class="filtros-linea">
                     <select class="filtro-select">
-                        <option value="todas">Todas</option>
                         <option value="perdidas">Perdidas</option>
-                        <option value="encontradas">Encontradas</option>
-                    </select>
-                    
-                    <select class="filtro-select">
-                        <option value="recientes">Más recientes</option>
-                        <option value="ubicacion">Por ubicación</option>
-                        <option value="recompensa">Con recompensa</option>
+                        <option value="mas-recientes">Más recientes</option>
                     </select>
                 </div>
             </div>
@@ -117,53 +128,82 @@ $resultado_reportes = $conexion->query($consulta_reportes);
 
         <!-- Reportes activos -->
         <section class="seccion-reportes-activos">
-            <h3>Reportes Activos (<?php echo $resultado_reportes ? $resultado_reportes->num_rows : 0; ?>)</h3>
-            <a href="#" class="enlace-ver-mapa">📍 Ver en mapa</a>
+            <h3>Reportes Activos (2) <a href="#" class="enlace-ver-mapa">📍 Ver en mapa</a></h3>
 
             <div class="contenedor-reportes">
-                <?php if ($resultado_reportes && $resultado_reportes->num_rows > 0): ?>
-                    <?php while($reporte = $resultado_reportes->fetch_assoc()): ?>
-                        <div class="tarjeta-reporte">
-                            <div class="etiqueta-estado">PERDIDO</div>
-                            <?php if ($reporte['recompensa'] > 0): ?>
-                                <div class="etiqueta-recompensa">Recompensa: €<?php echo number_format($reporte['recompensa'], 0); ?></div>
-                            <?php endif; ?>
-                            
-                            <div class="contenido-reporte">
-                                <img src="imagenes/<?php echo $reporte['foto']; ?>" alt="Mascota perdida" class="foto-reporte">
-                                
-                                <div class="info-reporte">
-                                    <h4><?php echo $reporte['nombre_mascota']; ?></h4>
-                                    <p><?php echo ucfirst($reporte['tipo']); ?> • Labrador</p>
-                                    <p><strong>Color:</strong> Dorado</p>
-                                    <p><strong>Tamaño:</strong> Grande</p>
-                                    <p><strong>📅 Perdido hace:</strong> <?php echo (time() - strtotime($reporte['fecha_perdida'])) / (60*60*24); ?> días (<?php echo date('d-m-Y', strtotime($reporte['fecha_perdida'])); ?>)</p>
-                                    <p><strong>📍</strong> <?php echo $reporte['ultima_ubicacion']; ?></p>
-                                </div>
-                            </div>
-                            
-                            <div class="acciones-reporte">
-                                <button class="boton-contactar" onclick="contactarDueño(<?php echo $reporte['id_usuario']; ?>)">
-                                    📞 Contactar
-                                </button>
-                                <button class="boton-compartir-reporte">📤</button>
-                                <button class="boton-ver-detalles">👁</button>
-                            </div>
-                            
-                            <div class="mensaje-ayuda">
-                                ¿Has visto a <?php echo $reporte['nombre_mascota']; ?>? Tu ayuda puede ser crucial para reunir a esta familia.
-                            </div>
+                <!-- Ejemplo de reporte - Buddy -->
+                <div class="tarjeta-reporte">
+                    <div class="etiqueta-estado">PERDIDO</div>
+                    <div class="etiqueta-recompensa">Recompensa: €300</div>
+                    
+                    <div class="contenido-reporte">
+                        <img src="imagenes/buddy.jpg" alt="Buddy" class="foto-reporte">
+                        
+                        <div class="info-reporte">
+                            <h4>Buddy</h4>
+                            <p>Perro • Labrador</p>
+                            <p><strong>Color:</strong> Dorado</p>
+                            <p><strong>Tamaño:</strong> Grande</p>
+                            <p><strong>📅 Perdido hace:</strong> 599 días (2024-01-20)</p>
+                            <p><strong>📍</strong> Parque del Retiro, Madrid</p>
                         </div>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <div class="mensaje-sin-reportes">
-                        <h4>¡Buenas noticias! 🎉</h4>
-                        <p>No hay reportes de mascotas perdidas en este momento.</p>
                     </div>
-                <?php endif; ?>
+                    
+                    <div class="acciones-reporte">
+                        <button class="boton-contactar">
+                            📞 Contactar
+                        </button>
+                        <button class="boton-compartir-reporte">📤</button>
+                        <button class="boton-ver-detalles">👁</button>
+                    </div>
+                    
+                    <div class="mensaje-ayuda">
+                        ¿Has visto a Buddy? Tu ayuda puede ser crucial para reunir a esta familia.
+                    </div>
+                </div>
+
+                <!-- Ejemplo de reporte - Mimi -->
+                <div class="tarjeta-reporte">
+                    <div class="etiqueta-estado">PERDIDO</div>
+                    
+                    <div class="contenido-reporte">
+                        <div class="foto-placeholder"></div>
+                        
+                        <div class="info-reporte">
+                            <h4>Mimi</h4>
+                            <p>Gato • Siamés</p>
+                            <p><strong>Color:</strong> Crema y marrón</p>
+                            <p><strong>Tamaño:</strong> Pequeño</p>
+                            <p><strong>📅 Perdido hace:</strong> 601 días (2024-01-18)</p>
+                            <p><strong>📍</strong> Calle Gran Vía, 45</p>
+                        </div>
+                    </div>
+                    
+                    <div class="acciones-reporte">
+                        <button class="boton-contactar">
+                            📞 Contactar
+                        </button>
+                        <button class="boton-compartir-reporte">📤</button>
+                        <button class="boton-ver-detalles">👁</button>
+                    </div>
+                    
+                    <div class="mensaje-ayuda">
+                        ¿Has visto a Mimi? Tu ayuda puede ser crucial para reunir a esta familia.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consejos para encontrar mascotas perdidas -->
+            <div class="consejos-encontrar">
+                <h4>💡 Consejos para encontrar mascotas perdidas:</h4>
+                <ul>
+                    <li>Busca en un radio de 1-2 km del último lugar visto</li>
+                    <li>Publica en grupos locales de Facebook y redes sociales</li>
+                    <li>Contacta refugios y clínicas veterinarias cercanas</li>
+                </ul>
             </div>
         </section>
-    </div>
+    </main>
 
     <!-- Modal para reportar mascota perdida -->
     <div class="modal-reporte" id="modalReporte" style="display: none;">
@@ -210,207 +250,31 @@ $resultado_reportes = $conexion->query($consulta_reportes);
     </div>
 
     <!-- Navegación inferior -->
-    <nav class="navegacion-inferior">
-        <button class="boton-nav-inferior" onclick="window.location.href='adopciones.php'">❤️</button>
-        <button class="boton-nav-inferior" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
-        <button class="boton-nav-inferior" onclick="window.location.href='index.php'">🏠</button>
-        <button class="boton-nav-inferior" onclick="window.location.href='comunidad.php'">👥</button>
-        <button class="boton-nav-inferior" onclick="window.location.href='veterinaria.php'">🏥</button>
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='adopciones.php'">❤️</button>
+        <button class="nav-btn active" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
+        <button class="nav-btn" onclick="window.location.href='index.php'">🏠</button>
+        <button class="nav-btn" onclick="window.location.href='comunidad.php'">👥</button>
+        <button class="nav-btn" onclick="window.location.href='veterinaria.php'">🏥</button>
     </nav>
 
-    <style>
-        /* Estilos específicos para mascotas perdidas */
-        .contenedor-filtros {
-            margin-bottom: 2rem;
-        }
-
-        .filtros-linea {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .filtro-select {
-            flex: 1;
-            padding: 0.8rem;
-            border: 2px solid #e8e8e8;
-            border-radius: 8px;
-            background-color: white;
-        }
-
-        .tarjeta-reporte {
-            background-color: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .etiqueta-estado {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background-color: #e74c3c;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .etiqueta-recompensa {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background-color: #f39c12;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .contenido-reporte {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .foto-reporte {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .info-reporte {
-            flex: 1;
-        }
-
-        .info-reporte h4 {
-            color: #d35400;
-            margin-bottom: 0.5rem;
-        }
-
-        .info-reporte p {
-            margin-bottom: 0.3rem;
-            font-size: 0.9rem;
-        }
-
-        .acciones-reporte {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .boton-contactar {
-            flex: 1;
-            background-color: #d35400;
-            color: white;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .boton-compartir-reporte, .boton-ver-detalles {
-            background-color: #f8f9fa;
-            border: 2px solid #e8e8e8;
-            padding: 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .mensaje-ayuda {
-            background-color: #fff3cd;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #856404;
-            border-left: 4px solid #ffc107;
-        }
-
-        .consejos-rapidos {
-            background-color: #ffeaa7;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-
-        .enlace-ver-mapa {
-            color: #d35400;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .seccion-reportes-activos h3 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #333;
-        }
-
-        .modal-reporte {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .modal-reporte .contenido-modal {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-reporte .grupo-input {
-            margin-bottom: 1rem;
-        }
-
-        .modal-reporte .grupo-input label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .modal-reporte .grupo-input input, 
-        .modal-reporte .grupo-input select, 
-        .modal-reporte .grupo-input textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e8e8e8;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .contenido-reporte {
-                flex-direction: column;
-            }
-            
-            .foto-reporte {
-                width: 100%;
-                height: 200px;
-            }
-            
-            .acciones-reporte {
-                flex-direction: column;
-            }
-        }
-    </style>
     <script src="js/scripts.js"></script>
+    <script>
+        // Modal reporte
+        function mostrarFormularioReporte() {
+            document.getElementById('modalReporte').style.display = 'flex';
+        }
+
+        function cerrarFormularioReporte() {
+            document.getElementById('modalReporte').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modalReporte').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarFormularioReporte();
+            }
+        });
+    </script>
 </body>
 </html>

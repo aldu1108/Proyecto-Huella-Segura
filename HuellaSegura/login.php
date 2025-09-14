@@ -48,66 +48,80 @@ if ($_POST) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - Huella Segura</title>
+    <title>Iniciar Sesión - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
-    <div class="cabecera-principal">
-        <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
-            <p class="logo-subtitulo">Tu compañero para el cuidado de mascotas</p>
-        </div>
+<body class="login-body">
+    <!-- Header centrado -->
+    <div class="login-header">
+        <div class="paw-icons">🐾 🐾</div>
+        <h1 class="login-logo">PetCare</h1>
+        <p class="login-subtitle">Tu compañero para el cuidado de mascotas</p>
     </div>
 
-    <div class="contenedor-login">
-        <h2 class="titulo-login">Iniciar Sesión</h2>
-        <p class="subtitulo-login">Bienvenido de vuelta a PetCare</p>
+    <!-- Contenedor de login -->
+    <div class="login-container">
+        <h2 class="login-title">Iniciar Sesión</h2>
+        <p class="login-welcome">Bienvenido de vuelta a PetCare</p>
         
         <?php if (!empty($mensaje_error)): ?>
-            <div class="mensaje-error" style="color: red; text-align: center; margin-bottom: 1rem;">
+            <div class="error-message">
                 <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
         
-        <form method="POST" action="">
-            <div class="grupo-input">
-                <input type="email" name="email" class="input-login" placeholder="Correo electrónico" required>
+        <form class="login-form" method="POST" action="">
+            <div class="input-group">
+                <span class="input-icon">📧</span>
+                <input type="email" name="email" class="login-input" placeholder="Correo electrónico" required>
             </div>
             
-            <div class="grupo-input">
-                <input type="password" name="contraseña" class="input-login" placeholder="Contraseña" required>
+            <div class="input-group">
+                <span class="input-icon">🔒</span>
+                <input type="password" name="contraseña" class="login-input" placeholder="Contraseña" required>
+                <button type="button" class="password-toggle">👁</button>
             </div>
             
-            <button type="submit" class="boton-login">Iniciar Sesión</button>
+            <div class="forgot-password">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+            
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
         </form>
         
-        <div style="text-align: center; margin: 1rem 0; color: #666;">o</div>
+        <div class="divider">
+            <span>o</span>
+        </div>
         
-        <button class="boton-demo" onclick="loginDemo()">
+        <button class="btn-demo" onclick="loginDemo()">
             ❤️ Probar con Cuenta Demo
         </button>
         
-        <button class="boton-veterinario" onclick="window.location.href='login-veterinario.php'">
+        <button class="btn-veterinario" onclick="window.location.href='login-veterinario.php'">
             🩺 Iniciar Sesión como Veterinario
         </button>
         
-        <button class="boton-admin" onclick="window.location.href='login-admin.php'">
+        <button class="btn-admin" onclick="window.location.href='login-admin.php'">
             ⚙️ Acceso de Administrador
         </button>
         
-        <div class="enlace-registro">
+        <div class="register-link">
             ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
         </div>
         
-        <div style="text-align: center; margin-top: 2rem;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                📋 <span>Historial médico completo</span>
+        <!-- Features -->
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="feature-icon">📋</span>
+                <span>Historial médico completo</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                🎯 <span>Recordatorios personalizados</span>
+            <div class="feature-item">
+                <span class="feature-icon">🎯</span>
+                <span>Recordatorios personalizados</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                🔍 <span>Búsqueda de mascotas perdidas</span>
+            <div class="feature-item">
+                <span class="feature-icon">🔍</span>
+                <span>Búsqueda de mascotas perdidas</span>
             </div>
         </div>
     </div>
@@ -134,5 +148,6 @@ if ($_POST) {
             });
         }
     </script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
