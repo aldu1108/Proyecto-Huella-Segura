@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración - PetCare</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #FFF3CD;
+      padding-bottom: 70px; /* espacio para la barra inferior */
+    }
+
+    /* HEADER */
+    header {
+      background-color: #F4D03F;
+      color: #D35400;
+      text-align: center;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    header img {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      padding: 15px;
+    }
+
+    section {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    section h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    section p {
+      color: #555;
+      font-size: 14px;
+      margin: 5px 0 15px;
+    }
+
+    .opcion {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .opcion:last-child {
+      border-bottom: none;
+    }
+
+    .opcion span {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .toggle {
+      width: 40px;
+      height: 20px;
+      border-radius: 10px;
+      background: #ccc;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      top: 1px;
+      left: 1px;
+      transition: 0.3s;
+    }
+
+    .toggle.active {
+      background: #e67e22;
+    }
+
+    .toggle.active::after {
+      left: 21px;
+    }
+
+    /* BARRA DE NAVEGACIÓN INFERIOR */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #f28b30;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    nav a.active {
+      background: white;
+      color: #f28b30;
+      border-radius: 10px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <span>PetCare 🐾</span>
+  </header>
+
+  <div class="container">
+
+    <!-- NOTIFICACIONES -->
+    <section>
+      <h2>🔔 Notificaciones</h2>
+      <div class="opcion">
+        <div>
+          <span>Notificaciones generales</span>
+          <p>Recibe notificaciones importantes de la app</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Recordatorios médicos</span>
+          <p>Citas veterinarias, medicinas y vacunas</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Recordatorios de cuidado</span>
+          <p>Comida, ejercicio y actividades diarias</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Actividad de comunidad</span>
+          <p>Nuevos posts, comentarios y eventos</p>
+        </div>
+        <div class="toggle"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Ofertas y promociones</span>
+          <p>Descuentos en tienda y productos recomendados</p>
+        </div>
+        <div class="toggle"></div>
+      </div>
+    </section>
+
+    <!-- PRIVACIDAD Y SEGURIDAD -->
+    <section>
+      <h2>🛡️ Privacidad y Seguridad</h2>
+      <div class="opcion">
+        <div>
+          <span>Perfil público</span>
+          <p>Permitir que otros usuarios vean tu perfil</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Mascotas visibles</span>
+          <p>Mostrar tus mascotas en la comunidad</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Información médica</span>
+          <p>Compartir historial médico con veterinarios</p>
+        </div>
+        <div class="toggle"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Compartir ubicación</span>
+          <p>Para mascotas perdidas y servicios cerca de ti</p>
+        </div>
+        <div class="toggle"></div>
+      </div>
+    </section>
+
+    <!-- PREFERENCIAS -->
+    <section>
+      <h2>⚙️ Preferencias</h2>
+      <div class="opcion">
+        <div>
+          <span>Tema de la aplicación</span>
+          <p>Claro u oscuro</p>
+        </div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Idioma</span>
+          <p>Español</p>
+        </div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Sonidos de la app</span>
+          <p>Reproducir sonidos para notificaciones</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+      <div class="opcion">
+        <div>
+          <span>Copia de seguridad automática</span>
+          <p>Guardar datos en la nube automáticamente</p>
+        </div>
+        <div class="toggle active"></div>
+      </div>
+    </section>
+
+    <!-- DATOS Y ALMACENAMIENTO -->
+    <section>
+      <h2>💾 Datos y Almacenamiento</h2>
+      <div class="opcion">
+        <span>📤 Exportar mis datos</span>
+      </div>
+      <div class="opcion">
+        <span>📥 Importar configuración</span>
+      </div>
+    </section>
+
+    <!-- SOPORTE Y AYUDA -->
+    <section>
+      <h2>❓ Soporte y Ayuda</h2>
+      <div class="opcion">
+        <span>Centro de ayuda</span>
+      </div>
+      <div class="opcion">
+        <span>Contactar soporte</span>
+      </div>
+      <div class="opcion">
+        <span>Calificar la app</span>
+      </div>
+    </section>
+
+    <!-- ZONA DE PELIGRO -->
+    <section>
+      <h2>⚠️ Zona de Peligro</h2>
+      <div class="opcion">
+        <span style="color:red;">🗑️ Eliminar cuenta</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- NAV BAR -->
+  <nav>
+    <a href="#">❤️</a>
+    <a href="#">🔍</a>
+    <a href="#" class="active">🏠</a>
+    <a href="#">👥</a>
+    <a href="#">⚕️</a>
+  </nav>
+
+</body>
+</html>
