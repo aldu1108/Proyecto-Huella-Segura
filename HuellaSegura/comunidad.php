@@ -2,6 +2,10 @@
 include_once('config/conexion.php');
 session_start();
 
+include_once('includes/menu_hamburguesa.php');
+
+
+
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit();
@@ -35,35 +39,14 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comunidad - PetCare</title>
+
+    <title>Comunidad - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
     <!-- Header -->
-    <header class="header-petcare">
-        <nav class="nav-principal">
-            <button class="btn-menu" id="menuHamburguesa">☰</button>
-            <div class="logo-container">
-                <h1 class="logo">PetCare 🐾</h1>
-            </div>
-            <div class="nav-icons">
-                <button class="btn-icon">🔍</button>
-                <button class="btn-icon">⚡</button>
-            </div>
-        </nav>
-        
-        <!-- Menú lateral -->
-        <div class="menu-lateral" id="menuLateral">
-            <div class="menu-options">
-                <a href="index.php" class="menu-item">🏠 Inicio</a>
-                <a href="mis-mascotas.php" class="menu-item">🐕 Mis Mascotas</a>
-                <a href="mascotas-perdidas.php" class="menu-item">🔍 Mascotas Perdidas</a>
-                <a href="adopciones.php" class="menu-item">❤️ Adopciones</a>
-                <a href="comunidad.php" class="menu-item">👥 Comunidad</a>
-                <a href="veterinaria.php" class="menu-item">🏥 Veterinaria</a>
-                <a href="logout.php" class="menu-item">🚪 Cerrar Sesión</a>
-            </div>
-        </div>
+    <header>
+        <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
 
     <!-- Contenido principal -->
@@ -90,9 +73,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                 <div class="stat-item">
                     <div class="stat-number">7</div>
                     <div class="stat-label">Ayudas</div>
+
                 </div>
             </div>
         </section>
+
 
         <!-- Navegación de secciones -->
         <nav class="section-nav">
@@ -148,10 +133,12 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <button class="action-btn">❤️ 12</button>
                         <button class="action-btn">💬 8</button>
                         <button class="action-btn">📤 Compartir</button>
+
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Sección Eventos (activa por defecto) -->
         <section class="eventos-section" id="eventosSection">

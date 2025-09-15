@@ -3,6 +3,9 @@ include_once('config/conexion.php');
 include_once('includes/funciones.php');
 session_start();
 
+include_once('includes/menu_hamburguesa.php');
+
+
 // Verificar si hay sesión activa
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -25,6 +28,7 @@ $resultado_citas = $conexion->query($consulta_citas);
 
 // Obtener historial médico
 $consulta_historial = "SELECT h.*, m.nombre_mascota, m.tipo,
+
                        u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
                        FROM historiales_medicos h 
                        JOIN mascotas m ON h.id_mascota = m.id_mascota 
@@ -36,6 +40,7 @@ $resultado_historial = $conexion->query($consulta_historial);
 
 // Obtener próximas citas
 $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad
+
                       FROM citas_veterinarias c 
                       JOIN mascotas m ON c.id_mascota = m.id_mascota 
                       LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
@@ -965,6 +970,7 @@ $resultado_mascotas = $conexion->query($consulta_mascotas);
             <div class="registros-medicos">
                 <?php if ($resultado_historial && $resultado_historial->num_rows > 0): ?>
                     <?php while($historial = $resultado_historial->fetch_assoc()): ?>
+
                         <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>">
                             <div class="encabezado-registro">
                                 <div class="fecha-registro">

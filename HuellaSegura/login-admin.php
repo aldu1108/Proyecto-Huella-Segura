@@ -55,7 +55,7 @@ if ($_POST) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Veterinario - PetCare</title>
+    <title>Login Veterinario - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body class="login-body-vet">

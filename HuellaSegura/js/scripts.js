@@ -1,4 +1,4 @@
-// Scripts para PetCare
+// Scripts para Huella Segura
 
 // Funcionalidad del menú hamburguesa
 document.addEventListener('DOMContentLoaded', function() {

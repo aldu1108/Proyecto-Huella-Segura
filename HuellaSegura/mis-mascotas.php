@@ -2,16 +2,29 @@
 include_once('config/conexion.php');
 session_start();
 
+// Verificar si hay sesión activa
+
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit();
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+$busqueda = isset($_GET['buscar']) ? $_GET['buscar'] : '';
 
 // Obtener mascotas del usuario
-$consulta_mascotas = "SELECT * FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo'";
+$consulta_base = "SELECT * FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo'";
+if (!empty($busqueda)) {
+    $consulta_base .= " AND nombre_mascota LIKE '%$busqueda%'";
+}
+$consulta_mascotas = $consulta_base . " ORDER BY nombre_mascota ASC";
 $resultado_mascotas = $conexion->query($consulta_mascotas);
+
+// Contar total de mascotas
+$consulta_total = "SELECT COUNT(*) as total FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo'";
+$resultado_total = $conexion->query($consulta_total);
+$total_mascotas = $resultado_total->fetch_assoc()['total'];
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

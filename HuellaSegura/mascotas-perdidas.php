@@ -2,6 +2,9 @@
 include_once('config/conexion.php');
 session_start();
 
+include_once('includes/menu_hamburguesa.php');
+
+
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit();

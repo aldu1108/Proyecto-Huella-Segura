@@ -22,7 +22,8 @@ $resultado_adopciones = $conexion->query($consulta_adopciones);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adopciones - PetCare</title>
+ 
+    <title>Adopciones - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <style>
         /* Incluir los estilos actualizados aquí */
@@ -31,30 +32,8 @@ $resultado_adopciones = $conexion->query($consulta_adopciones);
 </head>
 <body>
     <!-- Header -->
-    <header class="header-petcare">
-        <nav class="nav-principal">
-            <button class="btn-menu" id="menuHamburguesa">☰</button>
-            <div class="logo-container">
-                <h1 class="logo">PetCare 🐾</h1>
-            </div>
-            <div class="nav-icons">
-                <button class="btn-icon">🔍</button>
-                <button class="btn-icon">⚡</button>
-            </div>
-        </nav>
-        
-        <!-- Menú lateral -->
-        <div class="menu-lateral" id="menuLateral">
-            <div class="menu-options">
-                <a href="index.php" class="menu-item">🏠 Inicio</a>
-                <a href="mis-mascotas.php" class="menu-item">🐕 Mis Mascotas</a>
-                <a href="mascotas-perdidas.php" class="menu-item">🔍 Mascotas Perdidas</a>
-                <a href="adopciones.php" class="menu-item">❤️ Adopciones</a>
-                <a href="comunidad.php" class="menu-item">👥 Comunidad</a>
-                <a href="veterinaria.php" class="menu-item">🏥 Veterinaria</a>
-                <a href="logout.php" class="menu-item">🚪 Cerrar Sesión</a>
-            </div>
-        </div>
+    <header>
+        <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
 
     <!-- Contenido principal -->
