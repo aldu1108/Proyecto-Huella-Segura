@@ -51,11 +51,11 @@ if ($_POST) {
     <title>Iniciar Sesión - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="login-body">
+<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed;">
+
     <!-- Header centrado -->
     <div class="login-header">
-        <div class="paw-icons">🐾 🐾</div>
-        <h1 class="login-logo">PetCare</h1>
+        <h1 class="login-logo">Huella Segura</h1>
         <p class="login-subtitle">Tu compañero para el cuidado de mascotas</p>
     </div>
 
@@ -101,29 +101,11 @@ if ($_POST) {
             🩺 Iniciar Sesión como Veterinario
         </button>
         
-        <button class="btn-admin" onclick="window.location.href='login-admin.php'">
-            ⚙️ Acceso de Administrador
-        </button>
         
         <div class="register-link">
             ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
         </div>
         
-        <!-- Features -->
-        <div class="features-list">
-            <div class="feature-item">
-                <span class="feature-icon">📋</span>
-                <span>Historial médico completo</span>
-            </div>
-            <div class="feature-item">
-                <span class="feature-icon">🎯</span>
-                <span>Recordatorios personalizados</span>
-            </div>
-            <div class="feature-item">
-                <span class="feature-icon">🔍</span>
-                <span>Búsqueda de mascotas perdidas</span>
-            </div>
-        </div>
     </div>
 
     <script>
