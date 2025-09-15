@@ -101,10 +101,14 @@ if ($_POST) {
             🩺 Iniciar Sesión como Veterinario
         </button>
         
+        <button class="btn-admin" onclick="window.location.href='login-admin.php'">
+            🛡️ Acceso Administrativo
+        </button>
         
         <div class="register-link">
             ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
         </div>
+        
         
     </div>
 
