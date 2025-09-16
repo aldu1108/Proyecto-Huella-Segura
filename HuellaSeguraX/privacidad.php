@@ -13,7 +13,7 @@ session_start();
 <body>
     <div class="cabecera-principal">
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare</h1>
+            <h1 class="logo-texto">Huella Segura</h1>
             <p class="logo-subtitulo">Tu compañero para el cuidado de mascotas</p>
         </div>
     </div>

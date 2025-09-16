@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Huella Segura - Perfil</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #FFF3CD;
+      color: #333;
+    }
+
+    /* Barra superior */
+    header {
+      background: #F4D03F;
+      color: #D35400;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    header .icons {
+      display: flex;
+      gap: 15px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* Contenedor principal */
+    .container {
+      padding: 20px;
+      padding-bottom: 90px; /* espacio para barra inferior */
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Tarjeta de perfil */
+    .profile-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.05);
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .profile-info img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-text h2 {
+      font-size: 20px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 5px;
+    }
+
+    .badge {
+      background: #f28c3b;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    /* Contacto */
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .contact span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+      font-size: 13px;
+      color: #d35400;
+      cursor: pointer;
+    }
+
+    /* Configuraciones */
+    .settings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .settings button {
+      background: none;
+      border: 1px solid #d35400;
+      color: #d35400;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    .settings button:hover {
+      background: #fef0e6;
+    }
+
+    /* Sección de mascotas */
+    .pets-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.05);
+    }
+
+    .pets-card h3 {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pet {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .pet img {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .pet-info {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .pet-info h4 {
+      color: #333;
+      font-size: 15px;
+    }
+
+    .pet-details {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      margin-top: 3px;
+      color: #777;
+    }
+
+    /* Estadísticas */
+    .stats-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      text-align: center;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.05);
+    }
+
+    .stat {
+      color: #d35400;
+    }
+
+    .stat .number {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .stat .label {
+      color: #555;
+      font-size: 13px;
+    }
+
+    /* Barra inferior */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #f28c3b;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    nav .nav-item {
+      background: #d35400;
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Huella Segura 🐾</h1>
+    <div class="icons">
+      🔍 🔗
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-info">
+          <img src="https://via.placeholder.com/80" alt="Foto de perfil">
+          <div class="profile-text">
+            <h2>Juan Pérez</h2>
+            <p>Miembro desde Enero 2023</p>
+            <div class="badges">
+              <span class="badge">USUARIO VERIFICADO</span>
+              <span class="badge">4 MASCOTAS</span>
+            </div>
+          </div>
+        </div>
+        <button style="background:#d35400; border:none; color:#fff; border-radius:6px; padding:6px 10px; cursor:pointer;">✏️</button>
+      </div>
+
+      <div class="contact">
+        <span>📧 juan.perez@email.com</span>
+        <span>📞 +34 123 456 789</span>
+        <span>📍 Calle Principal 123, Madrid, España</span>
+        <div class="contact-actions">
+          <span>Contactar</span>
+          <span>Llamar</span>
+          <span>Ver en mapa</span>
+        </div>
+      </div>
+
+      <div class="settings">
+        <button>⚙️ Editar Perfil</button>
+        <button>🔔 Notificaciones</button>
+        <button>🛡️ Privacidad</button>
+        <button>⬇️ Exportar Datos</button>
+      </div>
+    </div>
+
+    <div class="pets-card">
+      <h3>Mis Mascotas (4) <span style="color:#d35400; font-size:13px; cursor:pointer;">Ver todas</span></h3>
+
+      <div class="pet">
+        <img src="https://via.placeholder.com/60" alt="Luna">
+        <div class="pet-info">
+          <h4>Luna ♀</h4>
+          <span>Perro • Golden Retriever</span>
+          <div class="pet-details"><span>3 años</span> <span>28 kg</span></div>
+        </div>
+      </div>
+
+      <div class="pet">
+        <img src="https://via.placeholder.com/60" alt="Whiskers">
+        <div class="pet-info">
+          <h4>Whiskers ♂</h4>
+          <span>Gato • Persa</span>
+          <div class="pet-details"><span>2 años</span> <span>4.5 kg</span></div>
+        </div>
+      </div>
+
+      <div class="pet">
+        <img src="https://via.placeholder.com/60" alt="Max">
+        <div class="pet-info">
+          <h4>Max ♂</h4>
+          <span>Perro • Pastor Alemán</span>
+          <div class="pet-details"><span>5 años</span> <span>35 kg</span></div>
+        </div>
+      </div>
+
+      <div class="pet">
+        <img src="https://via.placeholder.com/60" alt="Kiwi">
+        <div class="pet-info">
+          <h4>Kiwi ♀</h4>
+          <span>Ave • Loro Amazonas</span>
+          <div class="pet-details"><span>7 años</span> <span>0.8 kg</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <div class="stat">
+        <div class="number">12</div>
+        <div class="label">Citas médicas</div>
+      </div>
+      <div class="stat">
+        <div class="number">8</div>
+        <div class="label">Recordatorios</div>
+      </div>
+      <div class="stat">
+        <div class="number">95%</div>
+        <div class="label">Salud general</div>
+      </div>
+      <div class="stat">
+        <div class="number">3</div>
+        <div class="label">Veterinarios</div>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-item">❤️</div>
+    <div class="nav-item">🔍</div>
+    <div class="nav-item">🏠</div>
+    <div class="nav-item">👥</div>
+    <div class="nav-item">🩺</div>
+  </nav>
+
+</body>
+</html>

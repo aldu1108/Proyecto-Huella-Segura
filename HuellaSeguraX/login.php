@@ -51,18 +51,18 @@ if ($_POST) {
     <title>Iniciar Sesión - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed;">
+<body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
 
     <!-- Header centrado -->
     <div class="login-header">
-        <h1 class="login-logo">Huella Segura</h1>
+        <h1 class="login-logo">HUELLA SEGURA</h1>
         <p class="login-subtitle">Tu compañero para el cuidado de mascotas</p>
     </div>
 
     <!-- Contenedor de login -->
     <div class="login-container">
         <h2 class="login-title">Iniciar Sesión</h2>
-        <p class="login-welcome">Bienvenido de vuelta a PetCare</p>
+        <p class="login-welcome">Bienvenido de vuelta a Huella Segura</p>
         
         <?php if (!empty($mensaje_error)): ?>
             <div class="error-message">
@@ -101,14 +101,10 @@ if ($_POST) {
             🩺 Iniciar Sesión como Veterinario
         </button>
         
-        <button class="btn-admin" onclick="window.location.href='login-admin.php'">
-            🛡️ Acceso Administrativo
-        </button>
         
         <div class="register-link">
             ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
         </div>
-        
         
     </div>
 

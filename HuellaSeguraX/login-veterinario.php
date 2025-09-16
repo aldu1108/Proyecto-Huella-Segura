@@ -16,12 +16,11 @@ if ($_POST) {
     $contraseña = $_POST['contraseña'];
     
     if (!empty($email) && !empty($contraseña)) {
-        // Consulta para verificar veterinario CERTIFICADO
-        $consulta = "SELECT u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.contraseña_usuario, 
-                            v.id_veterinario, v.especialidad, v.clinica, v.certificado
+        // Consulta para verificar veterinario
+        $consulta = "SELECT u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.contraseña_usuario, v.id_veterinario, v.especialidad, v.clinica, v.certificado
                      FROM usuarios u 
                      JOIN veterinario v ON u.id_usuario = v.id_usuario 
-                     WHERE u.email_usuario = '$email' AND u.estado = 'activo'";
+                     WHERE u.email_usuario = '$email' AND u.estado = 'activo' AND v.certificado = 1";
         $resultado = $conexion->query($consulta);
         
         if ($resultado && $resultado->num_rows > 0) {
@@ -29,31 +28,25 @@ if ($_POST) {
             
             // Verificar contraseña
             if ($contraseña == $veterinario['contraseña_usuario']) {
-                // Verificar si está certificado
-                if ($veterinario['certificado'] == 1) {
-                    // Veterinario APROBADO - Crear sesión
-                    $_SESSION['usuario_id'] = $veterinario['id_usuario'];
-                    $_SESSION['usuario_nombre'] = $veterinario['nombre_usuario'];
-                    $_SESSION['usuario_apellido'] = $veterinario['apellido_usuario'];
-                    $_SESSION['veterinario_id'] = $veterinario['id_veterinario'];
-                    $_SESSION['es_veterinario'] = true;
-                    $_SESSION['especialidad'] = $veterinario['especialidad'];
-                    $_SESSION['clinica'] = $veterinario['clinica'];
-                    
-                    header("Location: panel-veterinario.php");
-                    exit();
-                } else {
-                    // Veterinario NO CERTIFICADO
-                    $mensaje_error = "⏳ Tu cuenta está pendiente de verificación por el administrador. Te contactaremos pronto.";
-                }
+                // Crear sesión de veterinario
+                $_SESSION['usuario_id'] = $veterinario['id_usuario'];
+                $_SESSION['usuario_nombre'] = $veterinario['nombre_usuario'];
+                $_SESSION['usuario_apellido'] = $veterinario['apellido_usuario'];
+                $_SESSION['veterinario_id'] = $veterinario['id_veterinario'];
+                $_SESSION['es_veterinario'] = true;
+                $_SESSION['especialidad'] = $veterinario['especialidad'];
+                $_SESSION['clinica'] = $veterinario['clinica'];
+                
+                header("Location: panel-veterinario.php");
+                exit();
             } else {
-                $mensaje_error = "❌ Contraseña incorrecta";
+                $mensaje_error = "Contraseña incorrecta";
             }
         } else {
-            $mensaje_error = "❌ Veterinario no encontrado o cuenta inactiva";
+            $mensaje_error = "Veterinario no encontrado o no certificado";
         }
     } else {
-        $mensaje_error = "⚠️ Por favor complete todos los campos";
+        $mensaje_error = "Por favor complete todos los campos";
     }
 }
 ?>
@@ -65,22 +58,22 @@ if ($_POST) {
     <title>Login Veterinario - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="veterinario-body">
+<body>
     <div class="cabecera-principal">
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
+            <h1 class="logo-texto">Huella Segura 🐾</h1>
             <p class="logo-subtitulo">Portal Veterinario Profesional</p>
         </div>
     </div>
 
     <div class="contenedor-login veterinario">
         <div class="encabezado-veterinario">
-            <h2 class="titulo-login">🩺 Acceso Veterinario</h2>
+            <h2 class="titulo-login">Acceso Veterinario</h2>
             <p class="subtitulo-login">Panel profesional para veterinarios certificados</p>
         </div>
         
         <?php if (!empty($mensaje_error)): ?>
-            <div class="mensaje-error">
+            <div class="mensaje-error" style="color: red; text-align: center; margin-bottom: 1rem; padding: 0.8rem; background-color: #ffebee; border-radius: 5px;">
                 <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
@@ -96,7 +89,12 @@ if ($_POST) {
                 <input type="password" name="contraseña" class="input-login veterinario-input" placeholder="Contraseña" required>
             </div>
             
-            <button type="submit" class="boton-login veterinario">🩺 Iniciar Sesión Profesional</button>
+            <div class="recordar-datos">
+                <input type="checkbox" id="recordar">
+                <label for="recordar">Mantener sesión activa</label>
+            </div>
+            
+            <button type="submit" class="boton-login veterinario">Iniciar Sesión Profesional</button>
         </form>
         
         <div class="separador">
@@ -108,26 +106,43 @@ if ($_POST) {
                 📋 Registrarse como Veterinario
             </button>
             
-            <div class="info-estados">
-                <div class="estado-item">
-                    <span class="icono-estado">✅</span>
+            <button class="boton-recuperar" onclick="mostrarRecuperacion()">
+                🔑 ¿Olvidaste tu contraseña?
+            </button>
+        </div>
+        
+        <div class="info-veterinario">
+            <h4>Acceso al Panel Veterinario</h4>
+            <div class="caracteristicas-veterinario">
+                <div class="caracteristica">
+                    <span class="icono">📊</span>
                     <div>
-                        <strong>Cuenta Aprobada</strong>
-                        <p>Acceso completo al panel veterinario</p>
+                        <strong>Panel de Control</strong>
+                        <p>Gestiona citas, historiales y pacientes</p>
                     </div>
                 </div>
-                <div class="estado-item">
-                    <span class="icono-estado">⏳</span>
+                
+                <div class="caracteristica">
+                    <span class="icono">🏥</span>
                     <div>
-                        <strong>Pendiente de Verificación</strong>
-                        <p>Tu solicitud está siendo revisada</p>
+                        <strong>Agenda Profesional</strong>
+                        <p>Calendario de citas y disponibilidad</p>
                     </div>
                 </div>
-                <div class="estado-item">
-                    <span class="icono-estado">❌</span>
+                
+                <div class="caracteristica">
+                    <span class="icono">📋</span>
                     <div>
-                        <strong>Rechazada</strong>
-                        <p>Debes registrarte nuevamente</p>
+                        <strong>Historiales Médicos</strong>
+                        <p>Acceso completo a expedientes</p>
+                    </div>
+                </div>
+                
+                <div class="caracteristica">
+                    <span class="icono">💊</span>
+                    <div>
+                        <strong>Prescripciones</strong>
+                        <p>Gestión de tratamientos y medicamentos</p>
                     </div>
                 </div>
             </div>
@@ -135,46 +150,76 @@ if ($_POST) {
         
         <div class="enlaces-adicionales">
             <a href="login.php" class="enlace-volver">← Volver al login normal</a>
+            <a href="ayuda-veterinarios.php" class="enlace-ayuda">¿Necesitas ayuda?</a>
+        </div>
+        
+        <div class="certificacion-info">
+            <p><strong>Nota:</strong> Solo veterinarios con certificación verificada pueden acceder a este panel.</p>
+            <p>Si eres veterinario y no tienes acceso, <a href="contacto-verificacion.php">solicita verificación</a>.</p>
         </div>
     </div>
 
-    <style>
-        .veterinario-body {
-            background: linear-gradient(135deg, #8d6e63 0%, #5d4e75 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+    <!-- Modal de recuperación -->
+    <div class="modal-recuperacion" id="modalRecuperacion" style="display: none;">
+        <div class="contenido-modal">
+            <div class="encabezado-modal">
+                <h3>Recuperar Contraseña</h3>
+                <button class="boton-cerrar-modal" onclick="cerrarRecuperacion()">✕</button>
+            </div>
+            <form method="POST" action="recuperar-veterinario.php">
+                <div class="grupo-input">
+                    <label>Correo electrónico profesional</label>
+                    <input type="email" name="email" required>
+                </div>
+                
+                <div class="grupo-input">
+                    <label>Número de colegiado (opcional)</label>
+                    <input type="text" name="numero_colegiado" placeholder="Para verificación adicional">
+                </div>
+                
+                <div class="botones-modal">
+                    <button type="button" class="boton-cancelar" onclick="cerrarRecuperacion()">Cancelar</button>
+                    <button type="submit" class="boton-guardar">Enviar Enlace de Recuperación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function mostrarRecuperacion() {
+            document.getElementById('modalRecuperacion').style.display = 'flex';
         }
 
+        function cerrarRecuperacion() {
+            document.getElementById('modalRecuperacion').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modalRecuperacion').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarRecuperacion();
+            }
+        });
+    </script>
+
+    <style>
+        /* Estilos específicos para login veterinario */
         .contenedor-login.veterinario {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
+            background: linear-gradient(135deg, #8d6e63 0%, #5d4e75 100%);
+            color: white;
             max-width: 500px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
         .encabezado-veterinario {
             text-align: center;
             margin-bottom: 2rem;
             padding: 1rem;
-            background: linear-gradient(135deg, #8d6e63, #5d4e75);
-            color: white;
+            background: rgba(255,255,255,0.1);
             border-radius: 10px;
-            margin: -1rem -1rem 2rem -1rem;
         }
 
-        .mensaje-error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            border: 1px solid #f5c6cb;
+        .titulo-login, .subtitulo-login {
+            color: white;
         }
 
         .grupo-input {
@@ -188,97 +233,186 @@ if ($_POST) {
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.2rem;
-            color: #666;
             z-index: 1;
         }
 
         .veterinario-input {
             padding-left: 3.5rem;
-            width: 100%;
-            padding: 1rem 1rem 1rem 3.5rem;
-            border: 2px solid #e8e8e8;
-            border-radius: 10px;
-            font-size: 1rem;
+            background: rgba(255,255,255,0.95);
+            border: 2px solid rgba(255,255,255,0.3);
         }
 
         .veterinario-input:focus {
-            outline: none;
+            background: white;
             border-color: #8d6e63;
         }
 
-        .boton-login.veterinario {
-            width: 100%;
-            background: linear-gradient(135deg, #8d6e63, #5d4e75);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
+        .recordar-datos {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             margin-bottom: 1.5rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .boton-login.veterinario {
+            background: linear-gradient(135deg, #6a4c93, #8d6e63);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .separador {
             text-align: center;
             margin: 1.5rem 0;
-            color: #666;
+            color: rgba(255,255,255,0.7);
         }
 
         .separador span {
-            background: white;
+            background: linear-gradient(135deg, #8d6e63 0%, #5d4e75 100%);
             padding: 0 1rem;
         }
 
-        .boton-registro-veterinario {
-            width: 100%;
-            background: rgba(141, 110, 99, 0.1);
-            border: 2px solid #8d6e63;
-            color: #8d6e63;
-            padding: 1rem;
-            border-radius: 10px;
-            cursor: pointer;
+        .opciones-veterinario {
             margin-bottom: 2rem;
         }
 
-        .info-estados {
-            margin: 2rem 0;
+        .boton-registro-veterinario, .boton-recuperar {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
         }
 
-        .estado-item {
+        .boton-registro-veterinario:hover, .boton-recuperar:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .info-veterinario {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .info-veterinario h4 {
+            color: #f1c40f;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .caracteristicas-veterinario {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .caracteristica {
             display: flex;
             align-items: center;
             gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
         }
 
-        .icono-estado {
+        .caracteristica .icono {
             font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
         }
 
-        .estado-item strong {
-            color: #333;
+        .caracteristica strong {
+            color: #f39c12;
+            display: block;
+        }
+
+        .caracteristica p {
             font-size: 0.9rem;
-        }
-
-        .estado-item p {
-            color: #666;
-            font-size: 0.8rem;
+            color: rgba(255,255,255,0.8);
             margin: 0;
         }
 
         .enlaces-adicionales {
             text-align: center;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
+            margin-bottom: 1rem;
         }
 
-        .enlace-volver {
+        .enlace-volver, .enlace-ayuda {
             color: #3498db;
             text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .enlace-volver:hover, .enlace-ayuda:hover {
+            text-decoration: underline;
+        }
+
+        .certificacion-info {
+            background: rgba(231,76,60,0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+            font-size: 0.9rem;
+        }
+
+        .certificacion-info a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+
+        .certificacion-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal */
+        .modal-recuperacion {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-recuperacion .contenido-modal {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-recuperacion .grupo-input label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .modal-recuperacion .grupo-input input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .contenedor-login.veterinario {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .caracteristicas-veterinario {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </body>

@@ -13,7 +13,7 @@ session_start();
 <body>
     <div class="cabecera-principal">
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
+            <h1 class="logo-texto">Huella Segura 🐾</h1>
             <p class="logo-subtitulo">Tu compañero para el cuidado de mascotas</p>
         </div>
     </div>
@@ -27,7 +27,7 @@ session_start();
         <div class="contenido-legal">
             <section class="seccion-terminos">
                 <h2>1. Aceptación de los Términos</h2>
-                <p>Al acceder y utilizar Huella Segura - PetCare ("el Servicio"), usted acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestro servicio.</p>
+                <p>Al acceder y utilizar Huella Segura ("el Servicio"), usted acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestro servicio.</p>
             </section>
 
             <section class="seccion-terminos">

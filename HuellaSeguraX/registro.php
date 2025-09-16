@@ -59,14 +59,14 @@ if ($_POST) {
 <body>
     <div class="cabecera-principal">
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
+            <h1 class="logo-texto">Huella Segura 🐾</h1>
             <p class="logo-subtitulo">Tu compañero para el cuidado de mascotas</p>
         </div>
     </div>
 
     <div class="contenedor-login">
         <h2 class="titulo-login">Crear Cuenta</h2>
-        <p class="subtitulo-login">Únete a la comunidad de PetCare</p>
+        <p class="subtitulo-login">Únete a la comunidad de Huella Segura</p>
         
         <?php if (!empty($mensaje_error)): ?>
             <div class="mensaje-error" style="color: red; text-align: center; margin-bottom: 1rem; padding: 0.8rem; background-color: #ffebee; border-radius: 5px;">

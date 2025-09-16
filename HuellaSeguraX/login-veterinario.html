@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Veterinario</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #5a4633;
+    }
+
+    header {
+      color: #e46b28;
+      text-align: center;
+      padding: 15px 0;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    header a {
+      display: block;
+      margin-top: 5px;
+      color: #F4D03F;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      margin-bottom: 8px;
+    }
+
+    .login-container p {
+      color: #a56c42;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+      color: #5a4633;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #c8a26c;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      color: #e46b28;
+      text-decoration: none;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #e46b28;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .btn-demo {
+      background-color: #f1a64d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .register-link {
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .register-link a {
+      color: #e46b28;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .features {
+      text-align: left;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    .features div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .features div span {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background-color: #F4D03F;
+      text-align: center;
+      line-height: 25px;
+      margin-right: 8px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed; background-size: cover;">
+
+  <header>
+    Portal profesional para veterinarios
+    <a href="#">← Volver al login de usuarios</a>
+  </header>
+
+  <div class="login-container">
+    <h2>Login Veterinario</h2>
+    <p>Accede a tu cuenta profesional</p>
+
+    <div class="input-group">
+      <label for="email">Correo profesional</label>
+      <input type="email" id="email" placeholder="Ingresa tu correo">
+    </div>
+
+    <div class="input-group">
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" placeholder="Ingresa tu contraseña">
+    </div>
+
+    <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
+
+    <button class="btn">Iniciar Sesión</button>
+
+    <button class="btn btn-demo">❤️ Probar con Cuenta Demo</button>
+
+    <div class="register-link">
+      ¿No tienes cuenta? <a href="#">Registrarse</a>
+    </div>
+
+    <div class="features">
+      <div><span>📋</span> Gestión de historiales médicos</div>
+      <div><span>📅</span> Agenda de citas y turnos</div>
+      <div><span>👥</span> Portal de pacientes integrado</div>
+    </div>
+  </div>
+
+</body>
+</html>

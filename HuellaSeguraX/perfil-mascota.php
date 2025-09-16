@@ -36,7 +36,7 @@ $resultado_citas = $conexion->query($consulta_citas);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo $mascota['nombre_mascota']; ?> - Perfil - PetCare</title>
+    <title><?php echo $mascota['nombre_mascota']; ?> - Perfil - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
@@ -45,7 +45,7 @@ $resultado_citas = $conexion->query($consulta_citas);
         <nav class="nav-principal">
             <button class="btn-menu" id="menuHamburguesa">☰</button>
             <div class="logo-container">
-                <h1 class="logo">PetCare 🐾</h1>
+                <h1 class="logo">Huella Segura 🐾</h1>
             </div>
             <div class="nav-icons">
                 <button class="btn-icon">🔍</button>

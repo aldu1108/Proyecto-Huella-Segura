@@ -429,7 +429,7 @@ ALTER TABLE `solicitud_adopcion`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`);
-  MODIFY id INT NOT NULL AUTO_INCREMENT;
+
 --
 -- Indices de la tabla `veterinario`
 --

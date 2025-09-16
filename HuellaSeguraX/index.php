@@ -65,7 +65,7 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - PetCare</title>
+    <title>Inicio - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <style>
         /* Estilos específicos para index.php */
@@ -706,7 +706,7 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                 <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
                     <?php while($mascota = $resultado_mascotas->fetch_assoc()): ?>
                         <div class="mascota-card-principal" onclick="window.location.href='perfil-mascota.php?id=<?php echo $mascota['id_mascota']; ?>'">
-                            <!--<img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" 
+                            <!--<img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : '/imagenes/perro.jpg'; ?>" 
                                  alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" 
                                  class="mascota-foto-principal"> -->
                             <div class="mascota-info-principal">

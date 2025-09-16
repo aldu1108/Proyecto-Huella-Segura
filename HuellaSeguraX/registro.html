@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Cuenta</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #5a4633;
+    }
+
+    header {
+      color: #e46b28;
+      text-align: center;
+      padding: 15px 0;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    header a {
+      display: block;
+      margin-top: 5px;
+      color: #F4D03F;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .container h2 {
+      margin-bottom: 8px;
+    }
+
+    .container p {
+      color: #a56c42;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+      color: #5a4633;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #c8a26c;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #e46b28;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .btn-demo {
+      background-color: #f1a64d;
+    }
+
+    .btn-vet {
+      background-color: #b4805a;
+    }
+
+    .btn-admin {
+      background-color: #4a5364;
+    }
+
+    .login-link {
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .login-link a {
+      color: #e46b28;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .features {
+      text-align: left;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    .features div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .features div span {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background-color: #F4D03F;
+      text-align: center;
+      line-height: 25px;
+      margin-right: 8px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed; background-size: cover;">
+
+  <header>
+    Únete a la comunidad de cuidadores de mascotas
+    <a href="#">← Volver al inicio</a>
+  </header>
+
+  <div class="container">
+    <h2>Crear Cuenta</h2>
+    <p>Únete a la comunidad de cuidadores de mascotas</p>
+
+    <div class="input-group">
+      <label for="nombre">Nombre completo</label>
+      <input type="text" id="nombre" placeholder="Ingresa tu nombre">
+    </div>
+
+    <div class="input-group">
+      <label for="correo">Correo electrónico</label>
+      <input type="email" id="correo" placeholder="Ingresa tu correo">
+    </div>
+
+    <div class="input-group">
+      <label for="pass">Contraseña</label>
+      <input type="password" id="pass" placeholder="Ingresa tu contraseña">
+    </div>
+
+    <div class="input-group">
+      <label for="pass2">Confirmar contraseña</label>
+      <input type="password" id="pass2" placeholder="Repite tu contraseña">
+    </div>
+
+    <button class="btn">Crear Cuenta</button>
+
+    <button class="btn btn-demo">❤️ Probar con Cuenta Demo</button>
+    <button class="btn btn-vet">🩺 Iniciar Sesión como Veterinario</button>
+    <button class="btn btn-admin">⚙️ Acceso de Administrador</button>
+
+    <div class="login-link">
+      ¿Ya tienes cuenta? <a href="#">Iniciar Sesión</a>
+    </div>
+
+    <div class="features">
+      <div><span>📋</span> Historial médico completo</div>
+      <div><span>📅</span> Recordatorios personalizados</div>
+      <div><span>🔍</span> Búsqueda de mascotas perdidas</div>
+    </div>
+  </div>
+
+</body>
+</html>
