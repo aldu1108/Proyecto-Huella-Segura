@@ -4,35 +4,46 @@ session_start();
 
 $mensaje_error = "";
 
-// Verificar si ya hay sesión de admin activa
-if (isset($_SESSION['es_admin']) && $_SESSION['es_admin'] === true) {
-    header("Location: panel-admin.php");
+// Verificar si ya hay sesión activa
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: index.php");
     exit();
 }
 
-// Credenciales de administrador hardcodeadas (simple y seguro para demo)
-const ADMIN_EMAIL = "admin@huellasegura.com";
-const ADMIN_PASSWORD = "admin123";
-
-// Procesar login de administrador
+// Procesar formulario de login de veterinario
 if ($_POST) {
     $email = $_POST['email'];
     $contraseña = $_POST['contraseña'];
     
     if (!empty($email) && !empty($contraseña)) {
-        // Verificar credenciales de admin
-        if ($email === ADMIN_EMAIL && $contraseña === ADMIN_PASSWORD) {
-            // Crear sesión de administrador
-            $_SESSION['usuario_id'] = 999; // ID especial para admin
-            $_SESSION['usuario_nombre'] = 'Administrador';
-            $_SESSION['usuario_apellido'] = 'Sistema';
-            $_SESSION['es_admin'] = true;
-            $_SESSION['hora_login'] = date('H:i:s');
+        // Consulta para verificar veterinario
+        $consulta = "SELECT u.id_usuario, u.nombre_usuario, u.apellido_usuario, u.contraseña_usuario, v.id_veterinario, v.especialidad, v.clinica, v.certificado
+                     FROM usuarios u 
+                     JOIN veterinario v ON u.id_usuario = v.id_usuario 
+                     WHERE u.email_usuario = '$email' AND u.estado = 'activo' AND v.certificado = 1";
+        $resultado = $conexion->query($consulta);
+        
+        if ($resultado && $resultado->num_rows > 0) {
+            $veterinario = $resultado->fetch_assoc();
             
-            header("Location: panel-admin.php");
-            exit();
+            // Verificar contraseña
+            if ($contraseña == $veterinario['contraseña_usuario']) {
+                // Crear sesión de veterinario
+                $_SESSION['usuario_id'] = $veterinario['id_usuario'];
+                $_SESSION['usuario_nombre'] = $veterinario['nombre_usuario'];
+                $_SESSION['usuario_apellido'] = $veterinario['apellido_usuario'];
+                $_SESSION['veterinario_id'] = $veterinario['id_veterinario'];
+                $_SESSION['es_veterinario'] = true;
+                $_SESSION['especialidad'] = $veterinario['especialidad'];
+                $_SESSION['clinica'] = $veterinario['clinica'];
+                
+                header("Location: panel-veterinario.php");
+                exit();
+            } else {
+                $mensaje_error = "Contraseña incorrecta";
+            }
         } else {
-            $mensaje_error = "Credenciales de administrador incorrectas";
+            $mensaje_error = "Veterinario no encontrado o no certificado";
         }
     } else {
         $mensaje_error = "Por favor complete todos los campos";
@@ -44,153 +55,81 @@ if ($_POST) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Administrativo - Huella Segura</title>
+    <title>Login Veterinario - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="admin-login-body">
-    <!-- Header simple -->
+<body class="login-body-vet">
+    <!-- Header centrado -->
     <div class="login-header">
-        <h1 class="login-logo">🛡️ Panel Administrativo</h1>
-        <p class="login-subtitle">Acceso restringido para administradores</p>
+        <p class="portal-text">Portal profesional para veterinarios</p>
+        <a href="login.php" class="back-link">← Volver al login de usuarios</a>
     </div>
 
-    <!-- Contenedor de login admin -->
-    <div class="login-container admin-container">
-        <h2 class="login-title">Acceso Administrativo</h2>
-        <p class="login-welcome">Ingrese sus credenciales de administrador</p>
+    <!-- Contenedor de login -->
+    <div class="login-container-vet">
+        <h2 class="login-title">Login Veterinario</h2>
+        <p class="login-welcome">Accede a tu cuenta profesional</p>
         
         <?php if (!empty($mensaje_error)): ?>
             <div class="error-message">
-                🔒 <?php echo $mensaje_error; ?>
+                <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
         
         <form class="login-form" method="POST" action="">
             <div class="input-group">
-                <span class="input-icon">👤</span>
-                <input type="email" name="email" class="login-input" placeholder="Email de administrador" required>
+                <span class="input-icon">📧</span>
+                <input type="email" name="email" class="login-input" placeholder="Correo profesional" required>
             </div>
             
             <div class="input-group">
-                <span class="input-icon">🔐</span>
-                <input type="password" name="contraseña" class="login-input" placeholder="Contraseña de administrador" required>
+                <span class="input-icon">🔒</span>
+                <input type="password" name="contraseña" class="login-input" placeholder="Contraseña" required>
+                <button type="button" class="password-toggle">👁</button>
             </div>
             
-            <button type="submit" class="btn-login admin-btn">🛡️ Acceder al Panel</button>
+            <div class="forgot-password">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+            
+            <button type="submit" class="btn-login-vet">Iniciar Sesión</button>
         </form>
         
         <div class="divider">
-            <span>Credenciales para prueba</span>
+            <span>o</span>
         </div>
         
-        <!-- Credenciales de prueba (solo para demo) -->
-        <div class="demo-credentials">
-            <p><strong>📧 Email:</strong> admin@huellasegura.com</p>
-            <p><strong>🔑 Contraseña:</strong> admin123</p>
+        <button class="btn-demo" onclick="loginDemo()">
+            ❤️ Probar con Cuenta Demo
+        </button>
+        
+        <div class="register-link">
+            ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
         </div>
         
-        <div class="admin-links">
-            <a href="login.php">← Volver al login de usuarios</a>
-            <a href="login-veterinario.php">Acceso veterinarios →</a>
-        </div>
-        
-        <div class="admin-warning">
-            <p>⚠️ <strong>Acceso Restringido</strong></p>
-            <p>Este panel es solo para administradores autorizados del sistema.</p>
+        <!-- Features veterinario -->
+        <div class="features-list">
+            <div class="feature-item">
+                <span class="feature-icon">📋</span>
+                <span>Gestión de historiales médicos</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📅</span>
+                <span>Agenda de citas y turnos</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">👥</span>
+                <span>Portal de pacientes integrado</span>
+            </div>
         </div>
     </div>
 
-    <style>
-        .admin-login-body {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .admin-container {
-            background: white;
-            border: 3px solid #e74c3c;
-            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.3);
-        }
-
-        .admin-container .login-title {
-            color: #c0392b;
-        }
-
-        .admin-btn {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .admin-btn:hover {
-            background: linear-gradient(135deg, #c0392b, #a93226);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
-        }
-
-        .demo-credentials {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .demo-credentials p {
-            margin: 0.5rem 0;
-            font-size: 14px;
-        }
-
-        .admin-links {
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-
-        .admin-links a {
-            color: #3498db;
-            text-decoration: none;
-            margin: 0 1rem;
-            font-size: 14px;
-        }
-
-        .admin-links a:hover {
-            text-decoration: underline;
-        }
-
-        .admin-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .admin-warning p {
-            margin: 0.25rem 0;
-            font-size: 13px;
-            color: #856404;
-        }
-    </style>
-
     <script>
-        // Auto-llenar campos para facilitar pruebas (solo en desarrollo)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Solo para desarrollo - remove en producción
-            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            
-            if (isDevelopment) {
-                document.querySelector('input[name="email"]').value = 'admin@huellasegura.com';
-                document.querySelector('input[name="contraseña"]').value = 'admin123';
-            }
-        });
+        function loginDemo() {
+            // Simulación de login demo para veterinario
+            window.location.href = 'panel-veterinario.php';
+        }
     </script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>

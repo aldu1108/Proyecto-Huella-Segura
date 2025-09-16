@@ -11,7 +11,7 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
     <nav class="navegacion-principal">
         <button class="boton-menu-hamburguesa" id="menuHamburguesa">☰</button>
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
+            <h1 class="logo-texto">Huella Segura 🐾</h1>
         </div>
         <div class="iconos-derecha">
             <button class="boton-notificaciones" onclick="toggleNotificaciones()">🔔</button>
@@ -70,7 +70,7 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
                 
                 <div class="separador-menu"></div>
                 
-                <a href="mi-perfil.php" class="opcion-menu">
+                <a href="mi_perfil.php" class="opcion-menu">
                     <span class="icono-menu">👤</span>
                     <span class="texto-menu">Mi Perfil</span>
                 </a>
@@ -142,7 +142,7 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    height: 60px; /* Altura fija reducida */
+    height: 80px; /* Altura fija reducida */
 }
 
 .navegacion-principal {
@@ -159,7 +159,7 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
     background: none;
     border: none;
     color: #333; /* Color negro para las líneas del menú */
-    font-size: 1.3rem; /* Tamaño ligeramente reducido */
+    font-size: 1.6rem; /* Tamaño ligeramente reducido */
     cursor: pointer;
     padding: 0.4rem;
     border-radius: 6px;
@@ -177,7 +177,7 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
 }
 
 .logo-texto {
-    font-size: 1.6rem; /* Tamaño reducido proporcionalmente */
+    font-size: 2.0rem; /* Tamaño reducido proporcionalmente */
     margin: 0;
     font-weight: bold;
     color: #d35400; /* Color naranja para el logo */

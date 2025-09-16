@@ -48,7 +48,7 @@
         
         <div class="footer-inferior">
             <div class="info-empresa">
-                <p>&copy; 2025 Huella Segura - PetCare. Todos los derechos reservados.</p>
+                <p>&copy; 2025 Huella Segura - Todos los derechos reservados.</p>
                 <p>Desarrollado con ❤️ para la comunidad de amantes de las mascotas</p>
             </div>
             

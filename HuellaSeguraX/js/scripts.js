@@ -642,7 +642,7 @@ function optimizePerformance() {
     // Precargar imágenes críticas
     const criticalImages = [
         'imagenes/logo.png',
-        'imagenes/mascota-default.jpg'
+        'imagenes/perro.jpg'
     ];
     preloadImages(criticalImages);
     
@@ -930,7 +930,7 @@ window.PetCareApp = {
     EventBus
 };
 
-console.log('PetCare Scripts v1.0 - Cargados correctamente'); 
+console.log('Huella Segura Scripts v1.0 - Cargados correctamente'); 
 function handleFileUpload(input, preview) {
     if (input && preview) {
         input.addEventListener('change', function(e) {
@@ -1838,7 +1838,7 @@ function initManejadorImagenes() {
     document.addEventListener('error', function(e) {
         if (e.target.tagName === 'IMG') {
             // Reemplazar con imagen por defecto
-            e.target.src = 'imagenes/mascota-default.jpg';
+            e.target.src = 'imagenes/perro.jpg';
             e.target.alt = 'Imagen no disponible';
         }
     }, true);
