@@ -843,31 +843,36 @@ $resultado_mascotas = $conexion->query($consulta_mascotas);
             <div class="historial-citas">
                 <h4>Historial Reciente</h4>
                 <div class="lista-citas">
-                    <?php if ($resultado_citas && $resultado_citas->num_rows > 0): ?>
-                        <?php 
-                        $resultado_citas->data_seek(0);
-                        $contador = 0;
-                        while($cita = $resultado_citas->fetch_assoc() && $contador < 5): 
-                        ?>
-                            <div class="item-cita">
-                                <div class="fecha-item"><?php echo date('d M Y', strtotime($cita['fecha'])); ?></div>
-                                <div class="info-item">
-                                    <strong><?php echo htmlspecialchars($cita['motivo']); ?></strong>
-                                    <p><?php echo htmlspecialchars($cita['nombre_mascota']); ?> - 
-                                       <?php echo htmlspecialchars($cita['nombre_veterinario'] . ' ' . $cita['apellido_veterinario']); ?>
-                                    </p>
+                    <?php if ($resultado_proximas && $resultado_proximas->num_rows > 0): ?>
+                        <?php while (($cita = $resultado_proximas->fetch_assoc()) !== null && $cita !== false): ?>
+                            <div class="tarjeta-cita <?php echo ($cita['fecha'] == $fecha_hoy) ? 'hoy' : 'proxima'; ?>">
+                                <div class="info-cita">
+                                    <div class="fecha-cita">
+                                        <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
+                                        <span class="mes"><?php echo date('M', strtotime($cita['fecha'])); ?></span>
+                                    </div>
+                                    <div class="detalles-cita">
+                                        <h5><?php echo htmlspecialchars($cita['motivo']); ?></h5>
+                                        <p>🐕 <?php echo htmlspecialchars($cita['nombre_mascota']); ?></p>
+                                        <p>🏥 <?php echo htmlspecialchars(!empty($cita['clinica']) ? $cita['clinica'] : 'Clínica Veterinaria'); ?>
+                                        </p>
+                                        <p>⏰ 10:00 AM</p>
+                                    </div>
                                 </div>
-                                <div class="estado-item <?php echo $cita['estado']; ?>">
+                                <div class="estado-cita <?php echo $cita['estado']; ?>">
                                     <?php echo ucfirst($cita['estado']); ?>
                                 </div>
                             </div>
-                        <?php 
-                        $contador++;
-                        endwhile; 
-                        ?>
+                        <?php endwhile; ?>
                     <?php else: ?>
-                        <p class="sin-historial">No hay citas registradas</p>
+                        <div class="sin-citas">
+                            <p>No tienes citas programadas próximamente</p>
+                            <button class="boton-agendar-primera" onclick="mostrarFormularioCita()">
+                                Agendar Primera Cita
+                            </button>
+                        </div>
                     <?php endif; ?>
+
                 </div>
             </div>
         </section>
