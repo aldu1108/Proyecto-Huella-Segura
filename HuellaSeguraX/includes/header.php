@@ -15,7 +15,7 @@ include_once('config/conexion.php');
         <nav class="navegacion-principal">
             <button class="boton-menu-hamburguesa" id="menuHamburguesa">☰</button>
             <div class="logo-contenedor">
-                <h1 class="logo-texto">PetCare 🐾</h1>
+                <h1 class="logo-texto">Huella Segura 🐾</h1>
                 <p class="logo-subtitulo">Tu compañero para el cuidado de mascotas</p>
             </div>
             <div class="iconos-derecha">

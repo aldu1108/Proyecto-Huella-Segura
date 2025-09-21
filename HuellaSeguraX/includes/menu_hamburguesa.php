@@ -11,7 +11,7 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
     <nav class="navegacion-principal">
         <button class="boton-menu-hamburguesa" id="menuHamburguesa">☰</button>
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
+            <h1 class="logo-texto">Huella Segura 🐾</h1>
         </div>
         <div class="iconos-derecha">
             <button class="boton-notificaciones" onclick="toggleNotificaciones()">🔔</button>
