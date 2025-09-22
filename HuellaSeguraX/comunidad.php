@@ -226,12 +226,8 @@ $resultado_eventos = $conexion->query($consulta_eventos);
     </main>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn">❤️</button>
-        <button class="nav-btn">🔍</button>
-        <button class="nav-btn">🏠</button>
-        <button class="nav-btn active">👥</button>
-        <button class="nav-btn">🏥</button>
+    <nav>
+        <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script src="js/scripts.js"></script>

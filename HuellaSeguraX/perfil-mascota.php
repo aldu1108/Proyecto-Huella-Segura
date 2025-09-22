@@ -41,30 +41,8 @@ $resultado_citas = $conexion->query($consulta_citas);
 </head>
 <body>
     <!-- Header -->
-    <header class="header-petcare">
-        <nav class="nav-principal">
-            <button class="btn-menu" id="menuHamburguesa">☰</button>
-            <div class="logo-container">
-                <h1 class="logo">PetCare 🐾</h1>
-            </div>
-            <div class="nav-icons">
-                <button class="btn-icon">🔍</button>
-                <button class="btn-icon">⚡</button>
-            </div>
-        </nav>
-        
-        <!-- Menú lateral -->
-        <div class="menu-lateral" id="menuLateral">
-            <div class="menu-options">
-                <a href="index.php" class="menu-item">🏠 Inicio</a>
-                <a href="mis-mascotas.php" class="menu-item">🐕 Mis Mascotas</a>
-                <a href="mascotas-perdidas.php" class="menu-item">🔍 Mascotas Perdidas</a>
-                <a href="adopciones.php" class="menu-item">❤️ Adopciones</a>
-                <a href="comunidad.php" class="menu-item">👥 Comunidad</a>
-                <a href="veterinaria.php" class="menu-item">🏥 Veterinaria</a>
-                <a href="logout.php" class="menu-item">🚪 Cerrar Sesión</a>
-            </div>
-        </div>
+    <header>
+        <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
 
     <!-- Contenido principal -->
@@ -257,12 +235,8 @@ $resultado_citas = $conexion->query($consulta_citas);
     </main>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn" onclick="window.location.href='adopciones.php'">❤️</button>
-        <button class="nav-btn" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
-        <button class="nav-btn" onclick="window.location.href='index.php'">🏠</button>
-        <button class="nav-btn" onclick="window.location.href='comunidad.php'">👥</button>
-        <button class="nav-btn active" onclick="window.location.href='veterinaria.php'">🏥</button>
+    <nav>
+        <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script src="js/scripts.js"></script>

@@ -56,122 +56,136 @@ if ($_POST) {
     <title>Registrarse - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body>
-    <div class="cabecera-principal">
-        <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
-            <p class="logo-subtitulo">Tu compañero para el cuidado de mascotas</p>
-        </div>
+<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed; background-size: cover;">
+
+    <!-- Header centrado -->
+    <div class="login-header">
+        <h1 class="login-logo">Huella Segura</h1>
+        <p class="login-subtitle">Tu compañero para el cuidado de mascotas 🐕</p>
     </div>
 
-    <div class="contenedor-login">
-        <h2 class="titulo-login">Crear Cuenta</h2>
-        <p class="subtitulo-login">Únete a la comunidad de PetCare</p>
+    <!-- Contenedor de registro -->
+    <div class="login-container">
+        <h2 class="login-title">Crear Cuenta</h2>
+        <p class="login-welcome">¡Únete a la comunidad de Huella Segura!</p>
         
         <?php if (!empty($mensaje_error)): ?>
-            <div class="mensaje-error" style="color: red; text-align: center; margin-bottom: 1rem; padding: 0.8rem; background-color: #ffebee; border-radius: 5px;">
+            <div class="error-message">
                 <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
         
         <?php if (!empty($mensaje_exito)): ?>
-            <div class="mensaje-exito" style="color: green; text-align: center; margin-bottom: 1rem; padding: 0.8rem; background-color: #e8f5e8; border-radius: 5px;">
+            <div class="error-message" style="background: #E8F5E8; color: #2E7D32;">
                 <?php echo $mensaje_exito; ?>
-                <br><a href="login.php" style="color: #27ae60;">Ir a Iniciar Sesión</a>
+                <br><a href="login.php" style="color: #27AE60; font-weight: 600;">Ir a Iniciar Sesión</a>
             </div>
         <?php endif; ?>
         
-        <form method="POST" action="">
-            <div class="fila-inputs">
-                <div class="grupo-input">
-                    <input type="text" name="nombre_usuario" class="input-login" placeholder="Nombre" required value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>">
-                </div>
-                
-                <div class="grupo-input">
-                    <input type="text" name="apellido_usuario" class="input-login" placeholder="Apellido" required value="<?php echo isset($_POST['apellido_usuario']) ? $_POST['apellido_usuario'] : ''; ?>">
-                </div>
+        <form class="login-form" method="POST" action="">
+            <div class="input-group">
+                <input type="text" name="nombre_usuario" class="login-input" placeholder="Ingrese su nombre" required 
+                       value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>">
             </div>
             
-            <div class="grupo-input">
-                <input type="email" name="email_usuario" class="input-login" placeholder="Correo electrónico" required value="<?php echo isset($_POST['email_usuario']) ? $_POST['email_usuario'] : ''; ?>">
+            <div class="input-group">
+                <input type="text" name="apellido_usuario" class="login-input" placeholder="Ingrese su apellido" required 
+                       value="<?php echo isset($_POST['apellido_usuario']) ? $_POST['apellido_usuario'] : ''; ?>">
             </div>
             
-            <div class="grupo-input">
-                <input type="tel" name="telefono_usuario" class="input-login" placeholder="Teléfono (opcional)" value="<?php echo isset($_POST['telefono_usuario']) ? $_POST['telefono_usuario'] : ''; ?>">
+            <div class="input-group">
+                <input type="email" name="email_usuario" class="login-input" placeholder="Ingrese su correo electrónico" required 
+                       value="<?php echo isset($_POST['email_usuario']) ? $_POST['email_usuario'] : ''; ?>">
             </div>
             
-            <div class="grupo-input">
-                <input type="password" name="contraseña_usuario" class="input-login" placeholder="Contraseña (mín. 6 caracteres)" required>
+            <div class="input-group">
+                <input type="tel" name="telefono_usuario" class="login-input" placeholder="Teléfono (opcional)" 
+                       value="<?php echo isset($_POST['telefono_usuario']) ? $_POST['telefono_usuario'] : ''; ?>">
             </div>
             
-            <div class="grupo-input">
-                <input type="password" name="confirmar_contraseña" class="input-login" placeholder="Confirmar contraseña" required>
+            <div class="input-group">
+                <input type="password" name="contraseña_usuario" class="login-input" placeholder="Contraseña (mín. 6 caracteres)" required>
             </div>
             
-            <div class="checkbox-grupo">
-                <input type="checkbox" id="terminos" required>
-                <label for="terminos">Acepto los <a href="terminos.php" style="color: #d35400;">términos y condiciones</a></label>
+            <div class="input-group">
+                <input type="password" name="confirmar_contraseña" class="login-input" placeholder="Confirmar contraseña" required>
             </div>
             
-            <button type="submit" class="boton-login">Crear Cuenta</button>
+            <div class="terms-checkbox">
+                <label>
+                    <input type="checkbox" id="terminos" required>
+                    <span class="checkmark"></span>
+                    Acepto los <a href="terminos.php">términos y condiciones</a>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn-login">Crear Cuenta</button>
         </form>
         
-        <div style="text-align: center; margin: 1rem 0; color: #666;">o</div>
+        <div class="divider">
+            <span>o</span>
+        </div>
         
-        <button class="boton-demo" onclick="window.location.href='login.php'">
+        <button class="btn-demo" onclick="window.location.href='login.php'">
             ⬅️ Volver al Iniciar Sesión
         </button>
         
-        <div class="enlace-registro">
+        <div class="register-link">
             ¿Ya tienes cuenta? <a href="login.php">Iniciar Sesión</a>
-        </div>
-        
-        <div style="text-align: center; margin-top: 2rem;">
-            <h4 style="color: #d35400; margin-bottom: 1rem;">¿Por qué registrarte?</h4>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                🐾 <span>Gestiona múltiples mascotas</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                📅 <span>Calendario de citas y vacunas</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                👥 <span>Conecta con otros dueños</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                🏥 <span>Historial médico completo</span>
-            </div>
         </div>
     </div>
 
     <style>
-        /* Estilos adicionales para el registro */
-        .fila-inputs {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .fila-inputs .grupo-input {
-            flex: 1;
-        }
-        
-        .checkbox-grupo {
+        /* Estilos adicionales específicos para registro */
+        .terms-checkbox {
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            font-size: 14px;
         }
         
-        .checkbox-grupo input[type="checkbox"] {
-            width: auto;
+        .terms-checkbox label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #666;
+            line-height: 1.4;
         }
         
+        .terms-checkbox input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        
+        .terms-checkbox a {
+            color: #D35400;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Ajustes responsive para móvil */
         @media (max-width: 768px) {
-            .fila-inputs {
-                flex-direction: column;
-                gap: 0;
+            .login-container {
+                padding: 32px 20px;
+                margin: 0 12px;
+            }
+            
+            .features-list {
+                margin-top: 24px;
+            }
+            
+            .feature-item {
+                margin-bottom: 8px;
+                font-size: 13px;
             }
         }
     </style>
+
+    <script src="js/scripts.js"></script>
 </body>
 </html>

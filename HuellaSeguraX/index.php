@@ -694,8 +694,8 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
     <main class="main-content">
         <!-- Barra de búsqueda principal -->
         <div class="barra-busqueda-principal">
-            <input type="text" class="input-busqueda-principal" placeholder="🔍 Buscar mascotas, veterinarios, recordatorios...">
-            <button class="boton-filtro-principal">🎚️</button>
+            <input type="text" class="input-busqueda-principal" placeholder="Buscar mascotas, veterinarios, recordatorios...">
+            <button class="boton-filtro-principal">🔍</button>
         </div>
 
         <!-- Mis Mascotas -->
@@ -720,7 +720,7 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                     <!-- Botón agregar más mascotas -->
                     <div style="display: flex; align-items: center; justify-content: center; padding: 40px;">
                         <a href="mis-mascotas.php" class="boton-agregar-mascota">
-                            <span style="font-size: 24px;">+</span> Agregar
+                            Ver mis mascotas
                         </a>
                     </div>
                 <?php else: ?>
@@ -1000,12 +1000,8 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
     </main>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn" onclick="window.location.href='adopciones.php'">❤️</button>
-        <button class="nav-btn" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
-        <button class="nav-btn active">🏠</button>
-        <button class="nav-btn" onclick="window.location.href='comunidad.php'">👥</button>
-        <button class="nav-btn" onclick="window.location.href='veterinaria.php'">🏥</button>
+    <nav>
+        <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script src="js/scripts.js"></script>

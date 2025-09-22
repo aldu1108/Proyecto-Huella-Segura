@@ -74,82 +74,81 @@ if ($_POST) {
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 
-<body class="veterinario-body">
-    <div class="cabecera-principal">
-        <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
-            <p class="logo-subtitulo">Registro Profesional Veterinario</p>
-        </div>
+<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed; background-size: cover;">
+
+    <!-- Header centrado -->
+    <div class="login-header" style="margin-bottom: 23px">
+        <h1 class="login-logo">Huella Segura</h1>
+        <p class="login-subtitle">Tu compañero para el cuidado de mascotas 🐾</p>
     </div>
 
-    <div class="contenedor-registro-veterinario">
-        <div class="encabezado-veterinario-registro">
-            <h2 class="titulo-registro">Registro Veterinario</h2>
-            <p class="subtitulo-registro">Únete a nuestra red de profesionales certificados</p>
-        </div>
+    <!-- Contenedor de registro -->
+    <div class="login-container" style="max-width: 500px; max-height: 78vh; overflow-y: auto;">
+        <h2 class="login-title">Registro Veterinario</h2>
+        <p class="login-welcome">Únete a nuestra red de profesionales</p>
 
         <?php if (!empty($mensaje_error)): ?>
-            <div class="mensaje-error">
-                ⚠️ <?php echo $mensaje_error; ?>
+            <div class="error-message">
+                <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
 
         <?php if (!empty($mensaje_exito)): ?>
-            <div class="mensaje-exito">
-                ✅ <?php echo $mensaje_exito; ?>
-                <br><a href="login-veterinario.php">Ir a Iniciar Sesión</a>
+            <div class="success-message">
+                <?php echo $mensaje_exito; ?>
+                <br><a href="login-veterinario.php" style="color: #fff; text-decoration: underline;">Ir a Iniciar Sesión</a>
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="" class="form-veterinario">
-            <div class="seccion-formulario">
-                <h3>Información Personal</h3>
-
-                <div class="fila-inputs">
-                    <div class="grupo-input">
-                        <label>Nombre *</label>
-                        <input type="text" name="nombre_usuario" required
+        <form class="login-form" method="POST" action="">
+            <!-- Información Personal -->
+            <div class="form-section">
+                <h3 style="color: #d17c41; margin-bottom: 1rem; font-size: 1.1rem;">Información Personal</h3>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="input-group" style="flex: 1;">
+                        <span class="input-icon">👤</span>
+                        <input type="text" name="nombre_usuario" class="login-input" placeholder="Nombre" required
                             value="<?php echo isset($_POST['nombre_usuario']) ? $_POST['nombre_usuario'] : ''; ?>">
                     </div>
-
-                    <div class="grupo-input">
-                        <label>Apellido *</label>
-                        <input type="text" name="apellido_usuario" required
+                    <div class="input-group" style="flex: 1;">
+                        <span class="input-icon">👤</span>
+                        <input type="text" name="apellido_usuario" class="login-input" placeholder="Apellido" required
                             value="<?php echo isset($_POST['apellido_usuario']) ? $_POST['apellido_usuario'] : ''; ?>">
                     </div>
                 </div>
 
-                <div class="grupo-input">
-                    <label>Correo Electrónico Profesional *</label>
-                    <input type="email" name="email_usuario" required
+                <div class="input-group">
+                    <span class="input-icon">📧</span>
+                    <input type="email" name="email_usuario" class="login-input" placeholder="Correo electrónico profesional" required
                         value="<?php echo isset($_POST['email_usuario']) ? $_POST['email_usuario'] : ''; ?>">
                 </div>
 
-                <div class="grupo-input">
-                    <label>Teléfono de Contacto</label>
-                    <input type="tel" name="telefono_usuario"
+                <div class="input-group">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" name="telefono_usuario" class="login-input" placeholder="Teléfono de contacto"
                         value="<?php echo isset($_POST['telefono_usuario']) ? $_POST['telefono_usuario'] : ''; ?>">
                 </div>
 
-                <div class="fila-inputs">
-                    <div class="grupo-input">
-                        <label>Contraseña *</label>
-                        <input type="password" name="contraseña_usuario" required>
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                    <div class="input-group" style="flex: 1;">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" name="contraseña_usuario" class="login-input" placeholder="Contraseña" required>
                     </div>
-
-                    <div class="grupo-input">
-                        <label>Confirmar Contraseña *</label>
-                        <input type="password" name="confirmar_contraseña" required>
+                    <div class="input-group" style="flex: 1;">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" name="confirmar_contraseña" class="login-input" placeholder="Confirmar contraseña" required>
                     </div>
                 </div>
             </div>
 
-            <div class="seccion-formulario">
-                <h3>Información Profesional</h3>
-
-                <div class="grupo-input">
-                    <label>Especialidad *</label>
-                    <select name="especialidad" required>
+            <!-- Información Profesional -->
+            <div class="form-section">
+                <h3 style="color: #d17c41; margin-bottom: 1rem; font-size: 1.1rem;">Información Profesional</h3>
+                
+                <div class="input-group">
+                    <span class="input-icon">🩺</span>
+                    <select name="especialidad" class="login-input" required>
                         <option value="">Seleccionar especialidad</option>
                         <option value="Medicina General">Medicina General</option>
                         <option value="Cirugía">Cirugía</option>
@@ -160,124 +159,107 @@ if ($_POST) {
                     </select>
                 </div>
 
-                <div class="grupo-input">
-                    <label>Clínica/Hospital *</label>
-                    <input type="text" name="clinica" placeholder="Nombre de la clínica donde trabajas" required>
+                <div class="input-group">
+                    <span class="input-icon">🏥</span>
+                    <input type="text" name="clinica" class="login-input" placeholder="Nombre de la clínica donde trabajas" required>
                 </div>
 
-                <div class="grupo-input">
-                    <label>Número de Colegiado *</label>
-                    <input type="text" name="numero_colegiado" placeholder="Número de registro profesional" required>
+                <div class="input-group">
+                    <span class="input-icon">🏅</span>
+                    <input type="text" name="numero_colegiado" class="login-input" placeholder="Número de registro profesional" required>
                 </div>
 
-                <div class="grupo-input">
-                    <label>Horarios de Atención</label>
-                    <textarea name="horarios_atencion" rows="3" placeholder="Ej: Lunes a Viernes 9:00-18:00"></textarea>
+                <div class="input-group">
+                    <span class="input-icon">🕐</span>
+                    <textarea name="horarios_atencion" class="login-input" placeholder="Ej: Lunes a Viernes 9:00-18:00" rows="3"></textarea>
                 </div>
             </div>
 
-            <button type="submit" class="boton-registro-veterinario">Registrarse como Veterinario</button>
+            <button type="submit" class="btn-login">Registrarse como Veterinario</button>
         </form>
 
-        <div class="enlaces-adicionales">
-            <a href="login-veterinario.php">← Ya tengo cuenta veterinaria</a>
-            <a href="login.php">Registro normal (no veterinario)</a>
+        <div class="divider">
+            <span>o</span>
+        </div>
+
+        <div class="register-link">
+            ¿Ya tienes cuenta? <a href="login.php">Iniciar Sesión</a>
         </div>
     </div>
 
     <style>
-        .veterinario-body {
-            background: linear-gradient(135deg, #8d6e63 0%, #5d4e75 100%);
-            min-height: 100vh;
-        }
-
-        .contenedor-registro-veterinario {
-            max-width: 600px;
-            margin: 2rem auto;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-        }
-
-        .encabezado-veterinario-registro {
-            background: linear-gradient(135deg, #6a4c93, #8d6e63);
+        /* Estilos adicionales específicos para el registro veterinario */
+        .success-message {
+            background: rgba(76, 175, 80, 0.9);
             color: white;
-            padding: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
             text-align: center;
+            margin-bottom: 1.5rem;
+            border: none;
         }
 
-        .form-veterinario {
-            padding: 2rem;
-        }
-
-        .seccion-formulario {
+        .form-section {
             margin-bottom: 2rem;
         }
 
-        .fila-inputs {
-            display: flex;
-            gap: 1rem;
+        .login-input[name="horarios_atencion"] {
+            resize: vertical;
+            min-height: 80px;
+            padding-top: 15px;
         }
 
-        .grupo-input {
-            margin-bottom: 1rem;
-        }
-
-        .grupo-input label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .grupo-input input,
-        .grupo-input select,
-        .grupo-input textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e8e8e8;
-            border-radius: 8px;
-        }
-
-        .boton-registro-veterinario {
-            width: 100%;
-            background: linear-gradient(135deg, #8d6e63, #6a4c93);
-            color: white;
-            border: none;
-            padding: 1.2rem;
-            font-size: 1.2rem;
-            border-radius: 10px;
+        /* Ajustar el select para que se vea igual que los inputs */
+        select.login-input {
+            background-color: rgba(255, 255, 255, 0.9);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23999" d="M6 9L1.5 4.5h9L6 9z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
             cursor: pointer;
         }
 
-        .mensaje-error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 1rem;
-            margin: 1rem 2rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .mensaje-exito {
-            background: #e8f5e8;
-            color: #2e7d32;
-            padding: 1rem;
-            margin: 1rem 2rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .enlaces-adicionales {
-            padding: 2rem;
-            text-align: center;
-        }
-
+        /* Responsive para móviles */
         @media (max-width: 768px) {
-            .fila-inputs {
-                flex-direction: column;
+            .login-container {
+                margin: 1rem;
+                max-height: 85vh;
+                padding: 1.5rem;
+            }
+            
+            div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 0 !important;
+            }
+            
+            .input-group[style*="flex: 1"] {
+                margin-bottom: 1rem;
             }
         }
+
+        /* Ajustar el scroll del contenedor */
+        .login-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .login-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .login-container::-webkit-scrollbar-thumb {
+            background: rgba(209, 124, 65, 0.6);
+            border-radius: 3px;
+        }
+
+        .login-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(209, 124, 65, 0.8);
+        }
     </style>
+
+    <script src="js/scripts.js"></script>
 </body>
 
 </html>
