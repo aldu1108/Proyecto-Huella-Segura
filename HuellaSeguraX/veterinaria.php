@@ -924,7 +924,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
     </style>
 </head>
 <body>
-    <?php include_once('includes/menu_hamburguesa.php'); ?>
+    <header>
+        <?php include_once('includes/menu_hamburguesa.php'); ?>
+    </header>
         
     <div class="contenedor-veterinaria">
         <!-- Mostrar mensajes -->

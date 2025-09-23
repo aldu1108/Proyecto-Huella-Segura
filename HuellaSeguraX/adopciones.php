@@ -314,7 +314,6 @@ if (isset($_GET['error'])) {
     <header>
         <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
-
     <!-- Contenido principal -->
     <main class="main-content">
         <?php if (!empty($mensaje)): ?>

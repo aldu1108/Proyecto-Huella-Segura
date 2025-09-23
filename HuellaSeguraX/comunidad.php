@@ -87,7 +87,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         </nav>
 
         <!-- Sección Feed -->
-        <section class="feed-section" id="feedSection" style="display: none;">
+        <section class="feed-section" id="feedSection">
             <!-- Crear post -->
             <div class="create-post">
                 <textarea placeholder="¿Qué quieres compartir con la comunidad?"></textarea>
@@ -141,7 +141,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 
 
         <!-- Sección Eventos (activa por defecto) -->
-        <section class="eventos-section" id="eventosSection">
+        <section class="eventos-section" id="eventosSection" style="display: none;">
             <div class="section-header">
                 <h3>Próximos Eventos</h3>
                 <button class="btn-create">Crear Evento</button>
