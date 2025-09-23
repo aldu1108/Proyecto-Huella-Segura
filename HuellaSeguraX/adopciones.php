@@ -549,12 +549,8 @@ if (isset($_GET['error'])) {
     </div>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active" onclick="window.location.href='adopciones.php'">❤️</button>
-        <button class="nav-btn" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
-        <button class="nav-btn" onclick="window.location.href='index.php'">🏠</button>
-        <button class="nav-btn" onclick="window.location.href='comunidad.php'">💥</button>
-        <button class="nav-btn" onclick="window.location.href='veterinaria.php'">🏥</button>
+    <nav>
+        <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script>

@@ -628,7 +628,6 @@ if (isset($_GET['error'])) {
                                 <h5>📢 Qué haremos después:</h5>
                                 <ul>
                                     <li>✅ Publicaremos tu reporte en la comunidad</li>
-                                    <li>📱 Notificaremos a usuarios cercanos</li>
                                     <li>🔍 Activaremos búsqueda en la zona</li>
                                     <li>📞 Te contactaremos si hay pistas</li>
                                 </ul>
@@ -646,12 +645,8 @@ if (isset($_GET['error'])) {
     </div>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn" onclick="window.location.href='adopciones.php'">❤️</button>
-        <button class="nav-btn active" onclick="window.location.href='mascotas-perdidas.php'">🔍</button>
-        <button class="nav-btn" onclick="window.location.href='index.php'">🏠</button>
-        <button class="nav-btn" onclick="window.location.href='comunidad.php'">💥</button>
-        <button class="nav-btn" onclick="window.location.href='veterinaria.php'">🏥</button>
+    <nav>
+        <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script>
@@ -696,8 +691,6 @@ if (isset($_GET['error'])) {
             pasos.forEach((paso, index) => {
                 if (index < numeroPaso) {
                     paso.classList.add('activo');
-                } else {
-                    paso.classList.remove('activo');
                 }
             });
         }

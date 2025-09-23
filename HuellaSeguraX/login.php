@@ -52,21 +52,19 @@ if ($_POST) {
     <title>Iniciar Sesión - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-
-<body class="login-body"
-    style="background: url('fondo-login.png') no-repeat center center fixed;">
+<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed; background-size: cover;">
 
     <!-- Header centrado -->
     <div class="login-header">
         <h1 class="login-logo">Huella Segura</h1>
-        <p class="login-subtitle">Tu compañero para el cuidado de mascotas</p>
+        <p class="login-subtitle">Tu compañero para el cuidado de mascotas 🐕</p>
     </div>
 
     <!-- Contenedor de login -->
     <div class="login-container">
         <h2 class="login-title">Iniciar Sesión</h2>
-        <p class="login-welcome">Bienvenido de vuelta a PetCare</p>
-
+        <p class="login-welcome">¡Bienvenido de vuelta a Huella Segura!</p>
+        
         <?php if (!empty($mensaje_error)): ?>
             <div class="error-message">
                 <?php echo $mensaje_error; ?>
@@ -75,13 +73,11 @@ if ($_POST) {
 
         <form class="login-form" method="POST" action="">
             <div class="input-group">
-                <span class="input-icon">📧</span>
-                <input type="email" name="email" class="login-input" placeholder="Correo electrónico" required>
+                <input type="email" name="email" class="login-input" placeholder="Ingrese su correo electrónico" required>
             </div>
 
             <div class="input-group">
-                <span class="input-icon">🔒</span>
-                <input type="password" name="contraseña" class="login-input" placeholder="Contraseña" required>
+                <input type="password" name="contraseña" class="login-input" placeholder="Ingrese su contraseña" required>
                 <button type="button" class="password-toggle">👁</button>
             </div>
 
@@ -99,9 +95,9 @@ if ($_POST) {
         <button class="btn-demo" onclick="loginDemo()">
             ❤️ Probar con Cuenta Demo
         </button>
-
-        <button class="btn-veterinario" onclick="window.location.href='login-veterinario.php'">
-            🩺 Iniciar Sesión como Veterinario
+        
+        <button class="btn-veterinario" onclick="window.location.href='registro-veterinario.php'">
+            🩺 Registrarse como Veterinario
         </button>
 
         <button class="btn-admin" onclick="window.location.href='login-admin.php'">

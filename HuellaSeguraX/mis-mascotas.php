@@ -253,7 +253,7 @@ if (isset($_GET['error'])) {
         <!-- Barra de búsqueda -->
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Buscar mascotas, veterinarios, recordatorios...">
-            <button class="filter-btn">🔽</button>
+            <button class="filter-btn">🔍</button>
         </div>
 
         <!-- Sección Mis Mascotas -->
@@ -464,12 +464,8 @@ if (isset($_GET['error'])) {
     </div>
 
     <!-- Navegación inferior -->
-    <nav class="bottom-nav">
-        <button class="nav-btn">❤️</button>
-        <button class="nav-btn">🔍</button>
-        <button class="nav-btn">🏠</button>
-        <button class="nav-btn">💥</button>
-        <button class="nav-btn">🏥</button>
+    <nav>
+        <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <!-- JavaScript -->

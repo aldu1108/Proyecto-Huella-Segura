@@ -68,7 +68,7 @@ if ($_POST) {
 <body class="veterinario-body">
     <div class="cabecera-principal">
         <div class="logo-contenedor">
-            <h1 class="logo-texto">PetCare 🐾</h1>
+            <h1 class="logo-texto">Huella Segura 🐾</h1>
             <p class="logo-subtitulo">Portal Veterinario Profesional</p>
         </div>
     </div>
