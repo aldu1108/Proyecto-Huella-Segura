@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-09-2025 a las 05:46:54
+-- Tiempo de generación: 24-09-2025 a las 20:46:39
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,11 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `aa`
+-- Base de datos: `huellasegura`
 --
-
-CREATE DATABASE huellasegura;
-USE huellasegura;
 
 -- --------------------------------------------------------
 
@@ -38,6 +35,14 @@ CREATE TABLE `citas_veterinarias` (
   `id_mascota` int(11) NOT NULL,
   `id_veterinario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `citas_veterinarias`
+--
+
+INSERT INTO `citas_veterinarias` (`id_cita`, `fecha`, `motivo`, `estado`, `id_mascota`, `id_veterinario`) VALUES
+(1, '2025-09-24', 'Vacunación', 'programada', 0, 1),
+(2, '2025-09-24', 'Consulta General', 'programada', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -128,6 +133,13 @@ CREATE TABLE `historiales_medicos` (
   `id_veterinario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `historiales_medicos`
+--
+
+INSERT INTO `historiales_medicos` (`id_historial`, `fecha`, `diagnostico`, `tratamiento`, `id_mascota`, `id_veterinario`) VALUES
+(0, '2025-09-11', 'qq', 'qq', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -146,6 +158,13 @@ CREATE TABLE `mascotas` (
   `estado` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `mascotas`
+--
+
+INSERT INTO `mascotas` (`id_mascota`, `id_usuario`, `tipo`, `sexo`, `nombre_mascota`, `edad_mascota`, `cumpleaños_mascota`, `foto_mascota`, `estado`) VALUES
+(0, 0, 'perro', 'hembra', 'Luna', 3, '2021-05-15', 'luna-demo.jpg', 'activo');
+
 -- --------------------------------------------------------
 
 --
@@ -159,7 +178,7 @@ CREATE TABLE `opinion_veterinario` (
   `puntuacion` tinyint(4) NOT NULL,
   `id_veterinario` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -282,6 +301,13 @@ CREATE TABLE `usuarios` (
   `foto_usuario` varchar(255) NOT NULL,
   `estado` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id_usuario`, `email_usuario`, `contraseña_usuario`, `telefono_usuario`, `nombre_usuario`, `apellido_usuario`, `foto_usuario`, `estado`) VALUES
+(0, 'demo@petcare.com', 'demo123', '123456789', 'aa', 'Demo', 'demo.jpg', 'activo');
 
 -- --------------------------------------------------------
 
@@ -429,7 +455,7 @@ ALTER TABLE `solicitud_adopcion`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`);
-  MODIFY id INT NOT NULL AUTO_INCREMENT;
+
 --
 -- Indices de la tabla `veterinario`
 --
@@ -445,7 +471,7 @@ ALTER TABLE `veterinario`
 -- AUTO_INCREMENT de la tabla `citas_veterinarias`
 --
 ALTER TABLE `citas_veterinarias`
-  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
@@ -476,189 +502,6 @@ ALTER TABLE `fichas_de_salud`
 --
 ALTER TABLE `gastos`
   MODIFY `id_gasto` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `historiales_medicos`
---
-ALTER TABLE `historiales_medicos`
-  MODIFY `id_historial` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `mascotas`
---
-ALTER TABLE `mascotas`
-  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `opinion_veterinario`
---
-ALTER TABLE `opinion_veterinario`
-  MODIFY `id_opinion` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `paseos`
---
-ALTER TABLE `paseos`
-  MODIFY `id_paseo` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `post_comunidad`
---
-ALTER TABLE `post_comunidad`
-  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `publicaciones`
---
-ALTER TABLE `publicaciones`
-  MODIFY `id_anuncio` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `publicacion_adopcion`
---
-ALTER TABLE `publicacion_adopcion`
-  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `publicacion_perdida`
---
-ALTER TABLE `publicacion_perdida`
-  MODIFY `id_perdida` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `reportes`
---
-ALTER TABLE `reportes`
-  MODIFY `id_reporte` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `solicitud_adopcion`
---
-ALTER TABLE `solicitud_adopcion`
-  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `veterinario`
---
-ALTER TABLE `veterinario`
-  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `citas_veterinarias`
---
-ALTER TABLE `citas_veterinarias`
-  ADD CONSTRAINT `fk_cita_mascota` FOREIGN KEY (`id_mascota`) REFERENCES `mascotas` (`id_mascota`),
-  ADD CONSTRAINT `fk_cita_veterinario` FOREIGN KEY (`id_veterinario`) REFERENCES `veterinario` (`id_veterinario`);
-
---
--- Filtros para la tabla `comentarios`
---
-ALTER TABLE `comentarios`
-  ADD CONSTRAINT `fk_comentario_post` FOREIGN KEY (`id_post`) REFERENCES `post_comunidad` (`id_post`),
-  ADD CONSTRAINT `fk_comentario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `documento_medico`
---
-ALTER TABLE `documento_medico`
-  ADD CONSTRAINT `fk_documento_historial` FOREIGN KEY (`id_historial`) REFERENCES `historiales_medicos` (`id_historial`);
-
---
--- Filtros para la tabla `eventos`
---
-ALTER TABLE `eventos`
-  ADD CONSTRAINT `fk_evento_mascota` FOREIGN KEY (`id_mascota`) REFERENCES `mascotas` (`id_mascota`),
-  ADD CONSTRAINT `fk_evento_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `gastos`
---
-ALTER TABLE `gastos`
-  ADD CONSTRAINT `fk_gasto_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `historiales_medicos`
---
-ALTER TABLE `historiales_medicos`
-  ADD CONSTRAINT `fk_historial_mascota` FOREIGN KEY (`id_mascota`) REFERENCES `mascotas` (`id_mascota`),
-  ADD CONSTRAINT `fk_historial_veterinario` FOREIGN KEY (`id_veterinario`) REFERENCES `veterinario` (`id_veterinario`);
-
---
--- Filtros para la tabla `mascotas`
---
-ALTER TABLE `mascotas`
-  ADD CONSTRAINT `fk_mascota_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `opinion_veterinario`
---
-ALTER TABLE `opinion_veterinario`
-  ADD CONSTRAINT `fk_opinion_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `fk_opinion_veterinario` FOREIGN KEY (`id_veterinario`) REFERENCES `veterinario` (`id_veterinario`);
-
---
--- Filtros para la tabla `paseos`
---
-ALTER TABLE `paseos`
-  ADD CONSTRAINT `fk_paseo_mascota` FOREIGN KEY (`id_mascota`) REFERENCES `mascotas` (`id_mascota`),
-  ADD CONSTRAINT `fk_paseo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `post_comunidad`
---
-ALTER TABLE `post_comunidad`
-  ADD CONSTRAINT `fk_post_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `publicaciones`
---
-ALTER TABLE `publicaciones`
-  ADD CONSTRAINT `fk_publicacion_mascota` FOREIGN KEY (`id_mascota`) REFERENCES `mascotas` (`id_mascota`),
-  ADD CONSTRAINT `fk_publicacion_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `publicacion_adopcion`
---
-ALTER TABLE `publicacion_adopcion`
-  ADD CONSTRAINT `fk_adopcion_publicacion` FOREIGN KEY (`id_publicacion`) REFERENCES `publicaciones` (`id_anuncio`);
-
---
--- Filtros para la tabla `publicacion_perdida`
---
-ALTER TABLE `publicacion_perdida`
-  ADD CONSTRAINT `fk_perdida_publicacion` FOREIGN KEY (`id_publicacion`) REFERENCES `publicaciones` (`id_anuncio`);
-
---
--- Filtros para la tabla `reportes`
---
-ALTER TABLE `reportes`
-  ADD CONSTRAINT `fk_reporte_comentario` FOREIGN KEY (`id_comentario`) REFERENCES `comentarios` (`id_comentario`),
-  ADD CONSTRAINT `fk_reporte_post` FOREIGN KEY (`id_post`) REFERENCES `post_comunidad` (`id_post`),
-  ADD CONSTRAINT `fk_reporte_publicacion` FOREIGN KEY (`id_publicaciones`) REFERENCES `publicaciones` (`id_anuncio`),
-  ADD CONSTRAINT `fk_reporte_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `solicitud_adopcion`
---
-ALTER TABLE `solicitud_adopcion`
-  ADD CONSTRAINT `fk_solicitud_adopcion` FOREIGN KEY (`id_adopcion`) REFERENCES `publicacion_adopcion` (`id_adopcion`),
-  ADD CONSTRAINT `fk_solicitud_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
-
---
--- Filtros para la tabla `veterinario`
---
-ALTER TABLE `veterinario`
-  ADD CONSTRAINT `fk_veterinario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
