@@ -1098,7 +1098,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                             <div class="info-cita">
                                 <div class="foto-paciente">
                                     <?php if (!empty($mascota['foto_mascota'])): ?>
-                                        <img src="imagenes/<?php echo htmlspecialchars($mascota['foto_mascota']); ?>" alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>">
+                                        <img src="imagenes/perro.jpg" class="foto-paciente">
                                     <?php else: ?>
                                         <div class="placeholder-paciente"><?php echo ($mascota['tipo'] == 'perro') ? '🐕' : '🐱'; ?></div>
                                     <?php endif; ?>
