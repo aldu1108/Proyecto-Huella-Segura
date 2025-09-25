@@ -73,37 +73,15 @@ if ($_POST) {
     }
 }
 
-// Obtener citas veterinarias del usuario
+// Obtener próximas citas (solo futuras y programadas)
 $fecha_hoy = date('Y-m-d');
-$consulta_citas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad,
-                   u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
-                   FROM citas_veterinarias c 
-                   JOIN mascotas m ON c.id_mascota = m.id_mascota 
-                   LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
-                   LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                   WHERE m.id_usuario = $usuario_id 
-                   ORDER BY c.fecha DESC LIMIT 10";
-$resultado_citas = $conexion->query($consulta_citas);
-
-// Obtener historial médico
-$consulta_historial = "SELECT h.*, m.nombre_mascota, m.tipo,
-                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
-                       FROM historiales_medicos h 
-                       JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                       LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
-                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                       WHERE m.id_usuario = $usuario_id 
-                       ORDER BY h.fecha DESC LIMIT 20";
-$resultado_historial = $conexion->query($consulta_historial);
-
-// Obtener próximas citas
 $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad,
                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
                       FROM citas_veterinarias c 
                       JOIN mascotas m ON c.id_mascota = m.id_mascota 
                       LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                      WHERE m.id_usuario = $usuario_id AND c.fecha >= '$fecha_hoy' AND c.estado != 'cancelada'
+                      WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) >= '$fecha_hoy' AND c.estado != 'cancelada'
                       ORDER BY c.fecha ASC LIMIT 5";
 $resultado_proximas = $conexion->query($consulta_proximas);
 
@@ -115,6 +93,52 @@ $consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especi
                        WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) = '$fecha_hoy' AND c.estado != 'cancelada'
                        ORDER BY c.fecha ASC";
 $resultado_citas_hoy = $conexion->query($consulta_citas_hoy);
+
+// Obtener historial médico combinado (consultas médicas + citas pasadas)
+$consulta_historial = "SELECT h.*, m.nombre_mascota, m.tipo,
+                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+                       'consulta' as tipo_entrada, h.fecha as fecha_registro
+                       FROM historiales_medicos h 
+                       JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                       LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
+                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                       WHERE m.id_usuario = $usuario_id 
+                       
+                       UNION ALL
+                       
+                       SELECT NULL as id_historial, NULL as diagnostico, NULL as tratamiento, 
+                       c.id_mascota, c.id_veterinario, c.motivo as nombre_mascota, m.tipo,
+                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+                       'cita_pasada' as tipo_entrada, DATE(c.fecha) as fecha_registro
+                       FROM citas_veterinarias c
+                       JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                       LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
+                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                       WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) < '$fecha_hoy' AND c.estado != 'cancelada'
+                       
+                       ORDER BY fecha_registro DESC LIMIT 20";
+
+// Modificamos la consulta del historial para que funcione con la DB actual
+$consulta_historial_simple = "SELECT h.*, m.nombre_mascota, m.tipo,
+                               u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+                               FROM historiales_medicos h 
+                               JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                               LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
+                               LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                               WHERE m.id_usuario = $usuario_id 
+                               ORDER BY h.fecha DESC LIMIT 20";
+$resultado_historial = $conexion->query($consulta_historial_simple);
+
+// Obtener citas pasadas para mostrar en el historial
+$consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad,
+                           u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+                           FROM citas_veterinarias c 
+                           JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                           LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
+                           LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                           WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) < '$fecha_hoy' AND c.estado != 'cancelada'
+                           ORDER BY c.fecha DESC LIMIT 10";
+$resultado_citas_pasadas = $conexion->query($consulta_citas_pasadas);
 
 // Obtener mascotas para el selector
 $consulta_mascotas = "SELECT * FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo'";
@@ -202,7 +226,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             <button class="boton-seccion-vet" data-seccion="documentos">📄 Documentos</button>
         </nav>
 
-        <!-- Sección Mi Agenda -->
+        <!-- Sección Mi Agenda (SIN historial de citas) -->
         <section class="seccion-veterinaria seccion-agenda activa" id="seccionAgenda">
             <div class="encabezado-agenda">
                 <h3>Mi Agenda Veterinaria</h3>
@@ -264,38 +288,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                     </div>
                 <?php endif; ?>
             </div>
-
-            <!-- Historial de citas recientes -->
-            <div class="historial-citas">
-                <h4>Historial Reciente de Citas</h4>
-                <div class="lista-citas">
-                    <?php if ($resultado_citas && $resultado_citas->num_rows > 0): ?>
-                        <?php while($cita_hist = $resultado_citas->fetch_assoc()): ?>
-                            <div class="tarjeta-cita">
-                                <div class="info-cita">
-                                    <div class="fecha-cita">
-                                        <span class="dia"><?php echo date('d', strtotime($cita_hist['fecha'])); ?></span>
-                                        <span class="mes"><?php echo date('M', strtotime($cita_hist['fecha'])); ?></span>
-                                    </div>
-                                    <div class="detalles-cita">
-                                        <h5><?php echo htmlspecialchars($cita_hist['motivo']); ?></h5>
-                                        <p>🐕 <?php echo htmlspecialchars($cita_hist['nombre_mascota']); ?></p>
-                                        <p>🏥 <?php echo htmlspecialchars($cita_hist['clinica'] ?: 'Clínica Veterinaria'); ?></p>
-                                        <p>⏰ <?php echo date('H:i', strtotime($cita_hist['fecha'])); ?></p>
-                                    </div>
-                                </div>
-                                <div class="estado-cita <?php echo $cita_hist['estado']; ?>">
-                                    <?php echo ucfirst($cita_hist['estado']); ?>
-                                </div>
-                            </div>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <div class="sin-citas">
-                            <p>No hay historial de citas disponible</p>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
         </section>
 
         <!-- Sección Pacientes -->
@@ -350,10 +342,10 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
         </section>
 
-        <!-- Sección Historial Médico -->
+        <!-- Sección Historial Médico (INCLUYE citas pasadas) -->
         <section class="seccion-veterinaria seccion-historial" id="seccionHistorial">
             <div class="encabezado-historial">
-                <h3>Historial Médico</h3>
+                <h3>Historial Médico Completo</h3>
                 <div class="filtros-historial">
                     <select class="filtro-mascota" onchange="filtrarHistorial(this.value)">
                         <option value="">Todas las mascotas</option>
@@ -373,7 +365,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
 
             <div class="registros-medicos">
+                <!-- Consultas médicas registradas -->
                 <?php if ($resultado_historial && $resultado_historial->num_rows > 0): ?>
+                    <h4 class="subtitulo-historial">📋 Consultas Médicas Registradas</h4>
                     <?php while($historial = $resultado_historial->fetch_assoc()): ?>
                         <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>">
                             <div class="encabezado-registro">
@@ -382,6 +376,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                 </div>
                                 <div class="mascota-registro">
                                     🐕 <?php echo htmlspecialchars($historial['nombre_mascota']); ?>
+                                </div>
+                                <div class="tipo-registro">
+                                    <span class="badge-consulta">📋 Consulta Médica</span>
                                 </div>
                             </div>
                             
@@ -403,10 +400,58 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                             </div>
                         </div>
                     <?php endwhile; ?>
-                <?php else: ?>
+                <?php endif; ?>
+
+                <!-- Citas pasadas -->
+                <?php if ($resultado_citas_pasadas && $resultado_citas_pasadas->num_rows > 0): ?>
+                    <h4 class="subtitulo-historial">📅 Citas Realizadas</h4>
+                    <?php while($cita_pasada = $resultado_citas_pasadas->fetch_assoc()): ?>
+                        <div class="registro-medico" data-mascota="<?php echo $cita_pasada['id_mascota']; ?>">
+                            <div class="encabezado-registro">
+                                <div class="fecha-registro">
+                                    📅 <?php echo date('d M Y', strtotime($cita_pasada['fecha'])); ?>
+                                </div>
+                                <div class="mascota-registro">
+                                    🐕 <?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?>
+                                </div>
+                                <div class="tipo-registro">
+                                    <span class="badge-cita">📅 Cita Realizada</span>
+                                </div>
+                            </div>
+                            
+                            <div class="contenido-registro">
+                                <div class="motivo-cita">
+                                    <h5>📋 Motivo de la Cita</h5>
+                                    <p><?php echo htmlspecialchars($cita_pasada['motivo']); ?></p>
+                                </div>
+                                
+                                <div class="clinica-cita">
+                                    <h5>🏥 Clínica</h5>
+                                    <p><?php echo htmlspecialchars($cita_pasada['clinica'] ?: 'Clínica Veterinaria'); ?></p>
+                                </div>
+                                
+                                <div class="hora-cita">
+                                    <h5>⏰ Hora</h5>
+                                    <p><?php echo date('H:i', strtotime($cita_pasada['fecha'])); ?></p>
+                                </div>
+                                
+                                <div class="estado-cita-historial">
+                                    <p><em>Esta cita fue realizada. Para registrar detalles médicos específicos, puedes crear una consulta médica nueva.</em></p>
+                                </div>
+                                
+                                <div class="veterinario-registro">
+                                    <h5>👨‍⚕️ Veterinario</h5>
+                                    <p><?php echo htmlspecialchars(($cita_pasada['nombre_veterinario'] && $cita_pasada['apellido_veterinario']) ? $cita_pasada['nombre_veterinario'] . ' ' . $cita_pasada['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+
+                <?php if ((!$resultado_historial || $resultado_historial->num_rows == 0) && (!$resultado_citas_pasadas || $resultado_citas_pasadas->num_rows == 0)): ?>
                     <div class="sin-registros">
                         <h4>📋 Sin Registros Médicos</h4>
-                        <p>Aún no hay registros médicos para tus mascotas</p>
+                        <p>Aún no hay registros médicos o citas realizadas para tus mascotas</p>
                         <button class="boton-agendar-primera" onclick="registrarNuevaConsulta()">
                             Registrar Primera Consulta
                         </button>
@@ -678,6 +723,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 
     <script src="js/scripts.js"></script>
     <script src="js/veterinaria.js"></script>
+
 </body>
 </html>
 <?php cerrarConexion(); ?>
