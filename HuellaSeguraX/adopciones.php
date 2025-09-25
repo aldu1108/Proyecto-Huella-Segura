@@ -336,5 +336,6 @@ if (isset($_GET['error'])) {
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/adopciones.js"></script>
 </body>
 </html>
