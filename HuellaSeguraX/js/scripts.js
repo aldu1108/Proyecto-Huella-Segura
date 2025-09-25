@@ -1088,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Nuevas funcionalidades
     initMascotasPerdidas();
-    initAdopciones();
+
 });
 
 function initExistingFeatures() {
@@ -1389,162 +1389,7 @@ function enviarReporte() {
 }
 
 // Funcionalidades específicas para adopciones
-function initAdopciones() {
-    // Solo ejecutar en la página de adopciones
-    if (!document.querySelector('.titulo-adopciones')) return;
-    
-    setupFiltrosAdopcion();
-    setupBotonesAdopcion();
-    setupAnimacionesTarjetas();
-}
 
-function setupFiltrosAdopcion() {
-    const filtros = document.querySelectorAll('.filtro-adopcion');
-    
-    filtros.forEach(filtro => {
-        filtro.addEventListener('click', function() {
-            // Remover clase activo de todos
-            filtros.forEach(f => f.classList.remove('activo'));
-            // Agregar clase activo al seleccionado
-            this.classList.add('activo');
-            
-            const tipoFiltro = this.textContent.trim();
-            filtrarTarjetas(tipoFiltro);
-        });
-    });
-}
-
-function filtrarTarjetas(filtro) {
-    const tarjetas = document.querySelectorAll('.tarjeta-adopcion');
-    
-    tarjetas.forEach(tarjeta => {
-        const tipoMascota = tarjeta.querySelector('.detalles-basicos').textContent;
-        let mostrar = true;
-        
-        if (filtro.includes('Perros') && !tipoMascota.toLowerCase().includes('pastor') && !tipoMascota.toLowerCase().includes('mestizo')) {
-            mostrar = false;
-        } else if (filtro.includes('Gatos') && !tipoMascota.toLowerCase().includes('siamés')) {
-            mostrar = false;
-        } else if (filtro.includes('Otros') && (tipoMascota.toLowerCase().includes('siamés') || tipoMascota.toLowerCase().includes('pastor') || tipoMascota.toLowerCase().includes('mestizo'))) {
-            mostrar = false;
-        }
-        
-        if (mostrar) {
-            tarjeta.style.display = 'block';
-            tarjeta.style.animation = 'slideUp 0.3s ease forwards';
-        } else {
-            tarjeta.style.display = 'none';
-        }
-    });
-}
-
-function setupBotonesAdopcion() {
-    const botones = document.querySelectorAll('.boton-interesa-adoptar');
-    
-    botones.forEach(boton => {
-        boton.addEventListener('click', function() {
-            const tarjeta = this.closest('.tarjeta-adopcion');
-            const nombreMascota = tarjeta.querySelector('h3').textContent;
-            const tipoMascota = tarjeta.querySelector('.detalles-basicos').textContent;
-            
-            // Animación del botón
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 150);
-            
-            // Mostrar modal de interés o redirigir
-            mostrarModalInteres(nombreMascota, tipoMascota);
-        });
-    });
-}
-
-function mostrarModalInteres(nombre, tipo) {
-    // Crear modal dinámico para mostrar interés en adopción
-    const modalHTML = `
-        <div class="modal-reporte" id="modalInteres" style="display: flex;">
-            <div class="contenido-modal-reporte" style="max-width: 400px;">
-                <div class="encabezado-modal-reporte">
-                    <h3 class="titulo-modal-reporte">¡Interés en Adopción!</h3>
-                    <button class="boton-cerrar-modal" onclick="cerrarModalInteres()">×</button>
-                </div>
-                
-                <div class="formulario-reporte">
-                    <div style="text-align: center; padding: 20px;">
-                        <div style="font-size: 48px; margin-bottom: 16px;">❤️</div>
-                        <h4 style="color: #333; margin-bottom: 8px;">Te interesa adoptar a ${nombre}</h4>
-                        <p style="color: #666; margin-bottom: 20px;">${tipo}</p>
-                        <p style="font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 24px;">
-                            ¡Excelente decisión! Te pondremos en contacto con el refugio para que puedas conocer más sobre ${nombre} y comenzar el proceso de adopción.
-                        </p>
-                        
-                        <div style="background: #f8f9fa; padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-                            <h5 style="margin-bottom: 12px; color: #333;">📋 Próximos pasos:</h5>
-                            <ul style="text-align: left; font-size: 14px; color: #666;">
-                                <li style="margin-bottom: 8px;">Te contactaremos en las próximas 24 horas</li>
-                                <li style="margin-bottom: 8px;">Coordinaremos una visita al refugio</li>
-                                <li style="margin-bottom: 8px;">Evaluaremos la compatibilidad</li>
-                                <li style="margin-bottom: 8px;">Procesaremos la adopción</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="botones-formulario">
-                        <button type="button" class="boton-anterior" onclick="cerrarModalInteres()">Cancelar</button>
-                        <button type="button" class="boton-siguiente" onclick="confirmarInteres('${nombre}')">Confirmar Interés</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Insertar modal en el DOM
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Cerrar al hacer clic fuera
-    const modal = document.getElementById('modalInteres');
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            cerrarModalInteres();
-        }
-    });
-}
-
-function cerrarModalInteres() {
-    const modal = document.getElementById('modalInteres');
-    if (modal) {
-        modal.remove();
-    }
-}
-
-function confirmarInteres(nombreMascota) {
-    // Aquí enviarías la solicitud al servidor
-    showMessage(`¡Solicitud enviada! Te contactaremos pronto sobre ${nombreMascota}.`, 'success');
-    cerrarModalInteres();
-}
-
-function setupAnimacionesTarjetas() {
-    // Observador de intersección para animar tarjetas cuando entran en vista
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        const tarjetas = document.querySelectorAll('.tarjeta-adopcion');
-        tarjetas.forEach((tarjeta, index) => {
-            tarjeta.style.opacity = '0';
-            tarjeta.style.transform = 'translateY(30px)';
-            tarjeta.style.transition = `all 0.3s ease ${index * 0.1}s`;
-            observer.observe(tarjeta);
-        });
-    }
-}
 
 // Funciones utilitarias
 function formatearFecha(fecha) {
@@ -1879,10 +1724,6 @@ window.MascotasPerdidas = {
     enviarReporte
 };
 
-window.Adopciones = {
-    mostrarModalInteres,
-    cerrarModalInteres,
-    confirmarInteres
-};
+
 
 console.log('Funcionalidades de mascotas perdidas y adopciones cargadas correctamente');
