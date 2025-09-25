@@ -56,7 +56,7 @@ if ($_POST) {
     <title>Registrarse - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="login-body" style="background: url('fondo-login.png') no-repeat center center fixed; background-size: cover;">
+<body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
 
     <!-- Header centrado -->
     <div class="login-header">

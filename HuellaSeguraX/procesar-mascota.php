@@ -14,13 +14,13 @@ if ($_POST) {
     $tipo = $_POST['tipo'];
     $sexo = $_POST['sexo'];
     $edad_mascota = (int) $_POST['edad_mascota'];
-    $cumpleanos_mascota = !empty($_POST['cumpleanos_mascota']) ? $_POST['cumpleanos_mascota'] : null;
+    $cumpleaños_mascota = !empty($_POST['cumpleaños_mascota']) ? $_POST['cumpleaños_mascota'] : null;
 
     // Si no hay fecha de cumpleaños, calcular una aproximada
-    if (!$cumpleanos_mascota) {
+    if (!$cumpleaños_mascota) {
         $año_actual = date('Y');
         $año_nacimiento = $año_actual - $edad_mascota;
-        $cumpleanos_mascota = $año_nacimiento . '-01-01';
+        $cumpleaños_mascota = $año_nacimiento . '-01-01';
     }
 
     // Manejo de la foto
@@ -53,7 +53,7 @@ if ($_POST) {
     $stmt = $conexion->prepare("INSERT INTO mascotas (id_usuario, tipo, sexo, nombre_mascota, edad_mascota, cumpleaños_mascota, foto_mascota, estado) VALUES (?, ?, ?, ?, ?, ?, ?, 'activo')");
 
     if ($stmt) {
-        $stmt->bind_param("isssiss", $usuario_id, $tipo, $sexo, $nombre_mascota, $edad_mascota, $cumpleanos_mascota, $foto_mascota);
+        $stmt->bind_param("isssiss", $usuario_id, $tipo, $sexo, $nombre_mascota, $edad_mascota, $cumpleaños_mascota, $foto_mascota);
 
         if ($stmt->execute()) {
             header("Location: mis-mascotas.php?mensaje=mascota_agregada&nombre=" . urlencode($nombre_mascota));

@@ -67,6 +67,16 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <!-- Icono  -->
+    <link rel="icon" type="image/png" href="imagenes/logo-hs.png">
+
+    <!-- Opcional: para distintas resoluciones -->
+    <link rel="icon" type="image/png" sizes="32x32" href="imagenes/logo-hs.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="imagenes/logo-hs.png">
+
+    <!-- Para cuando alguien guarda la webapp en la pantalla de inicio en iPhone/iPad -->
+    <link rel="apple-touch-icon" href="imagenes/logo-hs.png">
+
     <style>
         /* Estilos específicos para index.php */
         .barra-busqueda-principal {
@@ -706,9 +716,12 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                 <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
                     <?php while($mascota = $resultado_mascotas->fetch_assoc()): ?>
                         <div class="mascota-card-principal" onclick="window.location.href='perfil-mascota.php?id=<?php echo $mascota['id_mascota']; ?>'">
-                            <!--<img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" 
-                                 alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" 
-                                 class="mascota-foto-principal"> -->
+                            <img src="imagenes/<?php 
+                                $foto = !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'perro.jpg';
+                                echo file_exists('imagenes/' . $foto) ? $foto : 'mascota-default.jpg';
+                            ?>" 
+                            alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" 
+                            class="mascota-foto-principal">
                             <div class="mascota-info-principal">
                                 <h3 class="nombre-mascota-principal"><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h3>
                                 <p class="detalles-mascota-principal"><?php echo ucfirst($mascota['tipo']); ?></p>
@@ -968,7 +981,7 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                 <?php else: ?>
                     <!-- Datos de ejemplo si no hay reportes reales -->
                     <div class="perdida-item-index">
-                        <img src="imagenes/buddy.jpg" alt="Buddy" class="foto-perdida-index">
+                        <img src="imagenes/perro.jpg" alt="Buddy" class="foto-perdida-index">
                         <div class="info-perdida-index">
                             <h4 class="nombre-perdida-index">Buddy</h4>
                             <p class="detalles-perdida-index">Perro Labrador</p>
@@ -978,7 +991,7 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                     </div>
                     
                     <div class="perdida-item-index">
-                        <div class="placeholder-perdida-index">📷</div>
+                        <img src="imagenes/perro.jpg" alt="Buddy" class="foto-perdida-index">
                         <div class="info-perdida-index">
                             <h4 class="nombre-perdida-index">Mimi</h4>
                             <p class="detalles-perdida-index">Gato Siamés</p>

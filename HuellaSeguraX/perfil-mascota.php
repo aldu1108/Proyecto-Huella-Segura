@@ -50,7 +50,7 @@ $resultado_citas = $conexion->query($consulta_citas);
         <!-- Header de la mascota -->
         <section class="mascota-header">
             <div class="mascota-info-principal">
-                <img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" 
+                <img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'imagenes/mascota-default.jpg'; ?>" 
                      alt="<?php echo $mascota['nombre_mascota']; ?>" class="mascota-foto-grande">
                 <div class="mascota-datos">
                     <h1><?php echo $mascota['nombre_mascota']; ?> 💡</h1>
@@ -442,3 +442,4 @@ $resultado_citas = $conexion->query($consulta_citas);
             gap: 16px;
             padding: 16px;
             border-left: 4px solid #e8e8
+                
