@@ -46,6 +46,7 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Administrativo - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/login-admin.css">
 </head>
 <body class="admin-login-body">
     <!-- Header simple -->
@@ -100,97 +101,6 @@ if ($_POST) {
         </div>
     </div>
 
-    <style>
-        .admin-login-body {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .admin-container {
-            background: white;
-            border: 3px solid #e74c3c;
-            box-shadow: 0 8px 32px rgba(231, 76, 60, 0.3);
-        }
-
-        .admin-container .login-title {
-            color: #c0392b;
-        }
-
-        .admin-btn {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .admin-btn:hover {
-            background: linear-gradient(135deg, #c0392b, #a93226);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
-        }
-
-        .demo-credentials {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-            margin: 1rem 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .demo-credentials p {
-            margin: 0.5rem 0;
-            font-size: 14px;
-        }
-
-        .admin-links {
-            text-align: center;
-            margin: 1.5rem 0;
-        }
-
-        .admin-links a {
-            color: #3498db;
-            text-decoration: none;
-            margin: 0 1rem;
-            font-size: 14px;
-        }
-
-        .admin-links a:hover {
-            text-decoration: underline;
-        }
-
-        .admin-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .admin-warning p {
-            margin: 0.25rem 0;
-            font-size: 13px;
-            color: #856404;
-        }
-    </style>
-
-    <script>
-        // Auto-llenar campos para facilitar pruebas (solo en desarrollo)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Solo para desarrollo - remove en producción
-            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            
-            if (isDevelopment) {
-                document.querySelector('input[name="email"]').value = 'admin@huellasegura.com';
-                document.querySelector('input[name="contraseña"]').value = 'admin123';
-            }
-        });
-    </script>
+    <script src="js/login-admin.js"></script>
 </body>
 </html>

@@ -63,161 +63,7 @@ if (isset($_GET['error'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Mascotas - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
-<!-- Estilos para el modal -->
-    <style>
-        /* ESTILOS DEL MODAL */
-        .modal-agregar-mascota {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            padding: 20px;
-        }
-
-        .contenido-modal-mascota {
-            background: white;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .encabezado-modal-mascota {
-            padding: 24px 24px 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .titulo-modal-mascota {
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .boton-cerrar-modal-mascota {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #999;
-            cursor: pointer;
-        }
-
-        .formulario-mascota {
-            padding: 24px;
-        }
-
-        .grupo-input-mascota {
-            margin-bottom: 20px;
-        }
-
-        .fila-inputs-mascota {
-            display: flex;
-            gap: 16px;
-        }
-
-        .fila-inputs-mascota .grupo-input-mascota {
-            flex: 1;
-        }
-
-        .etiqueta-input-mascota {
-            display: block;
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .etiqueta-input-mascota.requerido::after {
-            content: " *";
-            color: #E74C3C;
-        }
-
-        .input-mascota, .select-mascota {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e8e8e8;
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        .input-mascota:focus, .select-mascota:focus {
-            border-color: #D35400;
-        }
-
-        .input-file-mascota {
-            width: 100%;
-            padding: 12px;
-            border: 2px dashed #e8e8e8;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            background: #f9f9f9;
-        }
-
-        .preview-foto-mascota {
-            margin-top: 12px;
-            text-align: center;
-        }
-
-        .botones-modal-mascota {
-            display: flex;
-            gap: 12px;
-            padding: 24px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .boton-cancelar-mascota {
-            flex: 1;
-            padding: 14px;
-            border: 2px solid #e8e8e8;
-            background: white;
-            color: #666;
-            border-radius: 12px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .boton-guardar-mascota {
-            flex: 1;
-            padding: 14px;
-            background: #D35400;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .boton-guardar-mascota:hover {
-            background: #B8450E;
-        }
-
-        @media (max-width: 768px) {
-            .fila-inputs-mascota {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .contenido-modal-mascota {
-                margin: 0 10px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/mis-mascotas.css">
 </head>
 <body>
     <header>
@@ -363,6 +209,9 @@ if (isset($_GET['error'])) {
                     <div class="day">25</div>
                     <div class="day">26</div>
                     <div class="day">27</div>
+                    <div class="day">28</div>
+                    <div class="day">29</div>
+                    <div class="day">30</div>
                 </div>
             </div>
 
@@ -469,57 +318,6 @@ if (isset($_GET['error'])) {
     </nav>
 
     <!-- JavaScript -->
-    <script>
-        // Abrir modal de agregar mascota
-        document.addEventListener('DOMContentLoaded', function() {
-            const btnAgregar = document.getElementById('btnAgregarMascota');
-            const modal = document.getElementById('modalAgregarMascota');
-            
-            if (btnAgregar) {
-                btnAgregar.addEventListener('click', function() {
-                    modal.style.display = 'flex';
-                });
-            }
-            
-            // Cerrar modal al hacer clic fuera
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    cerrarModalMascota();
-                }
-            });
-        });
-
-        // Cerrar modal
-        function cerrarModalMascota() {
-            const modal = document.getElementById('modalAgregarMascota');
-            const formulario = document.getElementById('formularioMascota');
-            const preview = document.getElementById('previewFotoMascota');
-            
-            modal.style.display = 'none';
-            formulario.reset();
-            preview.style.display = 'none';
-        }
-
-        // Preview de imagen
-        function previewImagen(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('previewFotoMascota');
-                    const img = preview.querySelector('img');
-                    img.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                cerrarModalMascota();
-            }
-        });
-    </script>
+    <script src="js/mis-mascotas.js"></script>
 </body>
 </html>

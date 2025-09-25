@@ -72,6 +72,7 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Veterinario - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/registro-veterinario.css">
 </head>
 
 <body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
@@ -186,79 +187,6 @@ if ($_POST) {
             ¿Ya tienes cuenta? <a href="login.php">Iniciar Sesión</a>
         </div>
     </div>
-
-    <style>
-        /* Estilos adicionales específicos para el registro veterinario */
-        .success-message {
-            background: rgba(76, 175, 80, 0.9);
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            border: none;
-        }
-
-        .form-section {
-            margin-bottom: 2rem;
-        }
-
-        .login-input[name="horarios_atencion"] {
-            resize: vertical;
-            min-height: 80px;
-            padding-top: 15px;
-        }
-
-        /* Ajustar el select para que se vea igual que los inputs */
-        select.login-input {
-            background-color: rgba(255, 255, 255, 0.9);
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23999" d="M6 9L1.5 4.5h9L6 9z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            cursor: pointer;
-        }
-
-        /* Responsive para móviles */
-        @media (max-width: 768px) {
-            .login-container {
-                margin: 1rem;
-                max-height: 85vh;
-                padding: 1.5rem;
-            }
-            
-            div[style*="display: flex"] {
-                flex-direction: column !important;
-                gap: 0 !important;
-            }
-            
-            .input-group[style*="flex: 1"] {
-                margin-bottom: 1rem;
-            }
-        }
-
-        /* Ajustar el scroll del contenedor */
-        .login-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .login-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .login-container::-webkit-scrollbar-thumb {
-            background: rgba(209, 124, 65, 0.6);
-            border-radius: 3px;
-        }
-
-        .login-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(209, 124, 65, 0.8);
-        }
-    </style>
-
     <script src="js/scripts.js"></script>
 </body>
 

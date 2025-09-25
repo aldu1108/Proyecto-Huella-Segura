@@ -55,6 +55,7 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/registro.css">
 </head>
 <body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
 
@@ -134,58 +135,6 @@ if ($_POST) {
             ¿Ya tienes cuenta? <a href="login.php">Iniciar Sesión</a>
         </div>
     </div>
-
-    <style>
-        /* Estilos adicionales específicos para registro */
-        .terms-checkbox {
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-        
-        .terms-checkbox label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            color: #666;
-            line-height: 1.4;
-        }
-        
-        .terms-checkbox input[type="checkbox"] {
-            margin-right: 8px;
-            transform: scale(1.2);
-            cursor: pointer;
-        }
-        
-        .terms-checkbox a {
-            color: #D35400;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .terms-checkbox a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Ajustes responsive para móvil */
-        @media (max-width: 768px) {
-            .login-container {
-                padding: 32px 20px;
-                margin: 0 12px;
-            }
-            
-            .features-list {
-                margin-top: 24px;
-            }
-            
-            .feature-item {
-                margin-bottom: 8px;
-                font-size: 13px;
-            }
-        }
-    </style>
-
     <script src="js/scripts.js"></script>
 </body>
 </html>

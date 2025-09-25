@@ -1,0 +1,229 @@
+.panel-veterinario {
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.header-veterinario {
+    background: linear-gradient(135deg, #8d6e63, #5d4e75);
+    color: white;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-veterinario h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.8rem;
+}
+
+.especialidad {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.boton-logout-vet {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.contenedor-veterinario {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.estadisticas-vet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.tarjeta-stat-vet {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tarjeta-stat-vet.urgente {
+    border-left: 5px solid #e74c3c;
+}
+
+.tarjeta-stat-vet.pendiente {
+    border-left: 5px solid #f39c12;
+}
+
+.icono-stat-vet {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.numero-stat-vet {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.acciones-vet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.boton-accion-vet {
+    padding: 1.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.boton-accion-vet:hover {
+    transform: translateY(-2px);
+}
+
+.boton-accion-vet.nueva-cita {
+    background: #27ae60;
+}
+
+.boton-accion-vet.ver-agenda {
+    background: #3498db;
+}
+
+.boton-accion-vet.historial {
+    background: #f39c12;
+}
+
+.boton-accion-vet.configurar {
+    background: #9b59b6;
+}
+
+.proximas-citas-vet,
+.historial-reciente-vet {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.proximas-citas-vet h2,
+.historial-reciente-vet h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.cita-item-vet,
+.historial-item-vet {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.fecha-cita-vet {
+    text-align: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.dia-cita {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.mes-cita,
+.hora-cita {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.info-cita-vet {
+    flex: 1;
+}
+
+.info-cita-vet h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.info-cita-vet p {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.acciones-cita-vet {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.boton-pequeno-vet {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.boton-pequeno-vet.confirmar {
+    background: #27ae60;
+    color: white;
+}
+
+.boton-pequeno-vet.ver-historial {
+    background: #3498db;
+    color: white;
+}
+
+.boton-pequeno-vet.contactar {
+    background: #f39c12;
+    color: white;
+}
+
+.sin-citas-vet,
+.sin-historial-vet {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .header-veterinario {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .cita-item-vet {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .acciones-cita-vet {
+        flex-direction: row;
+    }
+}
