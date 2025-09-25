@@ -6,7 +6,21 @@ $mensaje_error = "";
 
 // Verificar si ya hay sesión activa
 if (isset($_SESSION['usuario_id'])) {
-    header("Location: index.php");
+    // Redirigir según el rol
+    $rol = $_SESSION['rol'] ?? 'demo';
+    switch($rol) {
+        case 'admin':
+            header("Location: panel-admin.php");
+            break;
+        case 'veterinario':
+            header("Location: panel-veterinario.php");
+            break;
+        case 'usuario':
+        case 'demo':
+        default:
+            header("Location: index.php");
+            break;
+    }
     exit();
 }
 
@@ -16,8 +30,8 @@ if ($_POST) {
     $contraseña = $_POST['contraseña'];
 
     if (!empty($email) && !empty($contraseña)) {
-        // Consulta muy básica para verificar usuario
-        $consulta = "SELECT id_usuario, nombre_usuario, apellido_usuario, contraseña_usuario FROM usuarios WHERE email_usuario = '$email' AND estado = 'activo'";
+        // Consulta para verificar usuario incluyendo rol
+        $consulta = "SELECT id_usuario, nombre_usuario, apellido_usuario, contraseña_usuario, rol FROM usuarios WHERE email_usuario = '$email' AND estado = 'activo'";
         $resultado = $conexion->query($consulta);
 
         if ($resultado && $resultado->num_rows > 0) {
@@ -25,12 +39,25 @@ if ($_POST) {
 
             // Verificar contraseña (en un caso real usarías password_verify)
             if ($contraseña == $usuario['contraseña_usuario']) {
-                // Crear sesión
+                // Crear sesión con rol
                 $_SESSION['usuario_id'] = $usuario['id_usuario'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre_usuario'];
                 $_SESSION['usuario_apellido'] = $usuario['apellido_usuario'];
+                $_SESSION['rol'] = $usuario['rol'];
 
-                header("Location: index.php");
+                // Redirigir según el rol
+                switch($usuario['rol']) {
+                    case 'admin':
+                        header("Location: panel-admin.php");
+                        break;
+                    case 'veterinario':
+                        header("Location: panel-veterinario.php");
+                        break;
+                    case 'usuario':
+                    default:
+                        header("Location: index.php");
+                        break;
+                }
                 exit();
             } else {
                 $mensaje_error = "Contraseña incorrecta";
@@ -107,7 +134,6 @@ if ($_POST) {
         <div class="register-link">
             ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
         </div>
-
 
     </div>
 
