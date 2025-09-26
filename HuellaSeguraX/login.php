@@ -5,22 +5,17 @@ session_start();
 $mensaje_error = "";
 
 // Verificar si ya hay sesión activa
-if (isset($_SESSION['usuario_id'])) {
-    // Redirigir según el rol
-    $rol = $_SESSION['rol'] ?? 'demo';
-    switch($rol) {
-        case 'admin':
-            header("Location: panel-admin.php");
-            break;
-        case 'veterinario':
-            header("Location: panel-veterinario.php");
-            break;
-        case 'usuario':
-        case 'demo':
-        default:
-            header("Location: index.php");
-            break;
-    }
+if (isset($_SESSION['usuario_id']) && $_SESSION['rol'] != 'demo') {
+    header("Location: index.php");
+    exit();
+}
+
+if (isset($_POST['demo_login'])) {
+    $_SESSION['usuario_id'] = -1; // ID especial para demo
+    $_SESSION['usuario_nombre'] = 'Demo';
+    $_SESSION['usuario_apellido'] = 'User'; 
+    $_SESSION['rol'] = 'demo';
+    header("Location: index.php");
     exit();
 }
 
@@ -30,8 +25,14 @@ if ($_POST) {
     $contraseña = $_POST['contraseña'];
 
     if (!empty($email) && !empty($contraseña)) {
-        // Consulta para verificar usuario incluyendo rol
-        $consulta = "SELECT id_usuario, nombre_usuario, apellido_usuario, contraseña_usuario, rol FROM usuarios WHERE email_usuario = '$email' AND estado = 'activo'";
+        // Consulta muy básica para verificar usuario
+        $consulta = "
+            SELECT id_usuario, nombre_usuario, apellido_usuario, contraseña_usuario, rol
+            FROM usuarios
+            WHERE email_usuario = '$email'
+            AND estado = 'activo'
+        ";
+
         $resultado = $conexion->query($consulta);
 
         if ($resultado && $resultado->num_rows > 0) {
@@ -39,25 +40,13 @@ if ($_POST) {
 
             // Verificar contraseña (en un caso real usarías password_verify)
             if ($contraseña == $usuario['contraseña_usuario']) {
-                // Crear sesión con rol
+                // Crear sesión
                 $_SESSION['usuario_id'] = $usuario['id_usuario'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre_usuario'];
                 $_SESSION['usuario_apellido'] = $usuario['apellido_usuario'];
                 $_SESSION['rol'] = $usuario['rol'];
 
-                // Redirigir según el rol
-                switch($usuario['rol']) {
-                    case 'admin':
-                        header("Location: panel-admin.php");
-                        break;
-                    case 'veterinario':
-                        header("Location: panel-veterinario.php");
-                        break;
-                    case 'usuario':
-                    default:
-                        header("Location: index.php");
-                        break;
-                }
+                header("Location: index.php");
                 exit();
             } else {
                 $mensaje_error = "Contraseña incorrecta";
@@ -72,14 +61,15 @@ if ($_POST) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-<body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
+<body class="login-body"
+      style="background: url('imagenes/fondo-login.png') no-repeat center center fixed;
+             background-size: cover;">
 
     <!-- Header centrado -->
     <div class="login-header">
@@ -91,7 +81,7 @@ if ($_POST) {
     <div class="login-container">
         <h2 class="login-title">Iniciar Sesión</h2>
         <p class="login-welcome">¡Bienvenido de vuelta a Huella Segura!</p>
-        
+
         <?php if (!empty($mensaje_error)): ?>
             <div class="error-message">
                 <?php echo $mensaje_error; ?>
@@ -100,11 +90,19 @@ if ($_POST) {
 
         <form class="login-form" method="POST" action="">
             <div class="input-group">
-                <input type="email" name="email" class="login-input" placeholder="Ingrese su correo electrónico" required>
+                <input type="email"
+                       name="email"
+                       class="login-input"
+                       placeholder="Ingrese su correo electrónico"
+                       required>
             </div>
 
             <div class="input-group">
-                <input type="password" name="contraseña" class="login-input" placeholder="Ingrese su contraseña" required>
+                <input type="password"
+                       name="contraseña"
+                       class="login-input"
+                       placeholder="Ingrese su contraseña"
+                       required>
                 <button type="button" class="password-toggle">👁</button>
             </div>
 
@@ -119,10 +117,13 @@ if ($_POST) {
             <span>o</span>
         </div>
 
-        <button class="btn-demo" onclick="loginDemo()">
-            ❤️ Probar con Cuenta Demo
-        </button>
-        
+        <form method="POST" action="">
+            <input type="hidden" name="demo_login" value="1">
+            <button type="submit" class="btn-demo">
+                ❤️ Probar con Cuenta Demo
+            </button>
+        </form>
+
         <button class="btn-veterinario" onclick="window.location.href='registro-veterinario.php'">
             🩺 Registrarse como Veterinario
         </button>
@@ -132,13 +133,12 @@ if ($_POST) {
         </button>
 
         <div class="register-link">
-            ¿No tienes cuenta? <a href="registro.php">Registrarse</a>
+            ¿No tienes cuenta?
+            <a href="registro.php">Registrarse</a>
         </div>
-
     </div>
 
     <script src="js/login.js"></script>
     <script src="js/scripts.js"></script>
 </body>
-
 </html>

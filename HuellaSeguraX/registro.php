@@ -6,7 +6,7 @@ $mensaje_error = "";
 $mensaje_exito = "";
 
 // Verificar si ya hay sesión activa
-if (isset($_SESSION['usuario_id'])) {
+if (isset($_SESSION['usuario_id']) && $_SESSION['rol'] != 'demo') {
     header("Location: index.php");
     exit();
 }

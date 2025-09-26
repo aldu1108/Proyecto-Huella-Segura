@@ -3,8 +3,14 @@
 // Archivo: includes/menu-hamburguesa.php
 
 // Verificar si hay sesión activa para mostrar opciones apropiadas
-$usuario_logueado = isset($_SESSION['usuario_id']);
-$nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
+if (!session_id()) {
+    session_start();
+}
+
+$rol_usuario = $_SESSION['rol'] ?? null;
+$usuario_logueado = ($rol_usuario && $rol_usuario != 'demo');
+$es_demo = ($rol_usuario == 'demo');
+$nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
 ?>
 
 <header class="cabecera-principal">
@@ -27,6 +33,14 @@ $nombre_usuario = $usuario_logueado ? $_SESSION['usuario_nombre'] : '';
                     <div class="datos-usuario">
                         <span class="nombre-usuario"><?php echo htmlspecialchars($nombre_usuario); ?></span>
                         <span class="estado-usuario">En línea</span>
+                    </div>
+                </div>
+            <?php elseif ($es_demo): ?>
+                <div class="info-usuario-menu">
+                    <div class="avatar-usuario">👤</div>
+                    <div class="datos-usuario">
+                        <span class="nombre-usuario">Usuario Demo</span>
+                        <span class="estado-usuario">Modo solo lectura</span>
                     </div>
                 </div>
             <?php else: ?>
