@@ -31,7 +31,7 @@ if ($_POST) {
             if ($resultado_verificacion->num_rows > 0) {
                 $fecha_completa = $fecha . ' ' . $hora . ':00';
                 
-                // Insertar la cita
+                // Insertar la cita usando el mismo formato que el archivo agendar-cita.php
                 $consulta_insertar = "INSERT INTO citas_veterinarias (fecha, motivo, estado, id_mascota, id_veterinario) 
                                      VALUES ('$fecha_completa', '$motivo', 'programada', $id_mascota, 1)";
                 
@@ -42,6 +42,50 @@ if ($_POST) {
                 }
             } else {
                 $mensaje_error = "Mascota no válida.";
+            }
+            break;
+
+        case 'eliminar_consulta':
+            $id_historial = intval($_POST['id_historial']);
+            
+            // Verificar que la consulta pertenezca al usuario
+            $verificar_consulta = "SELECT h.id_historial FROM historiales_medicos h 
+                                  JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                  WHERE h.id_historial = $id_historial AND m.id_usuario = $usuario_id";
+            $resultado_verificacion = $conexion->query($verificar_consulta);
+            
+            if ($resultado_verificacion->num_rows > 0) {
+                $consulta_eliminar = "DELETE FROM historiales_medicos WHERE id_historial = $id_historial";
+                
+                if ($conexion->query($consulta_eliminar)) {
+                    $mensaje_exito = "Consulta eliminada exitosamente.";
+                } else {
+                    $mensaje_error = "Error al eliminar la consulta.";
+                }
+            } else {
+                $mensaje_error = "Consulta no válida.";
+            }
+            break;
+
+        case 'eliminar_cita':
+            $id_cita = intval($_POST['id_cita']);
+            
+            // Verificar que la cita pertenezca al usuario
+            $verificar_cita = "SELECT c.id_cita FROM citas_veterinarias c 
+                              JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                              WHERE c.id_cita = $id_cita AND m.id_usuario = $usuario_id";
+            $resultado_verificacion = $conexion->query($verificar_cita);
+            
+            if ($resultado_verificacion->num_rows > 0) {
+                $consulta_eliminar = "DELETE FROM citas_veterinarias WHERE id_cita = $id_cita";
+                
+                if ($conexion->query($consulta_eliminar)) {
+                    $mensaje_exito = "Cita eliminada exitosamente.";
+                } else {
+                    $mensaje_error = "Error al eliminar la cita.";
+                }
+            } else {
+                $mensaje_error = "Cita no válida.";
             }
             break;
             
@@ -73,10 +117,11 @@ if ($_POST) {
     }
 }
 
-// Obtener próximas citas (solo futuras y programadas)
+// Obtener próximas citas (solo futuras y programadas) con todos los datos necesarios
 $fecha_hoy = date('Y-m-d');
-$consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad,
-                      u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+$consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+                      u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+                      DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                       FROM citas_veterinarias c 
                       JOIN mascotas m ON c.id_mascota = m.id_mascota 
                       LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
@@ -85,8 +130,9 @@ $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especia
                       ORDER BY c.fecha ASC LIMIT 5";
 $resultado_proximas = $conexion->query($consulta_proximas);
 
-// Obtener citas de hoy
-$consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad
+// Obtener citas de hoy con todos los datos
+$consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+                       DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                        FROM citas_veterinarias c 
                        JOIN mascotas m ON c.id_mascota = m.id_mascota 
                        LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
@@ -94,31 +140,7 @@ $consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especi
                        ORDER BY c.fecha ASC";
 $resultado_citas_hoy = $conexion->query($consulta_citas_hoy);
 
-// Obtener historial médico combinado (consultas médicas + citas pasadas)
-$consulta_historial = "SELECT h.*, m.nombre_mascota, m.tipo,
-                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
-                       'consulta' as tipo_entrada, h.fecha as fecha_registro
-                       FROM historiales_medicos h 
-                       JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                       LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
-                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                       WHERE m.id_usuario = $usuario_id 
-                       
-                       UNION ALL
-                       
-                       SELECT NULL as id_historial, NULL as diagnostico, NULL as tratamiento, 
-                       c.id_mascota, c.id_veterinario, c.motivo as nombre_mascota, m.tipo,
-                       u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
-                       'cita_pasada' as tipo_entrada, DATE(c.fecha) as fecha_registro
-                       FROM citas_veterinarias c
-                       JOIN mascotas m ON c.id_mascota = m.id_mascota 
-                       LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
-                       LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                       WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) < '$fecha_hoy' AND c.estado != 'cancelada'
-                       
-                       ORDER BY fecha_registro DESC LIMIT 20";
-
-// Modificamos la consulta del historial para que funcione con la DB actual
+// Obtener historial médico simple
 $consulta_historial_simple = "SELECT h.*, m.nombre_mascota, m.tipo,
                                u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
                                FROM historiales_medicos h 
@@ -129,9 +151,10 @@ $consulta_historial_simple = "SELECT h.*, m.nombre_mascota, m.tipo,
                                ORDER BY h.fecha DESC LIMIT 20";
 $resultado_historial = $conexion->query($consulta_historial_simple);
 
-// Obtener citas pasadas para mostrar en el historial
-$consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica, v.especialidad,
-                           u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+// Obtener citas pasadas para mostrar en el historial con todos los datos
+$consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+                           u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+                           DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                            FROM citas_veterinarias c 
                            JOIN mascotas m ON c.id_mascota = m.id_mascota 
                            LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
@@ -269,13 +292,24 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                 </div>
                                 <div class="detalles-cita">
                                     <h5><?php echo htmlspecialchars($cita['motivo']); ?></h5>
-                                    <p>🐕 <?php echo htmlspecialchars($cita['nombre_mascota']); ?></p>
-                                    <p>🏥 <?php echo htmlspecialchars($cita['clinica'] ?: 'Clínica Veterinaria'); ?></p>
-                                    <p>⏰ <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                                    <p>🐕 <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
+                                    <p>🏥 <strong>Clínica:</strong> <?php echo htmlspecialchars($cita['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
+                                    <p>⏰ <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                                    <p>📅 <strong>Fecha completa:</strong> <?php echo date('d/m/Y H:i', strtotime($cita['fecha'])); ?></p>
+                                    <?php if ($cita['especialidad']): ?>
+                                        <p>👨‍⚕️ <strong>Especialidad:</strong> <?php echo htmlspecialchars($cita['especialidad']); ?></p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="estado-cita <?php echo $cita['estado']; ?>">
-                                <?php echo ucfirst($cita['estado']); ?>
+                            <div class="acciones-cita">
+                                <div class="estado-cita <?php echo $cita['estado']; ?>">
+                                    <?php echo ucfirst($cita['estado']); ?>
+                                </div>
+                                <div class="botones-cita">
+                                    <button class="boton-eliminar-cita" onclick="confirmarEliminarCita(<?php echo $cita['id_cita']; ?>, '<?php echo htmlspecialchars($cita['nombre_mascota']); ?>', '<?php echo htmlspecialchars($cita['motivo']); ?>')">
+                                        🗑️ Eliminar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     <?php endwhile; ?>
@@ -397,6 +431,12 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                     <h5>👨‍⚕️ Veterinario</h5>
                                     <p><?php echo htmlspecialchars(($historial['nombre_veterinario'] && $historial['apellido_veterinario']) ? $historial['nombre_veterinario'] . ' ' . $historial['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                 </div>
+
+                                <div class="acciones-consulta">
+                                    <button class="boton-eliminar-consulta" onclick="confirmarEliminarConsulta(<?php echo $historial['id_historial']; ?>, '<?php echo htmlspecialchars($historial['nombre_mascota']); ?>')">
+                                        🗑️ Eliminar Consulta
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     <?php endwhile; ?>
@@ -427,21 +467,47 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                 
                                 <div class="clinica-cita">
                                     <h5>🏥 Clínica</h5>
-                                    <p><?php echo htmlspecialchars($cita_pasada['clinica'] ?: 'Clínica Veterinaria'); ?></p>
+                                    <p><?php echo htmlspecialchars($cita_pasada['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
                                 </div>
                                 
                                 <div class="hora-cita">
                                     <h5>⏰ Hora</h5>
                                     <p><?php echo date('H:i', strtotime($cita_pasada['fecha'])); ?></p>
                                 </div>
+
+                                <div class="fecha-completa-cita">
+                                    <h5>📅 Fecha Completa</h5>
+                                    <p><?php echo date('d/m/Y H:i', strtotime($cita_pasada['fecha'])); ?></p>
+                                </div>
+
+                                <div class="mascota-detalle-cita">
+                                    <h5>🐕 Mascota</h5>
+                                    <p><?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?> (<?php echo ucfirst($cita_pasada['tipo']); ?>)</p>
+                                </div>
+
+                                <?php if ($cita_pasada['especialidad']): ?>
+                                    <div class="especialidad-cita">
+                                        <h5>👨‍⚕️ Especialidad</h5>
+                                        <p><?php echo htmlspecialchars($cita_pasada['especialidad']); ?></p>
+                                    </div>
+                                <?php endif; ?>
                                 
                                 <div class="estado-cita-historial">
                                     <p><em>Esta cita fue realizada. Para registrar detalles médicos específicos, puedes crear una consulta médica nueva.</em></p>
+                                    <button class="boton-nueva-consulta-desde-cita" onclick="crearConsultaDesdeCita(<?php echo $cita_pasada['id_mascota']; ?>, '<?php echo date('Y-m-d', strtotime($cita_pasada['fecha'])); ?>')">
+                                        + Agregar Consulta Médica
+                                    </button>
                                 </div>
                                 
                                 <div class="veterinario-registro">
                                     <h5>👨‍⚕️ Veterinario</h5>
                                     <p><?php echo htmlspecialchars(($cita_pasada['nombre_veterinario'] && $cita_pasada['apellido_veterinario']) ? $cita_pasada['nombre_veterinario'] . ' ' . $cita_pasada['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
+                                </div>
+
+                                <div class="acciones-cita-historial">
+                                    <button class="boton-eliminar-cita" onclick="confirmarEliminarCita(<?php echo $cita_pasada['id_cita']; ?>, '<?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?>', '<?php echo htmlspecialchars($cita_pasada['motivo']); ?>')">
+                                        🗑️ Eliminar Cita
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -685,7 +751,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 
                 <div class="grupo-input-consulta">
                     <label class="etiqueta-input-consulta requerido">Fecha de la Consulta</label>
-                    <input type="date" class="input-consulta" name="fecha_consulta" required max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" class="input-consulta" name="fecha_consulta" required>
                 </div>
 
                 <div class="grupo-input-consulta">
@@ -716,6 +782,59 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         </div>
     </div>
 
+    <!-- Modal para confirmar eliminación de cita -->
+    <div class="modal-confirmar-eliminar-cita" id="modalConfirmarEliminarCita">
+        <div class="contenido-modal-eliminar">
+            <div class="encabezado-modal-eliminar">
+                <h3 class="titulo-modal-eliminar">Confirmar Eliminación de Cita</h3>
+                <button class="boton-cerrar-modal-eliminar" onclick="cerrarModalEliminarCita()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-eliminar">
+                <div class="icono-advertencia">⚠️</div>
+                <p>¿Estás seguro de que deseas eliminar esta cita veterinaria?</p>
+                <p><strong>Mascota:</strong> <span id="mascotaEliminarCita"></span></p>
+                <p><strong>Motivo:</strong> <span id="motivoEliminarCita"></span></p>
+                <p class="texto-advertencia">Esta acción no se puede deshacer.</p>
+            </div>
+
+            <form id="formularioEliminarCita" method="POST">
+                <input type="hidden" name="accion" value="eliminar_cita">
+                <input type="hidden" name="id_cita" id="idCitaEliminar">
+            </form>
+
+            <div class="botones-modal-eliminar">
+                <button type="button" class="boton-cancelar-eliminar" onclick="cerrarModalEliminarCita()">Cancelar</button>
+                <button type="button" class="boton-confirmar-eliminar" onclick="eliminarCita()">Sí, Eliminar Cita</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-confirmar-eliminar" id="modalConfirmarEliminar">
+        <div class="contenido-modal-eliminar">
+            <div class="encabezado-modal-eliminar">
+                <h3 class="titulo-modal-eliminar">Confirmar Eliminación</h3>
+                <button class="boton-cerrar-modal-eliminar" onclick="cerrarModalEliminar()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-eliminar">
+                <div class="icono-advertencia">⚠️</div>
+                <p>¿Estás seguro de que deseas eliminar esta consulta médica?</p>
+                <p><strong>Mascota:</strong> <span id="mascotaEliminar"></span></p>
+                <p class="texto-advertencia">Esta acción no se puede deshacer.</p>
+            </div>
+
+            <form id="formularioEliminarConsulta" method="POST">
+                <input type="hidden" name="accion" value="eliminar_consulta">
+                <input type="hidden" name="id_historial" id="idHistorialEliminar">
+            </form>
+
+            <div class="botones-modal-eliminar">
+                <button type="button" class="boton-cancelar-eliminar" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button type="button" class="boton-confirmar-eliminar" onclick="eliminarConsulta()">Sí, Eliminar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
@@ -724,6 +843,405 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
     <script src="js/scripts.js"></script>
     <script src="js/veterinaria.js"></script>
 
+    <style>
+    /* Estilos adicionales para los nuevos elementos */
+    .subtitulo-historial {
+        color: #2C3E50;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #E8F4FD;
+        font-size: 1.1em;
+    }
+
+    .badge-consulta {
+        background: #27AE60;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: bold;
+    }
+
+    .badge-cita {
+        background: #3498DB;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: bold;
+    }
+
+    .tipo-registro {
+        margin-left: auto;
+    }
+
+    .boton-nueva-consulta-desde-cita {
+        background: #3498DB;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .boton-nueva-consulta-desde-cita:hover {
+        background: #2980B9;
+    }
+
+    .estado-cita-historial {
+        background: #F8F9FA;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        border-left: 4px solid #3498DB;
+    }
+
+    .estado-cita-historial p {
+        color: #7F8C8D;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    .clinica-cita, .hora-cita, .motivo-cita {
+        margin-bottom: 15px;
+    }
+
+    .clinica-cita h5, .hora-cita h5, .motivo-cita h5 {
+        color: #2C3E50;
+        margin-bottom: 5px;
+    }
+
+    .registros-medicos {
+        max-height: none;
+    }
+
+    /* Separación visual entre tipos de registros */
+    .subtitulo-historial:first-of-type {
+        margin-top: 0;
+    }
+
+    /* Estilos para eliminar consultas */
+    .acciones-consulta {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #E8F4FD;
+        text-align: right;
+    }
+
+    .boton-eliminar-consulta {
+        background: #E74C3C;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.85em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .boton-eliminar-consulta:hover {
+        background: #C0392B;
+    }
+
+    /* Estilos para las tarjetas de citas mejoradas */
+    .acciones-cita {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        margin-left: 15px;
+    }
+
+    .botones-cita {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .boton-eliminar-cita {
+        background: #E74C3C;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .boton-eliminar-cita:hover {
+        background: #C0392B;
+    }
+
+    /* Estilos para citas en historial */
+    .acciones-cita-historial {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #E8F4FD;
+        text-align: right;
+    }
+
+    .fecha-completa-cita, .mascota-detalle-cita, .especialidad-cita {
+        margin-bottom: 15px;
+    }
+
+    .fecha-completa-cita h5, .mascota-detalle-cita h5, .especialidad-cita h5 {
+        color: #2C3E50;
+        margin-bottom: 5px;
+    }
+
+    /* Modal para confirmar eliminación de citas */
+    .modal-confirmar-eliminar-cita {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Modal para confirmar eliminación */
+    .modal-confirmar-eliminar {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contenido-modal-eliminar {
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 450px;
+        text-align: center;
+    }
+
+    .encabezado-modal-eliminar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #E8F4FD;
+        padding-bottom: 16px;
+    }
+
+    .titulo-modal-eliminar {
+        color: #2C3E50;
+        margin: 0;
+    }
+
+    .boton-cerrar-modal-eliminar {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #95A5A6;
+    }
+
+    .cuerpo-modal-eliminar {
+        margin-bottom: 24px;
+    }
+
+    .icono-advertencia {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .cuerpo-modal-eliminar p {
+        margin-bottom: 12px;
+        color: #2C3E50;
+    }
+
+    .texto-advertencia {
+        color: #E74C3C !important;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .botones-modal-eliminar {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .boton-cancelar-eliminar {
+        background: #95A5A6;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .boton-cancelar-eliminar:hover {
+        background: #7F8C8D;
+    }
+
+    .boton-confirmar-eliminar {
+        background: #E74C3C;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .boton-confirmar-eliminar:hover {
+        background: #C0392B;
+    }
+    </style>
+
+    <script>
+    // Función adicional para crear consulta desde cita pasada
+    function crearConsultaDesdeCita(idMascota, fecha) {
+        registrarNuevaConsulta();
+        
+        // Pre-seleccionar la mascota y fecha
+        setTimeout(() => {
+            const selectMascota = document.querySelector('#formularioConsulta [name="id_mascota"]');
+            const inputFecha = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
+            
+            if (selectMascota) {
+                selectMascota.value = idMascota;
+            }
+            if (inputFecha) {
+                inputFecha.value = fecha;
+            }
+        }, 100);
+    }
+
+    // Función para mostrar modal de confirmación de eliminación de consulta
+    function confirmarEliminarConsulta(idHistorial, nombreMascota) {
+        document.getElementById('idHistorialEliminar').value = idHistorial;
+        document.getElementById('mascotaEliminar').textContent = nombreMascota;
+        document.getElementById('modalConfirmarEliminar').style.display = 'flex';
+    }
+
+    // Función para cerrar modal de eliminación de consulta
+    function cerrarModalEliminar() {
+        document.getElementById('modalConfirmarEliminar').style.display = 'none';
+    }
+
+    // Función para eliminar consulta
+    function eliminarConsulta() {
+        const form = document.getElementById('formularioEliminarConsulta');
+        form.submit();
+    }
+
+    // Función para mostrar modal de confirmación de eliminación de cita
+    function confirmarEliminarCita(idCita, nombreMascota, motivo) {
+        document.getElementById('idCitaEliminar').value = idCita;
+        document.getElementById('mascotaEliminarCita').textContent = nombreMascota;
+        document.getElementById('motivoEliminarCita').textContent = motivo;
+        document.getElementById('modalConfirmarEliminarCita').style.display = 'flex';
+    }
+
+    // Función para cerrar modal de eliminación de cita
+    function cerrarModalEliminarCita() {
+        document.getElementById('modalConfirmarEliminarCita').style.display = 'none';
+    }
+
+    // Función para eliminar cita
+    function eliminarCita() {
+        const form = document.getElementById('formularioEliminarCita');
+        form.submit();
+    }
+
+    // Cerrar modales con click fuera o ESC
+    document.addEventListener('click', function(event) {
+        const modalEliminar = document.getElementById('modalConfirmarEliminar');
+        const modalEliminarCita = document.getElementById('modalConfirmarEliminarCita');
+        
+        if (modalEliminar && event.target === modalEliminar) {
+            cerrarModalEliminar();
+        }
+        if (modalEliminarCita && event.target === modalEliminarCita) {
+            cerrarModalEliminarCita();
+        }
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            cerrarModalEliminar();
+            cerrarModalEliminarCita();
+        }
+    });
+
+    // Restringir fechas en formularios
+    document.addEventListener('DOMContentLoaded', function() {
+        // Para nueva cita: solo fechas futuras
+        const fechaCita = document.querySelector('#formularioCita [name="fecha"]');
+        if (fechaCita) {
+            const hoy = new Date();
+            const manana = new Date(hoy);
+            manana.setDate(hoy.getDate() + 1);
+            fechaCita.min = manana.toISOString().split('T')[0];
+        }
+
+        // Para nueva consulta: sin restricción de fechas (puede ser pasada o presente)
+        const fechaConsulta = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
+        if (fechaConsulta) {
+            // Eliminar restricción max para permitir fechas futuras también
+            fechaConsulta.removeAttribute('max');
+        }
+    });
+
+    // Validación adicional para fechas en guardar cita
+    function guardarCita() {
+        const form = document.getElementById('formularioCita');
+        
+        // Validar campos requeridos
+        const camposRequeridos = form.querySelectorAll('[required]');
+        let valido = true;
+        
+        camposRequeridos.forEach(campo => {
+            if (!campo.value.trim()) {
+                campo.style.borderColor = '#e74c3c';
+                valido = false;
+            } else {
+                campo.style.borderColor = '#E8F4FD';
+            }
+        });
+        
+        if (!valido) {
+            mostrarMensajeError('Por favor completa todos los campos requeridos');
+            return;
+        }
+        
+        // Validar fecha no sea pasada (solo para citas desde Mi Agenda)
+        const fecha = form.querySelector('[name="fecha"]').value;
+        const fechaHoy = new Date().toISOString().split('T')[0];
+        
+        if (fecha <= fechaHoy) {
+            mostrarMensajeError('Solo puedes agendar citas para fechas futuras. Para registrar citas pasadas, usa la sección Historial Médico.');
+            return;
+        }
+        
+        // Enviar formulario
+        form.submit();
+    }
+
+    // Funciones de mensaje (simplificadas para este contexto)
+    function mostrarMensajeError(mensaje) {
+        alert('Error: ' + mensaje);
+    }
+    </script>
 </body>
 </html>
 <?php cerrarConexion(); ?>
