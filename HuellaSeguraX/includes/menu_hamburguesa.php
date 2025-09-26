@@ -112,6 +112,14 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
                 
                 <div class="separador-menu"></div>
                 
+                <a href="index.php" class="opcion-menu">
+                    <span class="icono-menu">🏠</span>
+                    <span class="texto-menu">Inicio</span>
+                </a>
+                <a href="mis-mascotas.php" class="opcion-menu">
+                    <span class="icono-menu">🐕</span>
+                    <span class="texto-menu">Mis Mascotas</span>
+                </a>
                 <a href="mascotas-perdidas.php" class="opcion-menu">
                     <span class="icono-menu">🔍</span>
                     <span class="texto-menu">Mascotas Perdidas</span>
@@ -119,6 +127,10 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
                 <a href="adopciones.php" class="opcion-menu">
                     <span class="icono-menu">❤️</span>
                     <span class="texto-menu">Adopciones</span>
+                </a>
+                <a href="comunidad.php" class="opcion-menu">
+                    <span class="icono-menu">👥</span>
+                    <span class="texto-menu">Comunidad</span>
                 </a>
                 <a href="acerca.php" class="opcion-menu">
                     <span class="icono-menu">ℹ️</span>

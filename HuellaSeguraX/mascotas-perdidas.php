@@ -2,9 +2,7 @@
 include_once('config/conexion.php');
 session_start();
 
-include_once('includes/menu_hamburguesa.php');
-
-if (!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['usuario_id']) && !isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit();
 }
@@ -100,7 +98,9 @@ if (isset($_GET['error'])) {
 
 <body>
     <!-- Header -->
-    <header></header>
+    <header>
+         <?php include_once('includes/menu_hamburguesa.php'); ?>
+    </header>
 
     <!-- Contenido principal -->
     <main class="main-content">
@@ -176,10 +176,15 @@ if (isset($_GET['error'])) {
                                     <?php endif; ?>
                             
                                     <div class="contenido-reporte">
-                                        <img src="imagenes/<?php echo htmlspecialchars($reporte['foto_mascota']); ?>" 
-                                             alt="<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>" 
-                                             class="foto-reporte"
-                                             onerror="this.src=''">
+                                        <img src="<?php 
+                                        if ($reporte['foto_mascota'] === 'mascota-default.jpg') {
+                                            echo 'imagenes/mascota-default.jpg';
+                                        } else {
+                                            echo file_exists('uploads/mascotas/' . $reporte['foto_mascota']) ? 'uploads/mascotas/' . $reporte['foto_mascota'] : 'imagenes/mascota-default.jpg';
+                                        }
+                                        ?>" 
+                                        alt="<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>" 
+                                        class="foto-reporte">
                                 
                                         <div class="info-reporte">
                                             <h4><?php echo htmlspecialchars($reporte['nombre_mascota']); ?></h4>
@@ -376,7 +381,8 @@ if (isset($_GET['error'])) {
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
-    <script src="js/mascotas-perdidas.js"></script></style>
+    <script src="js/mascotas-perdidas.js"></script>
+    <script src="js/scripts.js"></script>
 
 </body>
 </html>

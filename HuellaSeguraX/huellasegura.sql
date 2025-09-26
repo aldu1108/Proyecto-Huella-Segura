@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-09-2025 a las 21:52:15
+-- Tiempo de generación: 26-09-2025 a las 06:53:15
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,9 +41,7 @@ CREATE TABLE `citas_veterinarias` (
 --
 
 INSERT INTO `citas_veterinarias` (`id_cita`, `fecha`, `motivo`, `estado`, `id_mascota`, `id_veterinario`) VALUES
-(1, '2025-09-25', 'Vacunación', 'programada', 6, 1),
-(2, '2025-09-25', 'Consulta General', 'programada', 8, 1),
-(3, '2025-09-23', 'Consulta General', 'programada', 8, 1);
+(6, '2025-10-30', 'Análisis', 'programada', 9, 1);
 
 -- --------------------------------------------------------
 
@@ -134,6 +132,15 @@ CREATE TABLE `historiales_medicos` (
   `id_veterinario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `historiales_medicos`
+--
+
+INSERT INTO `historiales_medicos` (`id_historial`, `fecha`, `diagnostico`, `tratamiento`, `id_mascota`, `id_veterinario`) VALUES
+(1, '2025-09-26', 'Vacuna antirabica', 'aplicación ', 9, 1),
+(2, '2025-09-26', 'Caca azul', 'lo matamos', 9, 1),
+(3, '2025-09-03', 'Patita rota', 'Yeso', 9, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -164,7 +171,8 @@ INSERT INTO `mascotas` (`id_mascota`, `id_usuario`, `tipo`, `sexo`, `nombre_masc
 (5, 5, 'perro', 'macho', 'menem', 8, '2025-08-31', 'mascota-default.jpg', 'activo'),
 (6, 5, 'perro', 'hembra', 'mora', 11, '2025-09-15', 'mascota-default.jpg', 'activo'),
 (7, 5, 'gato', 'hembra', 'dulce', 3, '2025-09-06', 'mascota-default.jpg', 'activo'),
-(8, 0, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota-default.jpg', 'activo');
+(8, 0, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota-default.jpg', 'activo'),
+(9, -1, 'perro', 'macho', 'Juan', 5, '2020-01-01', 'mascota-default.jpg', 'activo');
 
 -- --------------------------------------------------------
 
@@ -527,7 +535,7 @@ ALTER TABLE `veterinario`
 -- AUTO_INCREMENT de la tabla `citas_veterinarias`
 --
 ALTER TABLE `citas_veterinarias`
-  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
@@ -560,10 +568,16 @@ ALTER TABLE `gastos`
   MODIFY `id_gasto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `historiales_medicos`
+--
+ALTER TABLE `historiales_medicos`
+  MODIFY `id_historial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `publicaciones`

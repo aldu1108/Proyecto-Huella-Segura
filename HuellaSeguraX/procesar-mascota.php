@@ -25,9 +25,11 @@ if ($_POST) {
 
     // Manejo de la foto
     $foto_mascota = 'mascota-default.jpg'; // Valor por defecto
+    $ruta_destino = "uploads/mascotas/" . $nombre_archivo;
+    move_uploaded_file($archivo_temporal, $ruta_destino);
 
     if (isset($_FILES['foto_mascota']) && $_FILES['foto_mascota']['error'] == 0) {
-        $directorio_destino = 'imagenes/';
+        $directorio_destino = 'uploads/mascotas/';
 
         // Crear directorio si no existe
         if (!is_dir($directorio_destino)) {
