@@ -4,7 +4,7 @@ include_once('includes/funciones.php');
 session_start();
 
 // Verificar si hay sesión activa
-if (!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit();
 }

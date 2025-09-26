@@ -3,7 +3,7 @@ include_once('config/conexion.php');
 session_start();
 
 // Verificar si hay sesión activa
-if (!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit();
 }
@@ -318,6 +318,7 @@ if (isset($_GET['error'])) {
     </nav>
 
     <!-- JavaScript -->
+     <script src="js/scripts.js"></script>
     <script src="js/mis-mascotas.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 include_once('config/conexion.php');
 session_start();
 
-if (!isset($_SESSION['usuario_id']) && !isset($_SESSION['rol'])) {
+if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit();
 }
@@ -381,8 +381,8 @@ if (isset($_GET['error'])) {
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
-    <script src="js/mascotas-perdidas.js"></script>
     <script src="js/scripts.js"></script>
+    <script src="js/mascotas-perdidas.js"></script>
 
 </body>
 </html>

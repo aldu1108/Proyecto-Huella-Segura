@@ -2,9 +2,8 @@
 include_once('config/conexion.php');
 session_start();
 
-if (!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
-    header("Location: adopciones.php?id=" . $id_publicacion);
     exit();
 }
 
