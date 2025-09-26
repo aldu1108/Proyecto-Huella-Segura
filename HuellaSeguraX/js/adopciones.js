@@ -105,3 +105,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('Sistema de adopciones cargado correctamente');
+
+// Delegación: abrir modal de solicitud al hacer click en botones .boton-interesa-adoptar
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.body.dataset.adopcionesInit === '1') return;
+    document.body.dataset.adopcionesInit = '1';
+
+    document.body.addEventListener('click', function(e) {
+        const btn = e.target.closest && e.target.closest('.boton-interesa-adoptar');
+        if (!btn) return;
+
+        // Si tiene un data-alert mostramos alerta (caso ejemplo)
+        if (btn.dataset.alert) {
+            alert(btn.dataset.alert);
+            return;
+        }
+
+        const id = btn.dataset.idAdopcion || btn.getAttribute('data-id-adopcion');
+        const nombre = btn.dataset.nombre || btn.getAttribute('data-nombre');
+
+        if (id !== undefined && id !== null) {
+            // Llamar a la función centralizada
+            mostrarSolicitudAdopcion(parseInt(id, 10), nombre || 'la mascota');
+        }
+    });
+});

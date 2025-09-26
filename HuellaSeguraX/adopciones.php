@@ -194,7 +194,7 @@ if (isset($_GET['error'])) {
                                         </div>
                                     </div>
                             
-                                    <button class="boton-interesa-adoptar" onclick="mostrarSolicitudAdopcion(<?php echo $adopcion['id_adopcion']; ?>, '<?php echo htmlspecialchars($adopcion['nombre_mascota']); ?>')">
+                                    <button class="boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>" data-nombre="<?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
                                         ❤️ Me interesa adoptar →
                                     </button>
                                 </div>
@@ -230,7 +230,7 @@ if (isset($_GET['error'])) {
                                 </div>
                             </div>
                         
-                            <button class="boton-interesa-adoptar" onclick="alert('Este es un ejemplo. Registra mascotas para ver funcionalidad completa.')">
+                            <button class="boton-interesa-adoptar" data-id-adopcion="0" data-alert="Este es un ejemplo. Registra mascotas para ver funcionalidad completa.">
                                 ❤️ Me interesa adoptar →
                             </button>
                         </div>
