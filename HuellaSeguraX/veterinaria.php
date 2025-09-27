@@ -205,7 +205,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 
         <?php if (isset($mensaje_error)): ?>
             <div id="mensajeError" class="mensaje-error" style="background: #E74C3C; color: white; padding: 16px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
-                ❌ <?php echo $mensaje_error; ?>
+                ✖ <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
 
@@ -242,7 +242,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
         </section>
 
-        <!-- Navegación de secciones -->
+        <!-- Navegacion de secciones -->
         <nav class="navegacion-veterinaria">
             <button class="boton-seccion-vet activo" data-seccion="agenda">📅 Mi Agenda</button>
             <?php if ($rol_usuario === 'veterinario'): ?>
@@ -252,7 +252,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             <button class="boton-seccion-vet" data-seccion="documentos">📄 Documentos</button>
         </nav>
 
-        <!-- Sección Mi Agenda (SIN historial de citas) -->
+        <!-- Seccion Mi Agenda (SIN historial de citas) -->
         <section class="seccion-veterinaria seccion-agenda activa" id="seccionAgenda">
             <div class="encabezado-agenda">
                 <h3>Mi Agenda Veterinaria</h3>
@@ -267,7 +267,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                 <?php endif; ?>
             </div>
 
-            <!-- Acciones rápidas -->
+            <!-- Acciones rapidas -->
             <div class="acciones-rapidas">
                 <button class="boton-accion-rapida" onclick="verAgendaCompleta()">
                     <span class="icono-accion">📅</span>
@@ -292,9 +292,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                 </button>
             </div>
 
-            <!-- Próximas citas -->
+            <!-- Proximas citas -->
             <div class="proximas-citas">
-                <h4>Próximas Citas</h4>
+                <h4>Proximas Citas</h4>
                 <?php if ($resultado_proximas && $resultado_proximas->num_rows > 0): ?>
                     <?php while($cita = $resultado_proximas->fetch_assoc()): ?>
                         <div class="tarjeta-cita <?php echo (date('Y-m-d', strtotime($cita['fecha'])) == $fecha_hoy) ? 'hoy' : 'proxima'; ?>">
@@ -343,6 +343,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
         </section>
 
+<<<<<<< Updated upstream
         <!-- Sección Pacientes -->
         <?php if ($rol_usuario === 'veterinario'): ?>
             <section class="seccion-veterinaria seccion-pacientes" id="seccionPacientes">
@@ -352,6 +353,16 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                         + Agregar Mascota
                     </button>
                 </div>
+=======
+        <!-- Seccion Pacientes -->
+        <section class="seccion-veterinaria seccion-pacientes" id="seccionPacientes">
+            <div class="encabezado-agenda">
+                <h3>Mis Pacientes</h3>
+                <button class="boton-nueva-cita" onclick="window.location.href='mis-mascotas.php'">
+                    + Agregar Mascota
+                </button>
+            </div>
+>>>>>>> Stashed changes
 
                 <div class="lista-pacientes">
                     <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
@@ -375,6 +386,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                         <p>📅 Nació el <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
                                     </div>
                                 </div>
+<<<<<<< Updated upstream
                                 <div class="acciones-paciente">
                                     <button class="boton-ver-historial" onclick="verHistorialPaciente(<?php echo $mascota['id_mascota']; ?>)">
                                         Ver Historial
@@ -382,6 +394,13 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                     <button class="boton-nueva-cita-paciente" onclick="agendarCitaPaciente(<?php echo $mascota['id_mascota']; ?>)">
                                         Nueva Cita
                                     </button>
+=======
+                                <div class="detalles-cita">
+                                    <h5><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
+                                    <p><?php echo ucfirst($mascota['tipo']); ?> • <?php echo $mascota['edad_mascota']; ?> años</p>
+                                    <p>🐾 <?php echo ucfirst($mascota['sexo']); ?></p>
+                                    <p>📅 Nació el <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
+>>>>>>> Stashed changes
                                 </div>
                             </div>
                         <?php endwhile; ?>
@@ -397,10 +416,10 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </section>
         <?php endif; ?>
 
-        <!-- Sección Historial Médico (INCLUYE citas pasadas) -->
+        <!-- Seccion Historial Medico (INCLUYE citas pasadas) -->
         <section class="seccion-veterinaria seccion-historial" id="seccionHistorial">
             <div class="encabezado-historial">
-                <h3>Historial Médico Completo</h3>
+                <h3>Historial Medico Completo</h3>
                 <div class="filtros-historial">
                     <select class="filtro-mascota" onchange="filtrarHistorial(this.value)">
                         <option value="">Todas las mascotas</option>
@@ -455,7 +474,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                 </div>
                                 
                                 <div class="veterinario-registro">
-                                    <h5>👨‍⚕️ Veterinario</h5>
+                                    <h5>👩‍⚕️ Veterinario</h5>
                                     <p><?php echo htmlspecialchars(($historial['nombre_veterinario'] && $historial['apellido_veterinario']) ? $historial['nombre_veterinario'] . ' ' . $historial['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                 </div>
 
@@ -527,7 +546,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                 </div>
                                 
                                 <div class="veterinario-registro">
-                                    <h5>👨‍⚕️ Veterinario</h5>
+                                    <h5>👩‍⚕️ Veterinario</h5>
                                     <p><?php echo htmlspecialchars(($cita_pasada['nombre_veterinario'] && $cita_pasada['apellido_veterinario']) ? $cita_pasada['nombre_veterinario'] . ' ' . $cita_pasada['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                 </div>
 
@@ -576,7 +595,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 
             <div class="categorias-documentos">
                 <div class="categoria-doc">
-                    <h4>🩺 Certificados de Vacunación</h4>
+                    <h4>🧾 Certificados de Vacunación</h4>
                     <div class="lista-documentos">
                         <?php
                         // Consulta para obtener documentos de vacunación
@@ -1147,7 +1166,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
     </style>
 
     <script>
-    // Función adicional para crear consulta desde cita pasada
+    // Funcion adicional para crear consulta desde cita pasada
     function crearConsultaDesdeCita(idMascota, fecha) {
         registrarNuevaConsulta();
         
@@ -1177,7 +1196,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         document.getElementById('modalConfirmarEliminar').style.display = 'none';
     }
 
-    // Función para eliminar consulta
+    // Funcion para eliminar consulta
     function eliminarConsulta() {
         const form = document.getElementById('formularioEliminarConsulta');
         form.submit();
@@ -1191,7 +1210,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         document.getElementById('modalConfirmarEliminarCita').style.display = 'flex';
     }
 
-    // Función para cerrar modal de eliminación de cita
+    // Funcion para cerrar modal de eliminación de cita
     function cerrarModalEliminarCita() {
         document.getElementById('modalConfirmarEliminarCita').style.display = 'none';
     }
