@@ -10,6 +10,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+$rol_usuario = $_SESSION['rol'] ?? 'demo';
 
 // Procesar acciones POST
 if ($_POST) {
@@ -244,7 +245,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         <!-- Navegación de secciones -->
         <nav class="navegacion-veterinaria">
             <button class="boton-seccion-vet activo" data-seccion="agenda">📅 Mi Agenda</button>
-            <button class="boton-seccion-vet" data-seccion="pacientes">🐕 Pacientes</button>
+            <?php if ($rol_usuario === 'veterinario'): ?>
+                <button class="boton-seccion-vet" data-seccion="pacientes">🐕 Pacientes</button>
+            <?php endif; ?>
             <button class="boton-seccion-vet" data-seccion="historial">📋 Historial</button>
             <button class="boton-seccion-vet" data-seccion="documentos">📄 Documentos</button>
         </nav>
@@ -253,9 +256,15 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         <section class="seccion-veterinaria seccion-agenda activa" id="seccionAgenda">
             <div class="encabezado-agenda">
                 <h3>Mi Agenda Veterinaria</h3>
-                <button class="boton-nueva-cita" onclick="mostrarFormularioCita()">
-                    + Agendar Nueva Cita
-                </button>
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <button class="boton-nueva-cita" onclick="alert('Inicia sesión para agendar citas\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
+                        + Agendar Nueva Cita
+                    </button>
+                <?php else: ?>
+                    <button class="boton-nueva-cita" onclick="mostrarFormularioCita()">
+                        + Agendar Nueva Cita
+                    </button>
+                <?php endif; ?>
             </div>
 
             <!-- Acciones rápidas -->
@@ -272,7 +281,11 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                     <div class="descripcion-accion">Citas de hoy</div>
                 </button>
                 
-                <button class="boton-accion-rapida" onclick="registrarNuevaConsulta()">
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <button class="boton-accion-rapida" onclick="alert('Inicia sesión para registrar consultas\n\nRegístrate para poder:\n• Registrar consultas médicas\n• Llevar historial de tus mascotas\n• Gestionar citas veterinarias')">
+                <?php else: ?>
+                    <button class="boton-accion-rapida" onclick="registrarNuevaConsulta()">
+                <?php endif; ?>
                     <span class="icono-accion">📝</span>
                     <div class="titulo-accion">Registrar Nueva Consulta</div>
                     <div class="descripcion-accion">Agregar consulta médica</div>
@@ -316,65 +329,73 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                 <?php else: ?>
                     <div class="sin-citas">
                         <p>No tienes citas programadas próximamente</p>
-                        <button class="boton-agendar-primera" onclick="mostrarFormularioCita()">
-                            Agendar Primera Cita
-                        </button>
+                        <?php if ($rol_usuario == 'demo'): ?>
+                            <button class="boton-agendar-primera" onclick="alert('Inicia sesión para agendar citas\n\nRegístrate para gestionar la salud de tus mascotas')">
+                                Agendar Primera Cita
+                            </button>
+                        <?php else: ?>
+                            <button class="boton-agendar-primera" onclick="mostrarFormularioCita()">
+                                Agendar Primera Cita
+                            </button>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
         </section>
 
         <!-- Sección Pacientes -->
-        <section class="seccion-veterinaria seccion-pacientes" id="seccionPacientes">
-            <div class="encabezado-agenda">
-                <h3>Mis Pacientes</h3>
-                <button class="boton-nueva-cita" onclick="window.location.href='mis-mascotas.php'">
-                    + Agregar Mascota
-                </button>
-            </div>
+        <?php if ($rol_usuario === 'veterinario'): ?>
+            <section class="seccion-veterinaria seccion-pacientes" id="seccionPacientes">
+                <div class="encabezado-agenda">
+                    <h3>Mis Pacientes</h3>
+                    <button class="boton-nueva-cita" onclick="window.location.href='mis-mascotas.php'">
+                        + Agregar Mascota
+                    </button>
+                </div>
 
-            <div class="lista-pacientes">
-                <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
-                    <?php 
-                    $resultado_mascotas->data_seek(0);
-                    while($mascota = $resultado_mascotas->fetch_assoc()): 
-                    ?>
-                        <div class="tarjeta-paciente">
-                            <div class="info-cita">
-                                <div class="foto-paciente">
-                                    <?php if (!empty($mascota['foto_mascota'])): ?>
-                                        <img src="imagenes/perro.jpg" class="foto-paciente">
-                                    <?php else: ?>
-                                        <div class="placeholder-paciente"><?php echo ($mascota['tipo'] == 'perro') ? '🐕' : '🐱'; ?></div>
-                                    <?php endif; ?>
+                <div class="lista-pacientes">
+                    <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
+                        <?php 
+                        $resultado_mascotas->data_seek(0);
+                        while($mascota = $resultado_mascotas->fetch_assoc()): 
+                        ?>
+                            <div class="tarjeta-paciente">
+                                <div class="info-cita">
+                                    <div class="foto-paciente">
+                                        <?php if (!empty($mascota['foto_mascota'])): ?>
+                                            <img src="imagenes/perro.jpg" class="foto-paciente">
+                                        <?php else: ?>
+                                            <div class="placeholder-paciente"><?php echo ($mascota['tipo'] == 'perro') ? '🐕' : '🐱'; ?></div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="detalles-cita">
+                                        <h5><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
+                                        <p><?php echo ucfirst($mascota['tipo']); ?> • <?php echo $mascota['edad_mascota']; ?> años</p>
+                                        <p>♂ <?php echo ucfirst($mascota['sexo']); ?></p>
+                                        <p>📅 Nació el <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
+                                    </div>
                                 </div>
-                                <div class="detalles-cita">
-                                    <h5><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
-                                    <p><?php echo ucfirst($mascota['tipo']); ?> • <?php echo $mascota['edad_mascota']; ?> años</p>
-                                    <p>♂ <?php echo ucfirst($mascota['sexo']); ?></p>
-                                    <p>📅 Nació el <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
+                                <div class="acciones-paciente">
+                                    <button class="boton-ver-historial" onclick="verHistorialPaciente(<?php echo $mascota['id_mascota']; ?>)">
+                                        Ver Historial
+                                    </button>
+                                    <button class="boton-nueva-cita-paciente" onclick="agendarCitaPaciente(<?php echo $mascota['id_mascota']; ?>)">
+                                        Nueva Cita
+                                    </button>
                                 </div>
                             </div>
-                            <div class="acciones-paciente">
-                                <button class="boton-ver-historial" onclick="verHistorialPaciente(<?php echo $mascota['id_mascota']; ?>)">
-                                    Ver Historial
-                                </button>
-                                <button class="boton-nueva-cita-paciente" onclick="agendarCitaPaciente(<?php echo $mascota['id_mascota']; ?>)">
-                                    Nueva Cita
-                                </button>
-                            </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="sin-citas">
+                            <p>No tienes mascotas registradas</p>
+                            <button class="boton-agendar-primera" onclick="window.location.href='mis-mascotas.php'">
+                                Agregar Primera Mascota
+                            </button>
                         </div>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <div class="sin-citas">
-                        <p>No tienes mascotas registradas</p>
-                        <button class="boton-agendar-primera" onclick="window.location.href='mis-mascotas.php'">
-                            Agregar Primera Mascota
-                        </button>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
+                    <?php endif; ?>
+                </div>
+            </section>
+        <?php endif; ?>
 
         <!-- Sección Historial Médico (INCLUYE citas pasadas) -->
         <section class="seccion-veterinaria seccion-historial" id="seccionHistorial">
@@ -392,9 +413,15 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                             </option>
                         <?php endwhile; ?>
                     </select>
-                    <button class="boton-nueva-consulta" onclick="registrarNuevaConsulta()">
-                        + Nueva Consulta
-                    </button>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="boton-nueva-consulta" onclick="alert('Inicia sesión para registrar consultas\n\nRegístrate para llevar el historial médico de tus mascotas')">
+                            + Nueva Consulta
+                        </button>
+                    <?php else: ?>
+                        <button class="boton-nueva-consulta" onclick="registrarNuevaConsulta()">
+                            + Nueva Consulta
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -518,9 +545,15 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                     <div class="sin-registros">
                         <h4>📋 Sin Registros Médicos</h4>
                         <p>Aún no hay registros médicos o citas realizadas para tus mascotas</p>
-                        <button class="boton-agendar-primera" onclick="registrarNuevaConsulta()">
-                            Registrar Primera Consulta
-                        </button>
+                        <?php if ($rol_usuario == 'demo'): ?>
+                            <button class="boton-agendar-primera" onclick="alert('Inicia sesión para registrar consultas\n\nCrea una cuenta para gestionar el historial médico')">
+                                Registrar Primera Consulta
+                            </button>
+                        <?php else: ?>
+                            <button class="boton-agendar-primera" onclick="registrarNuevaConsulta()">
+                                Registrar Primera Consulta
+                            </button>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -530,9 +563,15 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         <section class="seccion-veterinaria seccion-documentos" id="seccionDocumentos">
             <div class="encabezado-documentos">
                 <h3>Documentos Médicos</h3>
-                <button class="boton-subir-documento" onclick="mostrarSubirDocumento()">
-                    📎 Subir Documento
-                </button>
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <button class="boton-subir-documento" onclick="alert('Inicia sesión para subir documentos\n\nRegístrate para poder:\n• Subir documentos médicos\n• Organizar certificados\n• Mantener registros actualizados')">
+                        📎 Subir Documento
+                    </button>
+                <?php else: ?>
+                    <button class="boton-subir-documento" onclick="mostrarSubirDocumento()">
+                        📎 Subir Documento
+                    </button>
+                <?php endif; ?>
             </div>
 
             <div class="categorias-documentos">

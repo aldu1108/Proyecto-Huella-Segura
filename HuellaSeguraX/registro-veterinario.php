@@ -6,7 +6,7 @@ $mensaje_error = "";
 $mensaje_exito = "";
 
 // Verificar si ya hay sesión activa
-if (isset($_SESSION['usuario_id'])) {
+if (isset($_SESSION['usuario_id']) && $_SESSION['rol'] != 'demo') {
     header("Location: index.php");
     exit();
 }
@@ -97,7 +97,7 @@ if ($_POST) {
         <?php if (!empty($mensaje_exito)): ?>
             <div class="success-message">
                 <?php echo $mensaje_exito; ?>
-                <br><a href="login-veterinario.php" style="color: #fff; text-decoration: underline;">Ir a Iniciar Sesión</a>
+                <br><a href="login.php" style="color: #fff; text-decoration: underline;">Ir a Iniciar Sesión</a>
             </div>
         <?php endif; ?>
 
