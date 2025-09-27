@@ -8,12 +8,17 @@ if (!isset($_SESSION['rol'])) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+$rol_usuario = $_SESSION['rol'] ?? 'demo';
 
 // Obtener mascotas del usuario para el selector
-$consulta_mascotas = "SELECT id_mascota, nombre_mascota, tipo FROM mascotas 
-                      WHERE id_usuario = $usuario_id AND estado = 'activo' 
-                      ORDER BY nombre_mascota ASC";
-$resultado_mascotas = $conexion->query($consulta_mascotas);
+if ($rol_usuario === 'demo') {
+    $resultado_mascotas = null; // Demo no tiene mascotas
+} else {
+    $consulta_mascotas = "SELECT id_mascota, nombre_mascota, tipo FROM mascotas 
+                          WHERE id_usuario = $usuario_id AND estado = 'activo' 
+                          ORDER BY nombre_mascota ASC";
+    $resultado_mascotas = $conexion->query($consulta_mascotas);
+}
 
 // Obtener publicaciones de adopción con información más completa
 $consulta_adopciones = "SELECT p.*, pa.*, m.*, u.nombre_usuario, u.telefono_usuario, u.email_usuario
@@ -119,10 +124,17 @@ if (isset($_GET['error'])) {
         </section>
 
         <!-- Botón crear publicación de adopción -->
-        <button class="boton-crear-publicacion" onclick="mostrarFormularioPublicacion()">
-            ❤️ ¡Publicar en Adopción!
-            <small>+ Buscar hogar para tu mascota</small>
-        </button>
+        <?php if ($rol_usuario == 'demo'): ?>
+            <button class="boton-crear-publicacion" onclick="alert('Inicia sesión para publicar adopciones\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
+                ❤️ ¡Publicar en Adopción!
+                <small>+ Buscar hogar para tu mascota</small>
+            </button>
+        <?php else: ?>
+            <button class="boton-crear-publicacion" onclick="mostrarFormularioPublicacion()">
+                ❤️ ¡Publicar en Adopción!
+                <small>+ Buscar hogar para tu mascota</small>
+            </button>
+        <?php endif; ?>
 
         <!-- Sección de adopción -->
         <section class="seccion-adopcion">
@@ -193,9 +205,15 @@ if (isset($_GET['error'])) {
                                         </div>
                                     </div>
                             
-                                    <button class="boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>" data-nombre="<?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
-                                        ❤️ Me interesa adoptar →
-                                    </button>
+                                    <?php if ($rol_usuario == 'demo'): ?>
+                                        <button class="boton-interesa-adoptar" onclick="alert('Inicia sesión para solicitar adopciones\n\nRegístrate para poder:\n• Solicitar adoptar mascotas\n• Contactar con los dueños\n• Completar el proceso de adopción')">
+                                            ❤️ Me interesa adoptar →
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>" data-nombre="<?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
+                                            ❤️ Me interesa adoptar →
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                         <?php endwhile; ?>
                 <?php else: ?>
@@ -229,9 +247,15 @@ if (isset($_GET['error'])) {
                                 </div>
                             </div>
                         
-                            <button class="boton-interesa-adoptar" data-id-adopcion="0" data-alert="Este es un ejemplo. Registra mascotas para ver funcionalidad completa.">
-                                ❤️ Me interesa adoptar →
-                            </button>
+                            <?php if ($rol_usuario == 'demo'): ?>
+                                <button class="boton-interesa-adoptar" onclick="alert('Inicia sesión para solicitar adopciones\n\nEste es un ejemplo de mascota en adopción.')">
+                                    ❤️ Me interesa adoptar →
+                                </button>
+                            <?php else: ?>
+                                <button class="boton-interesa-adoptar" data-id-adopcion="0" data-alert="Este es un ejemplo. Registra mascotas para ver funcionalidad completa.">
+                                    ❤️ Me interesa adoptar →
+                                </button>
+                            <?php endif; ?>
                         </div>
                 <?php endif; ?>
             </div>
@@ -296,14 +320,26 @@ if (isset($_GET['error'])) {
                     </select>
                 </div>
 
-                <?php if (!$resultado_mascotas || $resultado_mascotas->num_rows == 0): ?>
-                        <div class="sin-mascotas-mensaje">
-                            <p>⚠️ Primero debes registrar tus mascotas</p>
-                            <button type="button" class="boton-agregar-mascota"
-                                onclick="window.location.href='mis-mascotas.php'">
-                                + Agregar Mascota
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <div class="sin-mascotas-mensaje">
+                        <p>⚠️ Necesitas una cuenta para publicar adopciones</p>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" class="boton-agregar-mascota" onclick="window.location.href='login.php'">
+                                🔑 Iniciar Sesión
+                            </button>
+                            <button type="button" class="boton-agregar-mascota" onclick="window.location.href='registro.php'">
+                                📝 Registrarse
                             </button>
                         </div>
+                    </div>
+                <?php elseif (!$resultado_mascotas || $resultado_mascotas->num_rows == 0): ?>
+                    <div class="sin-mascotas-mensaje">
+                        <p>⚠️ Primero debes registrar tus mascotas</p>
+                        <button type="button" class="boton-agregar-mascota"
+                            onclick="window.location.href='mis-mascotas.php'">
+                            + Agregar Mascota
+                        </button>
+                    </div>
                 <?php endif; ?>
 
                 <div class="grupo-input">

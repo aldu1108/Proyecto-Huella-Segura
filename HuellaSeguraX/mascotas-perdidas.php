@@ -8,6 +8,7 @@ if (!isset($_SESSION['rol'])) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+$rol_usuario = $_SESSION['rol'] ?? 'demo';
 
 // Obtener estadísticas
 $consulta_perdidas = "SELECT COUNT(*) as total FROM publicacion_perdida pp 
@@ -30,10 +31,14 @@ $resultado_recompensa = $conexion->query($consulta_recompensa);
 $total_recompensa = $resultado_recompensa ? $resultado_recompensa->fetch_assoc()['total'] : 0;
 
 // Obtener mascotas del usuario para el selector
-$consulta_mascotas = "SELECT id_mascota, nombre_mascota, tipo FROM mascotas 
-                      WHERE id_usuario = $usuario_id AND estado = 'activo' 
-                      ORDER BY nombre_mascota ASC";
-$resultado_mascotas = $conexion->query($consulta_mascotas);
+if ($rol_usuario === 'demo') {
+    $resultado_mascotas = null; // Demo no tiene mascotas
+} else {
+    $consulta_mascotas = "SELECT id_mascota, nombre_mascota, tipo FROM mascotas 
+                          WHERE id_usuario = $usuario_id AND estado = 'activo' 
+                          ORDER BY nombre_mascota ASC";
+    $resultado_mascotas = $conexion->query($consulta_mascotas);
+}
 
 // Obtener reportes activos con información más completa
 $consulta_reportes = "SELECT p.*, pp.*, m.nombre_mascota, m.tipo, m.foto_mascota, m.sexo, m.edad_mascota,
@@ -141,10 +146,17 @@ if (isset($_GET['error'])) {
         </div>
 
         <!-- Botón reportar mascota perdida -->
-        <button class="boton-reporte-perdida" onclick="mostrarFormularioReporte()">
-            ⚠️ ¡Reportar Mascota Perdida!
-            <small>+ Crear reporte de búsqueda</small>
-        </button>
+        <?php if ($rol_usuario == 'demo'): ?>
+            <button class="boton-reporte-perdida" onclick="alert('Inicia sesión para reportar mascotas perdidas\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
+                ⚠️ ¡Reportar Mascota Perdida!
+                <small>+ Crear reporte de búsqueda</small>
+            </button>
+        <?php else: ?>
+            <button class="boton-reporte-perdida" onclick="mostrarFormularioReporte()">
+                ⚠️ ¡Reportar Mascota Perdida!
+                <small>+ Crear reporte de búsqueda</small>
+            </button>
+        <?php endif; ?>
 
         <!-- Alerta actúa rápido -->
         <div class="alerta-actua-rapido">
@@ -196,9 +208,15 @@ if (isset($_GET['error'])) {
                                     </div>
                             
                                     <div class="acciones-reporte">
-                                        <button class="boton-contactar" onclick="contactarPropietario('<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>', '<?php echo htmlspecialchars($reporte['telefono_usuario']); ?>')">
-                                            📞 Contactar
-                                        </button>
+                                        <?php if ($rol_usuario == 'demo'): ?>
+                                            <button class="boton-contactar" onclick="alert('Inicia sesión para contactar propietarios\n\nRegístrate para poder:\n• Contactar a dueños de mascotas perdidas\n• Reportar avistamientos\n• Ayudar a reunir familias')">
+                                                📞 Contactar
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="boton-contactar" onclick="contactarPropietario('<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>', '<?php echo htmlspecialchars($reporte['telefono_usuario']); ?>')">
+                                                📞 Contactar
+                                            </button>
+                                        <?php endif; ?>
                                         <button class="boton-compartir-reporte" onclick="compartirReporte('<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>')" title="Compartir">📤</button>
                                         <button class="boton-ver-detalles" onclick="verDetallesReporte(<?php echo $reporte['id_anuncio']; ?>)" title="Ver detalles">👁</button>
                                     </div>
@@ -254,14 +272,26 @@ if (isset($_GET['error'])) {
                                 </select>
                             </div>
 
-                            <?php if (!$resultado_mascotas || $resultado_mascotas->num_rows == 0): ?>
-                                    <div class="sin-mascotas-mensaje">
-                                        <p>⚠️ Primero debes registrar tus mascotas</p>
-                                        <button type="button" class="boton-agregar-mascota"
-                                            onclick="window.location.href='mis-mascotas.php'">
-                                            + Agregar Mascota
+                            <?php if ($rol_usuario == 'demo'): ?>
+                                <div class="sin-mascotas-mensaje">
+                                    <p>⚠️ Necesitas una cuenta para reportar mascotas</p>
+                                    <div style="display: flex; gap: 10px;">
+                                        <button type="button" class="boton-agregar-mascota" onclick="window.location.href='login.php'">
+                                            🔑 Iniciar Sesión
+                                        </button>
+                                        <button type="button" class="boton-agregar-mascota" onclick="window.location.href='registro.php'">
+                                            📝 Registrarse
                                         </button>
                                     </div>
+                                </div>
+                            <?php elseif (!$resultado_mascotas || $resultado_mascotas->num_rows == 0): ?>
+                                <div class="sin-mascotas-mensaje">
+                                    <p>⚠️ Primero debes registrar tus mascotas</p>
+                                    <button type="button" class="boton-agregar-mascota"
+                                        onclick="window.location.href='mis-mascotas.php'">
+                                        + Agregar Mascota
+                                    </button>
+                                </div>
                             <?php endif; ?>
                         </div>
 

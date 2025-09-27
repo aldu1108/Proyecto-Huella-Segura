@@ -6,7 +6,7 @@ include_once('includes/menu_hamburguesa.php');
 
 
 
-if (!isset($_SESSION['usuario_id'])) {
+if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
     exit();
 }
@@ -24,11 +24,15 @@ $total_mascotas_comunidad = $resultado_mascotas_comunidad->fetch_assoc()['total'
 
 // Obtener posts de la comunidad
 $fecha_hoy = date('Y-m-d');
-$consulta_posts = "SELECT p.*, u.nombre_usuario, u.foto_usuario 
-                   FROM post_comunidad p 
-                   JOIN usuarios u ON p.id_usuario = u.id_usuario 
-                   ORDER BY p.fecha DESC LIMIT 10";
-$resultado_posts = $conexion->query($consulta_posts);
+if ($rol_usuario === 'demo') {
+    $resultado_posts = null; // Demo ve ejemplos estáticos
+} else {
+    $consulta_posts = "SELECT p.*, u.nombre_usuario, u.foto_usuario 
+                       FROM post_comunidad p 
+                       JOIN usuarios u ON p.id_usuario = u.id_usuario 
+                       ORDER BY p.fecha DESC LIMIT 10";
+    $resultado_posts = $conexion->query($consulta_posts);
+}
 
 // Obtener eventos próximos
 $consulta_eventos = "SELECT * FROM eventos WHERE fecha >= '$fecha_hoy' ORDER BY fecha ASC LIMIT 5";
@@ -90,7 +94,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         <section class="feed-section" id="feedSection">
             <!-- Crear post -->
             <div class="create-post">
-                <textarea placeholder="¿Qué quieres compartir con la comunidad?"></textarea>
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <textarea placeholder= "Inicia sesión para compartir con la comunidad" disabled onclick="alert('Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños')"></textarea>
+                <?php else: ?>
+                    <textarea placeholder="¿Qué quieres compartir con la comunidad?"></textarea>
+                <?php endif; ?>
             </div>
 
             <!-- Posts -->
@@ -110,9 +118,15 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <div class="post-tag">🐾 Luna</div>
                     </div>
                     <div class="post-actions">
-                        <button class="action-btn">❤️ 24</button>
-                        <button class="action-btn">💬 5</button>
-                        <button class="action-btn">📤 Compartir</button>
+                        <?php if ($rol_usuario == 'demo'): ?>
+                            <button class="action-btn" onclick="alert('Inicia sesión para dar me gusta')">❤️ 24</button>
+                            <button class="action-btn" onclick="alert('Inicia sesión para comentar')">💬 5</button>
+                            <button class="action-btn" onclick="alert('Inicia sesión para compartir')">📤 Compartir</button>
+                        <?php else: ?>
+                            <button class="action-btn">❤️ 24</button>
+                            <button class="action-btn">💬 5</button>
+                            <button class="action-btn">📤 Compartir</button>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -144,7 +158,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         <section class="eventos-section" id="eventosSection" style="display: none;">
             <div class="section-header">
                 <h3>Próximos Eventos</h3>
-                <button class="btn-create">Crear Evento</button>
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <button class="btn-create" onclick="alert('Inicia sesión para crear eventos\n\nRegístrate para poder:\n• Organizar eventos para mascotas\n• Invitar a otros miembros\n• Gestionar asistentes')">Crear Evento</button>
+                <?php else: ?>
+                    <button class="btn-create">Crear Evento</button>
+                <?php endif; ?>
             </div>
 
             <div class="eventos-list">
@@ -158,7 +176,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <div class="evento-details">
                             🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
                         </div>
-                        <button class="btn-join">Unirse al Evento</button>
+                        <?php if ($rol_usuario == 'demo'): ?>
+                            <button class="btn-join" onclick="alert('Inicia sesión para unirte a eventos\n\nCrea una cuenta para participar en eventos de la comunidad')">Unirse al Evento</button>
+                        <?php else: ?>
+                            <button class="btn-join">Unirse al Evento</button>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -182,7 +204,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         <section class="grupos-section" id="gruposSection" style="display: none;">
             <div class="section-header">
                 <h3>Grupos Populares</h3>
-                <button class="btn-create">Crear Grupo</button>
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <button class="btn-create" onclick="alert('Inicia sesión para crear grupos\n\nRegístrate para poder:\n• Crear grupos temáticos\n• Moderar discusiones\n• Conectar con dueños similares')">Crear Grupo</button>
+                <?php else: ?>
+                    <button class="btn-create">Crear Grupo</button>
+                <?php endif; ?>
             </div>
 
             <div class="grupos-list">
@@ -192,7 +218,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <h4>Dueños de Golden Retriever</h4>
                         <p>234 miembros</p>
                     </div>
-                    <button class="btn-join">Unirse</button>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                    <?php else: ?>
+                        <button class="btn-join">Unirse</button>
+                    <?php endif; ?>
                 </div>
 
                 <div class="grupo-card">
@@ -201,7 +231,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <h4>Gatos de Madrid</h4>
                         <p>189 miembros</p>
                     </div>
-                    <button class="btn-join">Unirse</button>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                    <?php else: ?>
+                        <button class="btn-join">Unirse</button>
+                    <?php endif; ?>
                 </div>
 
                 <div class="grupo-card">
@@ -210,7 +244,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <h4>Primeros Auxilios Pet</h4>
                         <p>156 miembros</p>
                     </div>
-                    <button class="btn-join">Unirse</button>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                    <?php else: ?>
+                        <button class="btn-join">Unirse</button>
+                    <?php endif; ?>
                 </div>
 
                 <div class="grupo-card">
@@ -219,7 +257,11 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <h4>Adopción Responsable</h4>
                         <p>203 miembros</p>
                     </div>
-                    <button class="btn-join">Unirse</button>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                    <?php else: ?>
+                        <button class="btn-join">Unirse</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

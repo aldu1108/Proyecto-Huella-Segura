@@ -11,43 +11,62 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = $_SESSION['usuario_id'];
 $nombre_usuario = $_SESSION['usuario_nombre'];
 
+$rol_usuario = $_SESSION['rol'] ?? 'demo';
+
 // Obtener mascotas del usuario
-$consulta_mascotas = "SELECT * FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo' ORDER BY nombre_mascota ASC";
-$resultado_mascotas = $conexion->query($consulta_mascotas);
+if ($rol_usuario === 'demo') {
+    $resultado_mascotas = null; // Demo no tiene mascotas
+} else {
+    $consulta_mascotas = "SELECT * FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo' ORDER BY nombre_mascota ASC";
+    $resultado_mascotas = $conexion->query($consulta_mascotas);
+}
 
 // Obtener eventos próximos de esta semana
+// Variables para fechas
 $fecha_hoy = date('Y-m-d');
 $fecha_fin_semana = date('Y-m-d', strtotime('+7 days'));
-$consulta_eventos = "SELECT e.*, m.nombre_mascota, m.foto_mascota 
-                     FROM eventos e 
-                     JOIN mascotas m ON e.id_mascota = m.id_mascota 
-                     WHERE e.id_usuario = $usuario_id 
-                     AND e.fecha BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 
-                     AND e.estado = 'activo'
-                     ORDER BY e.fecha ASC LIMIT 5";
-$resultado_eventos = $conexion->query($consulta_eventos);
 
-// Obtener citas veterinarias para hoy y próximas
-$consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.foto_mascota 
-                       FROM citas_veterinarias c 
-                       JOIN mascotas m ON c.id_mascota = m.id_mascota 
-                       WHERE m.id_usuario = $usuario_id 
-                       AND c.fecha = '$fecha_hoy' 
-                       AND c.estado != 'completada'
-                       ORDER BY c.fecha ASC";
-$resultado_citas_hoy = $conexion->query($consulta_citas_hoy);
+// Verificar rol y ejecutar consultas según corresponda
+if ($rol_usuario === 'demo') {
+    // Demo no tiene datos personales
+    $resultado_eventos = null;
+    $resultado_citas_hoy = null;
+    $resultado_citas_proximas = null;
+    $total_citas_hoy = 0;
+} else {
+    // Usuario normal - ejecutar consultas
+    $consulta_eventos = "SELECT e.*, m.nombre_mascota, m.foto_mascota 
+                         FROM eventos e 
+                         JOIN mascotas m ON e.id_mascota = m.id_mascota 
+                         WHERE e.id_usuario = $usuario_id 
+                         AND e.fecha BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 
+                         AND e.estado = 'activo'
+                         ORDER BY e.fecha ASC LIMIT 5";
+    $resultado_eventos = $conexion->query($consulta_eventos);
 
-$consulta_citas_proximas = "SELECT c.*, m.nombre_mascota 
+    $consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.foto_mascota 
                            FROM citas_veterinarias c 
                            JOIN mascotas m ON c.id_mascota = m.id_mascota 
                            WHERE m.id_usuario = $usuario_id 
-                           AND c.fecha > '$fecha_hoy' 
-                           AND c.fecha <= '$fecha_fin_semana'
+                           AND c.fecha = '$fecha_hoy' 
                            AND c.estado != 'completada'
-                           ORDER BY c.fecha ASC LIMIT 3";
-$resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
+                           ORDER BY c.fecha ASC";
+    $resultado_citas_hoy = $conexion->query($consulta_citas_hoy);
 
-// Obtener mascotas perdidas (datos de ejemplo o reales)
+    $consulta_citas_proximas = "SELECT c.*, m.nombre_mascota 
+                               FROM citas_veterinarias c 
+                               JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                               WHERE m.id_usuario = $usuario_id 
+                               AND c.fecha > '$fecha_hoy' 
+                               AND c.fecha <= '$fecha_fin_semana'
+                               AND c.estado != 'completada'
+                               ORDER BY c.fecha ASC LIMIT 3";
+    $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
+    
+    $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
+}
+
+// Obtener mascotas perdidas (esta consulta sí funciona para demo)
 $consulta_perdidas = "SELECT p.*, pp.*, m.nombre_mascota, m.tipo, u.nombre_usuario 
                       FROM publicaciones p 
                       JOIN publicacion_perdida pp ON p.id_anuncio = pp.id_publicacion
@@ -56,9 +75,6 @@ $consulta_perdidas = "SELECT p.*, pp.*, m.nombre_mascota, m.tipo, u.nombre_usuar
                       WHERE p.estado = 'activo' 
                       ORDER BY p.fecha DESC LIMIT 2";
 $resultado_perdidas = $conexion->query($consulta_perdidas);
-
-// Contar citas urgentes para hoy
-$total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -115,20 +131,34 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                     
                     <!-- Botón agregar más mascotas -->
                     <div style="display: flex; align-items: center; justify-content: center; padding: 40px;">
-                        <a href="mis-mascotas.php" class="boton-agregar-mascota">
-                            Ver mis mascotas
-                        </a>
+                        <?php if ($rol_usuario == 'demo'): ?>
+                            <a href=# class="boton-agregar-mascota" onclick="alert('Inicia sesión para agregar mascotas')">
+                                + Agregar Primera Mascota
+                            </a>
+                        <?php else: ?>
+                            <a href="mis-mascotas.php" class="boton-agregar-mascota">
+                                Ver mis mascotas
+                            </a>
+                        <?php endif; ?>
                     </div>
                 <?php else: ?>
                     <div style="text-align: center; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                         <div style="font-size: 48px; margin-bottom: 16px;">🐕</div>
                         <p style="color: #666; font-size: 16px; margin-bottom: 20px;">¡Todavía no tienes mascotas registradas!</p>
-                        <a href="mis-mascotas.php" class="boton-agregar-mascota" style="display: inline-flex;">
-                            <span style="font-size: 20px;">+</span> Agregar Primera Mascota
-                        </a>
+                        <?php if ($rol_usuario == 'demo'): ?>
+                            <a href=# class="boton-agregar-mascota" onclick="alert('Inicia sesión para agregar mascotas')">
+                                + Agregar Primera Mascota
+                            </a>
+                        <?php else: ?>
+                            <a href="mis-mascotas.php" class="boton-agregar-mascota" style="display: inline-flex;">
+                                <span style="font-size: 20px;">+</span> Agregar Primera Mascota
+                            </a>
+                        <?php endif; ?>                      
                     </div>
                 <?php endif; ?>
             </div>
+
+            <hr style="margin: 2rem 0; color: white">
 
             <!-- Banner de adopción -->
             <div class="banner-adopcion">
@@ -140,12 +170,14 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
             </div>
         </section>
 
+        <hr style="margin: 2rem 0; color: white">
+
         <!-- Calendario de Cuidados -->
+         
         <section class="calendario-cuidados">
             <div class="encabezado-calendario">
                 <div>
                     <h3 class="titulo-calendario">📅 Calendario de Cuidados</h3>
-                    <p class="eventos-programados">5 eventos programados</p>
                 </div>
                 <div class="navegacion-mes">
                     <button class="boton-nav-mes" onclick="cambiarMes(-1)">‹</button>
@@ -177,45 +209,58 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                 </div>
 
                 <div class="lista-eventos-hoy">
-                    <?php if ($resultado_citas_hoy && $resultado_citas_hoy->num_rows > 0): ?>
-                        <?php while($cita = $resultado_citas_hoy->fetch_assoc()): ?>
-                            <div class="evento-hoy <?php echo ($cita['motivo'] == 'Vacuna anual' || $cita['motivo'] == 'urgente') ? 'urgente' : ''; ?>">
-                                <div class="icono-evento"><?php echo $cita['motivo'] == 'Vacuna anual' ? '💉' : '💊'; ?></div>
-                                <div class="info-evento">
-                                    <div class="titulo-evento"><?php echo htmlspecialchars($cita['motivo']); ?></div>
-                                    <div class="detalles-evento">
-                                        <?php echo htmlspecialchars($cita['nombre_mascota']); ?> • 
-                                        <?php echo date('H:i', strtotime($cita['fecha'] . ' 14:00')); ?>
-                                    </div>
-                                </div>
-                                <?php if ($cita['motivo'] == 'Vacuna anual'): ?>
-                                    <div class="estado-urgente">Urgente</div>
-                                <?php else: ?>
-                                    <div class="estado-medio">Medio</div>
-                                <?php endif; ?>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📅</div>
+                            <h4>Tu calendario está vacío</h4>
+                            <p>Inicia sesión o regístrate para ver tus recordatorios y eventos</p>
+                            <div style="margin-top: 20px;">
+                                <a href="login.php" style="color: #D35400; text-decoration: none; margin-right: 10px;">Iniciar Sesión</a>
+                                <span>|</span>
+                                <a href="registro.php" style="color: #D35400; text-decoration: none; margin-left: 10px;">Registrarse</a>
                             </div>
-                        <?php endwhile; ?>
+                        </div>
                     <?php else: ?>
-                        <!-- Eventos de ejemplo -->
-                        <div class="evento-hoy urgente">
-                            <div class="icono-evento">💉</div>
-                            <div class="info-evento">
-                                <div class="titulo-evento">Vacuna anual</div>
-                                <div class="detalles-evento">Max • 14:00</div>
-                                <div style="font-size: 11px; color: #666; margin-top: 2px;">Vacuna anual completa</div>
+                        <?php if ($resultado_citas_hoy && $resultado_citas_hoy->num_rows > 0): ?>
+                            <?php while($cita = $resultado_citas_hoy->fetch_assoc()): ?>
+                                <div class="evento-hoy <?php echo ($cita['motivo'] == 'Vacuna anual' || $cita['motivo'] == 'urgente') ? 'urgente' : ''; ?>">
+                                    <div class="icono-evento"><?php echo $cita['motivo'] == 'Vacuna anual' ? '💉' : '💊'; ?></div>
+                                    <div class="info-evento">
+                                        <div class="titulo-evento"><?php echo htmlspecialchars($cita['motivo']); ?></div>
+                                        <div class="detalles-evento">
+                                            <?php echo htmlspecialchars($cita['nombre_mascota']); ?> • 
+                                            <?php echo date('H:i', strtotime($cita['fecha'] . ' 14:00')); ?>
+                                        </div>
+                                    </div>
+                                    <?php if ($cita['motivo'] == 'Vacuna anual'): ?>
+                                        <div class="estado-urgente">Urgente</div>
+                                    <?php else: ?>
+                                        <div class="estado-medio">Medio</div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <!-- Eventos de ejemplo -->
+                            <div class="evento-hoy urgente">
+                                <div class="icono-evento">💉</div>
+                                <div class="info-evento">
+                                    <div class="titulo-evento">Vacuna anual</div>
+                                    <div class="detalles-evento">Max • 14:00</div>
+                                    <div style="font-size: 11px; color: #666; margin-top: 2px;">Vacuna anual completa</div>
+                                </div>
+                                <div class="estado-urgente">Urgente</div>
                             </div>
-                            <div class="estado-urgente">Urgente</div>
-                        </div>
-                        
-                        <div class="evento-hoy">
-                            <div class="icono-evento">💊</div>
-                            <div class="info-evento">
-                                <div class="titulo-evento">Medicina para alergias</div>
-                                <div class="detalles-evento">Luna • 18:30</div>
-                                <div style="font-size: 11px; color: #666; margin-top: 2px;">Administrar antihistamínico</div>
+                            
+                            <div class="evento-hoy">
+                                <div class="icono-evento">💊</div>
+                                <div class="info-evento">
+                                    <div class="titulo-evento">Medicina para alergias</div>
+                                    <div class="detalles-evento">Luna • 18:30</div>
+                                    <div style="font-size: 11px; color: #666; margin-top: 2px;">Administrar antihistamínico</div>
+                                </div>
+                                <div class="estado-medio">Medio</div>
                             </div>
-                            <div class="estado-medio">Medio</div>
-                        </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
 
@@ -271,37 +316,50 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
             </div>
             
             <div class="urgente-list">
-                <?php if ($resultado_citas_hoy && $resultado_citas_hoy->num_rows > 0): ?>
-                    <?php 
-                    // Reset pointer para volver a iterar
-                    $resultado_citas_hoy->data_seek(0);
-                    while($cita = $resultado_citas_hoy->fetch_assoc()): 
-                    ?>
-                        <div class="urgente-item <?php echo ($cita['motivo'] == 'Vacuna anual') ? 'urgente' : ''; ?>">
+                <?php if ($rol_usuario == 'demo'): ?>
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">🔔</div>
+                        <h4>No tienes recordatorios</h4>
+                        <p>Registra tus mascotas para recibir recordatorios de citas y cuidados</p>
+                        <div style="margin-top: 20px;">
+                            <a href="login.php" style="color: #D35400; text-decoration: none; margin-right: 10px;">Iniciar Sesión</a>
+                            <span>|</span>
+                            <a href="registro.php" style="color: #D35400; text-decoration: none; margin-left: 10px;">Registrarse</a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <?php if ($resultado_citas_hoy && $resultado_citas_hoy->num_rows > 0): ?>
+                        <?php 
+                        // Reset pointer para volver a iterar
+                        $resultado_citas_hoy->data_seek(0);
+                        while($cita = $resultado_citas_hoy->fetch_assoc()): 
+                        ?>
+                            <div class="urgente-item <?php echo ($cita['motivo'] == 'Vacuna anual') ? 'urgente' : ''; ?>">
+                                <div class="urgente-info">
+                                    <span class="mascota-name"><?php echo htmlspecialchars($cita['nombre_mascota']); ?> • <?php echo htmlspecialchars($cita['motivo']); ?></span>
+                                    <span class="urgente-time">🕐 14:00</span>
+                                    <?php if ($cita['motivo'] == 'Vacuna anual'): ?>
+                                        <span class="urgente-label">Urgente</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="urgente-item urgente">
                             <div class="urgente-info">
-                                <span class="mascota-name"><?php echo htmlspecialchars($cita['nombre_mascota']); ?> • <?php echo htmlspecialchars($cita['motivo']); ?></span>
+                                <span class="mascota-name">Max • Vacuna</span>
                                 <span class="urgente-time">🕐 14:00</span>
-                                <?php if ($cita['motivo'] == 'Vacuna anual'): ?>
-                                    <span class="urgente-label">Urgente</span>
-                                <?php endif; ?>
+                                <span class="urgente-label">Urgente</span>
                             </div>
                         </div>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <div class="urgente-item urgente">
-                        <div class="urgente-info">
-                            <span class="mascota-name">Max • Vacuna</span>
-                            <span class="urgente-time">🕐 14:00</span>
-                            <span class="urgente-label">Urgente</span>
+                        
+                        <div class="urgente-item">
+                            <div class="urgente-info">
+                                <span class="mascota-name">Luna • Medicina</span>
+                                <span class="urgente-time">🕐 18:30</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="urgente-item">
-                        <div class="urgente-info">
-                            <span class="mascota-name">Luna • Medicina</span>
-                            <span class="urgente-time">🕐 18:30</span>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             
@@ -325,6 +383,8 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
             <a href="veterinaria.php" class="ver-todos">Ver todos los recordatorios →</a>
         </section>
 
+        <hr style="margin: 2rem 0; color: white">
+        
         <!-- Mascotas Perdidas -->
         <section class="mascotas-perdidas-index">
             <div class="encabezado-perdidas-index">
@@ -332,9 +392,15 @@ $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
                 <a href="mascotas-perdidas.php" class="enlace-ver-todas">Ver todas</a>
             </div>
             
-            <button class="boton-reporte-index" onclick="window.location.href='mascotas-perdidas.php'">
-                ⚠️ ¡Reportar Mascota Perdida!
-            </button>
+            <?php if ($rol_usuario == 'demo'): ?>
+                <button class="boton-reporte-index" onclick="alert('Inicia sesión para reportar mascotas perdidas')">
+                    ⚠️ ¡Reportar Mascota Perdida!
+                </button>
+            <?php else: ?>
+                <button class="boton-reporte-index" onclick="window.location.href='mascotas-perdidas.php'">
+                    ⚠️ ¡Reportar Mascota Perdida!
+                </button>
+            <?php endif; ?>
             
             <div class="lista-perdidas-index">
                 <?php if ($resultado_perdidas && $resultado_perdidas->num_rows > 0): ?>
