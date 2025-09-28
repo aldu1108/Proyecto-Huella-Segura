@@ -99,6 +99,7 @@ if (isset($_GET['error'])) {
     <title>Mascotas Perdidas - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/mascotas-perdidas.css">
+    <link rel="stylesheet" href="css/modal-alerta-demo.css">
 </head>
 
 <body>
@@ -147,7 +148,7 @@ if (isset($_GET['error'])) {
 
         <!-- Botón reportar mascota perdida -->
         <?php if ($rol_usuario == 'demo'): ?>
-            <button class="boton-reporte-perdida" onclick="alert('Inicia sesión para reportar mascotas perdidas\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
+            <button class="boton-reporte-perdida" onclick="mostrarModalAlerta('Inicia sesión para reportar mascotas perdidas\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
                 ⚠️ ¡Reportar Mascota Perdida!
                 <small>+ Crear reporte de búsqueda</small>
             </button>
@@ -209,7 +210,7 @@ if (isset($_GET['error'])) {
                             
                                     <div class="acciones-reporte">
                                         <?php if ($rol_usuario == 'demo'): ?>
-                                            <button class="boton-contactar" onclick="alert('Inicia sesión para contactar propietarios\n\nRegístrate para poder:\n• Contactar a dueños de mascotas perdidas\n• Reportar avistamientos\n• Ayudar a reunir familias')">
+                                            <button class="boton-contactar" onclick="mostrarModalAlerta('Inicia sesión para contactar propietarios\n\nRegístrate para poder:\n• Contactar a dueños de mascotas perdidas\n• Reportar avistamientos\n• Ayudar a reunir familias')">
                                                 📞 Contactar
                                             </button>
                                         <?php else: ?>
@@ -406,6 +407,35 @@ if (isset($_GET['error'])) {
         </div>
     </div>
 
+    <!-- Modal de alerta para usuarios demo -->
+    <div class="modal-alerta-demo" id="modalAlertaDemo">
+        <div class="contenido-modal-alerta">
+            <div class="encabezado-modal-alerta">
+                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-alerta">
+                <div class="icono-alerta-demo">🔐</div>
+                <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
+                
+                <div class="detalles-alerta">
+                    <h4>Con una cuenta podrás:</h4>
+                    <ul id="listaBeneficiosAlerta">
+                        <li>• Gestionar citas veterinarias</li>
+                        <li>• Registrar consultas médicas</li>
+                        <li>• Llevar historial de salud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botones-modal-alerta">
+                <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔑 Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+            </div>
+        </div>
+    </div>
     <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
@@ -413,6 +443,7 @@ if (isset($_GET['error'])) {
 
     <script src="js/scripts.js"></script>
     <script src="js/mascotas-perdidas.js"></script>
+    <script src="js/modal-alerta-demo.js"></script>
 
 </body>
 </html>

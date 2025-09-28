@@ -84,6 +84,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
     <title>Inicio - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/modal-alerta-demo.css">
     <!-- Icono  -->
     <link rel="icon" type="image/png" href="imagenes/logo-hs.png">
 
@@ -132,12 +133,12 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                     <!-- Botón agregar más mascotas -->
                     <div style="display: flex; align-items: center; justify-content: center; padding: 40px;">
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <a href=# class="boton-agregar-mascota" onclick="alert('Inicia sesión para agregar mascotas')">
+                            <a href="#" class="boton-agregar-mascota" onclick="mostrarModalAgregarMascota(); return false;">
                                 + Agregar Primera Mascota
                             </a>
                         <?php else: ?>
                             <a href="mis-mascotas.php" class="boton-agregar-mascota">
-                                Ver mis mascotas
+                                + Agregar Primera Mascota
                             </a>
                         <?php endif; ?>
                     </div>
@@ -146,7 +147,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                         <div style="font-size: 48px; margin-bottom: 16px;">🐕</div>
                         <p style="color: #666; font-size: 16px; margin-bottom: 20px;">¡Todavía no tienes mascotas registradas!</p>
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <a href=# class="boton-agregar-mascota" onclick="alert('Inicia sesión para agregar mascotas')">
+                            <a href=# class="boton-agregar-mascota" onclick="mostrarModalAlerta('Inicia sesión para agregar mascotas')">
                                 + Agregar Primera Mascota
                             </a>
                         <?php else: ?>
@@ -393,7 +394,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
             </div>
             
             <?php if ($rol_usuario == 'demo'): ?>
-                <button class="boton-reporte-index" onclick="alert('Inicia sesión para reportar mascotas perdidas')">
+                <button class="boton-reporte-index" onclick="mostrarModalAlerta('Inicia sesión para reportar mascotas perdidas')">
                     ⚠️ ¡Reportar Mascota Perdida!
                 </button>
             <?php else: ?>
@@ -461,11 +462,41 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
         </section>
     </main>
 
+    <!-- Modal de alerta para usuarios demo -->
+    <div class="modal-alerta-demo" id="modalAlertaDemo">
+        <div class="contenido-modal-alerta">
+            <div class="encabezado-modal-alerta">
+                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-alerta">
+                <div class="icono-alerta-demo">🔐</div>
+                <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
+                
+                <div class="detalles-alerta">
+                    <h4>Con una cuenta podrás:</h4>
+                    <ul id="listaBeneficiosAlerta">
+                        <li>• Gestionar citas veterinarias</li>
+                        <li>• Registrar consultas médicas</li>
+                        <li>• Llevar historial de salud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botones-modal-alerta">
+                <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔑 Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+            </div>
+        </div>
+    </div>
     <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/modal-alerta-demo.js"></script>
 </body>
 </html>

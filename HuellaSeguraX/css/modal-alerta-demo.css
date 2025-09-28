@@ -1,0 +1,259 @@
+/* Modal alerta demo - Universal para todos los archivos */
+.modal-alerta-demo {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenido-modal-alerta {
+    background: white;
+    padding: 0;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: slideInModal 0.3s ease-out;
+}
+
+.encabezado-modal-alerta {
+    background: linear-gradient(135deg, #E74C3C, #C0392B);
+    color: white;
+    padding: 20px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titulo-modal-alerta {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.boton-cerrar-modal-alerta {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.boton-cerrar-modal-alerta:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.cuerpo-modal-alerta {
+    padding: 30px 24px;
+}
+
+.icono-alerta-demo {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.cuerpo-modal-alerta p {
+    color: #2C3E50;
+    margin-bottom: 24px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+.detalles-alerta {
+    background: #F8F9FA;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    text-align: left;
+    border-left: 4px solid #E74C3C;
+}
+
+.detalles-alerta h4 {
+    color: #2C3E50;
+    margin: 0 0 12px 0;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.detalles-alerta ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.detalles-alerta li {
+    color: #7F8C8D;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.botones-modal-alerta {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 0 24px 24px 24px;
+    flex-wrap: wrap;
+}
+
+.boton-cancelar-alerta {
+    background: #95A5A6;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 100px;
+}
+
+.boton-cancelar-alerta:hover {
+    background: #7F8C8D;
+    transform: translateY(-1px);
+}
+
+.boton-login-alerta {
+    background: #3498DB;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 120px;
+}
+
+.boton-login-alerta:hover {
+    background: #2980B9;
+    transform: translateY(-1px);
+}
+
+.boton-registro-alerta {
+    background: #27AE60;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 120px;
+}
+
+.boton-registro-alerta:hover {
+    background: #229954;
+    transform: translateY(-1px);
+}
+
+/* Animación del modal */
+@keyframes slideInModal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+    .contenido-modal-alerta {
+        width: 95%;
+        margin: 0 10px;
+    }
+    
+    .encabezado-modal-alerta {
+        padding: 16px;
+    }
+    
+    .cuerpo-modal-alerta {
+        padding: 20px 16px;
+    }
+    
+    .titulo-modal-alerta {
+        font-size: 1.1em;
+    }
+    
+    .icono-alerta-demo {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+    
+    .cuerpo-modal-alerta p {
+        font-size: 1em;
+    }
+    
+    .detalles-alerta {
+        padding: 16px;
+    }
+    
+    .botones-modal-alerta {
+        flex-direction: column;
+        padding: 0 16px 20px 16px;
+    }
+    
+    .boton-cancelar-alerta,
+    .boton-login-alerta,
+    .boton-registro-alerta {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+/* Efectos adicionales */
+.modal-alerta-demo.show {
+    display: flex !important;
+}
+
+/* Overlay con efecto blur para el fondo */
+body.modal-abierto {
+    overflow: hidden;
+}
+
+body.modal-abierto > *:not(.modal-alerta-demo) {
+    filter: blur(2px);
+    transition: filter 0.3s ease;
+}
+
+/* Estilos para mejorar accesibilidad */
+.boton-cerrar-modal-alerta:focus,
+.boton-cancelar-alerta:focus,
+.boton-login-alerta:focus,
+.boton-registro-alerta:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Estilo para cuando hay error en la carga */
+.modal-alerta-demo.error {
+    background: rgba(231, 76, 60, 0.1);
+}
+
+.modal-alerta-demo.error .contenido-modal-alerta {
+    border: 2px solid #E74C3C;
+}

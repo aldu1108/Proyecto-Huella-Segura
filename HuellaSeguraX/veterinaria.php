@@ -38,6 +38,8 @@ if ($_POST) {
                 
                 if ($conexion->query($consulta_insertar)) {
                     $mensaje_exito = "¡Cita agendada exitosamente!";
+                    header("Location: veterinaria.php");
+                    exit();
                 } else {
                     $mensaje_error = "Error al agendar la cita. Inténtalo nuevamente.";
                 }
@@ -189,6 +191,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
     <title>Área Veterinaria - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/veterinaria.css">
+    <link rel="stylesheet" href="css/modal-alerta-demo.css">
 </head>
 <body>
     <header>
@@ -257,7 +260,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             <div class="encabezado-agenda">
                 <h3>Mi Agenda Veterinaria</h3>
                 <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="boton-nueva-cita" onclick="alert('Inicia sesión para agendar citas\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
+                    <button class="boton-nueva-cita" onclick="mostrarModalAlerta('Para agendar citas veterinarias necesitas una cuenta registrada.', ['Agendar citas con veterinarios', 'Recibir recordatorios automáticos', 'Gestionar horarios de tus mascotas', 'Llevar control de consultas'])">
                         + Agendar Nueva Cita
                     </button>
                 <?php else: ?>
@@ -282,7 +285,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                 </button>
                 
                 <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="boton-accion-rapida" onclick="alert('Inicia sesión para registrar consultas\n\nRegístrate para poder:\n• Registrar consultas médicas\n• Llevar historial de tus mascotas\n• Gestionar citas veterinarias')">
+                    <button class="boton-accion-rapida" onclick="mostrarModalAlerta('Para registrar consultas médicas necesitas iniciar sesión.', ['Registrar consultas médicas', 'Llevar historial de salud', 'Subir documentos veterinarios', 'Seguimiento de tratamientos'])">
                 <?php else: ?>
                     <button class="boton-accion-rapida" onclick="registrarNuevaConsulta()">
                 <?php endif; ?>
@@ -330,7 +333,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                     <div class="sin-citas">
                         <p>No tienes citas programadas próximamente</p>
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="boton-agendar-primera" onclick="alert('Inicia sesión para agendar citas\n\nRegístrate para gestionar la salud de tus mascotas')">
+                            <button class="boton-agendar-primera" onclick="mostrarModalAlerta('Inicia sesión para agendar citas\n\nRegístrate para gestionar la salud de tus mascotas')">
                                 Agendar Primera Cita
                             </button>
                         <?php else: ?>
@@ -433,7 +436,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                         <?php endwhile; ?>
                     </select>
                     <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="boton-nueva-consulta" onclick="alert('Inicia sesión para registrar consultas\n\nRegístrate para llevar el historial médico de tus mascotas')">
+                        <button class="boton-nueva-consulta" onclick="mostrarModalAlerta('Inicia sesión para registrar consultas\n\nRegístrate para llevar el historial médico de tus mascotas')">
                             + Nueva Consulta
                         </button>
                     <?php else: ?>
@@ -565,7 +568,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                         <h4>📋 Sin Registros Médicos</h4>
                         <p>Aún no hay registros médicos o citas realizadas para tus mascotas</p>
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="boton-agendar-primera" onclick="alert('Inicia sesión para registrar consultas\n\nCrea una cuenta para gestionar el historial médico')">
+                            <button class="boton-agendar-primera" onclick="mostrarModalAlerta('Inicia sesión para registrar consultas\n\nCrea una cuenta para gestionar el historial médico')">
                                 Registrar Primera Consulta
                             </button>
                         <?php else: ?>
@@ -583,7 +586,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             <div class="encabezado-documentos">
                 <h3>Documentos Médicos</h3>
                 <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="boton-subir-documento" onclick="alert('Inicia sesión para subir documentos\n\nRegístrate para poder:\n• Subir documentos médicos\n• Organizar certificados\n• Mantener registros actualizados')">
+                    <button class="boton-subir-documento" onclick="mostrarModalAlerta('Inicia sesión para subir documentos\n\nRegístrate para poder:\n• Subir documentos médicos\n• Organizar certificados\n• Mantener registros actualizados')">
                         📎 Subir Documento
                     </button>
                 <?php else: ?>
@@ -893,13 +896,46 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         </div>
     </div>
 
+    <!-- Modal de alerta para usuarios demo -->
+    <div class="modal-alerta-demo" id="modalAlertaDemo">
+        <div class="contenido-modal-alerta">
+            <div class="encabezado-modal-alerta">
+                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-alerta">
+                <div class="icono-alerta-demo">🔐</div>
+                <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
+                
+                <div class="detalles-alerta">
+                    <h4>Con una cuenta podrás:</h4>
+                    <ul id="listaBeneficiosAlerta">
+                        <li>• Gestionar citas veterinarias</li>
+                        <li>• Registrar consultas médicas</li>
+                        <li>• Llevar historial de salud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botones-modal-alerta">
+                <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔑 Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
+    
+
     <script src="js/scripts.js"></script>
     <script src="js/veterinaria.js"></script>
+<<<<<<< Updated upstream
 
     <style>
     /* Estilos adicionales para los nuevos elementos */
@@ -1300,6 +1336,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         alert('Error: ' + mensaje);
     }
     </script>
+=======
+    <script src="js/modal-alerta-demo.js"></script>
+>>>>>>> Stashed changes
 </body>
 </html>
 <?php cerrarConexion(); ?>
