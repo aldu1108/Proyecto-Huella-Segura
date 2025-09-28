@@ -95,6 +95,7 @@ if (isset($_GET['error'])) {
     <title>Adopciones - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/adopciones.css">
+    <link rel="stylesheet" href="css/modal-alerta-demo.css">
 </head>
 <body>
     <!-- Header -->
@@ -125,7 +126,7 @@ if (isset($_GET['error'])) {
 
         <!-- Botón crear publicación de adopción -->
         <?php if ($rol_usuario == 'demo'): ?>
-            <button class="boton-crear-publicacion" onclick="alert('Inicia sesión para publicar adopciones\n\nPara usar esta función necesitas:\n• Tener una cuenta registrada\n• Registrar tus mascotas')">
+            <button class="boton-crear-publicacion" onclick="mostrarModalPublicarAdopcion()">
                 ❤️ ¡Publicar en Adopción!
                 <small>+ Buscar hogar para tu mascota</small>
             </button>
@@ -206,7 +207,7 @@ if (isset($_GET['error'])) {
                                     </div>
                             
                                     <?php if ($rol_usuario == 'demo'): ?>
-                                        <button class="boton-interesa-adoptar" onclick="alert('Inicia sesión para solicitar adopciones\n\nRegístrate para poder:\n• Solicitar adoptar mascotas\n• Contactar con los dueños\n• Completar el proceso de adopción')">
+                                        <button class="boton-interesa-adoptar" onclick="mostrarModalAlerta('Inicia sesión para solicitar adopciones\n\nRegístrate para poder:\n• Solicitar adoptar mascotas\n• Contactar con los dueños\n• Completar el proceso de adopción')">
                                             ❤️ Me interesa adoptar →
                                         </button>
                                     <?php else: ?>
@@ -248,7 +249,7 @@ if (isset($_GET['error'])) {
                             </div>
                         
                             <?php if ($rol_usuario == 'demo'): ?>
-                                <button class="boton-interesa-adoptar" onclick="alert('Inicia sesión para solicitar adopciones\n\nEste es un ejemplo de mascota en adopción.')">
+                                <button class="boton-interesa-adoptar" onclick="mostrarModalAlerta('Inicia sesión para solicitar adopciones\n\nEste es un ejemplo de mascota en adopción.')">
                                     ❤️ Me interesa adoptar →
                                 </button>
                             <?php else: ?>
@@ -365,6 +366,35 @@ if (isset($_GET['error'])) {
         </div>
     </div>
 
+    <!-- Modal de alerta para usuarios demo -->
+    <div class="modal-alerta-demo" id="modalAlertaDemo">
+        <div class="contenido-modal-alerta">
+            <div class="encabezado-modal-alerta">
+                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-alerta">
+                <div class="icono-alerta-demo">🔐</div>
+                <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
+                
+                <div class="detalles-alerta">
+                    <h4>Con una cuenta podrás:</h4>
+                    <ul id="listaBeneficiosAlerta">
+                        <li>• Gestionar citas veterinarias</li>
+                        <li>• Registrar consultas médicas</li>
+                        <li>• Llevar historial de salud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botones-modal-alerta">
+                <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔑 Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+            </div>
+        </div>
+    </div>
     <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
@@ -372,5 +402,6 @@ if (isset($_GET['error'])) {
 
     <script src="js/scripts.js"></script>
     <script src="js/adopciones.js"></script>
+    <script src="js/modal-alerta-demo.js"></script>
 </body>
 </html>

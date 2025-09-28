@@ -46,6 +46,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 
     <title>Comunidad - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/modal-alerta-demo.css">
 </head>
 <body>
     <!-- Header -->
@@ -95,7 +96,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
             <!-- Crear post -->
             <div class="create-post">
                 <?php if ($rol_usuario == 'demo'): ?>
-                    <textarea placeholder= "Inicia sesión para compartir con la comunidad" disabled onclick="alert('Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños')"></textarea>
+                    <textarea placeholder= "Inicia sesión para compartir con la comunidad" disabled onclick="mostrarModalAlerta('Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños')"></textarea>
                 <?php else: ?>
                     <textarea placeholder="¿Qué quieres compartir con la comunidad?"></textarea>
                 <?php endif; ?>
@@ -119,9 +120,9 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                     </div>
                     <div class="post-actions">
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="action-btn" onclick="alert('Inicia sesión para dar me gusta')">❤️ 24</button>
-                            <button class="action-btn" onclick="alert('Inicia sesión para comentar')">💬 5</button>
-                            <button class="action-btn" onclick="alert('Inicia sesión para compartir')">📤 Compartir</button>
+                            <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para dar me gusta')">❤️ 24</button>
+                            <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para comentar')">💬 5</button>
+                            <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para compartir')">📤 Compartir</button>
                         <?php else: ?>
                             <button class="action-btn">❤️ 24</button>
                             <button class="action-btn">💬 5</button>
@@ -159,7 +160,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
             <div class="section-header">
                 <h3>Próximos Eventos</h3>
                 <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="btn-create" onclick="alert('Inicia sesión para crear eventos\n\nRegístrate para poder:\n• Organizar eventos para mascotas\n• Invitar a otros miembros\n• Gestionar asistentes')">Crear Evento</button>
+                    <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear eventos\n\nRegístrate para poder:\n• Organizar eventos para mascotas\n• Invitar a otros miembros\n• Gestionar asistentes')">Crear Evento</button>
                 <?php else: ?>
                     <button class="btn-create">Crear Evento</button>
                 <?php endif; ?>
@@ -177,7 +178,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                             🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
                         </div>
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="btn-join" onclick="alert('Inicia sesión para unirte a eventos\n\nCrea una cuenta para participar en eventos de la comunidad')">Unirse al Evento</button>
+                            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos\n\nCrea una cuenta para participar en eventos de la comunidad')">Unirse al Evento</button>
                         <?php else: ?>
                             <button class="btn-join">Unirse al Evento</button>
                         <?php endif; ?>
@@ -205,7 +206,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
             <div class="section-header">
                 <h3>Grupos Populares</h3>
                 <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="btn-create" onclick="alert('Inicia sesión para crear grupos\n\nRegístrate para poder:\n• Crear grupos temáticos\n• Moderar discusiones\n• Conectar con dueños similares')">Crear Grupo</button>
+                    <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear grupos\n\nRegístrate para poder:\n• Crear grupos temáticos\n• Moderar discusiones\n• Conectar con dueños similares')">Crear Grupo</button>
                 <?php else: ?>
                     <button class="btn-create">Crear Grupo</button>
                 <?php endif; ?>
@@ -219,7 +220,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <p>234 miembros</p>
                     </div>
                     <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
                     <?php else: ?>
                         <button class="btn-join">Unirse</button>
                     <?php endif; ?>
@@ -232,7 +233,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <p>189 miembros</p>
                     </div>
                     <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
                     <?php else: ?>
                         <button class="btn-join">Unirse</button>
                     <?php endif; ?>
@@ -245,7 +246,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <p>156 miembros</p>
                     </div>
                     <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
                     <?php else: ?>
                         <button class="btn-join">Unirse</button>
                     <?php endif; ?>
@@ -258,7 +259,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <p>203 miembros</p>
                     </div>
                     <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="alert('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
+                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
                     <?php else: ?>
                         <button class="btn-join">Unirse</button>
                     <?php endif; ?>
@@ -267,12 +268,42 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         </section>
     </main>
 
+    <!-- Modal de alerta para usuarios demo -->
+    <div class="modal-alerta-demo" id="modalAlertaDemo">
+        <div class="contenido-modal-alerta">
+            <div class="encabezado-modal-alerta">
+                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+            </div>
+            
+            <div class="cuerpo-modal-alerta">
+                <div class="icono-alerta-demo">🔐</div>
+                <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
+                
+                <div class="detalles-alerta">
+                    <h4>Con una cuenta podrás:</h4>
+                    <ul id="listaBeneficiosAlerta">
+                        <li>• Gestionar citas veterinarias</li>
+                        <li>• Registrar consultas médicas</li>
+                        <li>• Llevar historial de salud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="botones-modal-alerta">
+                <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔑 Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+            </div>
+        </div>
+    </div>
     <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/modal-alerta-demo.js"></script>
     <script>
         // Navegación entre secciones
         document.querySelectorAll('.section-btn').forEach(button => {
