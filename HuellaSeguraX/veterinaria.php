@@ -346,7 +346,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
         </section>
 
-<<<<<<< Updated upstream
         <!-- Sección Pacientes -->
         <?php if ($rol_usuario === 'veterinario'): ?>
             <section class="seccion-veterinaria seccion-pacientes" id="seccionPacientes">
@@ -356,16 +355,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                         + Agregar Mascota
                     </button>
                 </div>
-=======
-        <!-- Seccion Pacientes -->
-        <section class="seccion-veterinaria seccion-pacientes" id="seccionPacientes">
-            <div class="encabezado-agenda">
-                <h3>Mis Pacientes</h3>
-                <button class="boton-nueva-cita" onclick="window.location.href='mis-mascotas.php'">
-                    + Agregar Mascota
-                </button>
-            </div>
->>>>>>> Stashed changes
 
                 <div class="lista-pacientes">
                     <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
@@ -389,7 +378,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                         <p>📅 Nació el <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
                                     </div>
                                 </div>
-<<<<<<< Updated upstream
                                 <div class="acciones-paciente">
                                     <button class="boton-ver-historial" onclick="verHistorialPaciente(<?php echo $mascota['id_mascota']; ?>)">
                                         Ver Historial
@@ -397,13 +385,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                     <button class="boton-nueva-cita-paciente" onclick="agendarCitaPaciente(<?php echo $mascota['id_mascota']; ?>)">
                                         Nueva Cita
                                     </button>
-=======
-                                <div class="detalles-cita">
-                                    <h5><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
-                                    <p><?php echo ucfirst($mascota['tipo']); ?> • <?php echo $mascota['edad_mascota']; ?> años</p>
-                                    <p>🐾 <?php echo ucfirst($mascota['sexo']); ?></p>
-                                    <p>📅 Nació el <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
->>>>>>> Stashed changes
                                 </div>
                             </div>
                         <?php endwhile; ?>
@@ -935,7 +916,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 
     <script src="js/scripts.js"></script>
     <script src="js/veterinaria.js"></script>
-<<<<<<< Updated upstream
 
     <style>
     /* Estilos adicionales para los nuevos elementos */
@@ -1336,9 +1316,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         alert('Error: ' + mensaje);
     }
     </script>
-=======
-    <script src="js/modal-alerta-demo.js"></script>
->>>>>>> Stashed changes
 </body>
 </html>
 <?php cerrarConexion(); ?>
