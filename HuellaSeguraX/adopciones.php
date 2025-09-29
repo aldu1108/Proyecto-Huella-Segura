@@ -206,12 +206,29 @@ if (isset($_GET['error'])) {
                                         </div>
                                     </div>
                             
-                                    <?php if ($rol_usuario == 'demo'): ?>
-                                        <button class="boton-interesa-adoptar" onclick="mostrarModalAlerta('Inicia sesión para solicitar adopciones\n\nRegístrate para poder:\n• Solicitar adoptar mascotas\n• Contactar con los dueños\n• Completar el proceso de adopción')">
+                                    <!-- Mostrar botones según sea propietario o no -->
+                                    <?php if ($adopcion['id_usuario'] == $usuario_id && $rol_usuario != 'demo'): ?>
+                                        <!-- Botones para el propietario de la mascota -->
+                                        <div class="botones-propietario">
+                                            <button class="boton-editar-adopcion"
+                                                onclick="editarAdopcion(<?php echo $adopcion['id_adopcion']; ?>, '<?php echo addslashes($adopcion['condiciones']); ?>', '<?php echo addslashes($adopcion['lugar_adopcion']); ?>', '<?php echo addslashes($adopcion['nombre_mascota']); ?>')">
+                                                ✏️ Editar
+                                            </button>
+                                            <button class="boton-eliminar-adopcion"
+                                                onclick="eliminarAdopcion(<?php echo $adopcion['id_adopcion']; ?>, '<?php echo addslashes($adopcion['nombre_mascota']); ?>')">
+                                                🗑️ Eliminar
+                                            </button>
+                                        </div>
+                                    <?php elseif ($rol_usuario == 'demo'): ?>
+                                        <!-- Botón para usuarios demo -->
+                                        <button class="boton-interesa-adoptar"
+                                            onclick="mostrarModalAlerta('Inicia sesión para solicitar adopciones\n\nRegístrate para poder:\n• Solicitar adoptar mascotas\n• Contactar con los dueños\n• Completar el proceso de adopción')">
                                             ❤️ Me interesa adoptar →
                                         </button>
                                     <?php else: ?>
-                                        <button class="boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>" data-nombre="<?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
+                                        <!-- Botón para otros usuarios registrados -->
+                                        <button class="boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
                                             ❤️ Me interesa adoptar →
                                         </button>
                                     <?php endif; ?>
