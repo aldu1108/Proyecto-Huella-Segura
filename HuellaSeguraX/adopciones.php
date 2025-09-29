@@ -30,10 +30,14 @@ $consulta_adopciones = "SELECT p.*, pa.*, m.*, u.nombre_usuario, u.telefono_usua
                         ORDER BY p.fecha DESC";
 $resultado_adopciones = $conexion->query($consulta_adopciones);
 
+// Calcular total de adoptados (solicitudes con estado 'aprobada' o 'adoptado')
+$consulta_adoptados = "SELECT COUNT(*) as total FROM solicitud_adopcion 
+                       WHERE estado = 'aprobada' OR estado = 'adoptado'";
+$resultado_adoptados = $conexion->query($consulta_adoptados);
+
 // Contar estadísticas
 $total_disponibles = $resultado_adopciones ? $resultado_adopciones->num_rows : 0;
-$total_adoptados = 15; // Esto se podría calcular con una consulta adicional
-$total_urgentes = 1;   // Esto se podría calcular basado en algún criterio
+$total_adoptados = $resultado_adoptados ? $resultado_adoptados->fetch_assoc()['total'] : 0;
 
 // Mensajes de éxito/error
 $mensaje = '';
@@ -156,10 +160,6 @@ if (isset($_GET['error'])) {
                 <div class="estadistica-adopcion">
                     <div class="numero-estadistica-adopcion"><?php echo $total_disponibles; ?></div>
                     <div class="etiqueta-estadistica-adopcion">Disponibles</div>
-                </div>
-                <div class="estadistica-adopcion urgente">
-                    <div class="numero-estadistica-adopcion"><?php echo $total_urgentes; ?></div>
-                    <div class="etiqueta-estadistica-adopcion">Urgentes</div>
                 </div>
                 <div class="estadistica-adopcion">
                     <div class="numero-estadistica-adopcion"><?php echo $total_adoptados; ?></div>
