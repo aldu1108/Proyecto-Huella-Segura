@@ -1322,7 +1322,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
         const fecha = form.querySelector('[name="fecha"]').value;
         const fechaHoy = new Date().toISOString().split('T')[0];
         
-        if (fecha <= fechaHoy) {
+        if (fecha < fechaHoy) {
             mostrarMensajeError('Solo puedes agendar citas para fechas futuras. Para registrar citas pasadas, usa la sección Historial Médico.');
             return;
         }
