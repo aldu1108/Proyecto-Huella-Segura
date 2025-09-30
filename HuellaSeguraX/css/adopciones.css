@@ -213,3 +213,38 @@
         margin: 0 10px;
     }
 }
+
+.botones-propietario {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.boton-editar-adopcion,
+.boton-eliminar-adopcion {
+    flex: 1;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-editar-adopcion {
+    background: #4CAF50;
+    color: white;
+}
+
+.boton-eliminar-adopcion {
+    background: #f44336;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .botones-propietario {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

@@ -130,3 +130,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+// Funciones simplificadas para editar/eliminar
+function editarAdopcion(id, condiciones, lugar, nombre) {
+    const nuevasCondiciones = prompt(`Editar condiciones de adopción para ${nombre}:`, condiciones);
+    if (nuevasCondiciones === null) return;
+
+    const nuevoLugar = prompt('Lugar de entrega:', lugar);
+    if (nuevoLugar === null) return;
+
+    if (nuevasCondiciones.trim() && nuevoLugar.trim()) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'gestionar-adopcion.php?accion=editar';
+
+        form.innerHTML = `
+            <input type="hidden" name="id_adopcion" value="${id}">
+            <input type="hidden" name="condiciones" value="${nuevasCondiciones}">
+            <input type="hidden" name="lugar_adopcion" value="${nuevoLugar}">
+        `;
+
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        alert('Todos los campos son requeridos');
+    }
+}
+
+function eliminarAdopcion(id, nombre) {
+    if (confirm(`¿Estás seguro de eliminar la publicación de ${nombre}?\n\nEsta acción no se puede deshacer.`)) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'gestionar-adopcion.php?accion=eliminar';
+
+        form.innerHTML = `<input type="hidden" name="id_adopcion" value="${id}">`;
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
