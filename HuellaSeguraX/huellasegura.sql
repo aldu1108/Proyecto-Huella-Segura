@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-09-2025 a las 06:53:15
+-- Tiempo de generación: 29-09-2025 a las 19:37:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `citas_veterinarias` (
   `id_cita` int(11) NOT NULL,
-  `fecha` date NOT NULL,
+  `fecha` datetime NOT NULL,
   `motivo` varchar(30) NOT NULL,
   `estado` varchar(10) NOT NULL,
   `id_mascota` int(11) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `citas_veterinarias` (
 --
 
 INSERT INTO `citas_veterinarias` (`id_cita`, `fecha`, `motivo`, `estado`, `id_mascota`, `id_veterinario`) VALUES
-(6, '2025-10-30', 'Análisis', 'programada', 9, 1);
+(45, '2025-09-29 14:00:00', 'Revisión', 'programada', 12, 1);
 
 -- --------------------------------------------------------
 
@@ -132,15 +132,6 @@ CREATE TABLE `historiales_medicos` (
   `id_veterinario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `historiales_medicos`
---
-
-INSERT INTO `historiales_medicos` (`id_historial`, `fecha`, `diagnostico`, `tratamiento`, `id_mascota`, `id_veterinario`) VALUES
-(1, '2025-09-26', 'Vacuna antirabica', 'aplicación ', 9, 1),
-(2, '2025-09-26', 'Caca azul', 'lo matamos', 9, 1),
-(3, '2025-09-03', 'Patita rota', 'Yeso', 9, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -172,7 +163,7 @@ INSERT INTO `mascotas` (`id_mascota`, `id_usuario`, `tipo`, `sexo`, `nombre_masc
 (6, 5, 'perro', 'hembra', 'mora', 11, '2025-09-15', 'mascota-default.jpg', 'activo'),
 (7, 5, 'gato', 'hembra', 'dulce', 3, '2025-09-06', 'mascota-default.jpg', 'activo'),
 (8, 0, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota-default.jpg', 'activo'),
-(9, -1, 'perro', 'macho', 'Juan', 5, '2020-01-01', 'mascota-default.jpg', 'activo');
+(12, 6, 'perro', 'macho', 'Doki', 2, '2023-01-01', 'mascota-default.jpg', 'activo');
 
 -- --------------------------------------------------------
 
@@ -364,7 +355,8 @@ INSERT INTO `usuarios` (`id_usuario`, `email_usuario`, `contraseña_usuario`, `t
 (1, 'vitovignoli2006@gmail.com', '123456', '', 'vito', 'vignoli', 'usuario-default.jpg', 'activo', 'usuario'),
 (2, 'walter@gmail.com', '123456789', '2347689075', 'walter', 'vignoli', 'veterinario-default.jpg', 'activo', 'usuario'),
 (3, 'ale@gmail.com', '1234567', '2347865437', 'alexander', 'gomez', 'veterinario-default.jpg', 'activo', 'usuario'),
-(5, 'demo@petcare.com', 'demo123', '123456789', 'Usuario', 'Demo', 'demo.jpg', 'activo', 'usuario');
+(5, 'demo@petcare.com', 'demo123', '123456789', 'Usuario', 'Demo', 'demo.jpg', 'activo', 'usuario'),
+(6, 'valen@gmail.com', '123456', '111', 'Valen', 'Michou', 'usuario-default.jpg', 'activo', 'usuario');
 
 -- --------------------------------------------------------
 
@@ -535,7 +527,7 @@ ALTER TABLE `veterinario`
 -- AUTO_INCREMENT de la tabla `citas_veterinarias`
 --
 ALTER TABLE `citas_veterinarias`
-  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
@@ -577,7 +569,7 @@ ALTER TABLE `historiales_medicos`
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `publicaciones`
@@ -607,7 +599,7 @@ ALTER TABLE `solicitud_adopcion`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `veterinario`
