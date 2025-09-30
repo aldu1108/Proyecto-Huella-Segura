@@ -5,8 +5,11 @@ session_start();
 $mensaje_error = "";
 
 // Verificar si ya hay sesión activa
-if (isset($_SESSION['usuario_id']) && $_SESSION['rol'] != 'demo') {
+if (isset($_SESSION['usuario_id']) && $_SESSION['rol'] != 'demo' && $_SESSION['rol'] != 'veterinario') {
     header("Location: index.php");
+    exit();
+} elseif (isset($_SESSION['usuario_id']) && $_SESSION['rol'] == 'veterinario') {
+    header("Location: veterinaria.php");
     exit();
 }
 
@@ -18,7 +21,6 @@ if (isset($_POST['demo_login'])) {
     header("Location: index.php");
     exit();
 }
-
 // Procesar formulario de login
 if ($_POST) {
     $email = $_POST['email'];
@@ -40,14 +42,37 @@ if ($_POST) {
 
             // Verificar contraseña (en un caso real usarías password_verify)
             if ($contraseña == $usuario['contraseña_usuario']) {
-                // Crear sesión
-                $_SESSION['usuario_id'] = $usuario['id_usuario'];
-                $_SESSION['usuario_nombre'] = $usuario['nombre_usuario'];
-                $_SESSION['usuario_apellido'] = $usuario['apellido_usuario'];
-                $_SESSION['rol'] = $usuario['rol'];
+                
+                // Verificar si es veterinario pendiente (tiene registro en tabla veterinario con certificado = 0)
+                $consulta_vet_pendiente = "SELECT certificado FROM veterinario WHERE id_usuario = " . $usuario['id_usuario'];
+                $resultado_vet_pendiente = $conexion->query($consulta_vet_pendiente);
+                
+                if ($resultado_vet_pendiente && $resultado_vet_pendiente->num_rows > 0) {
+                    // Es veterinario
+                    $vet_data = $resultado_vet_pendiente->fetch_assoc();
+                    if ($vet_data['certificado'] != 1) {
+                        // Veterinario NO aprobado
+                        $mensaje_error = "Tu cuenta de veterinario está pendiente de aprobación por el administrador. Te notificaremos por email cuando sea aprobada.";
+                    } else {
+                        // Veterinario aprobado, crear sesión
+                        $_SESSION['usuario_id'] = $usuario['id_usuario'];
+                        $_SESSION['usuario_nombre'] = $usuario['nombre_usuario'];
+                        $_SESSION['usuario_apellido'] = $usuario['apellido_usuario'];
+                        $_SESSION['rol'] = $usuario['rol'];
 
-                header("Location: index.php");
-                exit();
+                        header("Location: veterinaria.php");
+                        exit();
+                    }
+                } else {
+                    // Usuario normal, crear sesión directamente
+                    $_SESSION['usuario_id'] = $usuario['id_usuario'];
+                    $_SESSION['usuario_nombre'] = $usuario['nombre_usuario'];
+                    $_SESSION['usuario_apellido'] = $usuario['apellido_usuario'];
+                    $_SESSION['rol'] = $usuario['rol'];
+
+                    header("Location: index.php");
+                    exit();
+                }
             } else {
                 $mensaje_error = "Contraseña incorrecta";
             }

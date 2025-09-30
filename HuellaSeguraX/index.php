@@ -102,10 +102,22 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
 
     <!-- Contenido principal -->
     <main class="main-content">
+
         <!-- Barra de búsqueda principal -->
         <div class="barra-busqueda-principal">
-            <input type="text" class="input-busqueda-principal" placeholder="Buscar mascotas, veterinarios, recordatorios...">
-            <button class="boton-filtro-principal">🔍</button>
+            <form action="buscar.php" method="GET" style="display: flex; width: 100%; gap: 0.5rem;">
+                <input type="text" 
+                    name="q" 
+                    id="inputBusqueda"
+                    class="input-busqueda-principal" 
+                    placeholder="Buscar mascotas, veterinarios, recordatorios..."
+                    autocomplete="off"
+                    required>
+                <button type="submit" class="boton-filtro-principal" title="Buscar">🔍</button>
+            </form>
+            
+            <!-- Resultados de búsqueda en tiempo real -->
+            <div class="resultados-busqueda" id="resultadosBusqueda" style="display: none;"></div>
         </div>
 
         <!-- Mis Mascotas -->

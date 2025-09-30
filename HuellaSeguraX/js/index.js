@@ -75,21 +75,6 @@ function seleccionarDia(dia) {
 // Inicializar calendario
 document.addEventListener('DOMContentLoaded', function() {
     generarCalendario(mesActual, añoActual);
-    
-    // Funcionalidad de búsqueda
-    const inputBusqueda = document.querySelector('.input-busqueda-principal');
-    let timeoutBusqueda;
-    
-    inputBusqueda.addEventListener('input', function() {
-        clearTimeout(timeoutBusqueda);
-        const termino = this.value.trim();
-        
-        timeoutBusqueda = setTimeout(() => {
-            if (termino.length > 2) {
-                realizarBusqueda(termino);
-            }
-        }, 300);
-    });
 });
 
 function realizarBusqueda(termino) {

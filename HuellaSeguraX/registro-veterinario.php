@@ -42,9 +42,8 @@ if ($_POST) {
             $mensaje_error = "Ya existe una cuenta con este correo electrónico";
         } else {
             // Insertar nuevo usuario
-            $consulta_usuario = "INSERT INTO usuarios (email_usuario, contraseña_usuario, telefono_usuario, nombre_usuario, apellido_usuario, foto_usuario, estado) 
-                                 VALUES ('$email', '$contraseña', '$telefono', '$nombre', '$apellido', 'veterinario-default.jpg', 'activo')";
-
+            $consulta_usuario = "INSERT INTO usuarios (email_usuario, contraseña_usuario, telefono_usuario, nombre_usuario, apellido_usuario, foto_usuario, estado, rol) 
+                     VALUES ('$email', '$contraseña', '$telefono', '$nombre', '$apellido', 'veterinario-default.jpg', 'activo', 'usuario')";
             if ($conexion->query($consulta_usuario)) {
                 $usuario_id = $conexion->insert_id;
 
