@@ -36,7 +36,7 @@ if ($rol_usuario === 'demo') {
 } else {
     // Usuario normal - ejecutar consultas
     $consulta_eventos = "SELECT e.*, m.nombre_mascota, m.foto_mascota 
-                         FROM eventos e 
+                         FROM eventos_comunidad e 
                          JOIN mascotas m ON e.id_mascota = m.id_mascota 
                          WHERE e.id_usuario = $usuario_id 
                          AND e.fecha BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 

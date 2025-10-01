@@ -104,7 +104,7 @@ if ($rol_usuario === 'demo') {
 } else {
     $consulta_posts = "SELECT p.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario,
                        p.conteo_likes as total_likes,
-                       (SELECT COUNT(*) FROM comentarios WHERE id_post = p.id_post) as total_comentarios,
+                       (SELECT COUNT(*) FROM comentarios_comunidad WHERE id_post = p.id_post) as total_comentarios,
                        (SELECT COUNT(*) FROM likes_post WHERE id_post = p.id_post AND id_usuario = $usuario_id) as usuario_dio_like
                        FROM post_comunidad p 
                        JOIN usuarios u ON p.id_usuario = u.id_usuario 
@@ -113,7 +113,7 @@ if ($rol_usuario === 'demo') {
 }
 
 // Obtener eventos próximos
-$consulta_eventos = "SELECT * FROM eventos WHERE fecha >= CURDATE() ORDER BY fecha ASC LIMIT 5";
+$consulta_eventos = "SELECT * FROM eventos_comunidad WHERE fecha >= CURDATE() ORDER BY fecha ASC LIMIT 5";
 $resultado_eventos = $conexion->query($consulta_eventos);
 ?>
 <!DOCTYPE html>
