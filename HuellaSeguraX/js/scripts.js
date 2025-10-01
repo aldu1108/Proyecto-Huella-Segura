@@ -291,43 +291,26 @@ function mostrarMensaje(texto, tipo = 'info') {
     });
 
     // Navegación inferior
-    const navButtons = document.querySelectorAll('.nav-btn');
-    navButtons.forEach((button, index) => {
-        button.addEventListener('click', function() {
-            // Remover clase active de todos los botones
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Navegación básica
-            switch(index) {
-                case 0: // Adopciones
-                    if (window.location.pathname !== '/adopciones.php') {
-                        window.location.href = 'adopciones.php';
-                    }
-                    break;
-                case 1: // Búsqueda
-                    if (window.location.pathname !== '/mascotas-perdidas.php') {
-                        window.location.href = 'mascotas-perdidas.php';
-                    }
-                    break;
-                case 2: // Inicio
-                    if (window.location.pathname !== '/index.php' && window.location.pathname !== '/') {
-                        window.location.href = 'index.php';
-                    }
-                    break;
-                case 3: // Comunidad
-                    if (window.location.pathname !== '/comunidad.php') {
-                        window.location.href = 'comunidad.php';
-                    }
-                    break;
-                case 4: // Veterinaria
-                    if (window.location.pathname !== '/veterinaria.php') {
-                        window.location.href = 'veterinaria.php';
-                    }
-                    break;
-            }
-        });
-    });
+    function setActiveNavigation() {
+        const currentPath = window.location.pathname;
+        const navButtons = document.querySelectorAll('.nav-btn');
+        
+        // Remover todas las clases activas
+        navButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Establecer activo según la página
+        if (currentPath.includes('adopciones')) {
+            navButtons[0]?.classList.add('active');
+        } else if (currentPath.includes('mascotas-perdidas')) {
+            navButtons[1]?.classList.add('active');
+        } else if (currentPath.includes('index') || currentPath === '/') {
+            navButtons[2]?.classList.add('active');
+        } else if (currentPath.includes('comunidad')) {
+            navButtons[3]?.classList.add('active');
+        } else if (currentPath.includes('veterinaria')) {
+            navButtons[4]?.classList.add('active');
+        }
+    }
 
     // Marcar navegación activa según página actual
     setActiveNavigation();
@@ -340,7 +323,6 @@ function mostrarMensaje(texto, tipo = 'info') {
 
     // Funcionalidad de posts
     initPosts();
-});
 
 // Función para establecer navegación activa
 function setActiveNavigation() {
@@ -1727,3 +1709,4 @@ window.MascotasPerdidas = {
 
 
 console.log('Funcionalidades de mascotas perdidas y adopciones cargadas correctamente');
+});

@@ -8,8 +8,7 @@ if (!session_id()) {
 }
 
 $rol_usuario = $_SESSION['rol'] ?? null;
-$usuario_logueado = ($rol_usuario && $rol_usuario != 'demo');
-$es_demo = ($rol_usuario == 'demo');
+$usuario_logueado = ($rol_usuario && $rol_usuario != 'demo' && isset($_SESSION['usuario_id']));$es_demo = ($rol_usuario == 'demo');
 $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
 ?>
 
@@ -20,7 +19,7 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
             <h1 class="logo-texto">Huella Segura 🐾</h1>
         </div>
         <div class="iconos-derecha">
-            <button class="boton-notificaciones" onclick="toggleNotificaciones()">🔔</button>
+            <button class="boton-notificaciones" onclick="toggleNotificaciones()"  title="Notificaciones">🔔</button>
         </div>
     </nav>
     
@@ -43,19 +42,11 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
                         <span class="estado-usuario">Modo solo lectura</span>
                     </div>
                 </div>
-            <?php else: ?>
-                <div class="info-usuario-menu">
-                    <div class="avatar-usuario">👤</div>
-                    <div class="datos-usuario">
-                        <span class="nombre-usuario">Invitado</span>
-                        <span class="estado-usuario">No autenticado</span>
-                    </div>
-                </div>
             <?php endif; ?>
         </div>
         
         <div class="opciones-menu">
-            <?php if ($usuario_logueado): ?>
+            <?php if ($usuario_logueado && $rol_usuario != 'veterinario'): ?>
                 <!-- Opciones para usuarios autenticados -->
                 <a href="index.php" class="opcion-menu">
                     <span class="icono-menu">🏠</span>
@@ -73,6 +64,33 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
                     <span class="icono-menu">❤️</span>
                     <span class="texto-menu">Adopciones</span>
                 </a>
+                <a href="comunidad.php" class="opcion-menu">
+                    <span class="icono-menu">👥</span>
+                    <span class="texto-menu">Comunidad</span>
+                </a>
+                <a href="veterinaria.php" class="opcion-menu">
+                    <span class="icono-menu">🏥</span>
+                    <span class="texto-menu">Veterinaria</span>
+                </a>
+                
+                <div class="separador-menu"></div>
+                
+                <a href="mi-perfil.php" class="opcion-menu">
+                    <span class="icono-menu">👤</span>
+                    <span class="texto-menu">Mi Perfil</span>
+                </a>
+                <a href="configuracion.php" class="opcion-menu">
+                    <span class="icono-menu">⚙️</span>
+                    <span class="texto-menu">Configuración</span>
+                </a>
+                
+                <div class="separador-menu"></div>
+                
+                <a href="logout.php" class="opcion-menu opcion-logout">
+                    <span class="icono-menu">🚪</span>
+                    <span class="texto-menu">Cerrar Sesión</span>
+                </a>
+            <?php elseif ($rol_usuario == 'veterinario'): ?>
                 <a href="comunidad.php" class="opcion-menu">
                     <span class="icono-menu">👥</span>
                     <span class="texto-menu">Comunidad</span>
@@ -128,6 +146,10 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
                     <span class="icono-menu">👥</span>
                     <span class="texto-menu">Comunidad</span>
                 </a>
+                <a href="veterinaria.php" class="opcion-menu">
+                    <span class="icono-menu">🏥</span>
+                    <span class="texto-menu">Veterinaria</span>
+                </a>
                 <a href="acerca.php" class="opcion-menu">
                     <span class="icono-menu">ℹ️</span>
                     <span class="texto-menu">Acerca de</span>
@@ -150,7 +172,6 @@ $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
             </div>
         </div>
     </div>
-    
     <!-- Overlay para cerrar el menú -->
     <div class="overlay-menu" id="overlayMenu"></div>
 </header>

@@ -127,6 +127,10 @@ if ($_POST) {
             <span>o</span>
         </div>
         
+        <button class="btn-veterinario" onclick="window.location.href='registro-veterinario.php'">
+            🩺 Registrarse como Veterinario
+        </button>
+        
         <button class="btn-demo" onclick="window.location.href='login.php'">
             ⬅️ Volver al Iniciar Sesión
         </button>

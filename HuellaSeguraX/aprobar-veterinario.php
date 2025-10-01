@@ -29,16 +29,17 @@ if ($_GET && isset($_GET['accion']) && isset($_GET['email'])) {
         $nombre_completo = $veterinario['nombre_usuario'] . ' ' . $veterinario['apellido_usuario'];
 
         if ($accion === 'aprobar') {
-            // Aprobar veterinario (certificado = 1)
-            $update = "UPDATE veterinario SET certificado = 1 WHERE id_veterinario = " . $veterinario['id_veterinario'];
+            // Aprobar veterinario (certificado = 1) Y cambiar rol a veterinario
+            $update_vet = "UPDATE veterinario SET certificado = 1 WHERE id_veterinario = " . $veterinario['id_veterinario'];
+            $update_rol = "UPDATE usuarios SET rol = 'veterinario' WHERE id_usuario = " . $veterinario['id_usuario'];
 
-            if ($conexion->query($update)) {
+            if ($conexion->query($update_vet) && $conexion->query($update_rol)) {
                 $mensaje = "✅ Veterinario $nombre_completo APROBADO exitosamente. Ya puede acceder al sistema.";
                 $tipo = "success";
-            } else {
-                $mensaje = "❌ Error al aprobar al veterinario $nombre_completo";
-                $tipo = "error";
-            }
+        } else {
+            $mensaje = "❌ Error al aprobar al veterinario $nombre_completo";
+            $tipo = "error";
+        }
 
         } elseif ($accion === 'rechazar') {
             // Rechazar = eliminar cuenta completamente

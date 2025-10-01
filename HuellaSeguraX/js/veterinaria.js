@@ -388,136 +388,136 @@ document.head.appendChild(estilosAnimaciones);
 
 console.log('Veterinaria.php funcional cargado correctamente');
 
-    // Función adicional para crear consulta desde cita pasada
-    function crearConsultaDesdeCita(idMascota, fecha) {
-        registrarNuevaConsulta();
+// Función adicional para crear consulta desde cita pasada
+function crearConsultaDesdeCita(idMascota, fecha) {
+    registrarNuevaConsulta();
+    
+    // Pre-seleccionar la mascota y fecha
+    setTimeout(() => {
+        const selectMascota = document.querySelector('#formularioConsulta [name="id_mascota"]');
+        const inputFecha = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
         
-        // Pre-seleccionar la mascota y fecha
-        setTimeout(() => {
-            const selectMascota = document.querySelector('#formularioConsulta [name="id_mascota"]');
-            const inputFecha = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
-            
-            if (selectMascota) {
-                selectMascota.value = idMascota;
-            }
-            if (inputFecha) {
-                inputFecha.value = fecha;
-            }
-        }, 100);
-    }
-
-    // Función para mostrar modal de confirmación de eliminación de consulta
-    function confirmarEliminarConsulta(idHistorial, nombreMascota) {
-        document.getElementById('idHistorialEliminar').value = idHistorial;
-        document.getElementById('mascotaEliminar').textContent = nombreMascota;
-        document.getElementById('modalConfirmarEliminar').style.display = 'flex';
-    }
-
-    // Función para cerrar modal de eliminación de consulta
-    function cerrarModalEliminar() {
-        document.getElementById('modalConfirmarEliminar').style.display = 'none';
-    }
-
-    // Función para eliminar consulta
-    function eliminarConsulta() {
-        const form = document.getElementById('formularioEliminarConsulta');
-        form.submit();
-    }
-
-    // Función para mostrar modal de confirmación de eliminación de cita
-    function confirmarEliminarCita(idCita, nombreMascota, motivo) {
-        document.getElementById('idCitaEliminar').value = idCita;
-        document.getElementById('mascotaEliminarCita').textContent = nombreMascota;
-        document.getElementById('motivoEliminarCita').textContent = motivo;
-        document.getElementById('modalConfirmarEliminarCita').style.display = 'flex';
-    }
-
-    // Función para cerrar modal de eliminación de cita
-    function cerrarModalEliminarCita() {
-        document.getElementById('modalConfirmarEliminarCita').style.display = 'none';
-    }
-
-    // Función para eliminar cita
-    function eliminarCita() {
-        const form = document.getElementById('formularioEliminarCita');
-        form.submit();
-    }
-
-    // Cerrar modales con click fuera o ESC
-    document.addEventListener('click', function(event) {
-        const modalEliminar = document.getElementById('modalConfirmarEliminar');
-        const modalEliminarCita = document.getElementById('modalConfirmarEliminarCita');
-        
-        if (modalEliminar && event.target === modalEliminar) {
-            cerrarModalEliminar();
+        if (selectMascota) {
+            selectMascota.value = idMascota;
         }
-        if (modalEliminarCita && event.target === modalEliminarCita) {
-            cerrarModalEliminarCita();
+        if (inputFecha) {
+            inputFecha.value = fecha;
+        }
+    }, 100);
+}
+
+// Función para mostrar modal de confirmación de eliminación de consulta
+function confirmarEliminarConsulta(idHistorial, nombreMascota) {
+    document.getElementById('idHistorialEliminar').value = idHistorial;
+    document.getElementById('mascotaEliminar').textContent = nombreMascota;
+    document.getElementById('modalConfirmarEliminar').style.display = 'flex';
+}
+
+// Función para cerrar modal de eliminación de consulta
+function cerrarModalEliminar() {
+    document.getElementById('modalConfirmarEliminar').style.display = 'none';
+}
+
+// Función para eliminar consulta
+function eliminarConsulta() {
+    const form = document.getElementById('formularioEliminarConsulta');
+    form.submit();
+}
+
+// Función para mostrar modal de confirmación de eliminación de cita
+function confirmarEliminarCita(idCita, nombreMascota, motivo) {
+    document.getElementById('idCitaEliminar').value = idCita;
+    document.getElementById('mascotaEliminarCita').textContent = nombreMascota;
+    document.getElementById('motivoEliminarCita').textContent = motivo;
+    document.getElementById('modalConfirmarEliminarCita').style.display = 'flex';
+}
+
+// Función para cerrar modal de eliminación de cita
+function cerrarModalEliminarCita() {
+    document.getElementById('modalConfirmarEliminarCita').style.display = 'none';
+}
+
+// Función para eliminar cita
+function eliminarCita() {
+    const form = document.getElementById('formularioEliminarCita');
+    form.submit();
+}
+
+// Cerrar modales con click fuera o ESC
+document.addEventListener('click', function(event) {
+    const modalEliminar = document.getElementById('modalConfirmarEliminar');
+    const modalEliminarCita = document.getElementById('modalConfirmarEliminarCita');
+    
+    if (modalEliminar && event.target === modalEliminar) {
+        cerrarModalEliminar();
+    }
+    if (modalEliminarCita && event.target === modalEliminarCita) {
+        cerrarModalEliminarCita();
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        cerrarModalEliminar();
+        cerrarModalEliminarCita();
+    }
+});
+
+// Restringir fechas en formularios
+document.addEventListener('DOMContentLoaded', function() {
+    // Para nueva cita: solo fechas futuras
+    const fechaCita = document.querySelector('#formularioCita [name="fecha"]');
+    if (fechaCita) {
+        const hoy = new Date();
+        const manana = new Date(hoy);
+        manana.setDate(hoy.getDate() + 1);
+        fechaCita.min = manana.toISOString().split('T')[0];
+    }
+
+    // Para nueva consulta: sin restricción de fechas (puede ser pasada o presente)
+    const fechaConsulta = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
+    if (fechaConsulta) {
+        // Eliminar restricción max para permitir fechas futuras también
+        fechaConsulta.removeAttribute('max');
+    }
+});
+
+// Validación adicional para fechas en guardar cita
+function guardarCita() {
+    const form = document.getElementById('formularioCita');
+    
+    // Validar campos requeridos
+    const camposRequeridos = form.querySelectorAll('[required]');
+    let valido = true;
+    
+    camposRequeridos.forEach(campo => {
+        if (!campo.value.trim()) {
+            campo.style.borderColor = '#e74c3c';
+            valido = false;
+        } else {
+            campo.style.borderColor = '#E8F4FD';
         }
     });
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            cerrarModalEliminar();
-            cerrarModalEliminarCita();
-        }
-    });
-
-    // Restringir fechas en formularios
-    document.addEventListener('DOMContentLoaded', function() {
-        // Para nueva cita: solo fechas futuras
-        const fechaCita = document.querySelector('#formularioCita [name="fecha"]');
-        if (fechaCita) {
-            const hoy = new Date();
-            const manana = new Date(hoy);
-            manana.setDate(hoy.getDate() + 1);
-            fechaCita.min = manana.toISOString().split('T')[0];
-        }
-
-        // Para nueva consulta: sin restricción de fechas (puede ser pasada o presente)
-        const fechaConsulta = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
-        if (fechaConsulta) {
-            // Eliminar restricción max para permitir fechas futuras también
-            fechaConsulta.removeAttribute('max');
-        }
-    });
-
-    // Validación adicional para fechas en guardar cita
-    function guardarCita() {
-        const form = document.getElementById('formularioCita');
-        
-        // Validar campos requeridos
-        const camposRequeridos = form.querySelectorAll('[required]');
-        let valido = true;
-        
-        camposRequeridos.forEach(campo => {
-            if (!campo.value.trim()) {
-                campo.style.borderColor = '#e74c3c';
-                valido = false;
-            } else {
-                campo.style.borderColor = '#E8F4FD';
-            }
-        });
-        
-        if (!valido) {
-            mostrarMensajeError('Por favor completa todos los campos requeridos');
-            return;
-        }
-        
-        // Validar fecha no sea pasada (solo para citas desde Mi Agenda)
-        const fecha = form.querySelector('[name="fecha"]').value;
-        const fechaHoy = new Date().toISOString().split('T')[0];
-        
-        if (fecha <= fechaHoy) {
-            mostrarMensajeError('Solo puedes agendar citas para fechas futuras. Para registrar citas pasadas, usa la sección Historial Médico.');
-            return;
-        }
-        
-        // Enviar formulario
-        form.submit();
+    
+    if (!valido) {
+        mostrarMensajeError('Por favor completa todos los campos requeridos');
+        return;
     }
+    
+    // Validar fecha no sea pasada (solo para citas desde Mi Agenda)
+    const fecha = form.querySelector('[name="fecha"]').value;
+    const fechaHoy = new Date().toISOString().split('T')[0];
 
-    // Funciones de mensaje (simplificadas para este contexto)
-    function mostrarMensajeError(mensaje) {
-        alert('Error: ' + mensaje);
+    if (fecha << fechaHoy) {
+        mostrarMensajeError('Solo puedes agendar citas para fechas futuras. Para registrar citas pasadas, usa la sección Historial Médico.');
+        return;
     }
+    
+    // Enviar formulario
+    form.submit();
+}
+
+// Funciones de mensaje (simplificadas para este contexto)
+function mostrarMensajeError(mensaje) {
+    alert('Error: ' + mensaje);
+}
