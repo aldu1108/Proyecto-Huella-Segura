@@ -323,7 +323,6 @@ function mostrarMensaje(texto, tipo = 'info') {
 
     // Funcionalidad de posts
     initPosts();
-});
 
 // Función para establecer navegación activa
 function setActiveNavigation() {
@@ -1710,3 +1709,4 @@ window.MascotasPerdidas = {
 
 
 console.log('Funcionalidades de mascotas perdidas y adopciones cargadas correctamente');
+});

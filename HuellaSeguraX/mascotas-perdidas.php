@@ -441,9 +441,9 @@ if (isset($_GET['error'])) {
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
-    <script src="js/scripts.js"></script>
+    
     <script src="js/mascotas-perdidas.js"></script>
+    <script src="js/scripts.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
-
 </body>
 </html>

@@ -182,12 +182,6 @@ $fecha_registro_formateada = formatearFecha(date('Y-m-d'));
                     <span class="stat-number"><?php echo $total_eventos; ?></span>
                     <span class="stat-label">Eventos Programados</span>
                 </div>
-                
-                <div class="stat-card">
-                    <span class="stat-icon">⭐</span>
-                    <span class="stat-number">4.8</span>
-                    <span class="stat-label">Puntuación</span>
-                </div>
             </section>
 
             <div class="secciones-perfil">

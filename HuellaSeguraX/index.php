@@ -150,7 +150,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                             </a>
                         <?php else: ?>
                             <a href="mis-mascotas.php" class="boton-agregar-mascota">
-                                + Agregar Primera Mascota
+                                Ver mis mascotas
                             </a>
                         <?php endif; ?>
                     </div>
@@ -164,7 +164,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                             </a>
                         <?php else: ?>
                             <a href="mis-mascotas.php" class="boton-agregar-mascota" style="display: inline-flex;">
-                                <span style="font-size: 20px;">+</span> Agregar Primera Mascota
+                                <span style="font-size: 20px;">+</span> + Agregar Primera Mascota
                             </a>
                         <?php endif; ?>                      
                     </div>
