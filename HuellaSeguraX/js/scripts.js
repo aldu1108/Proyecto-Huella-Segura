@@ -151,8 +151,8 @@ function generarCalendario(mes, año) {
     const hoy = new Date();
     const esHoy = (dia) => hoy.getDate() === dia && hoy.getMonth() === mes && hoy.getFullYear() === año;
     
-    // Días con eventos (ejemplo)
-    const diasConEventos = [15, 16, 21];
+    // Obtener días con eventos desde PHP (se pasan como variable global)
+    const diasConEventos = window.diasConEventosCalendario || [];
     
     let html = '';
     
@@ -173,7 +173,7 @@ function generarCalendario(mes, año) {
     }
     
     // Días del próximo mes
-    const celdasTotales = 42;
+    const celdasTotales = 35;
     const celdasUsadas = primerDia + diasEnMes;
     const diasProximoMes = celdasTotales - celdasUsadas;
     
@@ -427,5 +427,13 @@ window.PetCareApp = {
     copyToClipboard,
     isMobile
 };
+
+function mostrarModalRecordatorio() {
+    document.getElementById('modalRecordatorio').style.display = 'flex';
+}
+
+function cerrarModalRecordatorio() {
+    document.getElementById('modalRecordatorio').style.display = 'none';
+}
 
 console.log('Scripts de Huella Segura cargados completamente');
