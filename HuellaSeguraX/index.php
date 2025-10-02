@@ -35,13 +35,14 @@ if ($rol_usuario === 'demo') {
     $total_citas_hoy = 0;
 } else {
     // Usuario normal - ejecutar consultas
-    $consulta_eventos = "SELECT e.*, m.nombre_mascota, m.foto_mascota 
-                         FROM eventos_comunidad e 
-                         JOIN mascotas m ON e.id_mascota = m.id_mascota 
-                         WHERE e.id_usuario = $usuario_id 
-                         AND e.fecha BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 
-                         AND e.estado = 'activo'
-                         ORDER BY e.fecha ASC LIMIT 5";
+    $consulta_eventos = "SELECT c.id_cita as id_evento, c.fecha, c.motivo as titulo, 
+                        'cita' as tipo, m.nombre_mascota, m.foto_mascota
+                         FROM citas_veterinarias c
+                         JOIN mascotas m ON c.id_mascota = m.id_mascota
+                         WHERE m.id_usuario = $usuario_id 
+                         AND DATE(c.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 
+                         AND c.estado = 'programada'
+                         ORDER BY c.fecha ASC LIMIT 5";
     $resultado_eventos = $conexion->query($consulta_eventos);
 
     $consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.foto_mascota 
@@ -253,26 +254,42 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                                 </div>
                             <?php endwhile; ?>
                         <?php else: ?>
-                            <!-- Eventos de ejemplo -->
-                            <div class="evento-hoy urgente">
-                                <div class="icono-evento">💉</div>
-                                <div class="info-evento">
-                                    <div class="titulo-evento">Vacuna anual</div>
-                                    <div class="detalles-evento">Max • 14:00</div>
-                                    <div style="font-size: 11px; color: #666; margin-top: 2px;">Vacuna anual completa</div>
+                            <?php if ($resultado_citas_hoy && $resultado_citas_hoy->num_rows > 0): ?>
+                                <?php while($cita = $resultado_citas_hoy->fetch_assoc()): ?>
+                                    <div class="evento-hoy <?php echo ($cita['motivo'] == 'Urgencia' || $cita['motivo'] == 'Vacunación') ? 'urgente' : ''; ?>">
+                                        <div class="icono-evento">
+                                            <?php 
+                                            echo match($cita['motivo']) {
+                                                'Vacunación' => '💉',
+                                                'Análisis' => '🧪',
+                                                'Cirugía' => '🏥',
+                                                'Control' => '📋',
+                                                'Urgencia' => '⚠️',
+                                                default => '💊'
+                                            };
+                                            ?>
+                                        </div>
+                                        <div class="info-evento">
+                                            <div class="titulo-evento"><?php echo htmlspecialchars($cita['motivo']); ?></div>
+                                            <div class="detalles-evento">
+                                                <?php echo htmlspecialchars($cita['nombre_mascota']); ?> • 
+                                                <?php echo date('H:i', strtotime($cita['fecha'])); ?>
+                                            </div>
+                                        </div>
+                                        <?php if ($cita['motivo'] == 'Urgencia' || $cita['motivo'] == 'Vacunación'): ?>
+                                            <div class="estado-urgente">Urgente</div>
+                                        <?php else: ?>
+                                            <div class="estado-medio">Programado</div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <div style="text-align: center; padding: 30px; color: #95A5A6;">
+                                    <div style="font-size: 36px; margin-bottom: 12px;">📅</div>
+                                    <p>No hay eventos programados para hoy</p>
+                                    <p style="font-size: 14px; margin-top: 8px;">Agenda una cita o crea un recordatorio</p>
                                 </div>
-                                <div class="estado-urgente">Urgente</div>
-                            </div>
-                            
-                            <div class="evento-hoy">
-                                <div class="icono-evento">💊</div>
-                                <div class="info-evento">
-                                    <div class="titulo-evento">Medicina para alergias</div>
-                                    <div class="detalles-evento">Luna • 18:30</div>
-                                    <div style="font-size: 11px; color: #666; margin-top: 2px;">Administrar antihistamínico</div>
-                                </div>
-                                <div class="estado-medio">Medio</div>
-                            </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -303,19 +320,34 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                             </div>
                         <?php endwhile; ?>
                     <?php else: ?>
-                        <!-- Eventos de ejemplo -->
-                        <div class="evento-proximo">
-                            <div class="info-evento-proximo">🐕 Max</div>
-                            <div class="fecha-evento-proximo">Mañana</div>
-                        </div>
-                        <div class="evento-proximo">
-                            <div class="info-evento-proximo">🌙 Luna</div>
-                            <div class="fecha-evento-proximo">mar, 16 sept</div>
-                        </div>
-                        <div class="evento-proximo">
-                            <div class="info-evento-proximo">🐕 Max</div>
-                            <div class="fecha-evento-proximo">dom, 21 sept</div>
-                        </div>
+                        <?php if ($resultado_eventos && $resultado_eventos->num_rows > 0): ?>
+                            <?php while($evento = $resultado_eventos->fetch_assoc()): ?>
+                                <div class="evento-proximo">
+                                    <div class="info-evento-proximo">
+                                        🐕 <?php echo htmlspecialchars($evento['nombre_mascota']); ?> - <?php echo htmlspecialchars($evento['titulo']); ?>
+                                    </div>
+                                    <div class="fecha-evento-proximo">
+                                        <?php 
+                                        $fecha_evento = new DateTime($evento['fecha']);
+                                        $hoy = new DateTime();
+                                        $diff = $hoy->diff($fecha_evento);
+                                        
+                                        if ($diff->days == 0) {
+                                            echo "Hoy • " . $fecha_evento->format('H:i');
+                                        } elseif ($diff->days == 1) {
+                                            echo "Mañana • " . $fecha_evento->format('H:i');
+                                        } else {
+                                            echo $fecha_evento->format('D, j M • H:i');
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <div style="text-align: center; padding: 20px; color: #95A5A6; font-size: 14px;">
+                                <p>No hay eventos próximos esta semana</p>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -343,34 +375,24 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                 <?php else: ?>
                     <?php if ($resultado_citas_hoy && $resultado_citas_hoy->num_rows > 0): ?>
                         <?php 
-                        // Reset pointer para volver a iterar
                         $resultado_citas_hoy->data_seek(0);
                         while($cita = $resultado_citas_hoy->fetch_assoc()): 
                         ?>
-                            <div class="urgente-item <?php echo ($cita['motivo'] == 'Vacuna anual') ? 'urgente' : ''; ?>">
+                            <div class="urgente-item <?php echo ($cita['motivo'] == 'Urgencia' || $cita['motivo'] == 'Vacunación') ? 'urgente' : ''; ?>">
                                 <div class="urgente-info">
                                     <span class="mascota-name"><?php echo htmlspecialchars($cita['nombre_mascota']); ?> • <?php echo htmlspecialchars($cita['motivo']); ?></span>
-                                    <span class="urgente-time">🕐 14:00</span>
-                                    <?php if ($cita['motivo'] == 'Vacuna anual'): ?>
+                                    <span class="urgente-time">🕐 <?php echo date('H:i', strtotime($cita['fecha'])); ?></span>
+                                    <?php if ($cita['motivo'] == 'Urgencia' || $cita['motivo'] == 'Vacunación'): ?>
                                         <span class="urgente-label">Urgente</span>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         <?php endwhile; ?>
                     <?php else: ?>
-                        <div class="urgente-item urgente">
-                            <div class="urgente-info">
-                                <span class="mascota-name">Max • Vacuna</span>
-                                <span class="urgente-time">🕐 14:00</span>
-                                <span class="urgente-label">Urgente</span>
-                            </div>
-                        </div>
-                        
-                        <div class="urgente-item">
-                            <div class="urgente-info">
-                                <span class="mascota-name">Luna • Medicina</span>
-                                <span class="urgente-time">🕐 18:30</span>
-                            </div>
+                        <div style="text-align: center; padding: 30px; color: #95A5A6;">
+                            <div style="font-size: 36px; margin-bottom: 12px;">✨</div>
+                            <p>No tienes recordatorios para hoy</p>
+                            <p style="font-size: 14px; margin-top: 8px;">¡Todo en orden!</p>
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -381,14 +403,17 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                 <?php if ($resultado_citas_proximas && $resultado_citas_proximas->num_rows > 0): ?>
                     <?php while($cita_proxima = $resultado_citas_proximas->fetch_assoc()): ?>
                         <div class="proximo-item">
-                            <span class="proximo-info">🌅 <?php echo date('D', strtotime($cita_proxima['fecha'])); ?> • <?php echo htmlspecialchars($cita_proxima['nombre_mascota']); ?> • <?php echo htmlspecialchars($cita_proxima['motivo']); ?></span>
-                            <span class="proximo-time">10:00</span>
+                            <span class="proximo-info">
+                                🌅 <?php echo date('D j', strtotime($cita_proxima['fecha'])); ?> • 
+                                <?php echo htmlspecialchars($cita_proxima['nombre_mascota']); ?> • 
+                                <?php echo htmlspecialchars($cita_proxima['motivo']); ?>
+                            </span>
+                            <span class="proximo-time"><?php echo date('H:i', strtotime($cita_proxima['fecha'])); ?></span>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <div class="proximo-item">
-                        <span class="proximo-info">🌅 Mañana • Max • Cita veterinario</span>
-                        <span class="proximo-time">10:00</span>
+                    <div style="text-align: center; padding: 15px; color: #95A5A6; font-size: 14px;">
+                        <p>Sin eventos próximos</p>
                     </div>
                 <?php endif; ?>
             </div>

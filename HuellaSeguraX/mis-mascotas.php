@@ -19,6 +19,17 @@ if (!empty($busqueda)) {
 $consulta_mascotas = $consulta_base . " ORDER BY nombre_mascota ASC";
 $resultado_mascotas = $conexion->query($consulta_mascotas);
 
+// Obtener eventos del día de hoy
+$fecha_hoy = date('Y-m-d');
+$consulta_eventos_hoy = "SELECT c.*, m.nombre_mascota, m.tipo
+                         FROM citas_veterinarias c
+                         JOIN mascotas m ON c.id_mascota = m.id_mascota
+                         WHERE m.id_usuario = $usuario_id 
+                         AND DATE(c.fecha) = '$fecha_hoy'
+                         AND c.estado != 'cancelada'
+                         ORDER BY c.fecha ASC";
+$resultado_eventos_hoy = $conexion->query($consulta_eventos_hoy);
+
 // Contar total de mascotas
 $consulta_total = "SELECT COUNT(*) as total FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo'";
 $resultado_total = $conexion->query($consulta_total);
@@ -222,29 +233,36 @@ if (isset($_GET['error'])) {
                     <span class="evento-count">2</span>
                 </div>
 
-                <div class="evento-item urgente">
-                    <div class="evento-icon">💉</div>
-                    <div class="evento-details">
-                        <span class="evento-title">Vacuna anual</span>
-                        <div class="evento-meta">
-                            <span class="evento-pet">Max • 14:00</span>
-                            <span class="evento-desc">Vacuna anual completa</span>
+                <?php if ($resultado_eventos_hoy && $resultado_eventos_hoy->num_rows > 0): ?>
+                    <?php while($evento = $resultado_eventos_hoy->fetch_assoc()): ?>
+                        <div class="evento-item <?php echo ($evento['motivo'] == 'Urgencia' || $evento['motivo'] == 'Vacunación') ? 'urgente' : 'medio'; ?>">
+                            <div class="evento-icon">
+                                <?php 
+                                echo match($evento['motivo']) {
+                                    'Vacunación' => '💉',
+                                    'Análisis' => '🧪',
+                                    'Cirugía' => '🏥',
+                                    'Control' => '📋',
+                                    default => '💊'
+                                };
+                                ?>
+                            </div>
+                            <div class="evento-details">
+                                <span class="evento-title"><?php echo htmlspecialchars($evento['motivo']); ?></span>
+                                <div class="evento-meta">
+                                    <span class="evento-pet"><?php echo htmlspecialchars($evento['nombre_mascota']); ?> • <?php echo date('H:i', strtotime($evento['fecha'])); ?></span>
+                                </div>
+                            </div>
+                            <span class="evento-status <?php echo ($evento['motivo'] == 'Urgencia') ? 'urgente' : 'medio'; ?>">
+                                <?php echo ($evento['motivo'] == 'Urgencia') ? 'Urgente' : 'Programado'; ?>
+                            </span>
                         </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <div class="sin-citas" style="padding: 20px; text-align: center;">
+                        <p>No hay eventos programados para hoy</p>
                     </div>
-                    <span class="evento-status urgente">Urgente</span>
-                </div>
-
-                <div class="evento-item medio">
-                    <div class="evento-icon">💊</div>
-                    <div class="evento-details">
-                        <span class="evento-title">Medicina para alergias</span>
-                        <div class="evento-meta">
-                            <span class="evento-pet">Luna • 18:30</span>
-                            <span class="evento-desc">Administrar antihistamínico</span>
-                        </div>
-                    </div>
-                    <span class="evento-status medio">Medio</span>
-                </div>
+                <?php endif; ?>
             </div>
         </section>
     </main>

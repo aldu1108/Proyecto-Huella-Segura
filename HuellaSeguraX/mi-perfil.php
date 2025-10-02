@@ -115,7 +115,7 @@ $consulta_citas = "SELECT COUNT(*) as total FROM citas_veterinarias c
 $resultado_citas = $conexion->query($consulta_citas);
 $total_citas = $resultado_citas->fetch_assoc()['total'];
 
-$consulta_eventos = "SELECT COUNT(*) as total FROM eventos WHERE id_usuario = $usuario_id";
+$consulta_eventos = "SELECT COUNT(*) as total FROM eventos_comunidad WHERE id_usuario = $usuario_id";
 $resultado_eventos = $conexion->query($consulta_eventos);
 $total_eventos = $resultado_eventos->fetch_assoc()['total'];
 
