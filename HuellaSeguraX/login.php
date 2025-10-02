@@ -91,6 +91,7 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body class="login-body"
       style="background: url('imagenes/fondo-login.png') no-repeat center center fixed;

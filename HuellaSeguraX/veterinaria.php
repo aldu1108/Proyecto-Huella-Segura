@@ -192,6 +192,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/veterinaria.css">
     <link rel="stylesheet" href="css/modal-alerta-demo.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <header>

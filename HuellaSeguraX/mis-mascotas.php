@@ -75,6 +75,7 @@ if (isset($_GET['error'])) {
     <title>Mis Mascotas - PetCare</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/mis-mascotas.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <header>

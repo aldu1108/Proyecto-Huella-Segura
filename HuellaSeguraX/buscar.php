@@ -90,6 +90,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/buscar.css">
     <link rel="icon" type="image/png" href="imagenes/logo-hs.png">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <header>

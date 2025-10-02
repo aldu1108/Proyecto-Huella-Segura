@@ -39,6 +39,7 @@ $resultado_citas = $conexion->query($consulta_citas);
     <title><?php echo $mascota['nombre_mascota']; ?> - Perfil - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/perfil-mascota.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <!-- Header -->

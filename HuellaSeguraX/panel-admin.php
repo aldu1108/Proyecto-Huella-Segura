@@ -55,6 +55,7 @@ try {
     <title>Panel Administrativo - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/panel-admin.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 
 <body class="admin-panel">

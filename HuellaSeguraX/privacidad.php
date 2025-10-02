@@ -10,6 +10,7 @@ session_start();
     <title>Política de Privacidad - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/privacidad.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <div class="cabecera-principal">

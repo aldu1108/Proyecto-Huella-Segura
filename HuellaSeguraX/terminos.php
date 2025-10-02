@@ -10,6 +10,7 @@ session_start();
     <title>Términos y Condiciones - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/terminos.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <div class="cabecera-principal">

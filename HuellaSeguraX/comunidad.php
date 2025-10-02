@@ -126,6 +126,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/modal-alerta-demo.css">
     <link rel="stylesheet" href="css/comunidad.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <!-- Header -->

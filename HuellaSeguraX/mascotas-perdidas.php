@@ -100,6 +100,7 @@ if (isset($_GET['error'])) {
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/mascotas-perdidas.css">
     <link rel="stylesheet" href="css/modal-alerta-demo.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 
 <body>
