@@ -437,4 +437,72 @@ estilosAnimacion.textContent = `
 `;
 document.head.appendChild(estilosAnimacion);
 
-console.log('✓ Funcionalidades de comunidad cargadas correctamente');
+// Funciones globales para comentarios
+function toggleComentarios(postId) {
+    const seccionComentarios = document.getElementById('comentarios-' + postId);
+    
+    if (seccionComentarios) {
+        if (seccionComentarios.style.display === 'none' || seccionComentarios.style.display === '') {
+            seccionComentarios.style.display = 'block';
+            setTimeout(() => {
+                seccionComentarios.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+            const textarea = seccionComentarios.querySelector('.comentario-input');
+            if (textarea) {
+                setTimeout(() => textarea.focus(), 300);
+            }
+        } else {
+            seccionComentarios.style.display = 'none';
+        }
+    }
+}
+
+function enviarComentario(textarea) {
+    const contenido = textarea.value.trim();
+    const postId = textarea.getAttribute('data-post-id');
+    
+    if (!contenido) {
+        alert('El comentario no puede estar vacio');
+        return;
+    }
+    
+    if (contenido.length < 2) {
+        alert('El comentario debe tener al menos 2 caracteres');
+        return;
+    }
+    
+    textarea.disabled = true;
+    const botonEnviar = textarea.nextElementSibling;
+    const textoOriginalBoton = botonEnviar.innerHTML;
+    botonEnviar.innerHTML = '...';
+    botonEnviar.disabled = true;
+    
+    const formData = new FormData();
+    formData.append('post_id', postId);
+    formData.append('contenido', contenido);
+    
+    fetch('ajax/crear_comentario.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            textarea.value = '';
+            location.reload();
+        } else {
+            alert(data.message || 'Error al publicar comentario');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexion al publicar comentario');
+    })
+    .finally(() => {
+        textarea.disabled = false;
+        botonEnviar.innerHTML = textoOriginalBoton;
+        botonEnviar.disabled = false;
+    });
+}
+
+console.log('Funciones de comentarios cargadas correctamente');

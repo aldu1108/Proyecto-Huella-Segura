@@ -98,17 +98,18 @@ $consulta_ayudas = "SELECT COUNT(*) as total FROM post_comunidad WHERE tipo_post
 $resultado_ayudas = $conexion->query($consulta_ayudas);
 $total_ayudas = $resultado_ayudas->fetch_assoc()['total'];
 
-// Obtener posts de la comunidad con likes optimizados
-if ($rol_usuario === 'demo') {
-    $resultado_posts = null;
-} else {
-    $consulta_posts = "SELECT p.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario,
-                       p.conteo_likes as total_likes,
-                       (SELECT COUNT(*) FROM comentarios_comunidad WHERE id_post = p.id_post) as total_comentarios,
-                       (SELECT COUNT(*) FROM likes_post WHERE id_post = p.id_post AND id_usuario = $usuario_id) as usuario_dio_like
-                       FROM post_comunidad p 
-                       JOIN usuarios u ON p.id_usuario = u.id_usuario 
-                       ORDER BY p.fecha DESC LIMIT 20";
+// Obtener posts de la comunidad con contadores optimizados 
+if ($rol_usuario === 'demo') { 
+    $resultado_posts = null; 
+} else { 
+    $consulta_posts = "SELECT p.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario, 
+        p.conteo_likes as total_likes, 
+        p.conteo_comentarios as total_comentarios, 
+        (SELECT COUNT(*) FROM likes_post WHERE id_post = p.id_post AND id_usuario = $usuario_id) as usuario_dio_like 
+        FROM post_comunidad p 
+        JOIN usuarios u ON p.id_usuario = u.id_usuario 
+        ORDER BY p.fecha DESC LIMIT 20"; 
+    
     $resultado_posts = $conexion->query($consulta_posts);
 }
 
@@ -204,7 +205,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                                         📎 Adjuntar imágenes
                                     </button>
                                     <button type="button" class="btn-publicar" onclick="mostrarModalAlerta('Inicia sesión para publicar\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños')">
-                                        Publicar
+                                        ✉️ Publicar
                                     </button>
                                 <?php else: ?>
                                     <label for="imagenes_post" class="btn-adjuntar">
@@ -213,7 +214,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                                     </label>
                                     
                                     <button type="submit" name="crear_post" class="btn-publicar">
-                                        Publicar
+                                        ✉️ Publicar
                                     </button>
                                 <?php endif; ?>
                             </div>
@@ -221,7 +222,6 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         
                         <div id="preview-imagenes" class="preview-imagenes"></div>
                     </form>
-            </div>
             </div>
 
             <!-- Posts -->
@@ -279,10 +279,61 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                                         onclick="toggleLike(this)">
                                     ❤️ <?php echo $post['total_likes']; ?>
                                 </button>
-                                <button class="action-btn">💬 <?php echo $post['total_comentarios']; ?></button>
+                                <button class="action-btn btn-comentarios" onclick="toggleComentarios(<?php echo $post['id_post']; ?>)">
+                                    💬 <?php echo $post['total_comentarios']; ?>
+                                </button>
                                 <button class="action-btn btn-compartir" onclick="compartirPost(<?php echo $post['id_post']; ?>, '<?php echo htmlspecialchars($post['titulo']); ?>')">
                                     🔤 Compartir
                                 </button>
+                            </div>
+                            
+                            <!-- Sección de comentarios (colapsable) -->
+                            <div class="comentarios-seccion" id="comentarios-<?php echo $post['id_post']; ?>" style="display: none;">
+                                <div class="comentarios-lista">
+                                    <?php
+                                    // Obtener comentarios de este post
+                                    $post_id = $post['id_post'];
+                                    $consulta_comentarios = "SELECT c.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario 
+                                                            FROM comentarios_comunidad c 
+                                                            JOIN usuarios u ON c.id_usuario = u.id_usuario 
+                                                            WHERE c.id_post = $post_id 
+                                                            ORDER BY c.fecha ASC";
+                                    $resultado_comentarios = $conexion->query($consulta_comentarios);
+                                    
+                                    if ($resultado_comentarios && $resultado_comentarios->num_rows > 0):
+                                        while ($comentario = $resultado_comentarios->fetch_assoc()): ?>
+                                            <div class="comentario-item">
+                                                <div class="comentario-avatar" style="background-image: url('imagenes/<?php echo $comentario['foto_usuario']; ?>')"></div>
+                                                <div class="comentario-contenido">
+                                                    <div class="comentario-header">
+                                                        <span class="comentario-autor"><?php echo htmlspecialchars($comentario['nombre_usuario'] . ' ' . $comentario['apellido_usuario']); ?></span>
+                                                        <span class="comentario-fecha"><?php echo date('d/m/Y H:i', strtotime($comentario['fecha'])); ?></span>
+                                                    </div>
+                                                    <p class="comentario-texto"><?php echo nl2br(htmlspecialchars($comentario['contenido'])); ?></p>
+                                                </div>
+                                            </div>
+                                        <?php endwhile;
+                                    else: ?>
+                                        <p class="sin-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <!-- Formulario para nuevo comentario -->
+                                <div class="comentario-form">
+                                    <div class="comentario-input-wrapper">
+                                        <textarea 
+                                            class="comentario-input" 
+                                            placeholder="Escribe un comentario..." 
+                                            maxlength="500"
+                                            data-post-id="<?php echo $post['id_post']; ?>"
+                                            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); enviarComentario(this);}"
+                                        ></textarea>
+                                        <button class="btn-enviar-comentario" onclick="enviarComentario(this.previousElementSibling)">
+                                            ➤
+                                        </button>
+                                    </div>
+                                    <small class="comentario-ayuda">Presiona Enter para enviar, Shift+Enter para nueva línea</small>
+                                </div>
                             </div>
                         </div>
                     <?php endwhile; ?>
@@ -530,35 +581,8 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
-    <script src="js/scripts.js"></script>
+    <script src="js/scripts.js" ></script>
     <script src="js/modal-alerta-demo.js"></script>
     <script src="js/comunidad.js"></script>
-    <script>
-        // Navegación entre secciones
-        document.querySelectorAll('.section-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const section = this.dataset.section;
-                
-                // Remover clase activa
-                document.querySelectorAll('.section-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Ocultar todas las secciones
-                document.querySelectorAll('.feed-section, .eventos-section, .grupos-section').forEach(sec => sec.style.display = 'none');
-                
-                // Mostrar sección seleccionada
-                document.getElementById(section + 'Section').style.display = 'block';
-            });
-        });
-
-        // Auto-ocultar mensajes de éxito/error
-        setTimeout(function() {
-            const mensajes = document.querySelectorAll('.mensaje-exito, .mensaje-error');
-            mensajes.forEach(mensaje => {
-                mensaje.style.opacity = '0';
-                setTimeout(() => mensaje.remove(), 300);
-            });
-        }, 3000);
-    </script>
 </body>
 </html>
