@@ -1,4 +1,3 @@
-
 // Auto-hide mensajes después de 5 segundos
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
@@ -14,6 +13,20 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => mensajeError.remove(), 300);
         }
     }, 5000);
+
+    // Configurar fecha mínima para nueva cita: solo fechas desde hoy en adelante
+    const fechaCita = document.querySelector('#formularioCita [name="fecha"]');
+    if (fechaCita) {
+        const hoy = new Date();
+        const fechaMinima = hoy.toISOString().split('T')[0];
+        fechaCita.min = fechaMinima;
+    }
+
+    // Para nueva consulta: sin restricción de fechas (puede ser pasada o futura)
+    const fechaConsulta = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
+    if (fechaConsulta) {
+        fechaConsulta.removeAttribute('max');
+    }
 });
 
 // Navegación entre secciones
@@ -66,13 +79,12 @@ function verAgendaDelDia() {
 function registrarNuevaConsulta() {
     document.getElementById('modalNuevaConsulta').style.display = 'flex';
     
-    // Establecer fecha de hoy como máximo
+    // No establecer restricciones de fecha para consultas (pueden ser pasadas o futuras)
     const inputFecha = document.querySelector('input[name="fecha_consulta"]');
     if (inputFecha) {
         const hoy = new Date();
-        const fechaMax = hoy.toISOString().split('T')[0];
-        inputFecha.max = fechaMax;
-        inputFecha.value = fechaMax;
+        const fechaHoy = hoy.toISOString().split('T')[0];
+        inputFecha.value = fechaHoy;
     }
 }
 
@@ -99,19 +111,32 @@ function guardarCita() {
     
     // Validar campos requeridos
     const camposRequeridos = form.querySelectorAll('[required]');
-    let formValido = true;
+    let valido = true;
     
     camposRequeridos.forEach(campo => {
         if (!campo.value.trim()) {
-            campo.style.borderColor = '#E74C3C';
-            formValido = false;
+            campo.style.borderColor = '#e74c3c';
+            valido = false;
         } else {
-            campo.style.borderColor = '#27AE60';
+            campo.style.borderColor = '#E8F4FD';
         }
     });
     
-    if (!formValido) {
+    if (!valido) {
         showMessage('Por favor completa todos los campos requeridos', 'error');
+        return;
+    }
+    
+    // VALIDACIÓN: Fecha no puede ser pasada
+    const fecha = form.querySelector('[name="fecha"]').value;
+    const fechaHoy = new Date();
+    fechaHoy.setHours(0, 0, 0, 0); // Resetear horas para comparar solo la fecha
+    
+    const fechaSeleccionada = new Date(fecha + 'T00:00:00');
+    
+    if (fechaSeleccionada < fechaHoy) {
+        showMessage('No puedes agendar citas para fechas pasadas. Selecciona hoy o una fecha futura.', 'error');
+        form.querySelector('[name="fecha"]').style.borderColor = '#e74c3c';
         return;
     }
     
@@ -150,15 +175,24 @@ function guardarConsulta() {
 }
 
 // Cerrar modales al hacer clic fuera
-document.getElementById('modalNuevaCita').addEventListener('click', function(e) {
-    if (e.target === this) {
-        cerrarModalCita();
+document.addEventListener('DOMContentLoaded', function() {
+    const modalCita = document.getElementById('modalNuevaCita');
+    const modalConsulta = document.getElementById('modalNuevaConsulta');
+    
+    if (modalCita) {
+        modalCita.addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModalCita();
+            }
+        });
     }
-});
-
-document.getElementById('modalNuevaConsulta').addEventListener('click', function(e) {
-    if (e.target === this) {
-        cerrarModalConsulta();
+    
+    if (modalConsulta) {
+        modalConsulta.addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModalConsulta();
+            }
+        });
     }
 });
 
@@ -386,7 +420,7 @@ estilosAnimaciones.textContent = `
 `;
 document.head.appendChild(estilosAnimaciones);
 
-console.log('Veterinaria.php funcional cargado correctamente');
+console.log('Veterinaria.js funcional cargado correctamente');
 
 // Función adicional para crear consulta desde cita pasada
 function crearConsultaDesdeCita(idMascota, fecha) {
@@ -460,64 +494,7 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         cerrarModalEliminar();
         cerrarModalEliminarCita();
+        cerrarModalCita();
+        cerrarModalConsulta();
     }
 });
-
-// Restringir fechas en formularios
-document.addEventListener('DOMContentLoaded', function() {
-    // Para nueva cita: solo fechas futuras
-    const fechaCita = document.querySelector('#formularioCita [name="fecha"]');
-    if (fechaCita) {
-        const hoy = new Date();
-        const manana = new Date(hoy);
-        manana.setDate(hoy.getDate() + 1);
-        fechaCita.min = manana.toISOString().split('T')[0];
-    }
-
-    // Para nueva consulta: sin restricción de fechas (puede ser pasada o presente)
-    const fechaConsulta = document.querySelector('#formularioConsulta [name="fecha_consulta"]');
-    if (fechaConsulta) {
-        // Eliminar restricción max para permitir fechas futuras también
-        fechaConsulta.removeAttribute('max');
-    }
-});
-
-// Validación adicional para fechas en guardar cita
-function guardarCita() {
-    const form = document.getElementById('formularioCita');
-    
-    // Validar campos requeridos
-    const camposRequeridos = form.querySelectorAll('[required]');
-    let valido = true;
-    
-    camposRequeridos.forEach(campo => {
-        if (!campo.value.trim()) {
-            campo.style.borderColor = '#e74c3c';
-            valido = false;
-        } else {
-            campo.style.borderColor = '#E8F4FD';
-        }
-    });
-    
-    if (!valido) {
-        mostrarMensajeError('Por favor completa todos los campos requeridos');
-        return;
-    }
-    
-    // Validar fecha no sea pasada (solo para citas desde Mi Agenda)
-    const fecha = form.querySelector('[name="fecha"]').value;
-    const fechaHoy = new Date().toISOString().split('T')[0];
-
-    if (fecha << fechaHoy) {
-        mostrarMensajeError('Solo puedes agendar citas para fechas futuras. Para registrar citas pasadas, usa la sección Historial Médico.');
-        return;
-    }
-    
-    // Enviar formulario
-    form.submit();
-}
-
-// Funciones de mensaje (simplificadas para este contexto)
-function mostrarMensajeError(mensaje) {
-    alert('Error: ' + mensaje);
-}

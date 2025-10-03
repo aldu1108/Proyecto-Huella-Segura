@@ -12,6 +12,32 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = $_SESSION['usuario_id'];
 $rol_usuario = $_SESSION['rol'] ?? 'demo';
 
+// Manejar errores de URL
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'fecha_pasada':
+            $mensaje_error = "No puedes agendar citas para fechas pasadas. Por favor selecciona hoy o una fecha futura.";
+            break;
+        case 'datos_cita_incompletos':
+            $mensaje_error = "Por favor completa todos los campos requeridos.";
+            break;
+        case 'mascota_no_valida':
+            $mensaje_error = "La mascota seleccionada no es válida.";
+            break;
+        case 'error_agendar_cita':
+            $mensaje_error = "Error al agendar la cita. Inténtalo nuevamente.";
+            break;
+    }
+}
+
+if (isset($_GET['exito'])) {
+    switch ($_GET['exito']) {
+        case 'cita_agendada':
+            $mensaje_exito = "¡Cita agendada exitosamente!";
+            break;
+    }
+}
+
 // Procesar acciones POST
 if ($_POST) {
     $accion = $_POST['accion'] ?? '';
@@ -24,6 +50,13 @@ if ($_POST) {
             $hora = $_POST['hora'];
             $clinica = strip_tags($_POST['clinica'] ?? '');
             $observaciones = strip_tags($_POST['observaciones'] ?? '');
+            
+            // VALIDACIÓN: No permitir fechas pasadas
+            $fecha_hoy = date('Y-m-d');
+            if ($fecha < $fecha_hoy) {
+                $mensaje_error = "No puedes agendar citas para fechas pasadas. Por favor selecciona hoy o una fecha futura.";
+                break;
+            }
             
             // Verificar que la mascota pertenezca al usuario
             $verificar_mascota = "SELECT id_mascota FROM mascotas WHERE id_mascota = $id_mascota AND id_usuario = $usuario_id";
@@ -236,7 +269,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             <div class="tarjeta-stat-vet completadas">
                 <span class="icono-stat-vet">📋</span>
                 <div class="numero-stat-vet"><?php echo $total_consultas; ?></div>
-                <div class="texto-stat-vet">Total Consultas</div>
+                <div class="texto-stat-vet"> Consultas Realizadas</div>
             </div>
 
             <div class="tarjeta-stat-vet">
@@ -285,15 +318,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                     <div class="descripcion-accion">Citas de hoy</div>
                 </button>
                 
-                <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="boton-accion-rapida" onclick="mostrarModalAlerta('Para registrar consultas médicas necesitas iniciar sesión.', ['Registrar consultas médicas', 'Llevar historial de salud', 'Subir documentos veterinarios', 'Seguimiento de tratamientos'])">
-                <?php else: ?>
-                    <button class="boton-accion-rapida" onclick="registrarNuevaConsulta()">
-                <?php endif; ?>
-                    <span class="icono-accion">📝</span>
-                    <div class="titulo-accion">Registrar Nueva Consulta</div>
-                    <div class="descripcion-accion">Agregar consulta médica</div>
-                </button>
             </div>
 
             <!-- Proximas citas -->
@@ -501,9 +525,9 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                     <p><?php echo htmlspecialchars($cita_pasada['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
                                 </div>
                                 
-                                <div class="hora-cita">
-                                    <h5>⏰ Hora</h5>
-                                    <p><?php echo date('H:i', strtotime($cita_pasada['fecha'])); ?></p>
+                                <div class="veterinario-registro">
+                                    <h5>👩‍⚕️ Veterinario</h5>
+                                    <p><?php echo htmlspecialchars(($cita_pasada['nombre_veterinario'] && $cita_pasada['apellido_veterinario']) ? $cita_pasada['nombre_veterinario'] . ' ' . $cita_pasada['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                 </div>
 
                                 <div class="fecha-completa-cita">
@@ -514,26 +538,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
                                 <div class="mascota-detalle-cita">
                                     <h5>🐕 Mascota</h5>
                                     <p><?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?> (<?php echo ucfirst($cita_pasada['tipo']); ?>)</p>
-                                </div>
-
-                                <?php if ($cita_pasada['especialidad']): ?>
-                                    <div class="especialidad-cita">
-                                        <h5>👨‍⚕️ Especialidad</h5>
-                                        <p><?php echo htmlspecialchars($cita_pasada['especialidad']); ?></p>
-                                    </div>
-                                <?php endif; ?>
-                                
-                                <div class="estado-cita-historial">
-                                    <p><em>Esta cita fue realizada. Para registrar detalles médicos específicos, puedes crear una consulta médica nueva.</em></p>
-                                    <button class="boton-nueva-consulta-desde-cita" onclick="crearConsultaDesdeCita(<?php echo $cita_pasada['id_mascota']; ?>, '<?php echo date('Y-m-d', strtotime($cita_pasada['fecha'])); ?>')">
-                                        + Agregar Consulta Médica
-                                    </button>
-                                </div>
-                                
-                                <div class="veterinario-registro">
-                                    <h5>👩‍⚕️ Veterinario</h5>
-                                    <p><?php echo htmlspecialchars(($cita_pasada['nombre_veterinario'] && $cita_pasada['apellido_veterinario']) ? $cita_pasada['nombre_veterinario'] . ' ' . $cita_pasada['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
-                                </div>
+                                </div>            
 
                                 <div class="acciones-cita-historial">
                                     <button class="boton-eliminar-cita" onclick="confirmarEliminarCita(<?php echo $cita_pasada['id_cita']; ?>, '<?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?>', '<?php echo htmlspecialchars($cita_pasada['motivo']); ?>')">
@@ -852,6 +857,8 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
         </div>
     </div>
+
+    <!-- Modal para confirmar eliminación de consulta -->
     <div class="modal-confirmar-eliminar" id="modalConfirmarEliminar">
         <div class="contenido-modal-eliminar">
             <div class="encabezado-modal-eliminar">
@@ -887,7 +894,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
             </div>
             
             <div class="cuerpo-modal-alerta">
-                <div class="icono-alerta-demo">🔐</div>
+                <div class="icono-alerta-demo">🔒</div>
                 <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
                 
                 <div class="detalles-alerta">
@@ -902,7 +909,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 
             <div class="botones-modal-alerta">
                 <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
-                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔑 Iniciar Sesión</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔐 Iniciar Sesión</button>
                 <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
             </div>
         </div>
@@ -912,8 +919,6 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
     <nav>
         <?php include_once('includes/footer.php'); ?>
     </nav>
-
-    
 
     <script src="js/scripts.js"></script>
     <script src="js/veterinaria.js"></script>
