@@ -244,6 +244,7 @@ $total_consultas = $conexion->query("SELECT COUNT(*) as total FROM historiales_m
 // Si es veterinario, obtener id_veterinario y citas pendientes
 $id_veterinario_actual = null;
 $citas_pendientes_vet = 0;
+$resultado_citas_pendientes = null;
 
 if ($rol_usuario === 'veterinario') {
     $consulta_vet_id = "SELECT id_veterinario FROM veterinario WHERE id_usuario = $usuario_id";
@@ -331,59 +332,9 @@ if ($rol_usuario === 'veterinario') {
             </div>
         </section>
 
-        <!-- SECCIÓN ESPECIAL PARA VETERINARIOS: Citas Pendientes de Aprobación -->
+        <!-- SECCIÓN ESPECIAL PARA VETERINARIOS: Citas Pendientes de Aprobación (SOLO ARRIBA CUANDO NO ES VETERINARIO) -->
         <?php if ($rol_usuario === 'veterinario' && isset($resultado_citas_pendientes)): ?>
-        <section class="citas-pendientes-veterinario">
-            <div class="encabezado-agenda">
-                <h3>🔔 Citas Pendientes de Aprobación</h3>
-                <span class="badge-pendientes"><?php echo $citas_pendientes_vet; ?> pendientes</span>
-            </div>
-
-            <?php if ($resultado_citas_pendientes && $resultado_citas_pendientes->num_rows > 0): ?>
-                <div class="lista-citas-pendientes">
-                    <?php while($cita = $resultado_citas_pendientes->fetch_assoc()): ?>
-                        <div class="tarjeta-cita-pendiente">
-                            <div class="info-cita">
-                                <div class="fecha-cita">
-                                    <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
-                                    <span class="mes"><?php echo date('M', strtotime($cita['fecha'])); ?></span>
-                                </div>
-                                <div class="detalles-cita">
-                                    <h5>📋 <?php echo htmlspecialchars($cita['motivo']); ?></h5>
-                                    <p>🐕 <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
-                                    <p>👤 <strong>Dueño:</strong> <?php echo htmlspecialchars($cita['nombre_dueno'] . ' ' . $cita['apellido_dueno']); ?></p>
-                                    <p>📱 <strong>Teléfono:</strong> <?php echo htmlspecialchars($cita['telefono_usuario'] ?: 'No disponible'); ?></p>
-                                    <p>📧 <strong>Email:</strong> <?php echo htmlspecialchars($cita['email_usuario']); ?></p>
-                                    <p>⏰ <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
-                                    <p>📅 <strong>Fecha:</strong> <?php echo date('d/m/Y', strtotime($cita['fecha'])); ?></p>
-                                </div>
-                            </div>
-                            <div class="acciones-cita-pendiente">
-                                <form method="POST" action="gestionar-citas-veterinario.php" style="display: inline;">
-                                    <input type="hidden" name="accion" value="aceptar_cita">
-                                    <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
-                                    <button type="submit" class="boton-aceptar-cita" onclick="return confirm('¿Confirmas que deseas ACEPTAR esta cita?')">
-                                        ✅ Aceptar
-                                    </button>
-                                </form>
-                                
-                                <form method="POST" action="gestionar-citas-veterinario.php" style="display: inline;">
-                                    <input type="hidden" name="accion" value="rechazar_cita">
-                                    <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
-                                    <button type="submit" class="boton-rechazar-cita" onclick="return confirm('¿Estás seguro de RECHAZAR esta cita?')">
-                                        ❌ Rechazar
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    <?php endwhile; ?>
-                </div>
-            <?php else: ?>
-                <div class="sin-citas">
-                    <p>✅ No tienes citas pendientes de aprobar</p>
-                </div>
-            <?php endif; ?>
-        </section>
+        <!-- NO MOSTRAR AQUÍ PARA VETERINARIOS -->
         <?php endif; ?>
 
         <!-- Navegacion de secciones -->
@@ -401,22 +352,6 @@ if ($rol_usuario === 'veterinario') {
             <div class="encabezado-agenda">
                 <h3>Mi Agenda Veterinaria</h3>
             </div>
-
-            <!-- Acciones rapidas -->
-            <div class="acciones-rapidas">
-                <button class="boton-accion-rapida" onclick="verAgendaCompleta()">
-                    <span class="icono-accion">📅</span>
-                    <div class="titulo-accion">Ver Agenda Completa</div>
-                    <div class="descripcion-accion">Todas las citas programadas</div>
-                </button>
-                
-                <button class="boton-accion-rapida" onclick="verAgendaDelDia()">
-                    <span class="icono-accion">📋</span>
-                    <div class="titulo-accion">Ver Agenda del Día</div>
-                    <div class="descripcion-accion">Citas de hoy</div>
-                </button>
-            </div>
-
             <!-- TARJETA 1: Citas Aceptadas/Confirmadas -->
             <div class="proximas-citas citas-aceptadas">
                 <div class="encabezado-citas-seccion">
@@ -481,7 +416,61 @@ if ($rol_usuario === 'veterinario') {
                 <?php endif; ?>
             </div>
 
-            <!-- TARJETA 2: Citas Pendientes de Aprobación -->
+            <!-- TARJETA 2: Citas Pendientes de Aprobación (SOLO MOSTRAR AQUÍ SI ES VETERINARIO) -->
+            <?php if ($rol_usuario === 'veterinario' && isset($resultado_citas_pendientes)): ?>
+            <div class="proximas-citas citas-pendientes-veterinario">
+                <div class="encabezado-citas-seccion">
+                    <h4>🔔 Citas Pendientes de Aprobación</h4>
+                    <span class="badge-pendientes"><?php echo $citas_pendientes_vet; ?> pendientes</span>
+                </div>
+
+                <?php if ($resultado_citas_pendientes && $resultado_citas_pendientes->num_rows > 0): ?>
+                    <div class="lista-citas-pendientes">
+                        <?php while($cita = $resultado_citas_pendientes->fetch_assoc()): ?>
+                            <div class="tarjeta-cita-pendiente">
+                                <div class="info-cita">
+                                    <div class="fecha-cita">
+                                        <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
+                                        <span class="mes"><?php echo date('M', strtotime($cita['fecha'])); ?></span>
+                                    </div>
+                                    <div class="detalles-cita">
+                                        <h5>📋 <?php echo htmlspecialchars($cita['motivo']); ?></h5>
+                                        <p>🐕 <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
+                                        <p>👤 <strong>Dueño:</strong> <?php echo htmlspecialchars($cita['nombre_dueno'] . ' ' . $cita['apellido_dueno']); ?></p>
+                                        <p>📱 <strong>Teléfono:</strong> <?php echo htmlspecialchars($cita['telefono_usuario'] ?: 'No disponible'); ?></p>
+                                        <p>📧 <strong>Email:</strong> <?php echo htmlspecialchars($cita['email_usuario']); ?></p>
+                                        <p>⏰ <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                                        <p>📅 <strong>Fecha:</strong> <?php echo date('d/m/Y', strtotime($cita['fecha'])); ?></p>
+                                    </div>
+                                </div>
+                                <div class="acciones-cita-pendiente">
+                                    <form method="POST" action="gestionar-citas-veterinario.php" style="display: inline;">
+                                        <input type="hidden" name="accion" value="aceptar_cita">
+                                        <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
+                                        <button type="submit" class="boton-aceptar-cita" onclick="return confirm('¿Confirmas que deseas ACEPTAR esta cita?')">
+                                            ✅ Aceptar
+                                        </button>
+                                    </form>
+                                    
+                                    <form method="POST" action="gestionar-citas-veterinario.php" style="display: inline;">
+                                        <input type="hidden" name="accion" value="rechazar_cita">
+                                        <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
+                                        <button type="submit" class="boton-rechazar-cita" onclick="return confirm('¿Estás seguro de RECHAZAR esta cita?')">
+                                            ❌ Rechazar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="sin-citas">
+                        <p>✅ No tienes citas pendientes de aprobar</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <?php else: ?>
+            <!-- TARJETA 2: Citas Pendientes de Aprobación USUARIOS NORMALES -->
             <div class="proximas-citas citas-pendientes-usuario">
                 <div class="encabezado-citas-seccion">
                     <h4>⏳ Citas Pendientes de Aprobación</h4>
@@ -508,7 +497,7 @@ if ($rol_usuario === 'veterinario') {
                     if ($cita['estado'] === 'pendiente'):
                         $hay_pendientes = true;
                 ?>
-                                            <div class="tarjeta-cita pendiente-aprobacion">
+                    <div class="tarjeta-cita pendiente-aprobacion">
                         <div class="info-cita">
                             <div class="fecha-cita fecha-pendiente">
                                 <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
@@ -556,6 +545,7 @@ if ($rol_usuario === 'veterinario') {
                     </div>
                 <?php endif; ?>
             </div>
+            <?php endif; ?>
         </section>
 
         <!-- Sección Pacientes -->
