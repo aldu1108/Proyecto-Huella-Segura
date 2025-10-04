@@ -44,6 +44,11 @@ function mostrarPaso(numeroPaso) {
 }
 
 function siguientePaso(siguientePasoNum) {
+    // Si estamos en modo edición, no validar (el submit normal se encarga)
+    if (window.modoEdicion) {
+        return true;
+    }
+
     if (validarPasoActual()) {
         guardarDatosPaso();
         pasoActual = siguientePasoNum;
@@ -61,8 +66,26 @@ function anteriorPaso(anteriorPasoNum) {
 }
 
 function validarPasoActual() {
+    // Si estamos en modo edición, no validar
+    if (window.modoEdicion) {
+        return true;
+    }
+
     const pasoDiv = document.getElementById('paso' + pasoActual);
-    const camposRequeridos = pasoDiv.querySelectorAll('input[required], select[required]');
+
+    // Solo validar campos que estén visibles (display !== 'none')
+    const camposRequeridos = Array.from(pasoDiv.querySelectorAll('input[required], select[required]'))
+        .filter(campo => {
+            // Verificar que el campo y sus padres estén visibles
+            let elemento = campo;
+            while (elemento && elemento !== pasoDiv) {
+                if (window.getComputedStyle(elemento).display === 'none') {
+                    return false;
+                }
+                elemento = elemento.parentElement;
+            }
+            return true;
+        });
 
     let esValido = true;
     camposRequeridos.forEach(campo => {
@@ -226,3 +249,90 @@ document.addEventListener('keydown', function(e) {
         cerrarFormularioReporte();
     }
 });
+
+// Variable global para detectar modo edición
+let modoEdicionGlobal = false;
+
+// Marcar mascota como encontrada
+function marcarComoEncontrada(idPublicacion, nombreMascota) {
+    if (confirm(`¿Confirmas que ${nombreMascota} ha sido encontrada?\n\nEsta acción cerrará el reporte y notificará a la comunidad.`)) {
+        // Crear formulario y enviar
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'procesar-estado-mascota.php';
+
+        const inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = 'id_publicacion';
+        inputId.value = idPublicacion;
+
+        const inputAccion = document.createElement('input');
+        inputAccion.type = 'hidden';
+        inputAccion.name = 'accion';
+        inputAccion.value = 'encontrada';
+
+        form.appendChild(inputId);
+        form.appendChild(inputAccion);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Editar reporte - redirige con parámetro de edición
+function editarReporte(idPublicacion) {
+    window.location.href = `mascotas-perdidas.php?editar=${idPublicacion}`;
+}
+
+// Eliminar reporte
+function eliminarReporte(idPublicacion, nombreMascota) {
+    if (confirm(`¿Estás seguro de eliminar el reporte de ${nombreMascota}?\n\n⚠️ Esta acción no se puede deshacer.`)) {
+        if (confirm('¿Realmente deseas eliminar este reporte? Esta es tu última oportunidad para cancelar.')) {
+            // Crear formulario y enviar
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'procesar-estado-mascota.php';
+
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'id_publicacion';
+            inputId.value = idPublicacion;
+
+            const inputAccion = document.createElement('input');
+            inputAccion.type = 'hidden';
+            inputAccion.name = 'accion';
+            inputAccion.value = 'eliminar';
+
+            form.appendChild(inputId);
+            form.appendChild(inputAccion);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+}
+
+// Eliminar reporte
+function eliminarReporte(idPublicacion, nombreMascota) {
+    if (confirm(`¿Estás seguro de eliminar el reporte de ${nombreMascota}?\n\n⚠️ Esta acción no se puede deshacer.`)) {
+        if (confirm('¿Realmente deseas eliminar este reporte? Esta es tu última oportunidad para cancelar.')) {
+            // Crear formulario y enviar
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'procesar-estado-mascota.php';
+
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'id_publicacion';
+            inputId.value = idPublicacion;
+
+            const inputAccion = document.createElement('input');
+            inputAccion.type = 'hidden';
+            inputAccion.name = 'accion';
+            inputAccion.value = 'eliminar';
+
+            form.appendChild(inputId);
+            form.appendChild(inputAccion);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+}

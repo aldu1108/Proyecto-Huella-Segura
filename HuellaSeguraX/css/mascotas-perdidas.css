@@ -324,3 +324,102 @@
     background: #f8f9fa;
     border-radius: 12px;
 }
+
+/* Estilos para botones de propietario */
+.boton-encontrado {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+.boton-encontrado:hover {
+    background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.boton-editar-reporte {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.boton-editar-reporte:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.boton-eliminar-reporte {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.boton-eliminar-reporte:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Responsive para botones */
+@media (max-width: 768px) {
+    .acciones-reporte {
+        flex-wrap: wrap;
+    }
+
+    .boton-encontrado,
+    .boton-editar-reporte,
+    .boton-eliminar-reporte {
+        flex: 1 1 100%;
+        min-width: 100%;
+        justify-content: center;
+    }
+}
+
+.info-mascota-editar {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    margin-bottom: 1rem;
+}
+
+.info-mascota-editar p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.info-mascota-editar strong {
+    color: #2c3e50;
+}

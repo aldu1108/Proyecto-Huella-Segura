@@ -35,13 +35,13 @@ if ($rol_usuario === 'demo') {
     $total_citas_hoy = 0;
 } else {
     // Obtener EVENTOS de comunidad a los que está unido
-    $consulta_eventos = "SELECT e.id_evento, e.fecha, e.titulo, e.descripcion, 'comunidad' as tipo
+    /*$consulta_eventos = "SELECT e.id_evento, e.fecha, e.titulo, e.descripcion, 'comunidad' as tipo
                         FROM eventos_comunidad e
                         JOIN asistentes_evento ae ON e.id_evento = ae.id_evento
                         WHERE ae.id_usuario = $usuario_id 
                         AND DATE(e.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana'
                         ORDER BY e.fecha ASC LIMIT 5";
-    $resultado_eventos = $conexion->query($consulta_eventos);
+    $resultado_eventos = $conexion->query($consulta_eventos);*/
 
     // Obtener RECORDATORIOS (citas veterinarias)
     $consulta_recordatorios = "SELECT c.id_cita as id_recordatorio, c.fecha, c.motivo as titulo, 
