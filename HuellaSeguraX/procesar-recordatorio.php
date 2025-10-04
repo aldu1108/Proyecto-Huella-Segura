@@ -18,6 +18,22 @@ $sql = "INSERT INTO recordatorios_personales (titulo, descripcion, fecha, id_usu
         VALUES ('$titulo', '$descripcion', '$fecha_hora', $usuario_id)";
 
 if ($conexion->query($sql)) {
+    $id_recordatorio = $conexion->insert_id;
+    
+    // Asociar con mascotas si se seleccionaron
+    if (isset($_POST['mascotas']) && is_array($_POST['mascotas'])) {
+        foreach ($_POST['mascotas'] as $id_mascota) {
+            $id_mascota = (int)$id_mascota;
+            $sql_rel = "INSERT INTO recordatorio_mascota (id_recordatorio, id_mascota) 
+                       VALUES ($id_recordatorio, $id_mascota)";
+            $conexion->query($sql_rel);
+        }
+    }
+    
+    header("Location: index.php?recordatorio=agregado");
+}
+
+if ($conexion->query($sql)) {
     header("Location: index.php?recordatorio=agregado");
 } else {
     header("Location: index.php?error=recordatorio");

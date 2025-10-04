@@ -339,6 +339,24 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                                     }
                                     ?>
                                 </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Asociar a mascota (opcional)</label>
+                                    <select name="mascotas[]" multiple size="3" 
+                                            style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 8px;">
+                                        <?php
+                                        $consulta_mascotas_modal = "SELECT id_mascota, nombre_mascota FROM mascotas 
+                                                                    WHERE id_usuario = $usuario_id AND estado = 'activo' 
+                                                                    ORDER BY nombre_mascota";
+                                        $resultado_mascotas_modal = $conexion->query($consulta_mascotas_modal);
+                                        while($m = $resultado_mascotas_modal->fetch_assoc()):
+                                        ?>
+                                            <option value="<?php echo $m['id_mascota']; ?>">
+                                                <?php echo htmlspecialchars($m['nombre_mascota']); ?>
+                                            </option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                    <small style="color: #666;">Mantén Ctrl/Cmd para seleccionar varias</small>
+                                </div>
                             </div>
                         <?php endwhile; ?>
                     <?php else: ?>
@@ -362,6 +380,24 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                                             echo $fecha_evento->format('D, j M • H:i');
                                         }
                                         ?>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Asociar a mascota (opcional)</label>
+                                        <select name="mascotas[]" multiple size="3" 
+                                                style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 8px;">
+                                            <?php
+                                            $consulta_mascotas_modal = "SELECT id_mascota, nombre_mascota FROM mascotas 
+                                                                        WHERE id_usuario = $usuario_id AND estado = 'activo' 
+                                                                        ORDER BY nombre_mascota";
+                                            $resultado_mascotas_modal = $conexion->query($consulta_mascotas_modal);
+                                            while($m = $resultado_mascotas_modal->fetch_assoc()):
+                                            ?>
+                                                <option value="<?php echo $m['id_mascota']; ?>">
+                                                    <?php echo htmlspecialchars($m['nombre_mascota']); ?>
+                                                </option>
+                                            <?php endwhile; ?>
+                                        </select>
+                                        <small style="color: #666;">Mantén Ctrl/Cmd para seleccionar varias</small>
                                     </div>
                                 </div>
                             <?php endwhile; ?>
