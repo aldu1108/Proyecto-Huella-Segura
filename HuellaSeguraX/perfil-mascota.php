@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
-$mascota_id = isset($_GET['id']) ? $_GET['id'] : 0;
+$mascota_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 // Obtener información de la mascota
 $consulta_mascota = "SELECT * FROM mascotas WHERE id_mascota = $mascota_id AND id_usuario = $usuario_id AND estado = 'activo'";
@@ -20,46 +20,145 @@ if (!$resultado_mascota || $resultado_mascota->num_rows == 0) {
 }
 
 $mascota = $resultado_mascota->fetch_assoc();
+$fecha_hoy = date('Y-m-d');
+$fecha_fin_semana = date('Y-m-d', strtotime('+7 days'));
 
-// Obtener historial médico
-$consulta_historial = "SELECT * FROM historiales_medicos WHERE id_mascota = $mascota_id ORDER BY fecha DESC LIMIT 10";
-$resultado_historial = $conexion->query($consulta_historial);
+// Obtener datos de seguimiento de peso
+$consulta_peso = "SELECT * FROM seguimiento_peso WHERE id_mascota = $mascota_id ORDER BY fecha ASC";
+$resultado_peso = $conexion->query($consulta_peso);
+
+// Convertir resultado en array
+$pesos = [];
+if ($resultado_peso && $resultado_peso->num_rows > 0) {
+    while($row = $resultado_peso->fetch_assoc()) {
+        $pesos[] = $row;
+    }
+}
+
+// Calcular variables para el gráfico
+$max_peso = !empty($pesos) ? max(array_column($pesos, 'peso')) : 0;
+$min_peso = !empty($pesos) ? min(array_column($pesos, 'peso')) : 0;
+$rango = ($max_peso - $min_peso) > 0 ? ($max_peso - $min_peso) : 1;
+$divisor = (count($pesos) - 1) > 0 ? (count($pesos) - 1) : 1;
+
+// Obtener ficha de salud
+$consulta_ficha = "SELECT * FROM fichas_de_salud WHERE id_mascota = $mascota_id LIMIT 1";
+$resultado_ficha = $conexion->query($consulta_ficha);
+$ficha = $resultado_ficha && $resultado_ficha->num_rows > 0 ? $resultado_ficha->fetch_assoc() : null;
+
+// Obtener días con eventos para el calendario
+$consulta_dias_mascota = "SELECT DISTINCT DAY(c.fecha) as dia
+                         FROM citas_veterinarias c
+                         WHERE c.id_mascota = $mascota_id 
+                         AND MONTH(c.fecha) = MONTH(CURDATE())
+                         AND YEAR(c.fecha) = YEAR(CURDATE())
+                         AND c.estado != 'completada'
+                         UNION
+                         SELECT DISTINCT DAY(r.fecha) as dia
+                         FROM recordatorios_personales r
+                         JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
+                         WHERE rm.id_mascota = $mascota_id
+                         AND r.id_usuario = $usuario_id
+                         AND MONTH(r.fecha) = MONTH(CURDATE())
+                         AND YEAR(r.fecha) = YEAR(CURDATE())
+                         AND r.completado = 0";
+$resultado_dias_mascota = $conexion->query($consulta_dias_mascota);
+$dias_con_eventos_mascota = [];
+if ($resultado_dias_mascota) {
+    while($dia = $resultado_dias_mascota->fetch_assoc()) {
+        $dias_con_eventos_mascota[] = (int)$dia['dia'];
+    }
+}
+
+// Obtener eventos de hoy (citas + recordatorios)
+$consulta_eventos_hoy = "(SELECT 'cita' as tipo, motivo as titulo, fecha, id_cita as id_evento
+                         FROM citas_veterinarias 
+                         WHERE id_mascota = $mascota_id 
+                         AND DATE(fecha) = '$fecha_hoy' 
+                         AND estado != 'completada')
+                        UNION
+                        (SELECT 'recordatorio' as tipo, r.titulo, r.fecha, r.id_recordatorio as id_evento
+                         FROM recordatorios_personales r
+                         JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
+                         WHERE rm.id_mascota = $mascota_id
+                         AND r.id_usuario = $usuario_id
+                         AND DATE(r.fecha) = '$fecha_hoy'
+                         AND r.completado = 0)
+                        ORDER BY fecha ASC";
+$resultado_eventos_hoy = $conexion->query($consulta_eventos_hoy);
+
+// Obtener eventos de comunidad
+$consulta_eventos = "SELECT e.* FROM eventos_comunidad e
+                     JOIN asistentes_evento ae ON e.id_evento = ae.id_evento
+                     WHERE ae.id_usuario = $usuario_id 
+                     AND DATE(e.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana'
+                     ORDER BY e.fecha ASC LIMIT 5";
+$resultado_eventos = $conexion->query($consulta_eventos);
 
 // Obtener próximas citas
-$fecha_hoy = date('Y-m-d');
-$consulta_citas = "SELECT * FROM citas_veterinarias WHERE id_mascota = $mascota_id AND fecha >= '$fecha_hoy' ORDER BY fecha ASC LIMIT 5";
-$resultado_citas = $conexion->query($consulta_citas);
+$consulta_citas_proximas = "SELECT * FROM citas_veterinarias 
+                            WHERE id_mascota = $mascota_id 
+                            AND fecha > '$fecha_hoy' 
+                            AND fecha <= '$fecha_fin_semana'
+                            AND estado != 'completada'
+                            ORDER BY fecha ASC LIMIT 3";
+$resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title><?php echo $mascota['nombre_mascota']; ?> - Perfil - Huella Segura</title>
+    <title><?php echo htmlspecialchars($mascota['nombre_mascota']); ?> - Perfil - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/perfil-mascota.css">
     <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
 
-    <!-- Contenido principal -->
     <main class="main-content">
+        <!-- Mensajes -->
+        <?php if (isset($_GET['exito'])): ?>
+            <div class="mensaje-exito">
+                <?php 
+                echo match($_GET['exito']) {
+                    'perfil_actualizado' => '✓ Perfil actualizado correctamente',
+                    'peso_agregado' => '✓ Peso registrado correctamente',
+                    default => '✓ Operación exitosa'
+                };
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div class="mensaje-error">
+                <?php 
+                echo match($_GET['error']) {
+                    'error_actualizar' => '✗ Error al actualizar el perfil',
+                    'no_autorizado' => '✗ No autorizado',
+                    'error_peso' => '✗ Error al registrar el peso',
+                    default => '✗ Ha ocurrido un error'
+                };
+                ?>
+            </div>
+        <?php endif; ?>
+
         <!-- Header de la mascota -->
         <section class="mascota-header">
             <div class="mascota-info-principal">
-                <img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'imagenes/mascota-default.jpg'; ?>" 
-                     alt="<?php echo $mascota['nombre_mascota']; ?>" class="mascota-foto-grande">
+                <img src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" 
+                     alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" 
+                     class="mascota-foto-grande">
                 <div class="mascota-datos">
-                    <h1><?php echo $mascota['nombre_mascota']; ?> 💡</h1>
-                    <p class="mascota-tipo">Perro • Golden Retriever</p>
+                    <h1><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h1>
+                    <p class="mascota-tipo"><?php echo ucfirst($mascota['tipo']) . ' • ' . ucfirst($mascota['sexo']); ?></p>
                     <div class="mascota-stats">
                         <span class="stat">🎂 <?php echo $mascota['edad_mascota']; ?> años</span>
-                        <span class="stat">⚖️ 28 kg</span>
+                        <span class="stat">⚖️ <?php echo $ficha && !empty($ficha['peso']) ? $ficha['peso'] . ' kg' : 'Sin registrar'; ?></span>
                     </div>
                 </div>
             </div>
@@ -74,172 +173,456 @@ $resultado_citas = $conexion->query($consulta_citas);
                     <label>Fecha de nacimiento:</label>
                     <span><?php echo date('d/m/Y', strtotime($mascota['cumpleanos_mascota'] ?? '2021-03-15')); ?></span>
                 </div>
-                
                 <div class="info-item">
                     <label>Color:</label>
                     <span>Dorado</span>
                 </div>
-                
                 <div class="info-item">
                     <label>Microchip:</label>
                     <span>982123456789012</span>
                 </div>
-                
                 <div class="info-item">
-                    <label>Propietario:</label>
-                    <span>Juan Pérez</span>
+                    <label>Edad:</label>
+                    <span><?php echo $mascota['edad_mascota']; ?> años</span>
+                </div>
+                <?php if ($ficha): ?>
+                    <div class="info-item">
+                        <label>Peso actual:</label>
+                        <span><?php echo $ficha['peso']; ?> kg</span>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="boton-editar-container">
+                <button onclick="mostrarModalEditar()" class="btn-editar-perfil">
+                    ✏️ Editar Perfil
+                </button>
+            </div>
+        </section>
+
+        <!-- Calendario -->
+        <section class="calendario-cuidados">
+            <div class="encabezado-calendario">
+                <h3 class="titulo-calendario">📅 Calendario de <?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h3>
+                <div class="navegacion-mes">
+                    <button class="boton-nav-mes" onclick="cambiarMes(-1)">‹</button>
+                    <span class="mes-actual" id="mesActual"></span>
+                    <button class="boton-nav-mes" onclick="cambiarMes(1)">›</button>
                 </div>
             </div>
 
-            <div class="descripcion">
-                <label>Descripción:</label>
-                <p><?php echo $mascota['nombre_mascota']; ?> es una perra muy cariñosa y juguetona. Le encanta nadar y jugar en el parque. Es muy obediente y sociable con otros perros.</p>
+            <div class="mini-calendario">
+                <div class="encabezado-dias">
+                    <div class="dia-semana">D</div>
+                    <div class="dia-semana">L</div>
+                    <div class="dia-semana">M</div>
+                    <div class="dia-semana">X</div>
+                    <div class="dia-semana">J</div>
+                    <div class="dia-semana">V</div>
+                    <div class="dia-semana">S</div>
+                </div>
+                <div class="dias-calendario" id="diasCalendario"></div>
+            </div>
+
+            <div class="eventos-hoy">
+                <div class="encabezado-eventos-hoy">
+                    <h4 class="titulo-eventos-hoy">📅 Hoy</h4>
+                    <span class="contador-eventos"><?php echo $resultado_eventos_hoy ? $resultado_eventos_hoy->num_rows : 0; ?></span>
+                </div>
+
+                <div class="lista-eventos-hoy">
+                    <?php if ($resultado_eventos_hoy && $resultado_eventos_hoy->num_rows > 0): 
+                        while($evento = $resultado_eventos_hoy->fetch_assoc()): 
+                            $es_urgente = ($evento['tipo'] == 'cita' && in_array($evento['titulo'], ['Urgencia', 'Vacunación']));
+                    ?>
+                        <div class="evento-hoy <?php echo $es_urgente ? 'urgente' : ''; ?>">
+                            <div class="icono-evento">
+                                <?php 
+                                if ($evento['tipo'] == 'recordatorio') {
+                                    echo '📝';
+                                } else {
+                                    echo match($evento['titulo']) {
+                                        'Vacunación' => '💉',
+                                        'Análisis' => '🧪',
+                                        'Cirugía' => '🏥',
+                                        'Control' => '📋',
+                                        'Urgencia' => '⚠️',
+                                        default => '💊'
+                                    };
+                                }
+                                ?>
+                            </div>
+                            <div class="info-evento">
+                                <div class="titulo-evento"><?php echo htmlspecialchars($evento['titulo']); ?></div>
+                                <div class="detalles-evento">
+                                    <?php echo $evento['tipo'] == 'recordatorio' ? 'Recordatorio' : 'Cita'; ?> • 
+                                    <?php echo date('H:i', strtotime($evento['fecha'])); ?>
+                                </div>
+                            </div>
+                            <div class="<?php echo $es_urgente ? 'estado-urgente' : 'estado-medio'; ?>">
+                                <?php echo $es_urgente ? 'Urgente' : ($evento['tipo'] == 'recordatorio' ? 'Pendiente' : 'Programado'); ?>
+                            </div>
+                        </div>
+                    <?php endwhile; else: ?>
+                        <div class="sin-eventos">
+                            <div class="icono-grande">📅</div>
+                            <p>No hay eventos para hoy</p>
+                            <small>Agenda una cita o crea un recordatorio</small>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="proximos-eventos">
+                    <h4 class="titulo-proximos">Próximos eventos</h4>
+                    <?php if ($resultado_eventos && $resultado_eventos->num_rows > 0): 
+                        while($evento = $resultado_eventos->fetch_assoc()): 
+                            $fecha_evento = new DateTime($evento['fecha']);
+                            $diff = (new DateTime())->diff($fecha_evento);
+                    ?>
+                        <div class="evento-proximo">
+                            <div class="info-evento-proximo">🎉 <?php echo htmlspecialchars($evento['titulo']); ?></div>
+                            <div class="fecha-evento-proximo">
+                                <?php 
+                                if ($diff->days == 0) echo "Hoy • " . $fecha_evento->format('H:i');
+                                elseif ($diff->days == 1) echo "Mañana • " . $fecha_evento->format('H:i');
+                                else echo $fecha_evento->format('D, j M • H:i');
+                                ?>
+                            </div>
+                        </div>
+                    <?php endwhile; else: ?>
+                        <div class="sin-eventos-proximos">No hay eventos próximos</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recordatorios -->
+        <section class="recordatorios-urgentes">
+            <div class="section-header">
+                <h3>🔔 Recordatorios</h3>
+                <span class="count">
+                    <?php 
+                    // Reutilizar el mismo contador
+                    echo $resultado_eventos_hoy ? $resultado_eventos_hoy->num_rows : 0;
+                    ?> hoy
+                </span>            
+            </div>
+
+            <button class="btn-agregar-recordatorio" onclick="mostrarModalRecordatorio()">+ Agregar Recordatorio</button>
+
+            <div class="urgente-list">
+                <?php if ($resultado_eventos_hoy): 
+                    $resultado_eventos_hoy->data_seek(0); // Reiniciar puntero
+                    while($evento = $resultado_eventos_hoy->fetch_assoc()): 
+                        $es_urgente = ($evento['tipo'] == 'cita' && in_array($evento['titulo'], ['Urgencia', 'Vacunación']));
+                ?>
+                    <div class="urgente-item <?php echo $es_urgente ? 'urgente' : ''; ?>">
+                        <div class="urgente-info">
+                            <span class="mascota-name">
+                                <?php echo $evento['tipo'] == 'recordatorio' ? '📝 ' : ''; ?>
+                                <?php echo htmlspecialchars($evento['titulo']); ?>
+                            </span>
+                            <span class="urgente-time">🕐 <?php echo date('H:i', strtotime($evento['fecha'])); ?></span>
+                            <?php if ($es_urgente): ?>
+                                <span class="urgente-label">Urgente</span>
+                            <?php elseif ($evento['tipo'] == 'recordatorio'): ?>
+                                <span class="urgente-label" style="background: #3498db;">Recordatorio</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endwhile; else: ?>
+                    <div class="sin-eventos">
+                        <div class="icono-grande">✨</div>
+                        <p>No hay recordatorios para hoy</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="proximamente">
+                <h4>📅 Próximamente</h4>
+                <?php 
+                // Obtener próximas citas Y recordatorios personales
+                $consulta_proximos = "
+                    (SELECT 'cita' as tipo, motivo as titulo, fecha 
+                    FROM citas_veterinarias 
+                    WHERE id_mascota = $mascota_id 
+                    AND fecha > '$fecha_hoy' 
+                    AND fecha <= '$fecha_fin_semana'
+                    AND estado != 'completada')
+                    UNION
+                    (SELECT 'recordatorio' as tipo, r.titulo, r.fecha
+                    FROM recordatorios_personales r
+                    JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
+                    WHERE rm.id_mascota = $mascota_id
+                    AND r.id_usuario = $usuario_id
+                    AND r.fecha > '$fecha_hoy'
+                    AND r.fecha <= '$fecha_fin_semana'
+                    AND r.completado = 0)
+                    ORDER BY fecha ASC
+                    LIMIT 5";
+                
+                $resultado_proximos = $conexion->query($consulta_proximos);
+                
+                if ($resultado_proximos && $resultado_proximos->num_rows > 0): 
+                    while($item = $resultado_proximos->fetch_assoc()): 
+                        $icono = $item['tipo'] == 'cita' ? '💊' : '📝';
+                ?>
+                    <div class="proximo-item">
+                        <span class="proximo-info">
+                            <?php echo $icono . ' ' . date('D j', strtotime($item['fecha'])) . ' • ' . htmlspecialchars($item['titulo']); ?>
+                        </span>
+                        <span class="proximo-time"><?php echo date('H:i', strtotime($item['fecha'])); ?></span>
+                    </div>
+                <?php endwhile; else: ?>
+                    <div class="sin-eventos-proximos">Sin eventos próximos</div>
+                <?php endif; ?>
             </div>
         </section>
 
         <!-- Seguimiento de peso -->
         <section class="seguimiento-peso">
-            <h3>Seguimiento de Peso</h3>
-            
-            <!-- Gráfico simulado -->
-            <div class="grafico-peso">
-                <div class="grafico-container">
-                    <canvas id="pesoChart" width="400" height="200"></canvas>
-                    <!-- Simulación de gráfico con CSS -->
-                    <div class="peso-timeline">
-                        <div class="peso-point" style="left: 10%; bottom: 20%;">
-                            <span class="peso-value">22kg</span>
-                            <span class="peso-date">2023-01</span>
-                        </div>
-                        <div class="peso-point" style="left: 30%; bottom: 40%;">
-                            <span class="peso-value">24kg</span>
-                            <span class="peso-date">2023-03</span>
-                        </div>
-                        <div class="peso-point" style="left: 50%; bottom: 60%;">
-                            <span class="peso-value">26kg</span>
-                            <span class="peso-date">2023-06</span>
-                        </div>
-                        <div class="peso-point" style="left: 70%; bottom: 70%;">
-                            <span class="peso-value">27kg</span>
-                            <span class="peso-date">2023-09</span>
-                        </div>
-                        <div class="peso-point active" style="left: 90%; bottom: 80%;">
-                            <span class="peso-value">28kg</span>
-                            <span class="peso-date">2024-01</span>
-                        </div>
-                        <!-- Línea de conexión -->
-                        <svg class="peso-line">
-                            <polyline points="10,160 120,120 200,80 280,60 360,40" stroke="#D35400" stroke-width="2" fill="none"/>
+            <div class="peso-header">
+                <h3>Seguimiento de Peso</h3>
+                <button class="btn-agregar-peso" onclick="mostrarModalPeso()">+ Agregar Peso</button>
+            </div>
+
+            <div class="grafico-container">
+                <?php if (!empty($pesos)): ?>
+                    <div class="peso-grafico">
+                        <!-- Ejes y grid -->
+                        <svg class="grafico-fondo" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <!-- Líneas horizontales del grid -->
+                            <line x1="8" y1="15" x2="92" y2="15" stroke="#e8e8e8" stroke-width="0.3"/>
+                            <line x1="8" y1="35" x2="92" y2="35" stroke="#e8e8e8" stroke-width="0.3"/>
+                            <line x1="8" y1="55" x2="92" y2="55" stroke="#e8e8e8" stroke-width="0.3"/>
+                            <line x1="8" y1="75" x2="92" y2="75" stroke="#e8e8e8" stroke-width="0.3"/>
+                            
+                            <!-- Eje Y principal -->
+                            <line x1="8" y1="15" x2="8" y2="75" stroke="#999" stroke-width="0.5"/>
+                            <!-- Eje X principal -->
+                            <line x1="8" y1="75" x2="92" y2="75" stroke="#999" stroke-width="0.5"/>
                         </svg>
+
+                        <!-- Etiquetas del eje Y (peso) -->
+                        <div class="etiquetas-y">
+                            <span style="top: 15%"><?php echo round($max_peso, 1); ?> kg</span>
+                            <span style="top: 35%"><?php echo round($max_peso - ($rango * 0.33), 1); ?> kg</span>
+                            <span style="top: 55%"><?php echo round($max_peso - ($rango * 0.66), 1); ?> kg</span>
+                            <span style="top: 75%"><?php echo round($min_peso, 1); ?> kg</span>
+                        </div>
+
+                        <!-- Etiquetas del eje X (fechas) -->
+                        <div class="etiquetas-x">
+                            <?php 
+                            $mostrar_cada = max(1, floor(count($pesos) / 5));
+                            foreach($pesos as $index => $peso): 
+                                if ($index % $mostrar_cada == 0 || $index == count($pesos) - 1):
+                                    $left = ($index / $divisor) * 84 + 8;
+                            ?>
+                                <span style="left: <?php echo $left; ?>%"><?php echo date('d/m', strtotime($peso['fecha'])); ?></span>
+                            <?php endif; endforeach; ?>
+                        </div>
+
+                        <!-- Área bajo la curva -->
+                        <svg class="grafico-area" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="gradientArea" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#D35400;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#D35400;stop-opacity:0.05" />
+                                </linearGradient>
+                            </defs>
+                            <polygon fill="url(#gradientArea)" points="
+                                <?php 
+                                $puntos = [];
+                                foreach($pesos as $index => $peso) {
+                                    $x = ($index / $divisor) * 84 + 8;
+                                    $y = 75 - ((($peso['peso'] - $min_peso) / $rango) * 60);
+                                    $puntos[] = "$x,$y";
+                                }
+                                echo implode(' ', $puntos);
+                                // Cerrar el área
+                                $ultimo_x = ($index / $divisor) * 84 + 8;
+                                echo " $ultimo_x,75 8,75";
+                                ?>
+                            "/>
+                        </svg>
+
+                        <!-- Línea de datos -->
+                        <svg class="grafico-linea" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <polyline 
+                                fill="none" 
+                                stroke="#D35400" 
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                points="<?php echo implode(' ', $puntos); ?>"
+                            />
+                        </svg>
+
+                        <!-- Puntos de datos -->
+                        <?php foreach($pesos as $index => $peso):
+                            $left = ($index / $divisor) * 84 + 8;
+                            $bottom = 25 + ((($peso['peso'] - $min_peso) / $rango) * 60);
+                        ?>
+                            <div class="punto-dato" style="left: <?php echo $left; ?>%; bottom: <?php echo $bottom; ?>%;" 
+                                data-peso="<?php echo $peso['peso']; ?>" 
+                                data-fecha="<?php echo date('d/m/Y', strtotime($peso['fecha'])); ?>">
+                                <span class="tooltip-peso"><?php echo $peso['peso']; ?> kg<br><small><?php echo date('d/m/Y', strtotime($peso['fecha'])); ?></small></span>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
+                <?php else: ?>
+                    <div class="sin-datos-peso">
+                        <div class="icono-grande">📊</div>
+                        <p>No hay registros de peso</p>
+                        <small>Agrega el primer registro</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Editar Perfil -->
+        <div id="modalEditar" class="modal">
+            <div class="modal-contenido">
+                <div class="modal-header">
+                    <h3>✏️ Editar Perfil de <?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h3>
+                    <button class="btn-cerrar" onclick="cerrarModalEditar()">×</button>
+                </div>
+                <form method="POST" action="editar-mascota.php" enctype="multipart/form-data" class="modal-form">
+                    <input type="hidden" name="id_mascota" value="<?php echo $mascota_id; ?>">
                     
-                    <!-- Eje Y (peso) -->
-                    <div class="eje-y">
-                        <span class="eje-label" style="bottom: 90%;">30</span>
-                        <span class="eje-label" style="bottom: 70%;">26</span>
-                        <span class="eje-label" style="bottom: 50%;">23</span>
-                        <span class="eje-label" style="bottom: 30%;">20</span>
-                        <span class="eje-label" style="bottom: 10%;">kg</span>
+                    <div class="form-foto">
+                        <img id="previewFoto" src="imagenes/<?php echo !empty($mascota['foto_mascota']) ? $mascota['foto_mascota'] : 'mascota-default.jpg'; ?>" alt="Foto">
+                        <label for="fotoMascota" class="btn-cambiar-foto">📷
+                            <input type="file" id="fotoMascota" name="foto_mascota" accept="image/*">
+                        </label>
+                        <p class="form-ayuda">Haz clic para cambiar la foto</p>
                     </div>
+
+                    <div class="form-grupo">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre_mascota" value="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" required maxlength="20">
+                    </div>
+
+                    <div class="form-fila">
+                        <div class="form-grupo">
+                            <label>Tipo *</label>
+                            <select name="tipo" required>
+                                <option value="perro" <?php echo $mascota['tipo'] == 'perro' ? 'selected' : ''; ?>>Perro</option>
+                                <option value="gato" <?php echo $mascota['tipo'] == 'gato' ? 'selected' : ''; ?>>Gato</option>
+                                <option value="otro" <?php echo $mascota['tipo'] == 'otro' ? 'selected' : ''; ?>>Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-grupo">
+                            <label>Sexo *</label>
+                            <select name="sexo" required>
+                                <option value="macho" <?php echo $mascota['sexo'] == 'macho' ? 'selected' : ''; ?>>Macho</option>
+                                <option value="hembra" <?php echo $mascota['sexo'] == 'hembra' ? 'selected' : ''; ?>>Hembra</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Fecha de nacimiento *</label>
+                        <input type="date" name="cumpleanos_mascota" value="<?php echo $mascota['cumpleaños_mascota']; ?>" required max="<?php echo date('Y-m-d'); ?>">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Peso actual (kg)</label>
+                        <input type="number" name="peso_actual" value="<?php echo $ficha ? $ficha['peso'] : ''; ?>" step="0.1" min="0.1" max="200" placeholder="Ej: 28.5">
+                        <small>Opcional</small>
+                    </div>
+
+                    <div class="form-botones">
+                        <button type="button" class="btn-cancelar" onclick="cerrarModalEditar()">Cancelar</button>
+                        <button type="submit" class="btn-guardar">💾 Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Agregar Peso -->
+        <div id="modalPeso" class="modal">
+            <div class="modal-contenido modal-pequeno">
+                <div class="modal-header">
+                    <h3>📊 Registrar Peso</h3>
+                    <button class="btn-cerrar" onclick="cerrarModalPeso()">×</button>
+                </div>
+                <form method="POST" action="procesar-peso.php" class="modal-form">
+                    <input type="hidden" name="id_mascota" value="<?php echo $mascota_id; ?>">
                     
-                    <!-- Eje X (tiempo) -->
-                    <div class="eje-x">
-                        <span class="eje-label" style="left: 10%;">2023-01</span>
-                        <span class="eje-label" style="left: 30%;">2023-03</span>
-                        <span class="eje-label" style="left: 50%;">2023-06</span>
-                        <span class="eje-label" style="left: 70%;">2023-09</span>
-                        <span class="eje-label" style="left: 90%;">2024-01</span>
+                    <div class="form-grupo">
+                        <label>Peso (kg) *</label>
+                        <input type="number" name="peso" step="0.1" min="0.1" max="200" required placeholder="Ej: 28.5">
+                        <small>Peso en kilogramos</small>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Historial Médico -->
-        <section class="historial-medico">
-            <div class="section-header">
-                <h3>Historial Médico</h3>
-                <button class="btn-veterinarios">🩺 Veterinarios</button>
-            </div>
-
-            <div class="historial-list">
-                <!-- Consulta General -->
-                <div class="historial-item">
-                    <div class="historial-date">2024-01-15</div>
-                    <div class="historial-content">
-                        <h4>Consulta General</h4>
-                        <p><strong>Dr. María González</strong></p>
-                        <p>Clínica Veterinaria San Martín</p>
-                        <p><strong>Diagnóstico:</strong> Estado de salud excelente</p>
-                        <p><strong>Tratamiento:</strong> Vacunación anual completa</p>
-                        <p><strong>Notas:</strong> Peso ideal, muy activo y saludable</p>
+                    <div class="form-grupo">
+                        <label>Fecha *</label>
+                        <input type="date" name="fecha" required max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d'); ?>">
+                        <small>Solo fechas pasadas o presente</small>
                     </div>
-                </div>
 
-                <!-- Cirugía -->
-                <div class="historial-item">
-                    <div class="historial-date">2023-09-20</div>
-                    <div class="historial-content">
-                        <h4>Cirugía</h4>
-                        <p><strong>Dr. Carlos Rodríguez</strong></p>
-                        <p>Hospital Veterinario Central</p>
-                        <p><strong>Diagnóstico:</strong> Esterilización</p>
-                        <p><strong>Tratamiento:</strong> Cirugía de esterilización exitosa</p>
-                        <p><strong>Notas:</strong> Recuperación rápida, sin complicaciones</p>
+                    <div class="form-botones">
+                        <button type="button" class="btn-cancelar" onclick="cerrarModalPeso()">Cancelar</button>
+                        <button type="submit" class="btn-guardar">Guardar</button>
                     </div>
-                </div>
+                </form>
+            </div>
+        </div>
 
-                <!-- Emergencia -->
-                <div class="historial-item">
-                    <div class="historial-date">2023-06-10</div>
-                    <div class="historial-content">
-                        <h4>Emergencia</h4>
-                        <p><strong>Dra. Ana López</strong></p>
-                        <p>Urgencias Veterinarias 24h</p>
-                        <p><strong>Diagnóstico:</strong> Gastroenteritis leve</p>
-                        <p><strong>Tratamiento:</strong> Tratamiento con probióticos y dieta blanda</p>
-                        <p><strong>Notas:</strong> Mejoría completa en 3 días</p>
+        <!-- Modal Recordatorio -->
+        <div id="modalRecordatorio" class="modal">
+            <div class="modal-contenido modal-pequeno">
+                <div class="modal-header">
+                    <h3>📝 Nuevo Recordatorio</h3>
+                    <button class="btn-cerrar" onclick="cerrarModalRecordatorio()">×</button>
+                </div>
+                <form method="POST" action="procesar-recordatorio.php" class="modal-form">
+                    <input type="hidden" name="mascotas[]" value="<?php echo $mascota_id; ?>">
+                    
+                    <div class="form-grupo">
+                        <label>Título *</label>
+                        <input type="text" name="titulo" required maxlength="100">
                     </div>
-                </div>
+
+                    <div class="form-grupo">
+                        <label>Descripción</label>
+                        <textarea name="descripcion" maxlength="255" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-fila">
+                        <div class="form-grupo">
+                            <label>Fecha *</label>
+                            <input type="date" name="fecha" required min="<?php echo date('Y-m-d'); ?>">
+                        </div>
+                        <div class="form-grupo">
+                            <label>Hora *</label>
+                            <input type="time" name="hora" required>
+                        </div>
+                    </div>
+
+                    <div class="form-botones">
+                        <button type="button" class="btn-cancelar" onclick="cerrarModalRecordatorio()">Cancelar</button>
+                        <button type="submit" class="btn-guardar">Guardar</button>
+                    </div>
+                </form>
             </div>
-
-            <button class="btn-agregar-visita">+ Agregar Visita Médica</button>
-        </section>
-
-        <!-- Próximas Citas -->
-        <section class="proximas-citas">
-            <h3>Próximas Citas</h3>
-            
-            <div class="cita-proxima">
-                <div class="cita-fecha">
-                    <div class="fecha-dia">15</div>
-                    <div class="fecha-mes">Feb 2024</div>
-                    <div class="fecha-hora">10:30 AM</div>
-                </div>
-                <div class="cita-info">
-                    <h4>Vacunación Anual</h4>
-                    <p>Dr. María González</p>
-                    <p>📍 Clínica Veterinaria San Martín</p>
-                </div>
-            </div>
-
-            <button class="btn-nueva-cita">📅 Agendar Nueva Cita</button>
-        </section>
-
-        <!-- Contacto de Emergencia -->
-        <section class="contacto-emergencia">
-            <h3>❤️ Contacto de Emergencia</h3>
-            <div class="emergencia-info">
-                <p><strong>Teléfono:</strong> +34 123 456 789</p>
-                <p><strong>Hospital 24h:</strong> Urgencias Veterinarias Central</p>
-                <button class="btn-llamar">📞 Llamar</button>
-            </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Navegación inferior -->
     <nav>
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
+    <script>
+        window.mascotaData = {
+            diasConEventos: <?php echo json_encode($dias_con_eventos_mascota); ?>,
+            mascotaId: <?php echo $mascota_id; ?>
+        };
+    </script>
+     <script src="js/perfil-mascota.js"></script>
     <script src="js/scripts.js"></script>
-                
+   
+</body>
+</html>
