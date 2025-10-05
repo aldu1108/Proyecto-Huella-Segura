@@ -113,8 +113,13 @@ if ($rol_usuario === 'demo') {
     $resultado_posts = $conexion->query($consulta_posts);
 }
 
-// Obtener eventos próximos
-$consulta_eventos = "SELECT * FROM eventos_comunidad WHERE fecha >= CURDATE() ORDER BY fecha ASC LIMIT 5";
+// Obtener eventos próximos REALES
+$consulta_eventos = "SELECT e.*, u.nombre_usuario, u.apellido_usuario,
+                     (SELECT COUNT(*) FROM participantes_evento WHERE id_evento = e.id_evento AND id_usuario = $usuario_id) as usuario_participa
+                     FROM eventos_comunidad e
+                     JOIN usuarios u ON e.id_creador = u.id_usuario
+                     WHERE e.fecha >= NOW() AND e.estado = 'activo'
+                     ORDER BY e.fecha ASC LIMIT 10";
 $resultado_eventos = $conexion->query($consulta_eventos);
 ?>
 <!DOCTYPE html>
@@ -392,49 +397,66 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 
         <!-- Sección Eventos -->
         <section class="eventos-section" id="eventosSection" style="display: none;">
-            <div class="section-header">
-                <h3>Próximos Eventos</h3>
-                <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear eventos\n\nRegístrate para poder:\n• Organizar eventos para mascotas\n• Invitar a otros miembros\n• Gestionar asistentes')">Crear Evento</button>
-                <?php else: ?>
-                    <button class="btn-create">Crear Evento</button>
-                <?php endif; ?>
-            </div>
+    <div class="section-header">
+        <h3>Próximos Eventos</h3>
+        <?php if ($rol_usuario == 'demo'): ?>
+            <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear eventos')">Crear Evento</button>
+        <?php else: ?>
+            <button class="btn-create" onclick="mostrarModalCrearEvento()">Crear Evento</button>
+        <?php endif; ?>
+    </div>
 
-            <div class="eventos-list">
+    <div class="eventos-list">
+        <?php if ($rol_usuario !== 'demo' && $resultado_eventos && $resultado_eventos->num_rows > 0): ?>
+            <?php while ($evento = $resultado_eventos->fetch_assoc()): 
+                $fecha_evento = new DateTime($evento['fecha']);
+                $dia = $fecha_evento->format('d');
+                $mes = $fecha_evento->format('M');
+            ?>
                 <div class="evento-card">
                     <div class="evento-date">
-                        <div class="date-day">15</div>
-                        <div class="date-month">Feb</div>
+                        <div class="date-day"><?php echo $dia; ?></div>
+                        <div class="date-month"><?php echo ucfirst($mes); ?></div>
                     </div>
                     <div class="evento-info">
-                        <h4>Adopción Solidaria</h4>
+                        <h4><?php echo htmlspecialchars($evento['titulo']); ?></h4>
+                        <p class="evento-descripcion"><?php echo htmlspecialchars($evento['descripcion']); ?></p>
                         <div class="evento-details">
-                            🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
+                            🕐 <?php echo $fecha_evento->format('H:i'); ?> 
+                            📍 <?php echo htmlspecialchars($evento['ubicacion']); ?> 
+                            👥 <?php echo $evento['contador_participantes']; ?> asistirán
                         </div>
                         <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos\n\nCrea una cuenta para participar en eventos de la comunidad')">Unirse al Evento</button>
+                            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
                         <?php else: ?>
-                            <button class="btn-join">Unirse al Evento</button>
+                            <button class="btn-join <?php echo $evento['usuario_participa'] > 0 ? 'btn-joined' : ''; ?>" 
+                                    data-evento-id="<?php echo $evento['id_evento']; ?>"
+                                    onclick="toggleParticipacion(this)">
+                                <?php echo $evento['usuario_participa'] > 0 ? '✓ Participando' : 'Unirse al Evento'; ?>
+                            </button>
                         <?php endif; ?>
                     </div>
                 </div>
-
-                <div class="evento-card">
-                    <div class="evento-date">
-                        <div class="date-day">18</div>
-                        <div class="date-month">Feb</div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <!-- Eventos de ejemplo para demo -->
+            <div class="evento-card">
+                <div class="evento-date">
+                    <div class="date-day">15</div>
+                    <div class="date-month">Nov</div>
+                </div>
+                <div class="evento-info">
+                    <h4>Adopción Solidaria</h4>
+                    <p class="evento-descripcion">Jornada de adopción de mascotas rescatadas</p>
+                    <div class="evento-details">
+                        🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
                     </div>
-                    <div class="evento-info">
-                        <h4>Taller de Primeros Auxilios</h4>
-                        <div class="evento-details">
-                            🕐 16:00 📍 Centro Veterinario 👥 12 asistirán
-                        </div>
-                        <button class="btn-join">Unirse al Evento</button>
-                    </div>
+                    <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
                 </div>
             </div>
-        </section>
+        <?php endif; ?>
+    </div>
+</section>
 
         <!-- Sección Grupos -->
         <section class="grupos-section" id="gruposSection" style="display: none;">
@@ -572,6 +594,55 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                     <input type="text" id="linkCompartir" readonly>
                     <button class="btn-copiar-link" onclick="copiarEnlace()">📋 Copiar enlace</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear evento -->
+    <div id="modalCrearEvento" class="modal-crear-evento"  style="display: none;">
+        <div class="modal-crear-evento-contenido">
+            <div class="modal-crear-evento-header">
+                <h3>Crear Nuevo Evento</h3>
+                <button class="cerrar-modal-evento" onclick="cerrarModalCrearEvento()">&times;</button>
+            </div>
+            <div class="modal-crear-evento-body">
+                <form id="formCrearEvento" onsubmit="return enviarEvento(event)">
+                    <div class="form-group">
+                        <label for="titulo_evento">Título del Evento *</label>
+                        <input type="text" id="titulo_evento" name="titulo_evento" required maxlength="100" 
+                               placeholder="Ej: Jornada de Adopción">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion_evento">Descripción *</label>
+                        <textarea id="descripcion_evento" name="descripcion_evento" required maxlength="255" 
+                                  rows="4" placeholder="Describe el evento y lo que se hará"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fecha_evento">Fecha *</label>
+                            <input type="date" id="fecha_evento" name="fecha_evento" required 
+                                   min="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hora_evento">Hora *</label>
+                            <input type="time" id="hora_evento" name="hora_evento" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ubicacion_evento">Ubicación *</label>
+                        <input type="text" id="ubicacion_evento" name="ubicacion_evento" required maxlength="100"
+                               placeholder="Ej: Parque Central">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancelar" onclick="cerrarModalCrearEvento()">Cancelar</button>
+                        <button type="submit" class="btn-crear-evento">Crear Evento</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

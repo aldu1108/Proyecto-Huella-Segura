@@ -504,5 +504,177 @@ function enviarComentario(textarea) {
         botonEnviar.disabled = false;
     });
 }
+// ===== FUNCIONES DE EVENTOS =====
 
-console.log('Funciones de comentarios cargadas correctamente');
+// Unirse o salirse de un evento
+function toggleParticipacion(boton) {
+    const eventoId = boton.getAttribute('data-evento-id');
+    const estaParticipando = boton.classList.contains('btn-joined');
+    
+    if (boton.disabled) return;
+    boton.disabled = true;
+    
+    const formData = new FormData();
+    formData.append('evento_id', eventoId);
+    formData.append('accion', estaParticipando ? 'salir' : 'unirse');
+    
+    fetch('ajax/toggle_participacion_evento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (estaParticipando) {
+                boton.classList.remove('btn-joined');
+                boton.textContent = 'Unirse al Evento';
+            } else {
+                boton.classList.add('btn-joined');
+                boton.textContent = 'Participando';
+            }
+            
+            const eventoCard = boton.closest('.evento-card');
+            const detalles = eventoCard.querySelector('.evento-details');
+            const match = detalles.textContent.match(/(\d+)\s+asistiran/);
+            if (match) {
+                const nuevoTexto = detalles.textContent.replace(match[1], data.total_participantes);
+                detalles.textContent = nuevoTexto;
+            }
+            
+            boton.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                boton.style.transform = 'scale(1)';
+            }, 200);
+            
+            alert(data.message);
+        } else {
+            alert(data.message || 'Error al procesar la participacion');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexion al procesar la participacion');
+    })
+    .finally(() => {
+        boton.disabled = false;
+    });
+}
+
+// ===== MODAL CREAR EVENTO =====
+
+function mostrarModalCrearEvento() {
+    const modal = document.getElementById('modalCrearEvento');
+    modal.style.display = 'block';
+    
+    // Establecer fecha mínima como hoy
+    const fechaInput = document.getElementById('fecha_evento');
+    const hoy = new Date().toISOString().split('T')[0];
+    fechaInput.min = hoy;
+}
+
+function cerrarModalCrearEvento() {
+    const modal = document.getElementById('modalCrearEvento');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Limpiar formulario
+    document.getElementById('formCrearEvento').reset();
+}
+
+function enviarEvento(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('formCrearEvento');
+    const btnSubmit = form.querySelector('.btn-crear-evento');
+    const textoOriginal = btnSubmit.textContent;
+    
+    // Validar campos
+    const titulo = document.getElementById('titulo_evento').value.trim();
+    const descripcion = document.getElementById('descripcion_evento').value.trim();
+    const fecha = document.getElementById('fecha_evento').value;
+    const hora = document.getElementById('hora_evento').value;
+    const ubicacion = document.getElementById('ubicacion_evento').value.trim();
+    
+    if (!titulo || !descripcion || !fecha || !hora || !ubicacion) {
+        alert('Por favor completa todos los campos obligatorios');
+        return false;
+    }
+    
+    // Validar que la fecha no sea pasada
+    const fechaEvento = new Date(fecha + ' ' + hora);
+    const ahora = new Date();
+    
+    if (fechaEvento < ahora) {
+        alert('La fecha y hora del evento no puede ser en el pasado');
+        return false;
+    }
+    
+    // Deshabilitar botón
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Creando...';
+    
+    // Enviar datos
+    const formData = new FormData(form);
+    
+    fetch('ajax/crear_evento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Evento creado exitosamente');
+            cerrarModalCrearEvento();
+            // Recargar página para mostrar el nuevo evento
+            location.reload();
+        } else {
+            alert(data.message || 'Error al crear el evento');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexión al crear el evento');
+    })
+    .finally(() => {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = textoOriginal;
+    });
+    
+    return false;
+}
+
+// Cerrar modal al hacer clic fuera
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('modalCrearEvento');
+    if (event.target === modal) {
+        cerrarModalCrearEvento();
+    }
+});
+
+// Navegación entre secciones
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.section-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const section = this.dataset.section;
+            
+            // Remover clase activa
+            document.querySelectorAll('.section-btn').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Ocultar todas las secciones
+            document.querySelectorAll('.feed-section, .eventos-section, .grupos-section').forEach(sec => sec.style.display = 'none');
+            
+            // Mostrar sección seleccionada
+            document.getElementById(section + 'Section').style.display = 'block';
+        });
+    });
+
+    // Auto-ocultar mensajes de éxito/error
+    setTimeout(function() {
+        const mensajes = document.querySelectorAll('.mensaje-exito, .mensaje-error');
+        mensajes.forEach(mensaje => {
+            mensaje.style.opacity = '0';
+            setTimeout(() => mensaje.remove(), 300);
+        });
+    }, 3000);
+});
