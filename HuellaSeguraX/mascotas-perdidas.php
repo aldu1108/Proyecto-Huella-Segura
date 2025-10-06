@@ -42,7 +42,8 @@ if ($rol_usuario === 'demo') {
 
 // Obtener reportes activos con información más completa
 $consulta_reportes = "SELECT p.*, pp.*, m.nombre_mascota, m.tipo, m.foto_mascota, m.sexo, m.edad_mascota,
-                             u.nombre_usuario, u.telefono_usuario, u.email_usuario
+                             u.nombre_usuario, u.telefono_usuario, u.email_usuario, u.foto_usuario,
+                             p.fecha as fecha_publicacion
                       FROM publicaciones p 
                       JOIN publicacion_perdida pp ON p.id_anuncio = pp.id_publicacion
                       JOIN mascotas m ON p.id_mascota = m.id_mascota
@@ -159,6 +160,26 @@ if (isset($_GET['error'])) {
             break;
     }
 }
+function tiempoTranscurrido($fecha)
+{
+    $ahora = new DateTime();
+    $fecha_pub = new DateTime($fecha);
+    $diferencia = $ahora->diff($fecha_pub);
+
+    if ($diferencia->y > 0) {
+        return $diferencia->y . ' año' . ($diferencia->y > 1 ? 's' : '');
+    } elseif ($diferencia->m > 0) {
+        return $diferencia->m . ' mes' . ($diferencia->m > 1 ? 'es' : '');
+    } elseif ($diferencia->d > 0) {
+        return $diferencia->d . ' día' . ($diferencia->d > 1 ? 's' : '');
+    } elseif ($diferencia->h > 0) {
+        return $diferencia->h . ' hora' . ($diferencia->h > 1 ? 's' : '');
+    } elseif ($diferencia->i > 0) {
+        return $diferencia->i . ' minuto' . ($diferencia->i > 1 ? 's' : '');
+    } else {
+        return 'Ahora mismo';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -260,6 +281,15 @@ if (isset($_GET['error'])) {
                                     <?php endif; ?>
                             
                                     <div class="contenido-reporte">
+                                        <!-- Nuevo header con info del usuario -->
+                                        <div class="header-usuario-reporte">
+                                            <div class="avatar-usuario-reporte" style="background-image: url('imagenes/<?php echo htmlspecialchars($reporte['foto_usuario'] ?? 'usuario-default.jpg'); ?>')"></div>
+                                            <div class="info-usuario-reporte">
+                                                <h4 class="nombre-usuario-reporte"><?php echo htmlspecialchars($reporte['nombre_usuario']); ?></h4>
+                                                <p class="tiempo-publicacion-reporte">Hace <?php echo tiempoTranscurrido($reporte['fecha_publicacion']); ?></p>
+                                            </div>
+                                        </div>
+
                                         <img src="<?php 
                                         if ($reporte['foto_mascota'] === 'mascota-default.jpg') {
                                             echo 'imagenes/mascota-default.jpg';
@@ -269,7 +299,7 @@ if (isset($_GET['error'])) {
                                         ?>" 
                                         alt="<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>" 
                                         class="foto-reporte">
-                                
+                                        
                                         <div class="info-reporte">
                                             <h4><?php echo htmlspecialchars($reporte['nombre_mascota']); ?></h4>
                                             <p><?php echo ucfirst($reporte['tipo']); ?> • <?php echo $reporte['sexo'] ? ucfirst($reporte['sexo']) : 'No especificado'; ?></p>

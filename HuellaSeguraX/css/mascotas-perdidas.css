@@ -423,3 +423,336 @@
 .info-mascota-editar strong {
     color: #2c3e50;
 }
+
+.tarjeta-reporte {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-reporte:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Badges superiores */
+.etiqueta-estado {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.etiqueta-recompensa {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+}
+
+/* Contenedor de imagen */
+.contenido-reporte {
+    display: flex;
+    flex-direction: column;
+}
+
+.foto-reporte {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Header del usuario */
+.header-usuario-reporte {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 12px;
+    background: white;
+}
+
+.avatar-usuario-reporte {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #f0f0f0;
+    flex-shrink: 0;
+}
+
+.info-usuario-reporte {
+    flex: 1;
+    min-width: 0;
+}
+
+.nombre-usuario-reporte {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tiempo-publicacion-reporte {
+    font-size: 12px;
+    color: #95a5a6;
+    margin: 2px 0 0 0;
+}
+
+/* Información de la mascota */
+.info-reporte {
+    padding: 0 20px 16px;
+}
+
+.info-reporte h4 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+}
+
+.info-reporte p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-reporte p strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Acciones del reporte */
+.acciones-reporte {
+    padding: 16px 20px;
+    border-top: 1px solid #ecf0f1;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: white;
+}
+
+/* Botones de acción - Estilo de adopciones */
+.acciones-reporte button {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.acciones-reporte button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.acciones-reporte button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Botón Encontrada - Verde */
+.boton-encontrado {
+    background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.25);
+}
+
+.boton-encontrado:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.35);
+}
+
+.boton-encontrado:active {
+    transform: translateY(0);
+}
+
+/* Botón Editar - Azul */
+.boton-editar-reporte {
+    background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.25);
+}
+
+.boton-editar-reporte:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.35);
+}
+
+.boton-editar-reporte:active {
+    transform: translateY(0);
+}
+
+/* Botón Eliminar - Rojo */
+.boton-eliminar-reporte {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
+}
+
+.boton-eliminar-reporte:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
+}
+
+.boton-eliminar-reporte:active {
+    transform: translateY(0);
+}
+
+/* Botón Contactar - Morado (principal) */
+.boton-contactar {
+    background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    font-size: 15px;
+    padding: 14px 24px;
+}
+
+.boton-contactar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+}
+
+.boton-contactar:active {
+    transform: translateY(0);
+}
+
+/* Botones secundarios (Compartir, Ver detalles) */
+.boton-compartir-reporte,
+.boton-ver-detalles {
+    background: white;
+    color: #2c3e50;
+    border: 2px solid #ecf0f1;
+    min-width: 48px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.boton-compartir-reporte:hover,
+.boton-ver-detalles:hover {
+    background: #f8f9fa;
+    border-color: #bdc3c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.boton-compartir-reporte:active,
+.boton-ver-detalles:active {
+    transform: translateY(0);
+}
+
+/* Grid de botones del propietario */
+.botones-propietario-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+}
+
+/* Mensaje de ayuda */
+.mensaje-ayuda {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #FFF9E6 0%, #FFF3D6 100%);
+    border-top: 2px solid #F39C12;
+    font-size: 13px;
+    color: #7f6b4d;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* Grid de reportes */
+.contenedor-reportes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedor-reportes {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .foto-reporte {
+        height: 240px;
+    }
+
+    .acciones-reporte {
+        flex-direction: column;
+    }
+
+    .acciones-reporte button {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .boton-compartir-reporte,
+    .boton-ver-detalles {
+        min-width: 100%;
+    }
+}
+
+/* Sin reportes */
+.sin-reportes {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.sin-reportes p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.sin-reportes p:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+}
