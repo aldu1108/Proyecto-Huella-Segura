@@ -102,22 +102,22 @@ $total_ayudas = $resultado_ayudas->fetch_assoc()['total'];
 if ($rol_usuario === 'demo') { 
     $resultado_posts = null; 
 } else { 
-    $consulta_posts = "SELECT p.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario, 
-        p.conteo_likes as total_likes, 
-        p.conteo_comentarios as total_comentarios, 
-        (SELECT COUNT(*) FROM likes_post WHERE id_post = p.id_post AND id_usuario = $usuario_id) as usuario_dio_like 
-        FROM post_comunidad p 
-        JOIN usuarios u ON p.id_usuario = u.id_usuario 
-        ORDER BY p.fecha DESC LIMIT 20"; 
+    $consulta_posts = "SELECT a.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario, 
+        a.conteo_likes as total_likes, 
+        a.conteo_comentarios as total_comentarios, 
+        (SELECT COUNT(*) FROM likes_post WHERE id_post = a.id_post AND id_usuario = $usuario_id) as usuario_dio_like 
+        FROM post_comunidad a 
+        JOIN usuarios u ON a.id_usuario = u.id_usuario 
+        ORDER BY a.fecha DESC LIMIT 20"; 
     
     $resultado_posts = $conexion->query($consulta_posts);
 }
 
 // Obtener eventos próximos REALES
 $consulta_eventos = "SELECT e.*, u.nombre_usuario, u.apellido_usuario,
-                     (SELECT COUNT(*) FROM participantes_evento WHERE id_evento = e.id_evento AND id_usuario = $usuario_id) as usuario_participa
+                     (SELECT COUNT(*) FROM asistentes_evento WHERE id_evento = e.id_evento AND id_usuario = $usuario_id) as usuario_participa
                      FROM eventos_comunidad e
-                     JOIN usuarios u ON e.id_creador = u.id_usuario
+                     JOIN usuarios u ON e.id_usuario = u.id_usuario
                      WHERE e.fecha >= NOW() AND e.estado = 'activo'
                      ORDER BY e.fecha ASC LIMIT 10";
 $resultado_eventos = $conexion->query($consulta_eventos);
@@ -424,7 +424,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                         <div class="evento-details">
                             🕐 <?php echo $fecha_evento->format('H:i'); ?> 
                             📍 <?php echo htmlspecialchars($evento['ubicacion']); ?> 
-                            👥 <?php echo $evento['contador_participantes']; ?> asistirán
+                            👥 <?php echo $evento['contador_asistentes']; ?> asistirán
                         </div>
                         <?php if ($rol_usuario == 'demo'): ?>
                             <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>

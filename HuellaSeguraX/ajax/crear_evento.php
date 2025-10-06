@@ -72,11 +72,36 @@ if ($fecha_evento_dt < $ahora) {
     exit();
 }
 
-// Insertar evento
+// SOLUCIÓN: Obtener una mascota válida del usuario para asociar al evento
+// Si el usuario no tiene mascotas, usar la primera mascota disponible o crear el evento sin mascota
+$sql_mascota = "SELECT id_mascota FROM mascotas WHERE id_usuario = $usuario_id AND estado = 'activo' LIMIT 1";
+$resultado_mascota = $conexion->query($sql_mascota);
+
+if ($resultado_mascota && $resultado_mascota->num_rows > 0) {
+    $mascota = $resultado_mascota->fetch_assoc();
+    $id_mascota = $mascota['id_mascota'];
+} else {
+    // Si no tiene mascotas, usar cualquier mascota activa del sistema
+    $sql_mascota_sistema = "SELECT id_mascota FROM mascotas WHERE estado = 'activo' LIMIT 1";
+    $resultado_sistema = $conexion->query($sql_mascota_sistema);
+    
+    if ($resultado_sistema && $resultado_sistema->num_rows > 0) {
+        $mascota = $resultado_sistema->fetch_assoc();
+        $id_mascota = $mascota['id_mascota'];
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'No hay mascotas disponibles en el sistema. Registra una mascota primero.'
+        ]);
+        exit();
+    }
+}
+
+// Insertar evento con mascota válida
 $sql = "INSERT INTO eventos_comunidad 
-        (titulo, fecha, hora, descripcion, ubicacion, estado, contador_participantes, id_mascota, id_creador) 
+        (titulo, fecha, hora, descripcion, ubicacion, estado, contador_asistentes, id_mascota, id_usuario) 
         VALUES 
-        ('$titulo', '$fecha_hora', '$hora', '$descripcion', '$ubicacion', 'activo', 0, 0, $usuario_id)";
+        ('$titulo', '$fecha_hora', '$hora', '$descripcion', '$ubicacion', 'activo', 0, $id_mascota, $usuario_id)";
 
 if ($conexion->query($sql)) {
     echo json_encode([

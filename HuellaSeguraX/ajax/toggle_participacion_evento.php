@@ -4,14 +4,7 @@ include_once('../config/conexion.php');
 
 header('Content-Type: application/json');
 
-// Verificar autenticación
-if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] === 'demo') {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Debes iniciar sesión para participar en eventos'
-    ]);
-    exit();
-}
+
 
 // Verificar datos
 if (!isset($_POST['evento_id']) || !isset($_POST['accion'])) {
@@ -44,7 +37,7 @@ $conexion->begin_transaction();
 try {
     if ($accion === 'unirse') {
         // Verificar que no esté ya participando
-        $consulta_existe = "SELECT id_participante FROM participantes_evento 
+        $consulta_existe = "SELECT id_asistente FROM asistentes_evento 
                            WHERE id_evento = $evento_id AND id_usuario = $usuario_id";
         $resultado_existe = $conexion->query($consulta_existe);
         
@@ -58,13 +51,13 @@ try {
         }
         
         // Insertar participación
-        $sql_insert = "INSERT INTO participantes_evento (id_evento, id_usuario, fecha_union) 
+        $sql_insert = "INSERT INTO asistentes_evento (id_evento, id_usuario, fecha_union) 
                       VALUES ($evento_id, $usuario_id, NOW())";
         $conexion->query($sql_insert);
         
         // Incrementar contador
         $sql_update = "UPDATE eventos_comunidad 
-                      SET contador_participantes = contador_participantes + 1 
+                      SET contador_asistentes = contador_asistentes + 1 
                       WHERE id_evento = $evento_id";
         $conexion->query($sql_update);
         
@@ -72,13 +65,13 @@ try {
         
     } else if ($accion === 'salir') {
         // Eliminar participación
-        $sql_delete = "DELETE FROM participantes_evento 
+        $sql_delete = "DELETE FROM asistentes_evento 
                       WHERE id_evento = $evento_id AND id_usuario = $usuario_id";
         $conexion->query($sql_delete);
         
         // Decrementar contador (sin bajar de 0)
         $sql_update = "UPDATE eventos_comunidad 
-                      SET contador_participantes = GREATEST(0, contador_participantes - 1) 
+                      SET contador_asistentes = GREATEST(0, contador_asistentes - 1) 
                       WHERE id_evento = $evento_id";
         $conexion->query($sql_update);
         
@@ -96,9 +89,9 @@ try {
     $conexion->commit();
     
     // Obtener el nuevo contador
-    $consulta_contador = "SELECT contador_participantes FROM eventos_comunidad WHERE id_evento = $evento_id";
+    $consulta_contador = "SELECT contador_asistentes FROM eventos_comunidad WHERE id_evento = $evento_id";
     $resultado_contador = $conexion->query($consulta_contador);
-    $total_participantes = $resultado_contador->fetch_assoc()['contador_participantes'];
+    $total_participantes = $resultado_contador->fetch_assoc()['contador_asistentes'];
     
     echo json_encode([
         'success' => true,
