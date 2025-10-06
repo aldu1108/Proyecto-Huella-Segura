@@ -2,53 +2,65 @@
 include_once('config/conexion.php');
 session_start();
 
-if (!isset($_SESSION['usuario_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: index.php");
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
     exit();
 }
 
 $usuario_id = $_SESSION['usuario_id'];
-$titulo = $conexion->real_escape_string(trim($_POST['titulo']));
-$descripcion = isset($_POST['descripcion']) ? $conexion->real_escape_string(trim($_POST['descripcion'])) : '';
-$fecha = $_POST['fecha'];
-$hora = $_POST['hora'];
-$fecha_hora = $fecha . ' ' . $hora . ':00';
 
-// Insertar recordatorio UNA SOLA VEZ
-$sql = "INSERT INTO recordatorios_personales (titulo, descripcion, fecha, id_usuario, completado) 
-        VALUES ('$titulo', '$descripcion', '$fecha_hora', $usuario_id, 0)";
+// Validar datos requeridos
+if (!isset($_POST['titulo']) || !isset($_POST['fecha']) || !isset($_POST['hora']) || !isset($_POST['mascotas'])) {
+    header("Location: index.php?error=datos_incompletos");
+    exit();
+}
 
-if ($conexion->query($sql)) {
+$titulo = $conexion->real_escape_string($_POST['titulo']);
+$descripcion = isset($_POST['descripcion']) ? $conexion->real_escape_string($_POST['descripcion']) : '';
+$fecha = $_POST['fecha'] . ' ' . $_POST['hora'] . ':00';
+$mascotas = $_POST['mascotas'];
+
+// Insertar recordatorio
+$consulta_recordatorio = "INSERT INTO recordatorios_personales (id_usuario, titulo, descripcion, fecha, completado) 
+                          VALUES ($usuario_id, '$titulo', '$descripcion', '$fecha', 0)";
+
+if ($conexion->query($consulta_recordatorio)) {
     $id_recordatorio = $conexion->insert_id;
     
-    // Asociar con mascotas si se seleccionaron
-    if (isset($_POST['mascotas']) && is_array($_POST['mascotas'])) {
-        foreach ($_POST['mascotas'] as $id_mascota) {
-            $id_mascota = (int)$id_mascota;
-            
-            // Verificar que no exista ya esta relación
-            $verificar = "SELECT id FROM recordatorio_mascota WHERE id_recordatorio = $id_recordatorio AND id_mascota = $id_mascota";
-            $resultado_verificar = $conexion->query($verificar);
-            
-            if ($resultado_verificar->num_rows == 0) {
-                $sql_rel = "INSERT INTO recordatorio_mascota (id_recordatorio, id_mascota) 
-                           VALUES ($id_recordatorio, $id_mascota)";
-                $conexion->query($sql_rel);
-            }
+    // Asociar con mascotas
+    $exito = true;
+    foreach ($mascotas as $id_mascota) {
+        $id_mascota = (int)$id_mascota;
+        $consulta_relacion = "INSERT INTO recordatorio_mascota (id_recordatorio, id_mascota) 
+                             VALUES ($id_recordatorio, $id_mascota)";
+        if (!$conexion->query($consulta_relacion)) {
+            $exito = false;
         }
     }
     
-    // Redireccionar según el origen
-    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'perfil-mascota.php') !== false) {
-        $id_mascota = isset($_POST['mascotas'][0]) ? $_POST['mascotas'][0] : 0;
-        header("Location: perfil-mascota.php?id=$id_mascota&recordatorio=agregado");
+    // Redirigir según contexto
+    if (count($mascotas) == 1) {
+        // Si es para una sola mascota, volver a su perfil
+        $mascota_id = $mascotas[0];
+        if ($exito) {
+            header("Location: perfil-mascota.php?id=$mascota_id&exito=recordatorio_agregado");
+        } else {
+            header("Location: perfil-mascota.php?id=$mascota_id&error=error_relacion");
+        }
     } else {
-        header("Location: index.php?recordatorio=agregado");
+        // Si es para múltiples mascotas, volver a la página principal
+        if ($exito) {
+            header("Location: index.php?exito=recordatorio_agregado");
+        } else {
+            header("Location: index.php?error=error_relacion");
+        }
     }
 } else {
-    header("Location: index.php?error=recordatorio");
+    if (isset($_POST['mascotas'][0])) {
+        $mascota_id = $_POST['mascotas'][0];
+        header("Location: perfil-mascota.php?id=$mascota_id&error=error_recordatorio");
+    } else {
+        header("Location: index.php?error=error_recordatorio");
+    }
 }
-
-cerrarConexion();
-exit();
 ?>
