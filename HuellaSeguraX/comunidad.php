@@ -121,6 +121,16 @@ $consulta_eventos = "SELECT e.*, u.nombre_usuario, u.apellido_usuario,
                      WHERE e.fecha >= NOW() AND e.estado = 'activo'
                      ORDER BY e.fecha ASC LIMIT 10";
 $resultado_eventos = $conexion->query($consulta_eventos);
+
+        // Obtener grupos de la comunidad
+$consulta_grupos = "SELECT g.*, u.nombre_usuario, u.apellido_usuario,
+                    (SELECT COUNT(*) FROM miembros_grupo WHERE id_grupo = g.id_grupo AND id_usuario = $usuario_id) as usuario_es_miembro
+                    FROM grupos_comunidad g
+                    JOIN usuarios u ON g.id_creador = u.id_usuario
+                    WHERE g.estado = 'activo'
+                    ORDER BY g.contador_miembros DESC LIMIT 20";
+$resultado_grupos = $conexion->query($consulta_grupos);
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -459,70 +469,47 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 </section>
 
         <!-- Sección Grupos -->
-        <section class="grupos-section" id="gruposSection" style="display: none;">
-            <div class="section-header">
-                <h3>Grupos Populares</h3>
-                <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear grupos\n\nRegístrate para poder:\n• Crear grupos temáticos\n• Moderar discusiones\n• Conectar con dueños similares')">Crear Grupo</button>
-                <?php else: ?>
-                    <button class="btn-create">Crear Grupo</button>
-                <?php endif; ?>
+<section class="grupos-section" id="gruposSection" style="display: none;">
+    <div class="section-header">
+        <h3>Grupos Populares</h3>
+        <?php if ($rol_usuario == 'demo'): ?>
+            <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear grupos')">Crear Grupo</button>
+        <?php else: ?>
+            <button class="btn-create" onclick="mostrarModalCrearGrupo()">Crear Grupo</button>
+        <?php endif; ?>
+    </div>
+
+    <div class="grupos-list">
+        <?php if ($rol_usuario !== 'demo' && $resultado_grupos && $resultado_grupos->num_rows > 0): ?>
+            <?php while ($grupo = $resultado_grupos->fetch_assoc()): ?>
+                <div class="grupo-card">
+                    <div class="grupo-icon"><?php echo $grupo['icono']; ?></div>
+                    <div class="grupo-info">
+                        <h4><?php echo htmlspecialchars($grupo['nombre_grupo']); ?></h4>
+                        <p><?php echo $grupo['contador_miembros']; ?> miembros</p>
+                        <p class="grupo-descripcion-mini"><?php echo htmlspecialchars(substr($grupo['descripcion'], 0, 60)); ?>...</p>
+                    </div>
+                    <button class="btn-join <?php echo $grupo['usuario_es_miembro'] > 0 ? 'btn-joined' : ''; ?>" 
+                            data-grupo-id="<?php echo $grupo['id_grupo']; ?>"
+                            onclick="toggleMiembroGrupo(this)">
+                        <?php echo $grupo['usuario_es_miembro'] > 0 ? '✓ Miembro' : 'Unirse'; ?>
+                    </button>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <!-- Grupos de ejemplo para demo -->
+            <div class="grupo-card">
+                <div class="grupo-icon">🐕</div>
+                <div class="grupo-info">
+                    <h4>Dueños de Golden Retriever</h4>
+                    <p>234 miembros</p>
+                </div>
+                <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos')">Unirse</button>
             </div>
+        <?php endif; ?>
+    </div>
+</section>
 
-            <div class="grupos-list">
-                <div class="grupo-card">
-                    <div class="grupo-icon">🐕</div>
-                    <div class="grupo-info">
-                        <h4>Dueños de Golden Retriever</h4>
-                        <p>234 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-
-                <div class="grupo-card">
-                    <div class="grupo-icon">🐱</div>
-                    <div class="grupo-info">
-                        <h4>Gatos de Madrid</h4>
-                        <p>189 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-
-                <div class="grupo-card">
-                    <div class="grupo-icon">🏥</div>
-                    <div class="grupo-info">
-                        <h4>Primeros Auxilios Pet</h4>
-                        <p>156 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-
-                <div class="grupo-card">
-                    <div class="grupo-icon">❤️</div>
-                    <div class="grupo-info">
-                        <h4>Adopción Responsable</h4>
-                        <p>203 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Modal de alerta para usuarios demo -->
@@ -646,6 +633,51 @@ $resultado_eventos = $conexion->query($consulta_eventos);
             </div>
         </div>
     </div>
+
+    <!-- Modal para crear grupo -->
+<div id="modalCrearGrupo" class="modal-crear-evento" style="display: none;">
+    <div class="modal-crear-evento-contenido">
+        <div class="modal-crear-evento-header">
+            <h3>Crear Nuevo Grupo</h3>
+            <button class="cerrar-modal-evento" onclick="cerrarModalCrearGrupo()">&times;</button>
+        </div>
+        <div class="modal-crear-evento-body">
+            <form id="formCrearGrupo" onsubmit="return enviarGrupo(event)">
+                <div class="form-group">
+                    <label for="nombre_grupo">Nombre del Grupo *</label>
+                    <input type="text" id="nombre_grupo" name="nombre_grupo" required maxlength="100" 
+                           placeholder="Ej: Amantes de los Beagles">
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion_grupo">Descripción *</label>
+                    <textarea id="descripcion_grupo" name="descripcion_grupo" required maxlength="500" 
+                              rows="4" placeholder="Describe el propósito del grupo"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="icono_grupo">Icono del Grupo *</label>
+                    <select id="icono_grupo" name="icono_grupo" required class="select-icono">
+                        <option value="🐕">🐕 Perro</option>
+                        <option value="🐱">🐱 Gato</option>
+                        <option value="🐾">🐾 Huellas</option>
+                        <option value="❤️">❤️ Corazón</option>
+                        <option value="🏥">🏥 Veterinaria</option>
+                        <option value="🎓">🎓 Educación</option>
+                        <option value="🏃">🏃 Actividad</option>
+                        <option value="👥">👥 Comunidad</option>
+                        <option value="🌟">🌟 Especial</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalCrearGrupo()">Cancelar</button>
+                    <button type="submit" class="btn-crear-evento">Crear Grupo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- Navegación inferior -->
     <nav>

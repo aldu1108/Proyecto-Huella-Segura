@@ -678,3 +678,97 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 3000);
 });
+
+// ===== FUNCIONES DE GRUPOS =====
+function toggleMiembroGrupo(boton) {
+    const grupoId = boton.getAttribute('data-grupo-id');
+    const esMiembro = boton.classList.contains('btn-joined');
+    
+    if (boton.disabled) return;
+    boton.disabled = true;
+    
+    const formData = new FormData();
+    formData.append('grupo_id', grupoId);
+    formData.append('accion', esMiembro ? 'salir' : 'unirse');
+    
+    fetch('ajax/toggle_miembro_grupo.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (esMiembro) {
+                boton.classList.remove('btn-joined');
+                boton.textContent = 'Unirse';
+            } else {
+                boton.classList.add('btn-joined');
+                boton.textContent = 'Miembro';
+            }
+            
+            const grupoCard = boton.closest('.grupo-card');
+            const miembrosP = grupoCard.querySelector('.grupo-info p');
+            miembrosP.textContent = data.total_miembros + ' miembros';
+            
+            alert(data.message);
+        } else {
+            alert(data.message || 'Error al procesar');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexion');
+    })
+    .finally(() => {
+        boton.disabled = false;
+    });
+}
+
+function mostrarModalCrearGrupo() {
+    const modal = document.getElementById('modalCrearGrupo');
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalCrearGrupo() {
+    const modal = document.getElementById('modalCrearGrupo');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    document.getElementById('formCrearGrupo').reset();
+}
+
+function enviarGrupo(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('formCrearGrupo');
+    const btnSubmit = form.querySelector('.btn-crear-evento');
+    
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Creando...';
+    
+    const formData = new FormData(form);
+    
+    fetch('ajax/crear_grupo.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Grupo creado exitosamente');
+            location.reload();
+        } else {
+            alert(data.message || 'Error al crear el grupo');
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'Crear Grupo';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexion');
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Crear Grupo';
+    });
+    
+    return false;
+}
