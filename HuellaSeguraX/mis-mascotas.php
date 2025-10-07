@@ -124,7 +124,7 @@ if (isset($_GET['error'])) {
             <div class="mascotas-grid">
                 <?php if ($resultado_mascotas && $resultado_mascotas->num_rows > 0): ?>
                         <?php while ($mascota = $resultado_mascotas->fetch_assoc()): ?>
-                                <div class="mascota-card">
+                                <div class="mascota-card" onclick="window.location.href='perfil-mascota.php?id=<?php echo $mascota['id_mascota']; ?>'">
                                     <img src="imagenes/<?php echo htmlspecialchars($mascota['foto_mascota']); ?>" 
                                          alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>" 
                                          class="mascota-photo"

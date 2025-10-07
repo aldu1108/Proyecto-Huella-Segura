@@ -1046,3 +1046,81 @@
     transform: scale(1.1);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+.evento-hoy[onclick] {
+    cursor: pointer;
+    position: relative;
+}
+
+.evento-hoy[onclick]:hover {
+    background: rgba(255, 235, 200, 0.9);
+    transform: translateX(4px);
+}
+
+.evento-hoy[onclick]::after {
+    content: '→';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--color-primario);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.evento-hoy[onclick]:hover::after {
+    opacity: 1;
+}
+
+/* Ajustes para eventos con acciones */
+.evento-hoy .acciones-evento {
+    margin-left: auto;
+}
+
+/* Mensaje de éxito para peso actualizado */
+.mensaje-exito {
+    animation: slideInDown 0.3s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.acciones-evento,
+.acciones-urgente,
+.acciones-proximo {
+    position: relative;
+    z-index: 10;
+}
+
+.btn-accion-evento,
+.btn-accion-pequeno,
+.btn-accion-mini {
+    position: relative;
+    z-index: 11;
+}
+
+/* Estilo para eventos vencidos */
+.evento-vencido {
+    opacity: 0.6;
+    background: #f8f9fa !important;
+}
+
+.evento-vencido .titulo-evento {
+    text-decoration: line-through;
+    color: #999 !important;
+}
+
+.estado-vencido {
+    background: #6c757d;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}

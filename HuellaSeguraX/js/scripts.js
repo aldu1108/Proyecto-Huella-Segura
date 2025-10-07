@@ -139,6 +139,10 @@ const meses = [
 ];
 
 function initCalendario() {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+    
     const diasCalendario = document.getElementById('diasCalendario');
     if (diasCalendario) {
         generarCalendario(mesActual, añoActual);
@@ -146,6 +150,10 @@ function initCalendario() {
 }
 
 function generarCalendario(mes, año) {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+
     const primerDia = new Date(año, mes, 1).getDay();
     const diasEnMes = new Date(año, mes + 1, 0).getDate();
     const hoy = new Date();
@@ -193,6 +201,10 @@ function generarCalendario(mes, año) {
 }
 
 function cambiarMes(direccion) {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+
     mesActual += direccion;
     if (mesActual > 11) {
         mesActual = 0;
@@ -205,6 +217,10 @@ function cambiarMes(direccion) {
 }
 
 function seleccionarDia(dia) {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+    
     document.querySelectorAll('.dia-calendario.seleccionado').forEach(d => 
         d.classList.remove('seleccionado')
     );
@@ -434,6 +450,22 @@ function mostrarModalRecordatorio() {
 
 function cerrarModalRecordatorio() {
     document.getElementById('modalRecordatorio').style.display = 'none';
+}
+
+// Función toggle password
+function togglePassword(button) {
+  const input = button.previousElementSibling;
+  const icon = button.querySelector('i');
+
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
 }
 
 console.log('Scripts de Huella Segura cargados completamente');

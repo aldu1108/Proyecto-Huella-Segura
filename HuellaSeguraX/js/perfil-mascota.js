@@ -1,3 +1,7 @@
+// Prevenir que scripts.js sobrescriba las funciones del perfil
+(function() {
+    'use strict';
+
 // ==========================================
 // GESTIÓN DE MODALES
 // ==========================================
@@ -221,21 +225,42 @@ function mostrarEventosDia(fecha, dia) {
     
     let html = '';
     eventos.forEach(evento => {
-        const icono = evento.tipo === 'recordatorio' ? '📝' : '💊';
-        const tipoTexto = evento.tipo === 'recordatorio' ? 'Recordatorio' : 'Cita';
-        const hora = new Date(evento.fecha).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'});
+        let icono = '📝';
+        let tipoTexto = 'Recordatorio';
+        
+        if (evento.tipo === 'recordatorio') {
+            icono = '📝';
+            tipoTexto = 'Recordatorio';
+        } else if (evento.tipo === 'cita') {
+            icono = '💊';
+            tipoTexto = 'Cita Veterinaria';
+        } else if (evento.tipo === 'evento') {
+            icono = '🎉';
+            tipoTexto = 'Evento Comunidad';
+        }
+        
+        // Obtener hora del evento
+        const fechaEvento = new Date(evento.fecha);
+        const hora = fechaEvento.toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'});
+        
+        // Verificar si está vencido
+        const ahora = new Date();
+        const esVencido = fechaEvento < ahora;
+        const claseVencido = esVencido ? 'evento-vencido' : '';
         
         html += `
-            <div class="evento-hoy">
+            <div class="evento-hoy ${claseVencido}" ${evento.tipo === 'cita' ? 'onclick="window.location.href=\'veterinaria.php\'" style="cursor: pointer;"' : ''}>
                 <div class="icono-evento">${icono}</div>
                 <div class="info-evento">
                     <div class="titulo-evento">${evento.titulo}</div>
                     <div class="detalles-evento">${tipoTexto} • ${hora}</div>
                 </div>
-                <div class="acciones-evento">
-                    <button class="btn-accion-evento btn-editar" onclick="editarEvento('${evento.tipo}', ${evento.id_evento})" title="Editar">✏️</button>
-                    <button class="btn-accion-evento btn-eliminar" onclick="eliminarEvento('${evento.tipo}', ${evento.id_evento})" title="Eliminar">🗑️</button>
-                </div>
+                ${evento.tipo === 'recordatorio' ? `
+                    <div class="acciones-evento" onclick="event.stopPropagation()">
+                        <button class="btn-accion-evento btn-editar" onclick="event.stopPropagation(); editarEvento('${evento.tipo}', ${evento.id_evento})" title="Editar">✏️</button>
+                        <button class="btn-accion-evento btn-eliminar" onclick="event.stopPropagation(); eliminarEvento('${evento.tipo}', ${evento.id_evento})" title="Eliminar">🗑️</button>
+                    </div>
+                ` : ''}
             </div>
         `;
     });
@@ -248,6 +273,8 @@ function mostrarEventosDia(fecha, dia) {
 // ==========================================
 
 function editarEvento(tipo, id) {
+    event.stopPropagation();
+
     if (tipo === 'recordatorio') {
         fetch(`obtener-recordatorio.php?id=${id}`)
             .then(response => response.json())
@@ -296,6 +323,8 @@ function editarEvento(tipo, id) {
 }
 
 function eliminarEvento(tipo, id) {
+    event.stopPropagation();
+
     const mensaje = tipo === 'recordatorio' ? 'recordatorio' : 'cita';
     const confirmacion = confirm(`¿Estás seguro de que deseas eliminar este ${mensaje}?`);
     
@@ -419,16 +448,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
 });
 
-window.mostrarModalEditar = mostrarModalEditar;
-window.cerrarModalEditar = cerrarModalEditar;
-window.mostrarModalPeso = mostrarModalPeso;
-window.cerrarModalPeso = cerrarModalPeso;
-window.mostrarModalRecordatorio = mostrarModalRecordatorio;
-window.cerrarModalRecordatorio = cerrarModalRecordatorio;
-window.previsualizarFoto = previsualizarFoto;
-window.cambiarMes = cambiarMes;
-window.seleccionarDia = seleccionarDia;
-window.editarEvento = editarEvento;
-window.eliminarEvento = eliminarEvento;
-window.editarPeso = editarPeso;
-window.eliminarPeso = eliminarPeso;
+if (typeof window.perfilMascotaPage === 'undefined') {
+    window.perfilMascotaPage = true;
+    
+    window.mostrarModalEditar = mostrarModalEditar;
+    window.cerrarModalEditar = cerrarModalEditar;
+    window.mostrarModalPeso = mostrarModalPeso;
+    window.cerrarModalPeso = cerrarModalPeso;
+    window.mostrarModalRecordatorio = mostrarModalRecordatorio;
+    window.cerrarModalRecordatorio = cerrarModalRecordatorio;
+    window.previsualizarFoto = previsualizarFoto;
+    window.cambiarMes = cambiarMes;
+    window.seleccionarDia = seleccionarDia;
+    window.editarEvento = editarEvento;
+    window.eliminarEvento = eliminarEvento;
+    window.editarPeso = editarPeso;
+    window.eliminarPeso = eliminarPeso;
+}
+})();

@@ -2,18 +2,24 @@
 include_once('config/conexion.php');
 session_start();
 
-if (!isset($_SESSION['usuario_id']) || !isset($_GET['id'])) {
+if (!isset($_SESSION['usuario_id']) || !isset($_POST['id_recordatorio'])) {
     header("Location: mis-mascotas.php");
     exit();
 }
 
-$id = (int)$_GET['id'];
+$id = (int)$_POST['id_recordatorio'];
 $usuario_id = $_SESSION['usuario_id'];
-$mascota_id = isset($_POST['mascotas'][0]) ? (int)$_POST['mascotas'][0] : 0;
 
 $titulo = $conexion->real_escape_string($_POST['titulo']);
 $descripcion = $conexion->real_escape_string($_POST['descripcion']);
-$fecha = $_POST['fecha'] . ' ' . $_POST['hora'];
+$fecha = $_POST['fecha'] . ' ' . $_POST['hora'] . ':00';
+
+// Obtener la mascota asociada al recordatorio
+$consulta_mascota = "SELECT rm.id_mascota FROM recordatorio_mascota rm 
+                     JOIN recordatorios_personales r ON rm.id_recordatorio = r.id_recordatorio
+                     WHERE r.id_recordatorio = $id AND r.id_usuario = $usuario_id LIMIT 1";
+$resultado_mascota = $conexion->query($consulta_mascota);
+$mascota_id = $resultado_mascota->num_rows > 0 ? $resultado_mascota->fetch_assoc()['id_mascota'] : 0;
 
 $consulta = "UPDATE recordatorios_personales 
              SET titulo = '$titulo', descripcion = '$descripcion', fecha = '$fecha'
@@ -24,4 +30,5 @@ if ($conexion->query($consulta)) {
 } else {
     header("Location: perfil-mascota.php?id=$mascota_id&error=error_actualizar");
 }
+exit();
 ?>

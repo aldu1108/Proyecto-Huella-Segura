@@ -1,6 +1,10 @@
 <?php
 include_once('config/conexion.php');
+include_once('config/timezone.php');
 session_start();
+
+// Configurar zona horaria del servidor para evitar problemas de fecha
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
@@ -21,7 +25,10 @@ if (!$resultado_mascota || $resultado_mascota->num_rows == 0) {
 
 $mascota = $resultado_mascota->fetch_assoc();
 $fecha_hoy = date('Y-m-d');
+$hora_actual = date('Y-m-d H:i:s');
 $fecha_fin_semana = date('Y-m-d', strtotime('+7 days'));
+$fecha_inicio_dia = date('Y-m-d 00:00:00');
+$fecha_fin_dia = date('Y-m-d 23:59:59');
 
 // Obtener datos de seguimiento de peso
 $consulta_peso = "SELECT * FROM seguimiento_peso WHERE id_mascota = $mascota_id ORDER BY fecha ASC";
@@ -71,29 +78,31 @@ if ($resultado_dias_mascota) {
 }
 
 // Obtener eventos de hoy (citas + recordatorios)
-$consulta_eventos_hoy = "(SELECT 'cita' as tipo, motivo as titulo, fecha, id_cita as id_evento
+$consulta_eventos_hoy = "(SELECT DISTINCT 'cita' as tipo, motivo as titulo, fecha, id_cita as id_evento
                          FROM citas_veterinarias 
                          WHERE id_mascota = $mascota_id 
-                         AND DATE(fecha) = '$fecha_hoy' 
+                         AND fecha >= '$fecha_inicio_dia'
+                         AND fecha <= '$fecha_fin_dia'
                          AND estado != 'completada')
                         UNION
-                        (SELECT 'recordatorio' as tipo, r.titulo, r.fecha, r.id_recordatorio as id_evento
+                        (SELECT DISTINCT 'recordatorio' as tipo, r.titulo, r.fecha, r.id_recordatorio as id_evento
                          FROM recordatorios_personales r
                          JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
                          WHERE rm.id_mascota = $mascota_id
                          AND r.id_usuario = $usuario_id
-                         AND DATE(r.fecha) = '$fecha_hoy'
+                         AND r.fecha >= '$fecha_inicio_dia'
+                         AND r.fecha <= '$fecha_fin_dia'
                          AND r.completado = 0)
                         ORDER BY fecha ASC";
 $resultado_eventos_hoy = $conexion->query($consulta_eventos_hoy);
 
 // Obtener TODOS los eventos del mes para el calendario interactivo
-$consulta_eventos_mes = "(SELECT 'cita' as tipo, motivo as titulo, fecha, id_cita as id_evento, id_mascota
+$consulta_eventos_mes = "(SELECT DISTINCT 'cita' as tipo, motivo as titulo, fecha, id_cita as id_evento, id_mascota
                           FROM citas_veterinarias 
                           WHERE id_mascota = $mascota_id 
                           AND estado != 'completada')
                          UNION
-                         (SELECT 'recordatorio' as tipo, r.titulo, r.fecha, r.id_recordatorio as id_evento, $mascota_id as id_mascota
+                         (SELECT DISTINCT 'recordatorio' as tipo, r.titulo, r.fecha, r.id_recordatorio as id_evento, $mascota_id as id_mascota
                           FROM recordatorios_personales r
                           JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
                           WHERE rm.id_mascota = $mascota_id
@@ -110,19 +119,56 @@ if ($resultado_eventos_mes) {
     }
 }
 
+// Obtener citas de esta mascota
+$consulta_citas_mes = "SELECT 'cita' as tipo, c.motivo as titulo, c.fecha, c.id_cita as id_evento, c.id_mascota
+                       FROM citas_veterinarias c
+                       WHERE c.id_mascota = $mascota_id
+                       AND c.estado != 'completada'
+                       AND c.estado != 'cancelada'
+                       AND c.estado != 'rechazada'";
+$resultado_citas_mes = $conexion->query($consulta_citas_mes);
+if ($resultado_citas_mes) {
+    while($cita = $resultado_citas_mes->fetch_assoc()) {
+        $eventos_mes[] = $cita;
+    }
+}
+
+// Obtener eventos de comunidad del usuario
+$consulta_eventos_comunidad = "SELECT 'evento' as tipo, e.titulo, e.fecha, e.id_evento, $mascota_id as id_mascota
+                               FROM eventos_comunidad e
+                               JOIN asistentes_evento ae ON e.id_evento = ae.id_evento
+                               WHERE ae.id_usuario = $usuario_id
+                               AND e.estado = 'activo'";
+$resultado_eventos_comunidad = $conexion->query($consulta_eventos_comunidad);
+if ($resultado_eventos_comunidad) {
+    while($evento = $resultado_eventos_comunidad->fetch_assoc()) {
+        $eventos_mes[] = $evento;
+    }
+}
+
 // Obtener eventos de comunidad
-$consulta_eventos = "SELECT e.* FROM eventos_comunidad e
-                     JOIN asistentes_evento ae ON e.id_evento = ae.id_evento
-                     WHERE ae.id_usuario = $usuario_id 
-                     AND DATE(e.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana'
-                     ORDER BY e.fecha ASC LIMIT 5";
+$consulta_eventos = "(SELECT 'evento' as tipo, e.titulo, e.fecha, e.id_evento
+                      FROM eventos_comunidad e
+                      JOIN asistentes_evento ae ON e.id_evento = ae.id_evento
+                      WHERE ae.id_usuario = $usuario_id 
+                      AND e.fecha > '$hora_actual'
+                      AND e.fecha <= DATE_ADD('$hora_actual', INTERVAL 7 DAY)
+                      AND e.estado = 'activo')
+                     UNION
+                     (SELECT 'cita' as tipo, c.motivo as titulo, c.fecha, c.id_cita as id_evento
+                      FROM citas_veterinarias c
+                      WHERE c.id_mascota = $mascota_id
+                      AND c.fecha > '$hora_actual'
+                      AND c.fecha <= DATE_ADD('$hora_actual', INTERVAL 7 DAY)
+                      AND c.estado != 'completada' AND c.estado != 'cancelada')
+                     ORDER BY fecha ASC LIMIT 5";
 $resultado_eventos = $conexion->query($consulta_eventos);
 
 // Obtener próximas citas
 $consulta_citas_proximas = "SELECT * FROM citas_veterinarias 
                             WHERE id_mascota = $mascota_id 
-                            AND fecha > '$fecha_hoy' 
-                            AND fecha <= '$fecha_fin_semana'
+                            AND fecha > '$hora_actual'
+                            AND fecha <= DATE_ADD('$hora_actual', INTERVAL 7 DAY)
                             AND estado != 'completada'
                             ORDER BY fecha ASC LIMIT 3";
 $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
@@ -151,6 +197,7 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                 echo match($_GET['exito']) {
                     'perfil_actualizado' => '✓ Perfil actualizado correctamente',
                     'peso_agregado' => '✓ Peso registrado correctamente',
+                    'peso_actualizado' => '✓ Peso actualizado correctamente',
                     default => '✓ Operación exitosa'
                 };
                 ?>
@@ -250,13 +297,17 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                         while($evento = $resultado_eventos_hoy->fetch_assoc()): 
                             $es_urgente = ($evento['tipo'] == 'cita' && in_array($evento['titulo'], ['Urgencia', 'Vacunación']));
                     ?>
-                        <div class="evento-hoy <?php echo $es_urgente ? 'urgente' : ''; ?>">
+                        <div class="evento-hoy <?php echo $es_urgente ? 'urgente' : ''; ?>" 
+                        onclick="<?php echo $evento['tipo'] == 'cita' ? 'window.location.href=\'veterinaria.php\'' : ''; ?>" 
+                        style="<?php echo $evento['tipo'] == 'cita' ? 'cursor: pointer;' : ''; ?>">
                             <div class="icono-evento">
                                 <?php 
                                 if ($evento['tipo'] == 'recordatorio') {
                                     echo '📝';
                                 } else {
-                                    echo match($evento['titulo']) {
+                                    // Para citas, usar el campo 'motivo' en lugar de 'titulo'
+                                    $motivo = $evento['titulo'];
+                                    echo match($motivo) {
                                         'Vacunación' => '💉',
                                         'Análisis' => '🧪',
                                         'Cirugía' => '🏥',
@@ -274,10 +325,12 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                                     <?php echo date('H:i', strtotime($evento['fecha'])); ?>
                                 </div>
                             </div>
-                            <div class="acciones-evento">
-                                <button class="btn-accion-evento btn-editar" onclick="editarEvento('<?php echo $evento['tipo']; ?>', <?php echo $evento['id_evento']; ?>)" title="Editar">✏️</button>
-                                <button class="btn-accion-evento btn-eliminar" onclick="eliminarEvento('<?php echo $evento['tipo']; ?>', <?php echo $evento['id_evento']; ?>)" title="Eliminar">🗑️</button>
-                            </div>
+                            <?php if ($evento['tipo'] == 'recordatorio'): ?>
+                                <div class="acciones-evento">
+                                    <button class="btn-accion-evento btn-editar" onclick="editarEvento('<?php echo $evento['tipo']; ?>', <?php echo $evento['id_evento']; ?>)" title="Editar">✏️</button>
+                                    <button class="btn-accion-evento btn-eliminar" onclick="eliminarEvento('<?php echo $evento['tipo']; ?>', <?php echo $evento['id_evento']; ?>)" title="Eliminar">🗑️</button>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endwhile; else: ?>
                         <div class="sin-eventos" id="sinEventos">
@@ -292,11 +345,21 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                     <h4 class="titulo-proximos">Próximos eventos</h4>
                     <?php if ($resultado_eventos && $resultado_eventos->num_rows > 0): 
                         while($evento = $resultado_eventos->fetch_assoc()): 
-                            $fecha_evento = new DateTime($evento['fecha']);
-                            $diff = (new DateTime())->diff($fecha_evento);
+                        $fecha_evento = new DateTime($evento['fecha']);
+                        $diff = (new DateTime())->diff($fecha_evento);
                     ?>
-                        <div class="evento-proximo">
-                            <div class="info-evento-proximo">🎉 <?php echo htmlspecialchars($evento['titulo']); ?></div>
+                        <div class="evento-proximo" onclick="window.location.href='veterinaria.php'" style="cursor: pointer;">
+                            <div class="info-evento-proximo">
+                                <?php 
+                                if ($evento['tipo'] === 'evento') {
+                                    echo '🎉 ' . htmlspecialchars($evento['titulo']);
+                                } elseif ($evento['tipo'] === 'cita') {
+                                    echo '💊 Cita: ' . htmlspecialchars($evento['titulo']);
+                                } else {
+                                    echo '📝 ' . htmlspecialchars($evento['titulo']);
+                                }
+                                ?>
+                            </div>
                             <div class="fecha-evento-proximo">
                                 <?php 
                                 if ($diff->days == 0) echo "Hoy • " . $fecha_evento->format('H:i');
@@ -328,18 +391,20 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
             <div class="urgente-list">
                 <?php 
                 // Solo recordatorios de HOY
-                $consulta_recordatorios_hoy = "(SELECT 'recordatorio' as tipo, r.titulo, r.descripcion, r.fecha, r.id_recordatorio as id_evento
+                $consulta_recordatorios_hoy = "(SELECT DISTINCT 'recordatorio' as tipo, r.titulo, r.descripcion, r.fecha, r.id_recordatorio as id_evento
                                                 FROM recordatorios_personales r
                                                 JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
                                                 WHERE rm.id_mascota = $mascota_id
                                                 AND r.id_usuario = $usuario_id
-                                                AND DATE(r.fecha) = '$fecha_hoy'
+                                                AND r.fecha >= '$fecha_inicio_dia'
+                                                AND r.fecha <= '$fecha_fin_dia'
                                                 AND r.completado = 0)
                                             UNION
-                                            (SELECT 'cita' as tipo, motivo as titulo, NULL as descripcion, fecha, id_cita as id_evento
+                                            (SELECT DISTINCT 'cita' as tipo, motivo as titulo, NULL as descripcion, fecha, id_cita as id_evento
                                                 FROM citas_veterinarias 
                                                 WHERE id_mascota = $mascota_id 
-                                                AND DATE(fecha) = '$fecha_hoy' 
+                                                AND fecha >= '$fecha_inicio_dia'
+                                                AND fecha <= '$fecha_fin_dia'
                                                 AND estado != 'completada')
                                             ORDER BY fecha ASC";
                 $resultado_recordatorios_hoy = $conexion->query($consulta_recordatorios_hoy);
@@ -358,7 +423,9 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                             $texto_descripcion = 'Cita veterinaria';
                         }
                 ?>
-                    <div class="urgente-item <?php echo $es_urgente ? 'urgente' : ''; ?>">
+                    <div class="urgente-item <?php echo $es_urgente ? 'urgente' : ''; ?>" 
+                    onclick="<?php echo $item['tipo'] == 'cita' ? 'window.location.href=\'veterinaria.php\'' : ''; ?>" 
+                    style="<?php echo $item['tipo'] == 'cita' ? 'cursor: pointer;' : ''; ?>">
                         <div class="urgente-info">
                             <span class="mascota-name">
                                 <?php echo $item['tipo'] == 'recordatorio' ? '📝 ' : '💊 '; ?>
@@ -369,10 +436,12 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                                 <?php echo $texto_descripcion; ?>
                             </span>
                         </div>
-                        <div class="acciones-urgente">
-                            <button class="btn-accion-pequeno btn-editar" onclick="editarEvento('<?php echo $item['tipo']; ?>', <?php echo $item['id_evento']; ?>)" title="Editar">✏️</button>
-                            <button class="btn-accion-pequeno btn-eliminar" onclick="eliminarEvento('<?php echo $item['tipo']; ?>', <?php echo $item['id_evento']; ?>)" title="Eliminar">🗑️</button>
-                        </div>
+                        <?php if ($item['tipo'] == 'recordatorio'): ?>
+                            <div class="acciones-urgente">
+                                <button class="btn-accion-pequeno btn-editar" onclick="editarEvento('<?php echo $item['tipo']; ?>', <?php echo $item['id_evento']; ?>)" title="Editar">✏️</button>
+                                <button class="btn-accion-pequeno btn-eliminar" onclick="eliminarEvento('<?php echo $item['tipo']; ?>', <?php echo $item['id_evento']; ?>)" title="Eliminar">🗑️</button>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endwhile; else: ?>
                     <div class="sin-eventos">
@@ -385,17 +454,17 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
             <div class="proximamente">
                 <h4>📅 Próximamente</h4>
                 <?php 
-                // Solo RECORDATORIOS futuros (DESPUÉS de hoy, no incluir hoy)
+                // RECORDATORIOS futuros (DESPUÉS de hoy)
                 $consulta_recordatorios_futuros = "SELECT 'recordatorio' as tipo, r.titulo, r.fecha, r.id_recordatorio as id_evento
-                                                FROM recordatorios_personales r
-                                                JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
-                                                WHERE rm.id_mascota = $mascota_id
-                                                AND r.id_usuario = $usuario_id
-                                                AND r.fecha > '$fecha_hoy 23:59:59'
-                                                AND r.fecha <= '$fecha_fin_semana'
-                                                AND r.completado = 0
-                                                ORDER BY r.fecha ASC
-                                                LIMIT 5";
+                                FROM recordatorios_personales r
+                                JOIN recordatorio_mascota rm ON r.id_recordatorio = rm.id_recordatorio
+                                WHERE rm.id_mascota = $mascota_id
+                                AND r.id_usuario = $usuario_id
+                                AND r.fecha > '$hora_actual'
+                                AND r.fecha <= DATE_ADD('$hora_actual', INTERVAL 7 DAY)
+                                AND r.completado = 0
+                                ORDER BY r.fecha ASC
+                                LIMIT 5";
                 
                 $resultado_recordatorios_futuros = $conexion->query($consulta_recordatorios_futuros);
                 
@@ -413,7 +482,7 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
                         </div>
                     </div>
                 <?php endwhile; else: ?>
-                    <div class="sin-eventos-proximos">Sin recordatorios próximos</div>
+                    <div class="sin-eventos-proximos">Sin recordatorios próximos esta semana</div>
                 <?php endif; ?>
             </div>
         </section>
@@ -662,8 +731,8 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
-    <script src="js/perfil-mascota.js"></script>
     <script src="js/scripts.js"></script>
+    <script src="js/perfil-mascota.js"></script>
     <script>
     window.mascotaData = {
         diasConEventos: <?php echo json_encode($dias_con_eventos_mascota); ?>,

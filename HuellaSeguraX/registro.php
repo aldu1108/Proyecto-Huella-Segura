@@ -56,6 +56,7 @@ if ($_POST) {
     <title>Registrarse - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/registro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php include_once("includes/logo.php"); ?>
 </head>
 <body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
@@ -101,16 +102,22 @@ if ($_POST) {
             </div>
             
             <div class="input-group">
-                <input type="tel" name="telefono_usuario" class="login-input" placeholder="Teléfono (opcional)" 
+                <input type="tel" name="telefono_usuario" class="login-input" placeholder="Teléfono" required 
                        value="<?php echo isset($_POST['telefono_usuario']) ? $_POST['telefono_usuario'] : ''; ?>">
             </div>
             
             <div class="input-group">
                 <input type="password" name="contraseña_usuario" class="login-input" placeholder="Contraseña (mín. 6 caracteres)" required>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
             </div>
             
             <div class="input-group">
                 <input type="password" name="confirmar_contraseña" class="login-input" placeholder="Confirmar contraseña" required>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
             </div>
             
             <div class="terms-checkbox">

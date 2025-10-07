@@ -1,58 +1,54 @@
 function verUsuarios() {
-    mostrarMensaje('✅ Función de gestión de usuarios - Por implementar', 'info');
+    window.location.href = 'admin-usuarios.php';
 }
 
 function verVeterinarios() {
-    mostrarMensaje('✅ Función de verificación de veterinarios - Por implementar', 'info');
+    window.location.href = 'admin-veterinarios.php';
 }
 
 function verReportes() {
-    mostrarMensaje('✅ Función de reportes del sistema - Por implementar', 'info');
+    window.location.href = 'admin-reportes.php';
 }
 
 function configurarSistema() {
-    mostrarMensaje('✅ Función de configuración del sistema - Por implementar', 'info');
+    mostrarMensaje('Configuración del sistema - Próximamente', 'info');
 }
 
 function verUsuario(email) {
-    mostrarMensaje(`📋 Viendo usuario: ${email}`, 'info');
+    mostrarMensaje('Ver detalles de: ' + email, 'info');
 }
 
 function editarUsuario(email) {
-    mostrarMensaje(`✏️ Editando usuario: ${email}`, 'warning');
+    mostrarMensaje('Editar usuario: ' + email, 'info');
 }
 
-function aprobarVeterinario(email) {
-    // Función removida - ahora se usa enlace directo
-}
-
-function rechazarVeterinario(email) {
-    // Función removida - ahora se usa enlace directo
-}
-
-function mostrarMensaje(mensaje, tipo) {
-    const div = document.createElement('div');
-    div.className = `mensaje-admin mensaje-${tipo}`;
-    div.innerHTML = `
-        <span>${mensaje}</span>
-        <button onclick="this.parentElement.remove()">✕</button>
+// Función para mensajes
+function mostrarMensaje(texto, tipo) {
+    const mensaje = document.createElement('div');
+    mensaje.className = 'mensaje-admin mensaje-' + tipo;
+    mensaje.innerHTML = `
+        <span>${texto}</span>
+        <button onclick="this.parentElement.remove()" style="background:none;border:none;color:inherit;cursor:pointer;padding:0 10px;font-size:18px;">×</button>
     `;
-
-    div.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${tipo === 'success' ? '#27ae60' : tipo === 'error' ? '#e74c3c' : tipo === 'warning' ? '#f39c12' : '#3498db'};
-        color: white;
-        padding: 12px 16px;
-        border-radius: 8px;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    `;
-
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 4000);
+    
+    const contenedor = document.querySelector('.contenedor-admin');
+    contenedor.insertBefore(mensaje, contenedor.firstChild);
+    
+    setTimeout(() => {
+        mensaje.style.animation = 'slideUp 0.3s ease';
+        setTimeout(() => mensaje.remove(), 300);
+    }, 3000);
 }
+
+// Auto-cerrar mensajes existentes
+document.addEventListener('DOMContentLoaded', function() {
+    const mensajes = document.querySelectorAll('.mensaje-admin');
+    mensajes.forEach(mensaje => {
+        setTimeout(() => {
+            if (mensaje.parentElement) {
+                mensaje.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => mensaje.remove(), 300);
+            }
+        }, 5000);
+    });
+});

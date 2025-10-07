@@ -72,6 +72,7 @@ if ($_POST) {
     <title>Registro Veterinario - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/registro-veterinario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php include_once("includes/logo.php"); ?>
 </head>
 
@@ -135,10 +136,16 @@ if ($_POST) {
                     <div class="input-group" style="flex: 1;">
                         <span class="input-icon">🔒</span>
                         <input type="password" name="contraseña_usuario" class="login-input" placeholder="Contraseña" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
                     </div>
                     <div class="input-group" style="flex: 1;">
                         <span class="input-icon">🔒</span>
                         <input type="password" name="confirmar_contraseña" class="login-input" placeholder="Confirmar contraseña" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
                     </div>
                 </div>
             </div>
