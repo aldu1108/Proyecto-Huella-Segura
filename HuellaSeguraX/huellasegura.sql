@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-10-2025 a las 01:02:07
+-- Tiempo de generación: 08-10-2025 a las 16:41:32
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,16 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `asistentes_evento`
+--
+
+CREATE TABLE `asistentes_evento` (
+  `id_asistente` int(11) NOT NULL,
+  `id_evento` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fecha_union` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `citas_veterinarias`
 --
 
 CREATE TABLE `citas_veterinarias` (
   `id_cita` int(11) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
   `motivo` varchar(30) NOT NULL,
   `estado` varchar(10) NOT NULL,
   `id_mascota` int(11) NOT NULL,
-  `id_veterinario` int(11) NOT NULL
+  `id_veterinario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -44,8 +57,10 @@ INSERT INTO `citas_veterinarias` (`id_cita`, `fecha`, `motivo`, `estado`, `id_ma
 (1, '2025-09-25 03:00:00', 'Vacunación', 'programada', 6, 1),
 (2, '2025-09-25 03:00:00', 'Consulta General', 'programada', 8, 1),
 (3, '2025-09-23 03:00:00', 'Consulta General', 'programada', 8, 1),
-(4, '2025-09-30 03:00:00', 'Consulta General', 'programada', 9, 1),
-(10, '2025-09-28 03:00:00', 'Vacunación', 'programada', 9, 1);
+(17, '2025-10-05 14:00:00', 'Consulta General', 'rechazada', 10, NULL),
+(18, '2025-10-07 14:00:00', 'Revisión', 'aceptada', 10, 3),
+(19, '2025-10-04 19:00:00', 'Vacunación', 'rechazada', 9, NULL),
+(22, '2025-10-06 20:00:00', 'Revisión', 'aceptada', 9, 3);
 
 -- --------------------------------------------------------
 
@@ -106,6 +121,13 @@ CREATE TABLE `fichas_de_salud` (
   `id_mascota` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `fichas_de_salud`
+--
+
+INSERT INTO `fichas_de_salud` (`id_ficha`, `vacunas`, `esterilizado`, `peso`, `altura`, `documento`, `id_mascota`) VALUES
+(1, '', 0, 12, 0, '', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -157,7 +179,8 @@ INSERT INTO `likes_post` (`id_like`, `id_post`, `id_usuario`, `fecha`) VALUES
 (37, 8, 6, '2025-10-01 04:03:57'),
 (41, 8, 7, '2025-10-01 04:13:38'),
 (44, 9, 7, '2025-10-01 04:13:44'),
-(45, 9, 6, '2025-10-01 15:51:09');
+(46, 9, 6, '2025-10-01 21:22:11'),
+(47, 5, 6, '2025-10-01 21:22:24');
 
 -- --------------------------------------------------------
 
@@ -190,7 +213,9 @@ INSERT INTO `mascotas` (`id_mascota`, `id_usuario`, `tipo`, `sexo`, `nombre_masc
 (6, 5, 'perro', 'hembra', 'mora', 11, '2025-09-15', 'mascota-default.jpg', 'activo'),
 (7, 5, 'gato', 'hembra', 'dulce', 3, '2025-09-06', 'mascota-default.jpg', 'activo'),
 (8, 0, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota-default.jpg', 'activo'),
-(9, 6, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota-default.jpg', 'activo');
+(9, 6, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota_6_1759628874.jpg', 'activo'),
+(10, 12, 'perro', 'macho', 'Juan', 3, '2022-01-01', 'mascota-default.jpg', 'activo'),
+(13, 6, 'otro', 'macho', 'coqui', 4, '2021-01-01', 'mascota_6_1759690803.jpg', 'activo');
 
 -- --------------------------------------------------------
 
@@ -248,11 +273,12 @@ INSERT INTO `post_comunidad` (`id_post`, `titulo`, `contenido`, `tipo_post`, `im
 (2, 'Holaa chicos este es el primer post', 'tomaaa el primer poust', 'general', NULL, 0, '2025-10-01 02:52:46', 6),
 (3, 'holaaa', 'aaaaaaaaaaaa', 'general', 'post_6_1759300344_0.jpeg', 0, '2025-10-01 03:32:24', 6),
 (4, 'aaaaaaaaaaaa', 'aaaaaaaaaaaaa', 'general', 'post_6_1759300406_0.jpg', 0, '2025-10-01 03:33:26', 6),
-(5, 'aaaaaaaa', 'aaaaaaaaaaaaaaaa', 'general', 'post_6_1759300421_0.jpg,post_6_1759300421_1.jpeg,post_6_1759300421_2.jpg', 0, '2025-10-01 03:33:41', 6),
+(5, 'aaaaaaaa', 'aaaaaaaaaaaaaaaa', 'general', 'post_6_1759300421_0.jpg,post_6_1759300421_1.jpeg,post_6_1759300421_2.jpg', 1, '2025-10-01 03:33:41', 6),
 (6, 'se logro el poust', 'faltan los likes', 'logro', NULL, 0, '2025-10-01 03:36:23', 6),
 (7, 'test', 'aaaaaaaaaaaa', 'paseo', NULL, 0, '2025-10-01 03:36:42', 6),
 (8, 'ayuden', 'aaaaaaaaaaaaa', 'ayuda', NULL, 2, '2025-10-01 03:36:52', 6),
-(9, 'aaaaaaaaaaaa', 'bbbbbbbbbbbbb', 'general', NULL, 2, '2025-10-01 04:01:49', 6);
+(9, 'aaaaaaaaaaaa', 'bbbbbbbbbbbbb', 'general', NULL, 2, '2025-10-01 04:01:49', 6),
+(10, 'holissss', 'likeen si se ve!!!', 'logro', 'post_6_1759364737_0.jpeg', 0, '2025-10-01 21:25:37', 6);
 
 -- --------------------------------------------------------
 
@@ -284,7 +310,8 @@ INSERT INTO `publicaciones` (`id_anuncio`, `fecha`, `estado`, `titulo`, `descrip
 (6, '2025-09-16 03:00:00', 'activo', 'Se busca: menem (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: menem\nTipo: Perro\nFecha perdida: 13/09/2025 a las 17:40\nÚltima ubicación: tandil\n\nDetalles: nosé\n\n???? RECOMPENSA: €49.00\n\n¿Has visto a menem? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 5, 5),
 (7, '2025-09-16 03:00:00', 'activo', 'En adopción: menem (Perro', '???? BUSCA HOGAR ????\n\nNombre: menem\nTipo: Perro\nSexo: Macho\nEdad: 8 años\n\nMotivo: no puedo cuidarlo\n\nCondiciones de adopción:\nle gusta los interiores\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a menem? ¡Contáctanos! ❤️', 'mascota-default.jpg', 5, 5),
 (12, '2025-09-24 03:00:00', 'activo', 'En adopción: mora (Perro)', '???? BUSCA HOGAR ????\n\nNombre: mora\nTipo: Perro\nSexo: Hembra\nEdad: 11 años\n\nMotivo: cccccc\n\nCondiciones de adopción:\nffffff\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a mora? ¡Contáctanos! ❤️', 'mascota-default.jpg', 6, 5),
-(13, '2025-09-24 03:00:00', 'activo', 'En adopción: dulce (Gato)', '???? BUSCA HOGAR ????\n\nNombre: dulce\nTipo: Gato\nSexo: Hembra\nEdad: 3 años\n\nMotivo: kkkkkk\n\nCondiciones de adopción:\nfffff\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a dulce? ¡Contáctanos! ❤️', 'mascota-default.jpg', 7, 5);
+(13, '2025-09-24 03:00:00', 'activo', 'En adopción: dulce (Gato)', '???? BUSCA HOGAR ????\n\nNombre: dulce\nTipo: Gato\nSexo: Hembra\nEdad: 3 años\n\nMotivo: kkkkkk\n\nCondiciones de adopción:\nfffff\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a dulce? ¡Contáctanos! ❤️', 'mascota-default.jpg', 7, 5),
+(15, '2025-10-05 16:04:43', 'activo', 'Se busca: Lola (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: Lola\nTipo: Perro\nFecha perdida: 21/04/2025 a las 00:00\nÚltima ubicación: mi casa\n\nDetalles: fdsfsdsd\n\n???? RECOMPENSA: €333.00\n\n¿Has visto a Lola? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 9, 6);
 
 -- --------------------------------------------------------
 
@@ -332,7 +359,64 @@ INSERT INTO `publicacion_perdida` (`id_perdida`, `ultima_ubicacion`, `fecha_perd
 (3, 'necochea', '2025-09-02 03:00:00', 0, 3),
 (4, 'tandil', '2025-09-05 03:00:00', 20, 4),
 (5, 'necochea', '2025-09-05 03:00:00', 0, 5),
-(6, 'tandil', '2025-09-13 03:00:00', 49, 6);
+(6, 'tandil', '2025-09-13 03:00:00', 49, 6),
+(7, 'mi casa', '2025-04-21 03:00:00', 333, 15);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `recordatorios_personales`
+--
+
+CREATE TABLE `recordatorios_personales` (
+  `id_recordatorio` int(11) NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `fecha` datetime NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `completado` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `recordatorios_personales`
+--
+
+INSERT INTO `recordatorios_personales` (`id_recordatorio`, `titulo`, `descripcion`, `fecha`, `id_usuario`, `completado`) VALUES
+(1, 'pastillita', 'para lola', '2025-02-21 12:54:00', 6, 0),
+(2, 'pastillita', 'jiji', '2025-10-05 12:54:00', 6, 0),
+(3, 'pastillita', 'jiji', '2025-10-05 12:54:00', 6, 0),
+(4, 'f', 'fdsfs', '2025-10-05 10:00:00', 6, 0),
+(6, 'x', 'fdgdf', '2025-10-13 12:00:00', 6, 0),
+(9, 'l', '', '2025-11-02 04:00:00', 6, 0),
+(12, 'coqui recordatorio', 'jjj', '2025-10-07 14:56:00', 6, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `recordatorio_mascota`
+--
+
+CREATE TABLE `recordatorio_mascota` (
+  `id` int(11) NOT NULL,
+  `id_recordatorio` int(11) NOT NULL,
+  `id_mascota` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `recordatorio_mascota`
+--
+
+INSERT INTO `recordatorio_mascota` (`id`, `id_recordatorio`, `id_mascota`) VALUES
+(1, 2, 9),
+(2, 4, 9),
+(3, 5, 9),
+(4, 6, 9),
+(5, 7, 9),
+(6, 8, 9),
+(7, 9, 9),
+(8, 10, 9),
+(9, 11, 9),
+(10, 12, 13);
 
 -- --------------------------------------------------------
 
@@ -350,6 +434,29 @@ CREATE TABLE `reportes` (
   `id_comentario` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `seguimiento_peso`
+--
+
+CREATE TABLE `seguimiento_peso` (
+  `id_peso` int(11) NOT NULL,
+  `peso` decimal(5,2) NOT NULL,
+  `fecha` date NOT NULL,
+  `id_mascota` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `seguimiento_peso`
+--
+
+INSERT INTO `seguimiento_peso` (`id_peso`, `peso`, `fecha`, `id_mascota`) VALUES
+(1, 12.00, '2025-04-05', 9),
+(2, 12.00, '2025-10-05', 9),
+(3, 15.00, '2025-10-02', 9),
+(4, 2.00, '2024-08-15', 9);
 
 -- --------------------------------------------------------
 
@@ -398,7 +505,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `email_usuario`, `contraseña_usuario`, `telefono_usuario`, `nombre_usuario`, `apellido_usuario`, `foto_usuario`, `estado`, `rol`) VALUES
 (6, 'ae@a', 'hola1234', '', 'aa', 'ee', 'usuario-default.jpg', 'activo', 'usuario'),
-(7, 'vete@v', 'veterinario', '', 'veterinario', 'iuju', 'veterinario-default.jpg', 'activo', 'veterinario');
+(7, 'vete@v', 'veterinario', '', 'veterinario', 'iuju', 'veterinario-default.jpg', 'activo', 'veterinario'),
+(12, 'valen@gmail.com', '123456', '111111', 'Valen', 'Michou', 'usuario-default.jpg', 'activo', 'usuario');
 
 -- --------------------------------------------------------
 
@@ -430,6 +538,15 @@ INSERT INTO `veterinario` (`id_veterinario`, `certificado`, `especialidad`, `cli
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `asistentes_evento`
+--
+ALTER TABLE `asistentes_evento`
+  ADD PRIMARY KEY (`id_asistente`),
+  ADD UNIQUE KEY `unique_asistente` (`id_evento`,`id_usuario`),
+  ADD KEY `idx_asistente_evento` (`id_evento`),
+  ADD KEY `idx_asistente_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `citas_veterinarias`
@@ -545,6 +662,21 @@ ALTER TABLE `publicacion_perdida`
   ADD KEY `fk_perdida_publicacion` (`id_publicacion`);
 
 --
+-- Indices de la tabla `recordatorios_personales`
+--
+ALTER TABLE `recordatorios_personales`
+  ADD PRIMARY KEY (`id_recordatorio`),
+  ADD KEY `fk_recordatorio_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `recordatorio_mascota`
+--
+ALTER TABLE `recordatorio_mascota`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_recordatorio` (`id_recordatorio`),
+  ADD KEY `fk_mascota` (`id_mascota`);
+
+--
 -- Indices de la tabla `reportes`
 --
 ALTER TABLE `reportes`
@@ -553,6 +685,13 @@ ALTER TABLE `reportes`
   ADD KEY `fk_reporte_publicacion` (`id_publicaciones`),
   ADD KEY `fk_reporte_post` (`id_post`),
   ADD KEY `fk_reporte_comentario` (`id_comentario`);
+
+--
+-- Indices de la tabla `seguimiento_peso`
+--
+ALTER TABLE `seguimiento_peso`
+  ADD PRIMARY KEY (`id_peso`),
+  ADD KEY `fk_peso_mascota` (`id_mascota`);
 
 --
 -- Indices de la tabla `solicitud_adopcion`
@@ -580,10 +719,16 @@ ALTER TABLE `veterinario`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `asistentes_evento`
+--
+ALTER TABLE `asistentes_evento`
+  MODIFY `id_asistente` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `citas_veterinarias`
 --
 ALTER TABLE `citas_veterinarias`
-  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios_comunidad`
@@ -607,7 +752,7 @@ ALTER TABLE `eventos_comunidad`
 -- AUTO_INCREMENT de la tabla `fichas_de_salud`
 --
 ALTER TABLE `fichas_de_salud`
-  MODIFY `id_ficha` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ficha` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `gastos`
@@ -619,37 +764,55 @@ ALTER TABLE `gastos`
 -- AUTO_INCREMENT de la tabla `likes_post`
 --
 ALTER TABLE `likes_post`
-  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `post_comunidad`
 --
 ALTER TABLE `post_comunidad`
-  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `publicaciones`
 --
 ALTER TABLE `publicaciones`
-  MODIFY `id_anuncio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_anuncio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion_adopcion`
 --
 ALTER TABLE `publicacion_adopcion`
-  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion_perdida`
 --
 ALTER TABLE `publicacion_perdida`
-  MODIFY `id_perdida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_perdida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `recordatorios_personales`
+--
+ALTER TABLE `recordatorios_personales`
+  MODIFY `id_recordatorio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `recordatorio_mascota`
+--
+ALTER TABLE `recordatorio_mascota`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `seguimiento_peso`
+--
+ALTER TABLE `seguimiento_peso`
+  MODIFY `id_peso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_adopcion`
@@ -661,13 +824,24 @@ ALTER TABLE `solicitud_adopcion`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `veterinario`
 --
 ALTER TABLE `veterinario`
   MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `asistentes_evento`
+--
+ALTER TABLE `asistentes_evento`
+  ADD CONSTRAINT `fk_asistente_evento` FOREIGN KEY (`id_evento`) REFERENCES `eventos_comunidad` (`id_evento`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_asistente_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
