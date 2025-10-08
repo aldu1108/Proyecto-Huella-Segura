@@ -665,11 +665,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                             </option>
                         <?php endwhile; ?>
                     </select>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="boton-nueva-consulta" onclick="mostrarModalAlerta('Inicia sesión para registrar consultas\n\nRegístrate para llevar el historial médico de tus mascotas')">
-                            + Nueva Consulta
-                        </button>
-                    <?php elseif ($rol_usuario !== 'veterinario'): ?>
+                    <?php if ($rol_usuario == 'veterinario'): ?>
                         <button class="boton-nueva-consulta" onclick="registrarNuevaConsulta()">
                             + Nueva Consulta
                         </button>
@@ -787,15 +783,6 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                     <div class="sin-registros">
                         <h4>📋 Sin Registros Médicos</h4>
                         <p>Aún no hay registros médicos o citas realizadas para tus mascotas</p>
-                        <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="boton-agendar-primera" onclick="mostrarModalAlerta('Inicia sesión para registrar consultas\n\nCrea una cuenta para gestionar el historial médico')">
-                                Registrar Primera Consulta
-                            </button>
-                        <?php else: ?>
-                            <button class="boton-agendar-primera" onclick="registrarNuevaConsulta()">
-                                Registrar Primera Consulta
-                            </button>
-                        <?php endif; ?>
                     </div>
                 <?php elseif ($rol_usuario === 'veterinario' && (!$resultado_citas_pasadas || $resultado_citas_pasadas->num_rows == 0)): ?>
                     <div class="sin-registros">
