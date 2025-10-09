@@ -237,8 +237,8 @@ function filtrarHistorial(idMascota) {
         }
     });
     
-    // Actualizar el select
-    const mascotaSelect = document.querySelector('.filtro-mascota');
+    // Actualizar el select en la sección historial
+    const mascotaSelect = document.querySelector('#seccionHistorial .filtro-mascota');
     if (mascotaSelect && idMascota) {
         mascotaSelect.value = idMascota;
         
@@ -246,6 +246,109 @@ function filtrarHistorial(idMascota) {
         showMessage(`Mostrando ${registrosVisibles} registros de ${nombreMascota}`, 'info');
     } else if (!idMascota) {
         showMessage(`Mostrando todos los registros (${registrosVisibles} total)`, 'info');
+    }
+}
+
+function filtrarHistorialPorDueno(idDueno) {
+    // Filtrar registros médicos por dueño (para veterinarios)
+    const registros = document.querySelectorAll('.registro-medico');
+    let registrosVisibles = 0;
+    
+    registros.forEach(registro => {
+        if (!idDueno || registro.dataset.dueno === idDueno) {
+            registro.style.display = 'block';
+            registrosVisibles++;
+        } else {
+            registro.style.display = 'none';
+        }
+    });
+    
+    // Actualizar el select en la sección historial
+    const duenoSelect = document.querySelector('#seccionHistorial .filtro-mascota');
+    if (duenoSelect && idDueno) {
+        duenoSelect.value = idDueno;
+        
+        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
+        showMessage(`Mostrando ${registrosVisibles} registro(s) de ${nombreDueno}`, 'info');
+    } else if (!idDueno) {
+        showMessage(`Mostrando todos los registros (${registrosVisibles} total)`, 'info');
+    }
+}
+function filtrarHistorialPorDueno(idDueno) {
+    // Filtrar registros médicos por dueño (para veterinarios)
+    const registros = document.querySelectorAll('.registro-medico');
+    let registrosVisibles = 0;
+    
+    registros.forEach(registro => {
+        if (!idDueno || registro.dataset.dueno === idDueno) {
+            registro.style.display = 'block';
+            registrosVisibles++;
+        } else {
+            registro.style.display = 'none';
+        }
+    });
+    
+    // Actualizar el select en la sección historial
+    const duenoSelect = document.querySelector('#seccionHistorial .filtro-mascota');
+    if (duenoSelect && idDueno) {
+        duenoSelect.value = idDueno;
+        
+        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
+        showMessage(`Mostrando ${registrosVisibles} registro(s) de ${nombreDueno}`, 'info');
+    } else if (!idDueno) {
+        showMessage(`Mostrando todos los registros (${registrosVisibles} total)`, 'info');
+    }
+}
+
+function filtrarAgenda(idMascota) {
+    // Filtrar tarjetas de citas en la sección Mi Agenda (para usuarios normales)
+    const citas = document.querySelectorAll('#seccionAgenda .tarjeta-cita, #seccionAgenda .tarjeta-cita-pendiente');
+    let citasVisibles = 0;
+    
+    citas.forEach(cita => {
+        if (!idMascota || cita.dataset.mascota === idMascota) {
+            cita.style.display = 'block';
+            citasVisibles++;
+        } else {
+            cita.style.display = 'none';
+        }
+    });
+    
+    // Actualizar el select en la sección agenda
+    const mascotaSelect = document.querySelector('#seccionAgenda .filtro-mascota');
+    if (mascotaSelect && idMascota) {
+        mascotaSelect.value = idMascota;
+        
+        const nombreMascota = mascotaSelect.options[mascotaSelect.selectedIndex]?.text || 'esta mascota';
+        showMessage(`Mostrando ${citasVisibles} cita(s) de ${nombreMascota}`, 'info');
+    } else if (!idMascota) {
+        showMessage(`Mostrando todas las citas (${citasVisibles} total)`, 'info');
+    }
+}
+
+function filtrarAgendaPorDueno(idDueno) {
+    // Filtrar tarjetas de citas por dueño (para veterinarios)
+    const citas = document.querySelectorAll('#seccionAgenda .tarjeta-cita, #seccionAgenda .tarjeta-cita-pendiente');
+    let citasVisibles = 0;
+    
+    citas.forEach(cita => {
+        if (!idDueno || cita.dataset.dueno === idDueno) {
+            cita.style.display = 'block';
+            citasVisibles++;
+        } else {
+            cita.style.display = 'none';
+        }
+    });
+    
+    // Actualizar el select en la sección agenda
+    const duenoSelect = document.querySelector('#seccionAgenda .filtro-mascota');
+    if (duenoSelect && idDueno) {
+        duenoSelect.value = idDueno;
+        
+        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
+        showMessage(`Mostrando ${citasVisibles} cita(s) de ${nombreDueno}`, 'info');
+    } else if (!idDueno) {
+        showMessage(`Mostrando todas las citas (${citasVisibles} total)`, 'info');
     }
 }
 

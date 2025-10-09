@@ -191,7 +191,7 @@ $fecha_hoy = date('Y-m-d');
 // CAMBIO: Si es veterinario, mostrar citas donde él es el veterinario asignado
 // Si es usuario normal, mostrar citas de sus mascotas
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
-    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario, v.clinica as vet_clinica, v.especialidad,
                           u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
                           owner.nombre_usuario as nombre_dueno, owner.apellido_usuario as apellido_dueno,
                           owner.telefono_usuario, owner.email_usuario,
@@ -206,7 +206,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                           AND c.estado IN ('pendiente', 'aceptada', 'programada')
                           ORDER BY c.fecha ASC LIMIT 10";
 } else {
-    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario, v.clinica as vet_clinica, v.especialidad,
                           u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
                           DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                           FROM citas_veterinarias c 
@@ -247,7 +247,7 @@ $resultado_historial = $conexion->query($consulta_historial_simple);
 // Obtener citas pasadas para mostrar en el historial
 // CAMBIO: Si es veterinario, mostrar sus citas pasadas
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
-    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica,
                                u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
                                owner.nombre_usuario as nombre_dueno, owner.apellido_usuario as apellido_dueno,
                                DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
@@ -261,7 +261,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                AND c.estado IN ('aceptada', 'completada')
                                ORDER BY c.fecha DESC LIMIT 10";
 } else {
-    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, v.especialidad,
+    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, 
                                u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
                                DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                                FROM citas_veterinarias c 
@@ -303,8 +303,8 @@ $resultado_citas_pendientes = null;
 
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
     // CAMBIO: Obtener citas pendientes SIN veterinario asignado O asignadas a este veterinario
-    $consulta_pendientes = "SELECT c.*, m.nombre_mascota, m.tipo, 
-                            u.nombre_usuario as nombre_dueno, u.apellido_usuario as apellido_dueno,
+    $consulta_pendientes = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario,
+                        u.nombre_usuario as nombre_dueno,
                             u.telefono_usuario, u.email_usuario,
                             DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                             FROM citas_veterinarias c 
@@ -394,6 +394,47 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
         <section class="seccion-veterinaria seccion-agenda activa" id="seccionAgenda">
             <div class="encabezado-agenda">
                 <h3>Mi Agenda Veterinaria</h3>
+                <div class="filtros-historial">
+                    <?php if ($rol_usuario === 'veterinario'): ?>
+                        <select class="filtro-mascota" onchange="filtrarAgendaPorDueno(this.value)">
+                            <option value="">Todos los dueños</option>
+                            <?php 
+                            // Obtener lista de dueños únicos de las citas del veterinario
+                            if ($id_veterinario_actual) {
+                                $consulta_duenos = "SELECT DISTINCT u.id_usuario, u.nombre_usuario, u.apellido_usuario
+                                                   FROM citas_veterinarias c 
+                                                   JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                                                   JOIN usuarios u ON m.id_usuario = u.id_usuario
+                                                   WHERE (c.id_veterinario = $id_veterinario_actual OR c.id_veterinario IS NULL)
+                                                   ORDER BY u.nombre_usuario, u.apellido_usuario";
+                                $resultado_duenos = $conexion->query($consulta_duenos);
+                                
+                                if ($resultado_duenos && $resultado_duenos->num_rows > 0):
+                                    while($dueno = $resultado_duenos->fetch_assoc()): 
+                            ?>
+                                <option value="<?php echo $dueno['id_usuario']; ?>">
+                                    <?php echo htmlspecialchars($dueno['nombre_usuario'] . ' ' . $dueno['apellido_usuario']); ?>
+                                </option>
+                            <?php 
+                                    endwhile;
+                                endif;
+                            }
+                            ?>
+                        </select>
+                    <?php else: ?>
+                        <select class="filtro-mascota" onchange="filtrarAgenda(this.value)">
+                            <option value="">Todas las mascotas</option>
+                            <?php 
+                            $resultado_mascotas->data_seek(0);
+                            while($mascota = $resultado_mascotas->fetch_assoc()): 
+                            ?>
+                                <option value="<?php echo $mascota['id_mascota']; ?>">
+                                    <?php echo htmlspecialchars($mascota['nombre_mascota']); ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    <?php endif; ?>
+            </div>
             </div>
             <!-- TARJETA 1: Citas Aceptadas/Confirmadas -->
             <div class="proximas-citas citas-aceptadas">
@@ -409,7 +450,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                     if ($cita['estado'] === 'aceptada' || $cita['estado'] === 'programada'):
                         $hay_aceptadas = true;
                 ?>
-                    <div class="tarjeta-cita <?php echo (date('Y-m-d', strtotime($cita['fecha'])) == $fecha_hoy) ? 'hoy' : 'proxima'; ?>">
+<div class="tarjeta-cita <?php echo (date('Y-m-d', strtotime($cita['fecha'])) == $fecha_hoy) ? 'hoy' : 'proxima'; ?>" data-mascota="<?php echo $cita['id_mascota']; ?>" data-dueno="<?php echo $cita['id_usuario'] ?? ''; ?>">
                         <div class="info-cita">
                             <div class="fecha-cita">
                                 <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
@@ -474,7 +515,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                 <?php if ($resultado_citas_pendientes && $resultado_citas_pendientes->num_rows > 0): ?>
                     <div class="lista-citas-pendientes">
                         <?php while($cita = $resultado_citas_pendientes->fetch_assoc()): ?>
-                            <div class="tarjeta-cita-pendiente">
+                            <div class="tarjeta-cita-pendiente" data-mascota="<?php echo $cita['id_mascota']; ?>" data-dueno="<?php echo $cita['id_usuario'] ?? ''; ?>">
                                 <div class="info-cita">
                                     <div class="fecha-cita">
                                         <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
@@ -544,7 +585,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                     if ($cita['estado'] === 'pendiente'):
                         $hay_pendientes = true;
                 ?>
-                    <div class="tarjeta-cita pendiente-aprobacion">
+                    <div class="tarjeta-cita pendiente-aprobacion" data-mascota="<?php echo $cita['id_mascota']; ?>" data-dueno="<?php echo $cita['id_usuario'] ?? ''; ?>">
                         <div class="info-cita">
                             <div class="fecha-cita fecha-pendiente">
                                 <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
@@ -649,29 +690,53 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
             </section>
         <?php endif; ?>
 
-        <!-- Seccion Historial Medico (INCLUYE citas pasadas) -->
-        <section class="seccion-veterinaria seccion-historial" id="seccionHistorial">
-            <div class="encabezado-historial">
-                <h3>Historial Médico Completo</h3>
-                <div class="filtros-historial">
-                    <select class="filtro-mascota" onchange="filtrarHistorial(this.value)">
-                        <option value="">Todas las mascotas</option>
-                        <?php 
-                        $resultado_mascotas->data_seek(0);
-                        while($mascota = $resultado_mascotas->fetch_assoc()): 
-                        ?>
-                            <option value="<?php echo $mascota['id_mascota']; ?>">
-                                <?php echo htmlspecialchars($mascota['nombre_mascota']); ?>
-                            </option>
-                        <?php endwhile; ?>
-                    </select>
-                    <?php if ($rol_usuario == 'veterinario'): ?>
-                        <button class="boton-nueva-consulta" onclick="registrarNuevaConsulta()">
-                            + Nueva Consulta
-                        </button>
-                    <?php endif; ?>
-                </div>
-            </div>
+        <!-- Seccion Historial Medico  -->
+                    <div class="encabezado-agenda">
+                        <h4 class="subtitulo-historial">📅 Citas Realizadas</h4>
+                        <div class="filtros-historial">
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <select class="filtro-mascota" onchange="filtrarHistorialPorDueno(this.value)">
+                                    <option value="">Todos los dueños</option>
+                                    <?php 
+                                    if ($id_veterinario_actual) {
+                                        $consulta_duenos_historial = "SELECT DISTINCT u.id_usuario, u.nombre_usuario, u.apellido_usuario
+                                                                    FROM citas_veterinarias c 
+                                                                    JOIN mascotas m ON c.id_mascota = m.id_mascota 
+                                                                    JOIN usuarios u ON m.id_usuario = u.id_usuario
+                                                                    WHERE c.id_veterinario = $id_veterinario_actual 
+                                                                    ORDER BY u.nombre_usuario, u.apellido_usuario";
+                                        $resultado_duenos_historial = $conexion->query($consulta_duenos_historial);
+                                        
+                                        if ($resultado_duenos_historial && $resultado_duenos_historial->num_rows > 0):
+                                            while($dueno = $resultado_duenos_historial->fetch_assoc()): 
+                                    ?>
+                                        <option value="<?php echo $dueno['id_usuario']; ?>">
+                                            <?php echo htmlspecialchars($dueno['nombre_usuario'] . ' ' . $dueno['apellido_usuario']); ?>
+                                        </option>
+                                    <?php 
+                                            endwhile;
+                                        endif;
+                                    }
+                                    ?>
+                                </select>
+                                <button class="boton-nueva-consulta" onclick="registrarNuevaConsulta()">
+                                    + Nueva Consulta
+                                </button>
+                            <?php else: ?>
+                                <select class="filtro-mascota" onchange="filtrarHistorial(this.value)">
+                                    <option value="">Todas las mascotas</option>
+                                    <?php 
+                                    $resultado_mascotas->data_seek(0);
+                                    while($mascota = $resultado_mascotas->fetch_assoc()): 
+                                    ?>
+                                        <option value="<?php echo $mascota['id_mascota']; ?>">
+                                            <?php echo htmlspecialchars($mascota['nombre_mascota']); ?>
+                                        </option>
+                                    <?php endwhile; ?>
+                                </select>
+                            <?php endif; ?>
+                        </div>
+                    </div>
 
             <div class="registros-medicos">
                 <!-- Consultas médicas registradas (SOLO PARA USUARIOS NORMALES) -->
@@ -719,9 +784,8 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 
                 <!-- Citas pasadas (PARA TODOS) -->
                 <?php if ($resultado_citas_pasadas && $resultado_citas_pasadas->num_rows > 0): ?>
-                    <h4 class="subtitulo-historial">📅 Citas Realizadas</h4>
                     <?php while($cita_pasada = $resultado_citas_pasadas->fetch_assoc()): ?>
-                        <div class="registro-medico" data-mascota="<?php echo $cita_pasada['id_mascota']; ?>">
+                        <div class="registro-medico" data-mascota="<?php echo $cita_pasada['id_mascota']; ?>" data-dueno="<?php echo $cita_pasada['id_usuario'] ?? ''; ?>">
                             <div class="encabezado-registro">
                                 <div class="fecha-registro">
                                     📅 <?php echo date('d M Y', strtotime($cita_pasada['fecha'])); ?>
