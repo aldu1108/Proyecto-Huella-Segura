@@ -670,6 +670,140 @@ function tiempoTranscurrido($fecha)
             </form>
         </div>
     </div>
+    
+    <!-- Modal Marcar como Encontrada -->
+    <div class="modal-overlay-perdidas" id="modalEncontrada">
+        <div class="modal-container-perdidas">
+            <div class="modal-header-perdidas">
+                <button class="modal-close-perdidas" onclick="cerrarModalEncontrada()">×</button>
+                <div class="modal-icon-perdidas success">🎉</div>
+                <h3 class="modal-title-perdidas">¡Excelente Noticia!</h3>
+                <p class="modal-subtitle-perdidas">Marcar mascota como encontrada</p>
+            </div>
+            
+            <div class="modal-body-perdidas">
+                <div class="modal-mascota-info-perdidas" id="mascotaInfoEncontrada">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                
+                <div class="modal-success-box">
+                    <p><strong>✨ Al confirmar:</strong></p>
+                    <ul>
+                        <li>El reporte se cerrará automáticamente</li>
+                        <li>La comunidad será notificada de la buena noticia</li>
+                        <li>El estado de la mascota se actualizará</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer-perdidas">
+                <button class="modal-btn-perdidas modal-btn-cancel-perdidas" onclick="cerrarModalEncontrada()">
+                    Cancelar
+                </button>
+                <button class="modal-btn-perdidas modal-btn-success-perdidas" onclick="confirmarEncontrada()">
+                    🎉 Confirmar - ¡Está en Casa!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Reporte -->
+    <div class="modal-overlay-perdidas" id="modalEditarPerdida">
+        <div class="modal-container-perdidas">
+            <div class="modal-header-perdidas">
+                <button class="modal-close-perdidas" onclick="cerrarModalEditarPerdida()">×</button>
+                <div class="modal-icon-perdidas warning">✏️</div>
+                <h3 class="modal-title-perdidas">Editar Reporte</h3>
+                <p class="modal-subtitle-perdidas" id="subtituloEditarPerdida">Actualiza la información del reporte</p>
+            </div>
+            
+            <div class="modal-body-perdidas">
+                <form id="formEditarPerdida">
+                    <input type="hidden" id="idPublicacionEditar">
+                    
+                    <div class="form-group-perdidas">
+                        <label class="form-label-perdidas">Fecha en que se perdió</label>
+                        <input type="date" class="form-input-perdidas" id="fechaPerdidaEditar" required>
+                    </div>
+
+                    <div class="form-group-perdidas">
+                        <label class="form-label-perdidas">Hora aproximada</label>
+                        <input type="time" class="form-input-perdidas" id="horaPerdidaEditar">
+                    </div>
+
+                    <div class="form-group-perdidas">
+                        <label class="form-label-perdidas">Última ubicación conocida</label>
+                        <div class="campo-ubicacion-perdidas">
+                            <input type="text" class="form-input-perdidas" id="ubicacionEditar" placeholder="📍 Dirección o punto de referencia" required>
+                            <button type="button" class="boton-gps-modal" onclick="obtenerUbicacionModal()">📍</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group-perdidas">
+                        <label class="form-label-perdidas">¿Cómo se perdió?</label>
+                        <textarea class="form-textarea-perdidas" id="descripcionEditar" placeholder="Describe las circunstancias"></textarea>
+                    </div>
+
+                    <div class="checkbox-recompensa-modal">
+                        <input type="checkbox" id="checkboxRecompensaEditar" onchange="toggleRecompensaModal()">
+                        <label for="checkboxRecompensaEditar">💰 Ofrecer recompensa</label>
+                    </div>
+
+                    <div class="form-group-perdidas" id="campoRecompensaEditar" style="display: none;">
+                        <label class="form-label-perdidas">Monto de la recompensa (€)</label>
+                        <input type="number" class="form-input-perdidas" id="recompensaEditar" min="0" placeholder="Ejemplo: 100">
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer-perdidas">
+                <button class="modal-btn-perdidas modal-btn-cancel-perdidas" onclick="cerrarModalEditarPerdida()">
+                    Cancelar
+                </button>
+                <button class="modal-btn-perdidas modal-btn-confirm-perdidas" onclick="confirmarEditarPerdida()">
+                    ✏️ Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar Reporte -->
+    <div class="modal-overlay-perdidas" id="modalEliminarPerdida">
+        <div class="modal-container-perdidas">
+            <div class="modal-header-perdidas">
+                <button class="modal-close-perdidas" onclick="cerrarModalEliminarPerdida()">×</button>
+                <div class="modal-icon-perdidas danger">🗑️</div>
+                <h3 class="modal-title-perdidas">Eliminar Reporte</h3>
+                <p class="modal-subtitle-perdidas">Esta acción no se puede deshacer</p>
+            </div>
+            
+            <div class="modal-body-perdidas">
+                <div class="modal-mascota-info-perdidas" id="mascotaInfoEliminarPerdida">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                
+                <div class="modal-danger-box-perdidas">
+                    <p><strong>⚠️ Advertencia:</strong></p>
+                    <ul>
+                        <li>El reporte será eliminado permanentemente</li>
+                        <li>La comunidad dejará de recibir alertas</li>
+                        <li>No podrás recuperar esta información</li>
+                        <li>Si encontraste a tu mascota, usa "Encontrada" en su lugar</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer-perdidas">
+                <button class="modal-btn-perdidas modal-btn-cancel-perdidas" onclick="cerrarModalEliminarPerdida()">
+                    Cancelar
+                </button>
+                <button class="modal-btn-perdidas modal-btn-danger-perdidas" onclick="confirmarEliminarPerdida()">
+                    🗑️ Sí, Eliminar Reporte
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Modal de alerta para usuarios demo -->
     <div class="modal-alerta-demo" id="modalAlertaDemo">

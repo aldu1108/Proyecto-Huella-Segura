@@ -756,3 +756,422 @@
     font-weight: 600;
     color: #2c3e50;
 }
+
+/* Modal Base */
+.modal-overlay-perdidas {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay-perdidas.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-container-perdidas {
+    background: white;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s ease;
+    overflow: hidden;
+}
+
+/* Modal Header */
+.modal-header-perdidas {
+    padding: 30px 30px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-icon-perdidas {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    animation: scaleIn 0.5s ease;
+}
+
+.modal-icon-perdidas.success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.modal-icon-perdidas.warning {
+    background: linear-gradient(135deg, #f39c12, #f1c40f);
+    box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
+}
+
+.modal-icon-perdidas.danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+}
+
+.modal-title-perdidas {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 10px;
+}
+
+.modal-subtitle-perdidas {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.modal-close-perdidas {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-perdidas:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+    transform: rotate(90deg);
+}
+
+/* Modal Body */
+.modal-body-perdidas {
+    padding: 20px 30px;
+}
+
+.modal-mascota-info-perdidas {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal-mascota-avatar-perdidas {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-mascota-datos-perdidas h4 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.modal-mascota-datos-perdidas p {
+    margin: 0;
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.modal-success-box {
+    background: #d4edda;
+    border-left: 4px solid #27ae60;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-success-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #155724;
+    line-height: 1.5;
+}
+
+.modal-success-box ul {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.modal-success-box li {
+    font-size: 13px;
+    color: #155724;
+    margin: 5px 0;
+}
+
+.modal-warning-box-perdidas {
+    background: #fff3cd;
+    border-left: 4px solid #f39c12;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-warning-box-perdidas p {
+    margin: 0;
+    font-size: 14px;
+    color: #856404;
+    line-height: 1.5;
+}
+
+.modal-danger-box-perdidas {
+    background: #f8d7da;
+    border-left: 4px solid #e74c3c;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-danger-box-perdidas p {
+    margin: 0;
+    font-size: 14px;
+    color: #721c24;
+    line-height: 1.5;
+}
+
+.modal-danger-box-perdidas ul {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.modal-danger-box-perdidas li {
+    font-size: 13px;
+    color: #721c24;
+    margin: 5px 0;
+}
+
+/* Form Inputs */
+.form-group-perdidas {
+    margin-bottom: 20px;
+}
+
+.form-label-perdidas {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.form-input-perdidas,
+.form-textarea-perdidas {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input-perdidas:focus,
+.form-textarea-perdidas:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+}
+
+.form-textarea-perdidas {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.campo-ubicacion-perdidas {
+    display: flex;
+    gap: 10px;
+}
+
+.campo-ubicacion-perdidas .form-input-perdidas {
+    flex: 1;
+}
+
+.boton-gps-modal {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.boton-gps-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.grupo-campos-perdidas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.checkbox-recompensa-modal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.checkbox-recompensa-modal input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.checkbox-recompensa-modal label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Modal Footer */
+.modal-footer-perdidas {
+    padding: 20px 30px 30px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn-perdidas {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-btn-cancel-perdidas {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.modal-btn-cancel-perdidas:hover {
+    background: #bdc3c7;
+    color: #2c3e50;
+    transform: translateY(-2px);
+}
+
+.modal-btn-success-perdidas {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.modal-btn-success-perdidas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+}
+
+.modal-btn-confirm-perdidas {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.modal-btn-confirm-perdidas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+}
+
+.modal-btn-danger-perdidas {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.modal-btn-danger-perdidas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .modal-container-perdidas {
+        border-radius: 20px 20px 0 0;
+        margin-top: auto;
+    }
+
+    .modal-footer-perdidas {
+        flex-direction: column-reverse;
+    }
+
+    .modal-btn-perdidas {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .grupo-campos-perdidas {
+        grid-template-columns: 1fr;
+    }
+}
