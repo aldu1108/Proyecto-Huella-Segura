@@ -218,7 +218,7 @@
 }
 
 /* Badges de tipo de post */
-.post-badge {
+.post-eventos-list {
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 13px;
@@ -840,7 +840,582 @@
     font-size: 18px;
     padding: 10px;
 }
+/* Estilos para el botón de eliminar comentario - AGREGAR a comunidad.css */
 
+.comentario-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    position: relative;
+}
+
+.btn-eliminar-comentario {
+    margin-left: auto;
+    padding: 4px 8px;
+    background: transparent;
+    border: none;
+    color: #95a5a6;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+
+.comentario-item:hover .btn-eliminar-comentario {
+    opacity: 1;
+}
+
+.btn-eliminar-comentario:hover {
+    background: #fee;
+    color: #e74c3c;
+    transform: scale(1.1);
+}
+
+.btn-eliminar-comentario:active {
+    transform: scale(0.95);
+}
+
+/* Notificaciones flotantes */
+.mensaje-exito,
+.mensaje-error {
+    animation: slideDownNotification 0.3s ease;
+}
+/* ============================================
+   ESTILOS PARA MENÚ DE OPCIONES Y ELIMINAR POST
+   Agregar al final de comunidad.css
+   ============================================ */
+
+/* Contenedor del menú */
+.post-menu-container {
+    position: relative;
+    margin-left: auto;
+}
+
+/* Botón de menú (tres puntos verticales) */
+.btn-menu-post {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-menu-post:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.btn-menu-post:active {
+    transform: scale(0.95);
+}
+
+/* Menú desplegable de opciones */
+.post-menu-opciones {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    margin-top: 8px;
+    overflow: hidden;
+    animation: slideDownMenu 0.2s ease;
+}
+
+@keyframes slideDownMenu {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botón de eliminar dentro del menú */
+.menu-opcion-eliminar {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-opcion-eliminar:hover {
+    background: #fee;
+}
+
+.menu-opcion-eliminar:active {
+    background: #fdd;
+}
+
+.menu-opcion-eliminar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Nota especial para administradores */
+.menu-nota-admin {
+    display: block;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #95a5a6;
+    font-style: italic;
+    border-top: 1px solid #f0f0f0;
+    background: #f8f9fa;
+}
+
+/* Mensaje cuando no hay posts */
+.mensaje-sin-posts {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Asegurar que el header tenga el layout correcto */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+/* Animación para posts que se están eliminando */
+.post-card.eliminando {
+    pointer-events: none;
+}
+
+/* Overlay para prevenir clicks durante eliminación */
+.post-card.eliminando::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    pointer-events: all;
+}
+
+/* ============================================
+   ESTILOS PARA MENÚ DE OPCIONES DE EVENTOS
+   Agregar al final de comunidad.css
+   ============================================ */
+
+/* Contenedor del menú de evento */
+.evento-menu-container {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+}
+
+/* Botón de menú para eventos */
+.btn-menu-evento {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e8e8e8;
+    font-size: 20px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-menu-evento:hover {
+    background: white;
+    color: #333;
+    border-color: #ddd;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-menu-evento:active {
+    transform: scale(0.95);
+}
+
+/* Menú desplegable de eventos */
+.evento-menu-opciones {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    margin-top: 8px;
+    overflow: hidden;
+    animation: slideDownMenu 0.2s ease;
+}
+
+/* Botón de eliminar evento */
+.menu-opcion-eliminar-evento {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-opcion-eliminar-evento:hover {
+    background: #fee;
+}
+
+.menu-opcion-eliminar-evento:active {
+    background: #fdd;
+}
+
+.menu-opcion-eliminar-evento:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Nota para administradores en eventos */
+.menu-nota-admin-evento {
+    display: block;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #95a5a6;
+    font-style: italic;
+    border-top: 1px solid #f0f0f0;
+    background: #f8f9fa;
+}
+
+/* Mensaje cuando no hay eventos */
+.mensaje-sin-eventos {
+    animation: fadeIn 0.5s ease;
+}
+/* ============================================
+   ESTILOS PARA MENÚ DE OPCIONES DE GRUPOS
+   Agregar al final de comunidad.css
+   ============================================ */
+
+/* Ajuste de la estructura de grupo-card para incluir menú */
+.grupo-card {
+    position: relative;
+}
+
+/* Contenedor del menú de grupo */
+.grupo-menu-container {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+}
+
+/* Botón de menú para grupos */
+.btn-menu-grupo {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e8e8e8;
+    font-size: 20px;
+    color: #95a5a6;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-menu-grupo:hover {
+    background: white;
+    color: #333;
+    border-color: #ddd;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-menu-grupo:active {
+    transform: scale(0.95);
+}
+
+/* Menú desplegable de grupos */
+.grupo-menu-opciones {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    margin-top: 8px;
+    overflow: hidden;
+    animation: slideDownMenu 0.2s ease;
+}
+
+/* Botón de eliminar grupo */
+.menu-opcion-eliminar-grupo {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-opcion-eliminar-grupo:hover {
+    background: #fee;
+}
+
+.menu-opcion-eliminar-grupo:active {
+    background: #fdd;
+}
+
+.menu-opcion-eliminar-grupo:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Nota para administradores en grupos */
+.menu-nota-admin-grupo {
+    display: block;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #95a5a6;
+    font-style: italic;
+    border-top: 1px solid #f0f0f0;
+    background: #f8f9fa;
+}
+
+/* Mensaje cuando no hay grupos */
+.mensaje-sin-grupos {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Animación para grupos que se están eliminando */
+.grupo-card.eliminando {
+    pointer-events: none;
+}
+
+.grupo-card.eliminando::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    pointer-events: all;
+    border-radius: 12px;
+}
+
+/* ============================================
+   RESPONSIVE - GRUPOS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .btn-menu-grupo {
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
+        padding: 5px 8px;
+    }
+    
+    .grupo-menu-opciones {
+        min-width: 180px;
+        right: -8px;
+    }
+    
+    .menu-opcion-eliminar-grupo {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .menu-nota-admin-grupo {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
+    
+    .grupo-badge-creador,
+    .grupo-badge-admin {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grupo-menu-opciones {
+        min-width: 160px;
+    }
+    
+    .btn-menu-grupo {
+        font-size: 16px;
+        width: 28px;
+        height: 28px;
+    }
+    
+    .grupo-menu-container {
+        top: 8px;
+        right: 8px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - EVENTOS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .btn-menu-evento {
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
+        padding: 5px 8px;
+    }
+    
+    .evento-menu-opciones {
+        min-width: 180px;
+        right: -8px;
+    }
+    
+    .menu-opcion-eliminar-evento {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .menu-nota-admin-evento {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
+    
+}
+
+@media (max-width: 480px) {
+    .evento-menu-opciones {
+        min-width: 160px;
+    }
+    
+    .btn-menu-evento {
+        font-size: 16px;
+        width: 28px;
+        height: 28px;
+    }
+    
+    .evento-menu-container {
+        top: 8px;
+        right: 8px;
+    }
+}
+/* ============================================
+   RESPONSIVE - ADAPTACIÓN PARA MÓVILES
+   ============================================ */
+
+@media (max-width: 768px) {
+    .btn-menu-post {
+        font-size: 20px;
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+    
+    .post-menu-opciones {
+        min-width: 180px;
+        right: -8px;
+    }
+    
+    .menu-opcion-eliminar {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .menu-nota-admin {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .post-menu-opciones {
+        min-width: 160px;
+    }
+    
+    .btn-menu-post {
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
+    }
+}
+@keyframes slideDownNotification {
+    from {
+        transform: translate(-50%, -20px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+/* Responsive para botón eliminar */
+@media (max-width: 768px) {
+    .btn-eliminar-comentario {
+        opacity: 1; /* Siempre visible en móviles */
+        font-size: 14px;
+        padding: 2px 6px;
+    }
+}
 /* Responsive */
 @media (max-width: 768px) {
     .form-row {

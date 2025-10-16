@@ -743,9 +743,6 @@ function enviarGrupo(event) {
     const form = document.getElementById('formCrearGrupo');
     const btnSubmit = form.querySelector('.btn-crear-evento');
     
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = 'Creando...';
-    
     const formData = new FormData(form);
     
     fetch('ajax/crear_grupo.php', {
@@ -772,3 +769,417 @@ function enviarGrupo(event) {
     
     return false;
 }
+// Función para eliminar un comentario
+function eliminarComentario(comentarioId, elemento) {
+    if (!confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('comentario_id', comentarioId);
+    
+    fetch('ajax/eliminar_comentario.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Mostrar mensaje de éxito
+            mostrarNotificacion(data.message, 'success');
+            
+            // Eliminar el elemento del DOM con animación
+            const comentarioItem = elemento.closest('.comentario-item');
+            comentarioItem.style.transition = 'opacity 0.3s ease';
+            comentarioItem.style.opacity = '0';
+            
+            setTimeout(() => {
+                comentarioItem.remove();
+                
+                // Actualizar el contador de comentarios en el botón del post
+                const postId = elemento.getAttribute('data-post-id');
+                const btnComentarios = document.querySelector(`button[onclick="toggleComentarios(${postId})"]`);
+                if (btnComentarios) {
+                    btnComentarios.innerHTML = `💬 ${data.nuevo_conteo}`;
+                }
+                
+                // Si no hay más comentarios, mostrar mensaje
+                const comentariosLista = document.querySelector(`#comentarios-${postId} .comentarios-lista`);
+                if (comentariosLista && comentariosLista.children.length === 0) {
+                    comentariosLista.innerHTML = '<p class="sin-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>';
+                }
+            }, 300);
+            
+        } else {
+            mostrarNotificacion(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarNotificacion('Error al eliminar el comentario', 'error');
+    });
+}
+
+// Función auxiliar para mostrar notificaciones
+function mostrarNotificacion(mensaje, tipo) {
+    const notificacion = document.createElement('div');
+    notificacion.className = tipo === 'success' ? 'mensaje-exito' : 'mensaje-error';
+    notificacion.textContent = mensaje;
+    notificacion.style.position = 'fixed';
+    notificacion.style.top = '20px';
+    notificacion.style.left = '50%';
+    notificacion.style.transform = 'translateX(-50%)';
+    notificacion.style.zIndex = '10000';
+    
+    document.body.appendChild(notificacion);
+    
+    setTimeout(() => {
+        notificacion.style.transition = 'opacity 0.3s ease';
+        notificacion.style.opacity = '0';
+        setTimeout(() => notificacion.remove(), 300);
+    }, 3000);
+}
+// Función para eliminar un post completo
+function eliminarPost(postId, elemento) {
+    // Mostrar modal de confirmación personalizado
+    if (!confirm('⚠️ ¿Estás seguro de que deseas eliminar este post?\n\nEsta acción eliminará:\n• El post completo\n• Todos los comentarios\n• Todos los likes\n• Las imágenes asociadas\n\nEsta acción NO se puede deshacer.')) {
+        return;
+    }
+    
+    // Deshabilitar el botón mientras se procesa
+    const btnEliminar = elemento;
+    const textoOriginal = btnEliminar.innerHTML;
+    btnEliminar.disabled = true;
+    btnEliminar.innerHTML = '⏳ Eliminando...';
+    btnEliminar.style.opacity = '0.6';
+    
+    const formData = new FormData();
+    formData.append('post_id', postId);
+    
+    fetch('ajax/eliminar_post.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Mostrar mensaje de éxito
+            mostrarNotificacion(data.message, 'success');
+            
+            // Eliminar el post del DOM con animación
+            const postCard = elemento.closest('.post-card');
+            postCard.style.transition = 'all 0.4s ease';
+            postCard.style.transform = 'scale(0.95)';
+            postCard.style.opacity = '0';
+            
+            setTimeout(() => {
+                postCard.style.height = postCard.offsetHeight + 'px';
+                postCard.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    postCard.style.height = '0';
+                    postCard.style.margin = '0';
+                    postCard.style.padding = '0';
+                    
+                    setTimeout(() => {
+                        postCard.remove();
+                        
+                        // Verificar si quedan posts
+                        const postsContainer = document.querySelector('.posts-container');
+                        if (postsContainer && postsContainer.querySelectorAll('.post-card').length === 0) {
+                            postsContainer.innerHTML = `
+                                <div class="mensaje-sin-posts" style="text-align: center; padding: 40px; color: #95a5a6;">
+                                    <p style="font-size: 18px; margin-bottom: 10px;">📭</p>
+                                    <p>No hay posts para mostrar</p>
+                                    <p style="font-size: 14px; margin-top: 10px;">¡Sé el primero en compartir algo!</p>
+                                </div>
+                            `;
+                        }
+                    }, 400);
+                }, 50);
+            }, 400);
+            
+        } else {
+            // Mostrar error y restaurar botón
+            mostrarNotificacion(data.message, 'error');
+            btnEliminar.disabled = false;
+            btnEliminar.innerHTML = textoOriginal;
+            btnEliminar.style.opacity = '1';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarNotificacion('Error al eliminar el post', 'error');
+        btnEliminar.disabled = false;
+        btnEliminar.innerHTML = textoOriginal;
+        btnEliminar.style.opacity = '1';
+    });
+}
+
+// Función para mostrar/ocultar menú de opciones del post
+function toggleMenuPost(postId) {
+    const menu = document.getElementById(`menu-post-${postId}`);
+    
+    // Cerrar otros menús abiertos
+    document.querySelectorAll('.post-menu-opciones').forEach(m => {
+        if (m.id !== `menu-post-${postId}`) {
+            m.style.display = 'none';
+        }
+    });
+    
+    // Toggle del menú actual
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
+}
+
+// Cerrar menús al hacer clic fuera
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.post-menu-container')) {
+        document.querySelectorAll('.post-menu-opciones').forEach(menu => {
+            menu.style.display = 'none';
+        });
+    }
+});
+
+// Función auxiliar para mostrar notificaciones (si no existe ya)
+if (typeof mostrarNotificacion !== 'function') {
+    function mostrarNotificacion(mensaje, tipo) {
+        const notificacion = document.createElement('div');
+        notificacion.className = tipo === 'success' ? 'mensaje-exito' : 'mensaje-error';
+        notificacion.textContent = mensaje;
+        notificacion.style.position = 'fixed';
+        notificacion.style.top = '20px';
+        notificacion.style.left = '50%';
+        notificacion.style.transform = 'translateX(-50%)';
+        notificacion.style.zIndex = '10000';
+        notificacion.style.minWidth = '300px';
+        notificacion.style.textAlign = 'center';
+        
+        document.body.appendChild(notificacion);
+        
+        setTimeout(() => {
+            notificacion.style.transition = 'opacity 0.3s ease';
+            notificacion.style.opacity = '0';
+            setTimeout(() => notificacion.remove(), 300);
+        }, 3000);
+    }
+}
+// Función para eliminar un evento
+function eliminarEvento(eventoId, elemento) {
+    // Mostrar modal de confirmación personalizado
+    if (!confirm('⚠️ ¿Estás seguro de que deseas eliminar este evento?\n\nEsta acción eliminará:\n• El evento completo\n• Todas las inscripciones de asistentes\n\nEsta acción NO se puede deshacer.')) {
+        return;
+    }
+    
+    // Deshabilitar el botón mientras se procesa
+    const btnEliminar = elemento;
+    const textoOriginal = btnEliminar.innerHTML;
+    btnEliminar.disabled = true;
+    btnEliminar.innerHTML = '⏳ Eliminando...';
+    btnEliminar.style.opacity = '0.6';
+    
+    const formData = new FormData();
+    formData.append('evento_id', eventoId);
+    
+    fetch('ajax/eliminar_evento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Mostrar mensaje de éxito con información
+            let mensaje = data.message;
+            if (data.asistentes_afectados > 0) {
+                mensaje += ` (${data.asistentes_afectados} asistente${data.asistentes_afectados > 1 ? 's' : ''} notificado${data.asistentes_afectados > 1 ? 's' : ''})`;
+            }
+            mostrarNotificacion(mensaje, 'success');
+            
+            // Eliminar el evento del DOM con animación
+            const eventoCard = elemento.closest('.evento-card');
+            eventoCard.style.transition = 'all 0.4s ease';
+            eventoCard.style.transform = 'scale(0.95)';
+            eventoCard.style.opacity = '0';
+            
+            setTimeout(() => {
+                eventoCard.style.height = eventoCard.offsetHeight + 'px';
+                eventoCard.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    eventoCard.style.height = '0';
+                    eventoCard.style.margin = '0';
+                    eventoCard.style.padding = '0';
+                    
+                    setTimeout(() => {
+                        eventoCard.remove();
+                        
+                        // Verificar si quedan eventos
+                        const eventosContainer = document.querySelector('.eventos-list');
+                        if (eventosContainer && eventosContainer.querySelectorAll('.evento-card').length === 0) {
+                            eventosContainer.innerHTML = `
+                                <div class="mensaje-sin-eventos" style="text-align: center; padding: 40px; color: #95a5a6;">
+                                    <p style="font-size: 18px; margin-bottom: 10px;">📅</p>
+                                    <p>No hay eventos próximos</p>
+                                    <p style="font-size: 14px; margin-top: 10px;">¡Sé el primero en crear uno!</p>
+                                </div>
+                            `;
+                        }
+                    }, 400);
+                }, 50);
+            }, 400);
+            
+        } else {
+            // Mostrar error y restaurar botón
+            mostrarNotificacion(data.message, 'error');
+            btnEliminar.disabled = false;
+            btnEliminar.innerHTML = textoOriginal;
+            btnEliminar.style.opacity = '1';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarNotificacion('Error al eliminar el evento', 'error');
+        btnEliminar.disabled = false;
+        btnEliminar.innerHTML = textoOriginal;
+        btnEliminar.style.opacity = '1';
+    });
+}
+
+// Función para mostrar/ocultar menú de opciones del evento
+function toggleMenuEvento(eventoId) {
+    const menu = document.getElementById(`menu-evento-${eventoId}`);
+    
+    // Cerrar otros menús abiertos
+    document.querySelectorAll('.evento-menu-opciones').forEach(m => {
+        if (m.id !== `menu-evento-${eventoId}`) {
+            m.style.display = 'none';
+        }
+    });
+    
+    // Toggle del menú actual
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
+}
+
+// Cerrar menús de eventos al hacer clic fuera
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.evento-menu-container')) {
+        document.querySelectorAll('.evento-menu-opciones').forEach(menu => {
+            menu.style.display = 'none';
+        });
+    }
+});
+// Función para eliminar un grupo
+function eliminarGrupo(grupoId, elemento) {
+    // Mostrar modal de confirmación personalizado
+    if (!confirm('⚠️ ¿Estás seguro de que deseas eliminar este grupo?\n\nEsta acción eliminará:\n• El grupo completo\n• Todas las membresías de usuarios\n\nEsta acción NO se puede deshacer.')) {
+        return;
+    }
+    
+    // Deshabilitar el botón mientras se procesa
+    const btnEliminar = elemento;
+    const textoOriginal = btnEliminar.innerHTML;
+    btnEliminar.disabled = true;
+    btnEliminar.innerHTML = '⏳ Eliminando...';
+    btnEliminar.style.opacity = '0.6';
+    
+    const formData = new FormData();
+    formData.append('grupo_id', grupoId);
+    
+    fetch('ajax/eliminar_grupo.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Mostrar mensaje de éxito con información
+            let mensaje = data.message;
+            if (data.miembros_afectados > 0) {
+                mensaje += ` (${data.miembros_afectados} miembro${data.miembros_afectados > 1 ? 's' : ''} notificado${data.miembros_afectados > 1 ? 's' : ''})`;
+            }
+            mostrarNotificacion(mensaje, 'success');
+            
+            // Eliminar el grupo del DOM con animación
+            const grupoCard = elemento.closest('.grupo-card');
+            grupoCard.style.transition = 'all 0.4s ease';
+            grupoCard.style.transform = 'scale(0.95)';
+            grupoCard.style.opacity = '0';
+            
+            setTimeout(() => {
+                grupoCard.style.height = grupoCard.offsetHeight + 'px';
+                grupoCard.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    grupoCard.style.height = '0';
+                    grupoCard.style.margin = '0';
+                    grupoCard.style.padding = '0';
+                    
+                    setTimeout(() => {
+                        grupoCard.remove();
+                        
+                        // Verificar si quedan grupos
+                        const gruposContainer = document.querySelector('.grupos-list');
+                        if (gruposContainer && gruposContainer.querySelectorAll('.grupo-card').length === 0) {
+                            gruposContainer.innerHTML = `
+                                <div class="mensaje-sin-grupos" style="text-align: center; padding: 40px; color: #95a5a6;">
+                                    <p style="font-size: 18px; margin-bottom: 10px;">👥</p>
+                                    <p>No hay grupos disponibles</p>
+                                    <p style="font-size: 14px; margin-top: 10px;">¡Sé el primero en crear uno!</p>
+                                </div>
+                            `;
+                        }
+                    }, 400);
+                }, 50);
+            }, 400);
+            
+        } else {
+            // Mostrar error y restaurar botón
+            mostrarNotificacion(data.message, 'error');
+            btnEliminar.disabled = false;
+            btnEliminar.innerHTML = textoOriginal;
+            btnEliminar.style.opacity = '1';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarNotificacion('Error al eliminar el grupo', 'error');
+        btnEliminar.disabled = false;
+        btnEliminar.innerHTML = textoOriginal;
+        btnEliminar.style.opacity = '1';
+    });
+}
+
+// Función para mostrar/ocultar menú de opciones del grupo
+function toggleMenuGrupo(grupoId) {
+    const menu = document.getElementById(`menu-grupo-${grupoId}`);
+    
+    // Cerrar otros menús abiertos
+    document.querySelectorAll('.grupo-menu-opciones').forEach(m => {
+        if (m.id !== `menu-grupo-${grupoId}`) {
+            m.style.display = 'none';
+        }
+    });
+    
+    // Toggle del menú actual
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
+}
+
+// Cerrar menús de grupos al hacer clic fuera
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.grupo-menu-container')) {
+        document.querySelectorAll('.grupo-menu-opciones').forEach(menu => {
+            menu.style.display = 'none';
+        });
+    }
+});

@@ -244,6 +244,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 <?php if ($rol_usuario !== 'demo' && $resultado_posts && $resultado_posts->num_rows > 0): ?>
                     <?php while ($post = $resultado_posts->fetch_assoc()): ?>
                         <div class="post-card">
+                            <!-- Header del post con menú de opciones -->
                             <div class="post-header">
                                 <div class="user-avatar" style="background-image: url('imagenes/<?php echo $post['foto_usuario']; ?>')"></div>
                                 <div class="user-info">
@@ -269,6 +270,26 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 }
                                 if ($badge_text): ?>
                                     <span class="post-badge <?php echo $badge_class; ?>"><?php echo $badge_text; ?></span>
+                                <?php endif; ?>
+                                
+                                <?php 
+                                // Verificar si el usuario actual puede eliminar este post
+                                $puede_eliminar_post = ($post['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
+                                
+                                if ($puede_eliminar_post): ?>
+                                    <div class="post-menu-container">
+                                        <button class="btn-menu-post" onclick="toggleMenuPost(<?php echo $post['id_post']; ?>)" title="Opciones">
+                                            ⋮
+                                        </button>
+                                        <div class="post-menu-opciones" id="menu-post-<?php echo $post['id_post']; ?>" style="display: none;">
+                                            <button class="menu-opcion-eliminar" onclick="eliminarPost(<?php echo $post['id_post']; ?>, this)">
+                                                🗑️ Eliminar post
+                                            </button>
+                                            <?php if ($rol_usuario == 'admin' && $post['id_usuario'] != $usuario_id): ?>
+                                                <span class="menu-nota-admin">Como administrador</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
                                 <?php endif; ?>
                             </div>
                             <div class="post-content">
@@ -302,54 +323,66 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 </button>
                             </div>
                             
-                            <!-- Sección de comentarios (colapsable) -->
-                            <div class="comentarios-seccion" id="comentarios-<?php echo $post['id_post']; ?>" style="display: none;">
-                                <div class="comentarios-lista">
-                                    <?php
-                                    // Obtener comentarios de este post
-                                    $post_id = $post['id_post'];
-                                    $consulta_comentarios = "SELECT c.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario 
-                                                            FROM comentarios_comunidad c 
-                                                            JOIN usuarios u ON c.id_usuario = u.id_usuario 
-                                                            WHERE c.id_post = $post_id 
-                                                            ORDER BY c.fecha ASC";
-                                    $resultado_comentarios = $conexion->query($consulta_comentarios);
-                                    
-                                    if ($resultado_comentarios && $resultado_comentarios->num_rows > 0):
-                                        while ($comentario = $resultado_comentarios->fetch_assoc()): ?>
-                                            <div class="comentario-item">
-                                                <div class="comentario-avatar" style="background-image: url('imagenes/<?php echo $comentario['foto_usuario']; ?>')"></div>
-                                                <div class="comentario-contenido">
-                                                    <div class="comentario-header">
-                                                        <span class="comentario-autor"><?php echo htmlspecialchars($comentario['nombre_usuario'] . ' ' . $comentario['apellido_usuario']); ?></span>
-                                                        <span class="comentario-fecha"><?php echo date('d/m/Y H:i', strtotime($comentario['fecha'])); ?></span>
-                                                    </div>
-                                                    <p class="comentario-texto"><?php echo nl2br(htmlspecialchars($comentario['contenido'])); ?></p>
-                                                </div>
-                                            </div>
-                                        <?php endwhile;
-                                    else: ?>
-                                        <p class="sin-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <!-- Formulario para nuevo comentario -->
-                                <div class="comentario-form">
-                                    <div class="comentario-input-wrapper">
-                                        <textarea 
-                                            class="comentario-input" 
-                                            placeholder="Escribe un comentario..." 
-                                            maxlength="500"
-                                            data-post-id="<?php echo $post['id_post']; ?>"
-                                            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); enviarComentario(this);}"
-                                        ></textarea>
-                                        <button class="btn-enviar-comentario" onclick="enviarComentario(this.previousElementSibling)">
-                                            ➤
-                                        </button>
-                                    </div>
-                                    <small class="comentario-ayuda">Presiona Enter para enviar, Shift+Enter para nueva línea</small>
-                                </div>
-                            </div>
+                            <!-- Sección de comentarios (colapsable) - REEMPLAZAR en comunidad.php -->
+<div class="comentarios-seccion" id="comentarios-<?php echo $post['id_post']; ?>" style="display: none;">
+    <div class="comentarios-lista">
+        <?php
+        // Obtener comentarios de este post
+        $post_id = $post['id_post'];
+        $consulta_comentarios = "SELECT c.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario 
+                                FROM comentarios_comunidad c 
+                                JOIN usuarios u ON c.id_usuario = u.id_usuario 
+                                WHERE c.id_post = $post_id 
+                                ORDER BY c.fecha ASC";
+        $resultado_comentarios = $conexion->query($consulta_comentarios);
+        
+        if ($resultado_comentarios && $resultado_comentarios->num_rows > 0):
+            while ($comentario = $resultado_comentarios->fetch_assoc()): 
+                // Verificar si el usuario actual puede eliminar este comentario
+                $puede_eliminar = ($comentario['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
+            ?>
+                <div class="comentario-item">
+                    <div class="comentario-avatar" style="background-image: url('imagenes/<?php echo $comentario['foto_usuario']; ?>')"></div>
+                    <div class="comentario-contenido">
+                        <div class="comentario-header">
+                            <span class="comentario-autor"><?php echo htmlspecialchars($comentario['nombre_usuario'] . ' ' . $comentario['apellido_usuario']); ?></span>
+                            <span class="comentario-fecha"><?php echo date('d/m/Y H:i', strtotime($comentario['fecha'])); ?></span>
+                            
+                            <?php if ($puede_eliminar): ?>
+                                <button class="btn-eliminar-comentario" 
+                                        onclick="eliminarComentario(<?php echo $comentario['id_comentario']; ?>, this)"
+                                        data-post-id="<?php echo $post_id; ?>"
+                                        title="Eliminar comentario">
+                                    🗑️
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                        <p class="comentario-texto"><?php echo nl2br(htmlspecialchars($comentario['contenido'])); ?></p>
+                    </div>
+                </div>
+            <?php endwhile;
+        else: ?>
+            <p class="sin-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+        <?php endif; ?>
+    </div>
+    
+    <!-- Formulario para nuevo comentario -->
+    <div class="comentario-form">
+        <div class="comentario-input-wrapper">
+            <textarea 
+                class="comentario-input" 
+                placeholder="Escribe un comentario..." 
+                maxlength="500"
+                data-post-id="<?php echo $post['id_post']; ?>"
+                onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); enviarComentario(this);}"
+            ></textarea>
+            <button class="btn-enviar-comentario" onclick="enviarComentario(this.previousElementSibling)">
+                ➤
+            </button>
+        </div>
+        <small class="comentario-ayuda">Presiona Enter para enviar, Shift+Enter para nueva línea</small>
+    </div>
+</div>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -407,65 +440,84 @@ $resultado_grupos = $conexion->query($consulta_grupos);
 
         <!-- Sección Eventos -->
         <section class="eventos-section" id="eventosSection" style="display: none;">
+    <div>
+        
     <div class="section-header">
-        <h3>Próximos Eventos</h3>
-        <?php if ($rol_usuario == 'demo'): ?>
-            <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear eventos')">Crear Evento</button>
-        <?php else: ?>
+            <h3>Próximos Eventos</h3>
             <button class="btn-create" onclick="mostrarModalCrearEvento()">Crear Evento</button>
-        <?php endif; ?>
     </div>
-
-    <div class="eventos-list">
-        <?php if ($rol_usuario !== 'demo' && $resultado_eventos && $resultado_eventos->num_rows > 0): ?>
-            <?php while ($evento = $resultado_eventos->fetch_assoc()): 
-                $fecha_evento = new DateTime($evento['fecha']);
-                $dia = $fecha_evento->format('d');
-                $mes = $fecha_evento->format('M');
-            ?>
-                <div class="evento-card">
-                    <div class="evento-date">
-                        <div class="date-day"><?php echo $dia; ?></div>
-                        <div class="date-month"><?php echo ucfirst($mes); ?></div>
-                    </div>
-                    <div class="evento-info">
-                        <h4><?php echo htmlspecialchars($evento['titulo']); ?></h4>
-                        <p class="evento-descripcion"><?php echo htmlspecialchars($evento['descripcion']); ?></p>
-                        <div class="evento-details">
-                            🕐 <?php echo $fecha_evento->format('H:i'); ?> 
-                            📍 <?php echo htmlspecialchars($evento['ubicacion']); ?> 
-                            👥 <?php echo $evento['contador_asistentes']; ?> asistirán
-                        </div>
-                        <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
-                        <?php else: ?>
-                            <button class="btn-join <?php echo $evento['usuario_participa'] > 0 ? 'btn-joined' : ''; ?>" 
-                                    data-evento-id="<?php echo $evento['id_evento']; ?>"
-                                    onclick="toggleParticipacion(this)">
-                                <?php echo $evento['usuario_participa'] > 0 ? '✓ Participando' : 'Unirse al Evento'; ?>
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <!-- Eventos de ejemplo para demo -->
+<!-- Sección de eventos con menú de opciones -->
+<div class="eventos-list">
+    
+    <?php if ($rol_usuario !== 'demo' && $resultado_eventos && $resultado_eventos->num_rows > 0): ?>
+        <?php while ($evento = $resultado_eventos->fetch_assoc()): 
+            $fecha_evento = new DateTime($evento['fecha']);
+            $dia = $fecha_evento->format('d');
+            $mes = $fecha_evento->format('M');
+            
+            // Verificar si el usuario actual puede eliminar este evento
+            $puede_eliminar_evento = ($evento['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
+            $es_creador = ($evento['id_usuario'] == $usuario_id);
+        ?>
             <div class="evento-card">
+                <?php if ($puede_eliminar_evento): ?>
+                    <div class="evento-menu-container">
+                        <button class="btn-menu-evento" onclick="toggleMenuEvento(<?php echo $evento['id_evento']; ?>)" title="Opciones">
+                            ⋮
+                        </button>
+                        <div class="evento-menu-opciones" id="menu-evento-<?php echo $evento['id_evento']; ?>" style="display: none;">
+                            <button class="menu-opcion-eliminar-evento" onclick="eliminarEvento(<?php echo $evento['id_evento']; ?>, this)">
+                                🗑️ Eliminar evento
+                            </button>
+                            <?php if ($rol_usuario == 'admin' && !$es_creador): ?>
+                                <span class="menu-nota-admin-evento">Como administrador</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                
                 <div class="evento-date">
-                    <div class="date-day">15</div>
-                    <div class="date-month">Nov</div>
+                    <div class="date-day"><?php echo $dia; ?></div>
+                    <div class="date-month"><?php echo ucfirst($mes); ?></div>
                 </div>
                 <div class="evento-info">
-                    <h4>Adopción Solidaria</h4>
-                    <p class="evento-descripcion">Jornada de adopción de mascotas rescatadas</p>
+                    <h4><?php echo htmlspecialchars($evento['titulo']); ?></h4>
+                    <p class="evento-descripcion"><?php echo htmlspecialchars($evento['descripcion']); ?></p>
                     <div class="evento-details">
-                        🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
+                        🕐 <?php echo $fecha_evento->format('H:i'); ?> 
+                        📍 <?php echo htmlspecialchars($evento['ubicacion']); ?> 
+                        👥 <?php echo $evento['contador_asistentes']; ?> asistirán
                     </div>
-                    <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
+                    <?php else: ?>
+                        <button class="btn-join <?php echo $evento['usuario_participa'] > 0 ? 'btn-joined' : ''; ?>" 
+                                data-evento-id="<?php echo $evento['id_evento']; ?>"
+                                onclick="toggleParticipacion(this)">
+                            <?php echo $evento['usuario_participa'] > 0 ? '✓ Participando' : 'Unirse al Evento'; ?>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
-        <?php endif; ?>
-    </div>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <!-- Eventos de ejemplo para demo -->
+        <div class="evento-card">
+            <div class="evento-date">
+                <div class="date-day">15</div>
+                <div class="date-month">Nov</div>
+            </div>
+            <div class="evento-info">
+                <h4>Adopción Solidaria</h4>
+                <p class="evento-descripcion">Jornada de adopción de mascotas rescatadas</p>
+                <div class="evento-details">
+                    🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
+                </div>
+                <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
 </section>
 
         <!-- Sección Grupos -->
@@ -479,35 +531,57 @@ $resultado_grupos = $conexion->query($consulta_grupos);
         <?php endif; ?>
     </div>
 
-    <div class="grupos-list">
-        <?php if ($rol_usuario !== 'demo' && $resultado_grupos && $resultado_grupos->num_rows > 0): ?>
-            <?php while ($grupo = $resultado_grupos->fetch_assoc()): ?>
-                <div class="grupo-card">
-                    <div class="grupo-icon"><?php echo $grupo['icono']; ?></div>
-                    <div class="grupo-info">
-                        <h4><?php echo htmlspecialchars($grupo['nombre_grupo']); ?></h4>
-                        <p><?php echo $grupo['contador_miembros']; ?> miembros</p>
-                        <p class="grupo-descripcion-mini"><?php echo htmlspecialchars(substr($grupo['descripcion'], 0, 60)); ?>...</p>
-                    </div>
-                    <button class="btn-join <?php echo $grupo['usuario_es_miembro'] > 0 ? 'btn-joined' : ''; ?>" 
-                            data-grupo-id="<?php echo $grupo['id_grupo']; ?>"
-                            onclick="toggleMiembroGrupo(this)">
-                        <?php echo $grupo['usuario_es_miembro'] > 0 ? '✓ Miembro' : 'Unirse'; ?>
-                    </button>
-                </div>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <!-- Grupos de ejemplo para demo -->
+    <!-- Sección de grupos con menú de opciones - REEMPLAZAR en comunidad.php -->
+<div class="grupos-list">
+    <?php if ($rol_usuario !== 'demo' && $resultado_grupos && $resultado_grupos->num_rows > 0): ?>
+        <?php while ($grupo = $resultado_grupos->fetch_assoc()): 
+            // Verificar si el usuario actual puede eliminar este grupo
+            $puede_eliminar_grupo = ($grupo['id_creador'] == $usuario_id) || ($rol_usuario == 'admin');
+            $es_creador = ($grupo['id_creador'] == $usuario_id);
+        ?>
             <div class="grupo-card">
-                <div class="grupo-icon">🐕</div>
+                
+                <?php if ($puede_eliminar_grupo): ?>
+                    <div class="grupo-menu-container">
+                        <button class="btn-menu-grupo" onclick="toggleMenuGrupo(<?php echo $grupo['id_grupo']; ?>)" title="Opciones">
+                            ⋮
+                        </button>
+                        <div class="grupo-menu-opciones" id="menu-grupo-<?php echo $grupo['id_grupo']; ?>" style="display: none;">
+                            <button class="menu-opcion-eliminar-grupo" onclick="eliminarGrupo(<?php echo $grupo['id_grupo']; ?>, this)">
+                                🗑️ Eliminar grupo
+                            </button>
+                            <?php if ($rol_usuario == 'admin' && !$es_creador): ?>
+                                <span class="menu-nota-admin-grupo">Como administrador</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                
+                <div class="grupo-icon"><?php echo $grupo['icono']; ?></div>
                 <div class="grupo-info">
-                    <h4>Dueños de Golden Retriever</h4>
-                    <p>234 miembros</p>
+                    <h4><?php echo htmlspecialchars($grupo['nombre_grupo']); ?></h4>
+                    <p><?php echo $grupo['contador_miembros']; ?> miembros</p>
+                    <p class="grupo-descripcion-mini"><?php echo htmlspecialchars(substr($grupo['descripcion'], 0, 60)); ?>...</p>
                 </div>
-                <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos')">Unirse</button>
+                <button class="btn-join <?php echo $grupo['usuario_es_miembro'] > 0 ? 'btn-joined' : ''; ?>" 
+                        data-grupo-id="<?php echo $grupo['id_grupo']; ?>"
+                        onclick="toggleMiembroGrupo(this)">
+                    <?php echo $grupo['usuario_es_miembro'] > 0 ? '✓ Miembro' : 'Unirse'; ?>
+                </button>
             </div>
-        <?php endif; ?>
-    </div>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <!-- Grupos de ejemplo para demo -->
+        <div class="grupo-card">
+            <div class="grupo-icon">🐕</div>
+            <div class="grupo-info">
+                <h4>Dueños de Golden Retriever</h4>
+                <p>234 miembros</p>
+            </div>
+            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos')">Unirse</button>
+        </div>
+    <?php endif; ?>
+</div>
 </section>
 
     </main>
@@ -671,8 +745,8 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn-cancelar" onclick="cerrarModalCrearGrupo()">Cancelar</button>
-                    <button type="submit" class="btn-crear-evento">Crear Grupo</button>
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalCrearGrupo(this)">Cancelar</button>
+                    <button type="submit" class="btn-crear-grupo" id="btnSubmit">Crear Grupo</button>
                 </div>
             </form>
         </div>

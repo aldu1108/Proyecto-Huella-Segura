@@ -164,13 +164,15 @@ body {
     gap: 12px;
     overflow-x: auto;
     padding-bottom: 8px;
+    margin: 0 auto;        /* centra horizontalmente */
+    align-items: center;   /* centra el contenido dentro del flex */
 }
 
 .evento-card {
     background: #FFF3CD;
     border-radius: 15px;
     padding: 16px;
-    min-width: 120px;
+    min-width: 1000px;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
