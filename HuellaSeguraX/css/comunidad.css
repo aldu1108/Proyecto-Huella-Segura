@@ -1,6 +1,9 @@
-/* Formulario deshabilitado para demo */
+/* ============================================
+   FORMULARIO Y INPUTS
+   ============================================ */
 .input-titulo-post[readonly],
-.textarea-contenido-post[readonly] {
+.textarea-contenido-post[readonly],
+.tipo-post-selector select:disabled {
     background: #f8f9fa;
     cursor: not-allowed;
     color: #6c757d;
@@ -11,21 +14,49 @@
     border-color: #f39c12;
 }
 
-.tipo-post-selector select:disabled {
-    background: #f8f9fa;
-    cursor: not-allowed;
-    color: #6c757d;
-}
-
 .btn-adjuntar:disabled,
 .btn-publicar:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-/* Estilos para la sección de comunidad */
+.input-titulo-post {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
 
-/* Mensajes de éxito/error */
+.textarea-contenido-post {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.input-titulo-post:focus,
+.textarea-contenido-post:focus,
+.tipo-post-selector select:focus,
+.form-group input:focus,
+.form-group textarea:focus,
+.comentario-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ============================================
+   MENSAJES Y NOTIFICACIONES
+   ============================================ */
 .mensaje-exito,
 .mensaje-error {
     padding: 15px 20px;
@@ -34,7 +65,7 @@
     border-radius: 12px;
     font-weight: 500;
     text-align: center;
-    animation: slideDown 0.3s ease;
+    animation: slideDownNotification 0.3s ease;
     transition: opacity 0.3s ease;
 }
 
@@ -50,47 +81,9 @@
     border: 1px solid #f5c6cb;
 }
 
-/* Formulario de crear post mejorado */
-.create-post form {
-    width: 100%;
-}
-
-.input-titulo-post {
-    width: 100%;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-    border: 2px solid #e8e8e8;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.input-titulo-post:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.textarea-contenido-post {
-    width: 100%;
-    min-height: 100px;
-    padding: 12px 16px;
-    border: 2px solid #e8e8e8;
-    border-radius: 12px;
-    font-size: 14px;
-    resize: vertical;
-    font-family: inherit;
-    transition: all 0.3s ease;
-}
-
-.textarea-contenido-post:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-/* Opciones del post */
+/* ============================================
+   POST OPTIONS Y ACCIONES
+   ============================================ */
 .post-options {
     display: flex;
     justify-content: space-between;
@@ -121,12 +114,6 @@
     transition: all 0.3s ease;
 }
 
-.tipo-post-selector select:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-/* Acciones del post */
 .acciones-post {
     display: flex;
     gap: 10px;
@@ -152,7 +139,9 @@
     border-color: #667eea;
 }
 
-.btn-publicar {
+.btn-publicar,
+.btn-crear-evento,
+.btn-enviar-comentario {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -167,12 +156,27 @@
     transition: all 0.3s ease;
 }
 
-.btn-publicar:hover {
+.btn-publicar:hover,
+.btn-crear-evento:hover,
+.btn-enviar-comentario:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-/* Preview de imágenes */
+.btn-enviar-comentario {
+    padding: 12px 20px;
+    white-space: nowrap;
+    margin-top: 0;
+    align-self: flex-start;
+}
+
+.btn-enviar-comentario:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   PREVIEW Y POST IMAGES
+   ============================================ */
 .preview-imagenes {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -217,7 +221,9 @@
     transform: scale(1.1);
 }
 
-/* Badges de tipo de post */
+/* ============================================
+   BADGES
+   ============================================ */
 .post-eventos-list {
     padding: 6px 12px;
     border-radius: 6px;
@@ -229,19 +235,27 @@
 .badge-logro {
     background: #FFC107;
     color: #000;
+    border-radius: 6px;
+    padding: 2px 4px;
 }
 
 .badge-paseo {
     background: #27ae60;
     color: white;
+    border-radius: 6px;
+    padding: 2px 4px;
 }
 
 .badge-ayuda {
     background: #e74c3c;
     color: white;
+    border-radius: 6px;
+    padding: 2px 4px;
 }
 
-/* Título del post en el feed */
+/* ============================================
+   POST CONTENT
+   ============================================ */
 .post-titulo {
     font-size: 18px;
     font-weight: 700;
@@ -249,7 +263,6 @@
     color: #2c3e50;
 }
 
-/* Imágenes en posts del feed */
 .post-imagenes {
     display: grid;
     gap: 8px;
@@ -268,12 +281,9 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Grid para múltiples imágenes */
-.post-imagenes:has(img:nth-child(2)) {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.post-imagenes:has(img:nth-child(3)) {
+.post-imagenes:has(img:nth-child(2)),
+.post-imagenes:has(img:nth-child(3)),
+.post-imagenes:has(img:nth-child(4)) {
     grid-template-columns: repeat(2, 1fr);
 }
 
@@ -281,32 +291,32 @@
     grid-column: 1 / -1;
 }
 
-.post-imagenes:has(img:nth-child(4)) {
-    grid-template-columns: repeat(2, 1fr);
-}
-
 .post-imagenes:has(img:nth-child(5)) {
     grid-template-columns: repeat(3, 1fr);
 }
 
-.post-imagenes img:nth-child(1):nth-last-child(5),
-.post-imagenes img:nth-child(2):nth-last-child(4) {
-    grid-column: span 1;
-}
-
-/* Modal para ver imagen expandida */
-.modal-imagen {
+/* ============================================
+   MODALES BASE
+   ============================================ */
+.modal-imagen,
+.modal-compartir,
+.modal-crear-evento {
     display: none;
     position: fixed;
-    z-index: 9999;
-    padding-top: 50px;
+    z-index: 9998;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.6);
     animation: fadeIn 0.3s ease;
+}
+
+.modal-imagen {
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    padding-top: 50px;
 }
 
 .imagen-modal-contenido {
@@ -344,20 +354,11 @@
     padding: 10px 0;
 }
 
-/* Modal de compartir */
-.modal-compartir {
-    display: none;
-    position: fixed;
-    z-index: 9998;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-compartir-contenido {
+/* ============================================
+   MODAL COMPARTIR
+   ============================================ */
+.modal-compartir-contenido,
+.modal-crear-evento-contenido {
     position: relative;
     background: white;
     margin: 10% auto;
@@ -369,7 +370,15 @@
     animation: slideUp 0.3s ease;
 }
 
-.modal-compartir-header {
+.modal-crear-evento-contenido {
+    max-width: 600px;
+    margin: 5% auto;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-compartir-header,
+.modal-crear-evento-header {
     padding: 20px;
     border-bottom: 1px solid #e8e8e8;
     display: flex;
@@ -377,13 +386,24 @@
     align-items: center;
 }
 
-.modal-compartir-header h3 {
+.modal-crear-evento-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 16px 16px 0 0;
+}
+
+.modal-compartir-header h3,
+.modal-crear-evento-header h3 {
     margin: 0;
     font-size: 20px;
+}
+
+.modal-compartir-header h3 {
     color: #2c3e50;
 }
 
-.cerrar-modal-compartir {
+.cerrar-modal-compartir,
+.cerrar-modal-evento {
     background: none;
     border: none;
     font-size: 28px;
@@ -399,13 +419,26 @@
     transition: all 0.2s ease;
 }
 
+.cerrar-modal-evento {
+    color: white;
+}
+
 .cerrar-modal-compartir:hover {
     background: #f0f0f0;
     color: #333;
 }
 
-.modal-compartir-body {
+.cerrar-modal-evento:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-compartir-body,
+.modal-crear-evento-body {
     padding: 20px;
+}
+
+.modal-crear-evento-body {
+    padding: 24px;
 }
 
 .compartir-opciones {
@@ -504,12 +537,121 @@
     transform: translateY(-2px);
 }
 
-/* Botón de like activo */
+/* ============================================
+   FORMULARIO MODAL
+   ============================================ */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.btn-cancelar {
+    padding: 12px 24px;
+    background: #f8f9fa;
+    color: #666;
+    border: 2px solid #e8e8e8;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancelar:hover {
+    background: #e9ecef;
+    border-color: #ddd;
+}
+
+.btn-crear-evento:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.grupo-descripcion-mini {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.select-icono {
+    font-size: 18px;
+    padding: 10px;
+}
+
+/* ============================================
+   LIKES Y ACCIONES
+   ============================================ */
 .action-btn.liked {
     color: #e74c3c;
 }
 
-/* Sección de comentarios */
+.btn-join {
+    background: #D35400;
+    color: white;
+    border-radius: 8px;
+    padding: 3px 5px;
+   } 
+
+.btn-join.btn-joined {
+    background: #27ae60;
+    border-color: #27ae60;
+    border-radius: 8px;
+    padding: 3px 5px;
+}
+
+.btn-join.btn-joined:hover {
+    background: #229954;
+    border-color: #229954;
+}
+
+.evento-descripcion {
+    font-size: 14px;
+    color: #666;
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+/* ============================================
+   COMENTARIOS
+   ============================================ */
 .comentarios-seccion {
     margin-top: 16px;
     padding: 16px;
@@ -558,6 +700,7 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 4px;
+    position: relative;
 }
 
 .comentario-autor {
@@ -588,7 +731,6 @@
     margin: 0;
 }
 
-/* Formulario de comentario */
 .comentario-form {
     margin-top: 16px;
     padding-top: 16px;
@@ -616,38 +758,8 @@
     line-height: 1.5;
 }
 
-.comentario-input:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
 .comentario-input::placeholder {
     color: #95a5a6;
-}
-
-.btn-enviar-comentario {
-    padding: 12px 20px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    margin-top: 0;
-    align-self: flex-start;
-}
-
-.btn-enviar-comentario:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.btn-enviar-comentario:active {
-    transform: translateY(0);
 }
 
 .comentario-ayuda {
@@ -657,7 +769,6 @@
     color: #95a5a6;
 }
 
-/* Scrollbar personalizado para comentarios */
 .comentarios-lista::-webkit-scrollbar {
     width: 6px;
 }
@@ -675,181 +786,10 @@
 .comentarios-lista::-webkit-scrollbar-thumb:hover {
     background: #a0aec0;
 }
-/* Modal crear evento */
-.modal-crear-evento {
-    display: none;
-    position: fixed;
-    z-index: 9998;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    animation: fadeIn 0.3s ease;
-}
 
-.modal-crear-evento-contenido {
-    position: relative;
-    background: white;
-    margin: 5% auto;
-    padding: 0;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-crear-evento-header {
-    padding: 20px;
-    border-bottom: 1px solid #e8e8e8;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 16px 16px 0 0;
-}
-
-.modal-crear-evento-header h3 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.cerrar-modal-evento {
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: white;
-    cursor: pointer;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-}
-
-.cerrar-modal-evento:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.modal-crear-evento-body {
-    padding: 24px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #333;
-    font-size: 14px;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e8e8e8;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.form-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #e8e8e8;
-}
-
-.btn-cancelar {
-    padding: 12px 24px;
-    background: #f8f9fa;
-    color: #666;
-    border: 2px solid #e8e8e8;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-cancelar:hover {
-    background: #e9ecef;
-    border-color: #ddd;
-}
-
-.btn-crear-evento {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-crear-evento:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.btn-crear-evento:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.grupo-descripcion-mini {
-    font-size: 12px;
-    color: #666;
-    margin-top: 4px;
-}
-
-.select-icono {
-    font-size: 18px;
-    padding: 10px;
-}
-/* Estilos para el botón de eliminar comentario - AGREGAR a comunidad.css */
-
-.comentario-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-    position: relative;
-}
-
+/* ============================================
+   BOTONES DE ELIMINAR
+   ============================================ */
 .btn-eliminar-comentario {
     margin-left: auto;
     padding: 4px 8px;
@@ -877,24 +817,28 @@
     transform: scale(0.95);
 }
 
-/* Notificaciones flotantes */
-.mensaje-exito,
-.mensaje-error {
-    animation: slideDownNotification 0.3s ease;
-}
 /* ============================================
-   ESTILOS PARA MENÚ DE OPCIONES Y ELIMINAR POST
-   Agregar al final de comunidad.css
+   MENÚS DE OPCIONES (POST, EVENTO, GRUPO)
    ============================================ */
-
-/* Contenedor del menú */
-.post-menu-container {
+.post-menu-container,
+.evento-menu-container,
+.grupo-menu-container {
     position: relative;
     margin-left: auto;
 }
 
-/* Botón de menú (tres puntos verticales) */
-.btn-menu-post {
+.evento-menu-container,
+.grupo-menu-container {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    margin-left: 0;
+}
+
+.btn-menu-post,
+.btn-menu-evento,
+.btn-menu-grupo {
     background: transparent;
     border: none;
     font-size: 24px;
@@ -911,265 +855,23 @@
     justify-content: center;
 }
 
+.btn-menu-evento,
+.btn-menu-grupo {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e8e8e8;
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    padding: 6px 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .btn-menu-post:hover {
     background: #f0f0f0;
     color: #333;
 }
 
-.btn-menu-post:active {
-    transform: scale(0.95);
-}
-
-/* Menú desplegable de opciones */
-.post-menu-opciones {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #e8e8e8;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    min-width: 200px;
-    z-index: 1000;
-    margin-top: 8px;
-    overflow: hidden;
-    animation: slideDownMenu 0.2s ease;
-}
-
-@keyframes slideDownMenu {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Botón de eliminar dentro del menú */
-.menu-opcion-eliminar {
-    width: 100%;
-    padding: 12px 16px;
-    background: transparent;
-    border: none;
-    color: #e74c3c;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.menu-opcion-eliminar:hover {
-    background: #fee;
-}
-
-.menu-opcion-eliminar:active {
-    background: #fdd;
-}
-
-.menu-opcion-eliminar:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* Nota especial para administradores */
-.menu-nota-admin {
-    display: block;
-    padding: 8px 16px;
-    font-size: 12px;
-    color: #95a5a6;
-    font-style: italic;
-    border-top: 1px solid #f0f0f0;
-    background: #f8f9fa;
-}
-
-/* Mensaje cuando no hay posts */
-.mensaje-sin-posts {
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* Asegurar que el header tenga el layout correcto */
-.post-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    position: relative;
-}
-
-/* Animación para posts que se están eliminando */
-.post-card.eliminando {
-    pointer-events: none;
-}
-
-/* Overlay para prevenir clicks durante eliminación */
-.post-card.eliminando::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 10;
-    pointer-events: all;
-}
-
-/* ============================================
-   ESTILOS PARA MENÚ DE OPCIONES DE EVENTOS
-   Agregar al final de comunidad.css
-   ============================================ */
-
-/* Contenedor del menú de evento */
-.evento-menu-container {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 100;
-}
-
-/* Botón de menú para eventos */
-.btn-menu-evento {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e8e8e8;
-    font-size: 20px;
-    color: #95a5a6;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    line-height: 1;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.btn-menu-evento:hover {
-    background: white;
-    color: #333;
-    border-color: #ddd;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn-menu-evento:active {
-    transform: scale(0.95);
-}
-
-/* Menú desplegable de eventos */
-.evento-menu-opciones {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border: 1px solid #e8e8e8;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    min-width: 200px;
-    z-index: 1000;
-    margin-top: 8px;
-    overflow: hidden;
-    animation: slideDownMenu 0.2s ease;
-}
-
-/* Botón de eliminar evento */
-.menu-opcion-eliminar-evento {
-    width: 100%;
-    padding: 12px 16px;
-    background: transparent;
-    border: none;
-    color: #e74c3c;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.menu-opcion-eliminar-evento:hover {
-    background: #fee;
-}
-
-.menu-opcion-eliminar-evento:active {
-    background: #fdd;
-}
-
-.menu-opcion-eliminar-evento:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* Nota para administradores en eventos */
-.menu-nota-admin-evento {
-    display: block;
-    padding: 8px 16px;
-    font-size: 12px;
-    color: #95a5a6;
-    font-style: italic;
-    border-top: 1px solid #f0f0f0;
-    background: #f8f9fa;
-}
-
-/* Mensaje cuando no hay eventos */
-.mensaje-sin-eventos {
-    animation: fadeIn 0.5s ease;
-}
-/* ============================================
-   ESTILOS PARA MENÚ DE OPCIONES DE GRUPOS
-   Agregar al final de comunidad.css
-   ============================================ */
-
-/* Ajuste de la estructura de grupo-card para incluir menú */
-.grupo-card {
-    position: relative;
-}
-
-/* Contenedor del menú de grupo */
-.grupo-menu-container {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 100;
-}
-
-/* Botón de menú para grupos */
-.btn-menu-grupo {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e8e8e8;
-    font-size: 20px;
-    color: #95a5a6;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    line-height: 1;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
+.btn-menu-evento:hover,
 .btn-menu-grupo:hover {
     background: white;
     color: #333;
@@ -1177,11 +879,14 @@
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
+.btn-menu-post:active,
+.btn-menu-evento:active,
 .btn-menu-grupo:active {
     transform: scale(0.95);
 }
 
-/* Menú desplegable de grupos */
+.post-menu-opciones,
+.evento-menu-opciones,
 .grupo-menu-opciones {
     position: absolute;
     top: 100%;
@@ -1197,7 +902,8 @@
     animation: slideDownMenu 0.2s ease;
 }
 
-/* Botón de eliminar grupo */
+.menu-opcion-eliminar,
+.menu-opcion-eliminar-evento,
 .menu-opcion-eliminar-grupo {
     width: 100%;
     padding: 12px 16px;
@@ -1214,20 +920,27 @@
     gap: 8px;
 }
 
+.menu-opcion-eliminar:hover,
+.menu-opcion-eliminar-evento:hover,
 .menu-opcion-eliminar-grupo:hover {
     background: #fee;
 }
 
+.menu-opcion-eliminar:active,
+.menu-opcion-eliminar-evento:active,
 .menu-opcion-eliminar-grupo:active {
     background: #fdd;
 }
 
+.menu-opcion-eliminar:disabled,
+.menu-opcion-eliminar-evento:disabled,
 .menu-opcion-eliminar-grupo:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-/* Nota para administradores en grupos */
+.menu-nota-admin,
+.menu-nota-admin-evento,
 .menu-nota-admin-grupo {
     display: block;
     padding: 8px 16px;
@@ -1238,16 +951,23 @@
     background: #f8f9fa;
 }
 
-/* Mensaje cuando no hay grupos */
-.mensaje-sin-grupos {
-    animation: fadeIn 0.5s ease;
+/* ============================================
+   ESTADOS Y ANIMACIONES
+   ============================================ */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    position: relative;
 }
 
-/* Animación para grupos que se están eliminando */
+.post-card.eliminando,
 .grupo-card.eliminando {
     pointer-events: none;
 }
 
+.post-card.eliminando::before,
 .grupo-card.eliminando::before {
     content: '';
     position: absolute;
@@ -1258,185 +978,25 @@
     background: rgba(255, 255, 255, 0.7);
     z-index: 10;
     pointer-events: all;
+}
+
+.grupo-card.eliminando::before {
     border-radius: 12px;
 }
 
-/* ============================================
-   RESPONSIVE - GRUPOS
-   ============================================ */
-
-@media (max-width: 768px) {
-    .btn-menu-grupo {
-        font-size: 18px;
-        width: 30px;
-        height: 30px;
-        padding: 5px 8px;
-    }
-    
-    .grupo-menu-opciones {
-        min-width: 180px;
-        right: -8px;
-    }
-    
-    .menu-opcion-eliminar-grupo {
-        padding: 10px 14px;
-        font-size: 13px;
-    }
-    
-    .menu-nota-admin-grupo {
-        font-size: 11px;
-        padding: 6px 14px;
-    }
-    
-    .grupo-badge-creador,
-    .grupo-badge-admin {
-        font-size: 10px;
-        padding: 3px 8px;
-    }
+.mensaje-sin-posts,
+.mensaje-sin-eventos,
+.mensaje-sin-grupos {
+    animation: fadeIn 0.5s ease;
 }
 
-@media (max-width: 480px) {
-    .grupo-menu-opciones {
-        min-width: 160px;
-    }
-    
-    .btn-menu-grupo {
-        font-size: 16px;
-        width: 28px;
-        height: 28px;
-    }
-    
-    .grupo-menu-container {
-        top: 8px;
-        right: 8px;
-    }
+.grupo-card {
+    position: relative;
 }
 
 /* ============================================
-   RESPONSIVE - EVENTOS
+   ANIMACIONES
    ============================================ */
-
-@media (max-width: 768px) {
-    .btn-menu-evento {
-        font-size: 18px;
-        width: 30px;
-        height: 30px;
-        padding: 5px 8px;
-    }
-    
-    .evento-menu-opciones {
-        min-width: 180px;
-        right: -8px;
-    }
-    
-    .menu-opcion-eliminar-evento {
-        padding: 10px 14px;
-        font-size: 13px;
-    }
-    
-    .menu-nota-admin-evento {
-        font-size: 11px;
-        padding: 6px 14px;
-    }
-    
-}
-
-@media (max-width: 480px) {
-    .evento-menu-opciones {
-        min-width: 160px;
-    }
-    
-    .btn-menu-evento {
-        font-size: 16px;
-        width: 28px;
-        height: 28px;
-    }
-    
-    .evento-menu-container {
-        top: 8px;
-        right: 8px;
-    }
-}
-/* ============================================
-   RESPONSIVE - ADAPTACIÓN PARA MÓVILES
-   ============================================ */
-
-@media (max-width: 768px) {
-    .btn-menu-post {
-        font-size: 20px;
-        width: 32px;
-        height: 32px;
-        padding: 6px;
-    }
-    
-    .post-menu-opciones {
-        min-width: 180px;
-        right: -8px;
-    }
-    
-    .menu-opcion-eliminar {
-        padding: 10px 14px;
-        font-size: 13px;
-    }
-    
-    .menu-nota-admin {
-        font-size: 11px;
-        padding: 6px 14px;
-    }
-}
-
-/* Para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    .post-menu-opciones {
-        min-width: 160px;
-    }
-    
-    .btn-menu-post {
-        font-size: 18px;
-        width: 30px;
-        height: 30px;
-    }
-}
-@keyframes slideDownNotification {
-    from {
-        transform: translate(-50%, -20px);
-        opacity: 0;
-    }
-    to {
-        transform: translate(-50%, 0);
-        opacity: 1;
-    }
-}
-
-/* Responsive para botón eliminar */
-@media (max-width: 768px) {
-    .btn-eliminar-comentario {
-        opacity: 1; /* Siempre visible en móviles */
-        font-size: 14px;
-        padding: 2px 6px;
-    }
-}
-/* Responsive */
-@media (max-width: 768px) {
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-
-    .modal-crear-evento-contenido {
-        margin: 10% auto;
-        width: 95%;
-    }
-
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .form-actions button {
-        width: 100%;
-    }
-}
-
-/* Animaciones */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -1475,18 +1035,38 @@
     }
 }
 
-/* Responsive */
+@keyframes slideDownNotification {
+    from {
+        transform: translate(-50%, -20px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDownMenu {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
     .post-options {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .tipo-post-selector {
-        width: 100%;
-        justify-content: space-between;
-    }
-
+    .tipo-post-selector,
     .acciones-post {
         width: 100%;
         justify-content: space-between;
@@ -1511,23 +1091,89 @@
         font-size: 30px;
     }
 
-    /* Botón de evento cuando ya está participando */
-.btn-join.btn-joined {
-    background: #27ae60;
-    border-color: #27ae60;
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-crear-evento-contenido {
+        margin: 10% auto;
+        width: 95%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+
+    .btn-eliminar-comentario {
+        opacity: 1;
+        font-size: 14px;
+        padding: 2px 6px;
+    }
+
+    .btn-menu-post {
+        font-size: 20px;
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+    
+    .post-menu-opciones,
+    .evento-menu-opciones,
+    .grupo-menu-opciones {
+        min-width: 180px;
+        right: -8px;
+    }
+    
+    .menu-opcion-eliminar,
+    .menu-opcion-eliminar-evento,
+    .menu-opcion-eliminar-grupo {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+    
+    .menu-nota-admin,
+    .menu-nota-admin-evento,
+    .menu-nota-admin-grupo {
+        font-size: 11px;
+        padding: 6px 14px;
+    }
+
+    .btn-menu-evento,
+    .btn-menu-grupo {
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
+        padding: 5px 8px;
+    }
 }
 
-.btn-join.btn-joined:hover {
-    background: #229954;
-    border-color: #229954;
-}
+@media (max-width: 480px) {
+    .post-menu-opciones,
+    .evento-menu-opciones,
+    .grupo-menu-opciones {
+        min-width: 160px;
+    }
+    
+    .btn-menu-post {
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
+    }
 
-/* Descripción del evento */
-.evento-descripcion {
-    font-size: 14px;
-    color: #666;
-    margin: 8px 0;
-    line-height: 1.4;
-}
+    .btn-menu-evento,
+    .btn-menu-grupo {
+        font-size: 16px;
+        width: 28px;
+        height: 28px;
+    }
 
+    .evento-menu-container,
+    .grupo-menu-container {
+        top: 8px;
+        right: 8px;
+    }
 }

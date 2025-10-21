@@ -14,7 +14,7 @@ if ($conexion->connect_error) {
 }
 
 // Establecer el conjunto de caracteres
-$conexion->set_charset("utf8");
+$conexion->set_charset("utf8mb4");
 
 // Función para cerrar conexión
 function cerrarConexion() {

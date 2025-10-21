@@ -10,73 +10,6 @@ if (!isset($_SESSION['rol'])) {
 $usuario_id = $_SESSION['usuario_id'];
 $rol_usuario = $_SESSION['rol'];
 
-// Procesar formulario de nuevo post
-$mensaje_exito = '';
-$mensaje_error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titulo_post']) && $rol_usuario !== 'demo') {
-    
-    // Validar que vengan los datos
-    if (empty($_POST['titulo_post']) || empty($_POST['contenido_post']) || empty($_POST['tipo_post'])) {
-        $mensaje_error = "Por favor completa todos los campos obligatorios";
-    } else {
-        $titulo = $conexion->real_escape_string(trim($_POST['titulo_post']));
-        $contenido = $conexion->real_escape_string(trim($_POST['contenido_post']));
-        $tipo_post = $conexion->real_escape_string($_POST['tipo_post']);
-        $imagenes = [];
-        
-        // Crear directorio si no existe
-        if (!file_exists('imagenes/posts')) {
-            if (!mkdir('imagenes/posts', 0777, true)) {
-                $mensaje_error = "Error: No se pudo crear la carpeta de imágenes";
-            }
-        }
-        
-        // Procesar múltiples imágenes solo si no hay errores previos
-        if (empty($mensaje_error) && isset($_FILES['imagenes_post']) && !empty($_FILES['imagenes_post']['name'][0])) {
-            $total_imagenes = count($_FILES['imagenes_post']['name']);
-            
-            for ($i = 0; $i < $total_imagenes && $i < 5; $i++) { // Máximo 5 imágenes
-                if ($_FILES['imagenes_post']['error'][$i] === 0) {
-                    $extension = strtolower(pathinfo($_FILES['imagenes_post']['name'][$i], PATHINFO_EXTENSION));
-                    $extensiones_permitidas = ['jpg', 'jpeg', 'png', 'gif'];
-                    
-                    if (in_array($extension, $extensiones_permitidas) && $_FILES['imagenes_post']['size'][$i] <= 5000000) {
-                        $nombre_archivo = 'post_' . $usuario_id . '_' . time() . '_' . $i . '.' . $extension;
-                        $ruta_destino = 'imagenes/posts/' . $nombre_archivo;
-                        
-                        if (move_uploaded_file($_FILES['imagenes_post']['tmp_name'][$i], $ruta_destino)) {
-                            $imagenes[] = $nombre_archivo;
-                        } else {
-                            $mensaje_error = "Error al subir la imagen " . ($i + 1);
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Solo insertar si no hay errores
-        if (empty($mensaje_error)) {
-            $imagenes_str = !empty($imagenes) ? implode(',', $imagenes) : NULL;
-            
-            // Insertar post en la base de datos
-            $sql_insert = "INSERT INTO post_comunidad (titulo, contenido, fecha, id_usuario, tipo_post, imagen_post) 
-                           VALUES ('$titulo', '$contenido', NOW(), $usuario_id, '$tipo_post', " . 
-                           ($imagenes_str ? "'$imagenes_str'" : "NULL") . ")";
-            
-            // Debug: descomentar para ver la consulta SQL
-            // echo "SQL: " . $sql_insert . "<br>";
-            
-            if ($conexion->query($sql_insert)) {
-                $mensaje_exito = "¡Post publicado exitosamente!";
-                header("Location: comunidad.php?success=1");
-                exit();
-            } else {
-                $mensaje_error = "Error al publicar el post en la base de datos: " . $conexion->error . "<br>SQL: " . $sql_insert;
-            }
-        }
-    }
-}
 
 // Obtener estadísticas REALES de la comunidad (se actualizan al refrescar)
 $consulta_miembros = "SELECT COUNT(*) as total FROM usuarios WHERE estado = 'activo'";
@@ -150,17 +83,6 @@ $resultado_grupos = $conexion->query($consulta_grupos);
 
     <!-- Contenido principal -->
     <main class="main-content">
-        <!-- Mensajes de éxito/error -->
-        <?php if ($mensaje_exito): ?>
-            <div class="mensaje-exito"><?php echo $mensaje_exito; ?></div>
-        <?php endif; ?>
-        <?php if ($mensaje_error): ?>
-            <div class="mensaje-error"><?php echo $mensaje_error; ?></div>
-        <?php endif; ?>
-        <?php if (isset($_GET['success'])): ?>
-            <div class="mensaje-exito">¡Post publicado exitosamente!</div>
-        <?php endif; ?>
-
         <!-- Header de comunidad -->
         <section class="comunidad-header">
             <h2 class="comunidad-title">Comunidad PetCare</h2>
@@ -198,7 +120,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
         <section class="feed-section" id="feedSection">
             <!-- Crear post -->
             <div class="create-post">
-                <form method="POST" enctype="multipart/form-data" id="formCrearPost" <?php echo $rol_usuario == 'demo' ? 'onsubmit="return false;"' : ''; ?>>
+                <form enctype="multipart/form-data" id="formCrearPost" <?php echo $rol_usuario == 'demo' ? 'onsubmit="return false;"' : 'onsubmit="return enviarPost(event);"'; ?>>
                         <input type="text" name="titulo_post" placeholder="Título del post" required maxlength="100" class="input-titulo-post" <?php echo $rol_usuario == 'demo' ? 'readonly onclick="mostrarModalAlerta(\'Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños\')"' : ''; ?>>
                         
                         <textarea name="contenido_post" placeholder="¿Qué quieres compartir con la comunidad?" required maxlength="500" class="textarea-contenido-post" <?php echo $rol_usuario == 'demo' ? 'readonly onclick="mostrarModalAlerta(\'Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños\')"' : ''; ?>></textarea>
@@ -494,7 +416,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                         <button class="btn-join <?php echo $evento['usuario_participa'] > 0 ? 'btn-joined' : ''; ?>" 
                                 data-evento-id="<?php echo $evento['id_evento']; ?>"
                                 onclick="toggleParticipacion(this)">
-                            <?php echo $evento['usuario_participa'] > 0 ? '✓ Participando' : 'Unirse al Evento'; ?>
+                            <?php echo $evento['usuario_participa'] > 0 ? 'Participando' : 'Unirse al Evento'; ?>
                         </button>
                     <?php endif; ?>
                 </div>
@@ -566,7 +488,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 <button class="btn-join <?php echo $grupo['usuario_es_miembro'] > 0 ? 'btn-joined' : ''; ?>" 
                         data-grupo-id="<?php echo $grupo['id_grupo']; ?>"
                         onclick="toggleMiembroGrupo(this)">
-                    <?php echo $grupo['usuario_es_miembro'] > 0 ? '✓ Miembro' : 'Unirse'; ?>
+                    <?php echo $grupo['usuario_es_miembro'] > 0 ? 'Miembro' : 'Unirse'; ?>
                 </button>
             </div>
         <?php endwhile; ?>

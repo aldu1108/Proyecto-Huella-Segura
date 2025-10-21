@@ -1456,10 +1456,6 @@ button:focus {
     margin-bottom: 12px;
 }
 
-.btn-join {
-    background: #D35400;
-    color: white;
-   } 
    /* Alertas superiores */
 .alertas-superiores {
     display: flex;

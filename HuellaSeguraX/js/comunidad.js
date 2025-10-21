@@ -95,6 +95,76 @@ document.addEventListener('keydown', function(event) {
         cerrarModalCompartir();
     }
 });
+// Enviar post mediante AJAX
+function enviarPost(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('formCrearPost');
+    const btnPublicar = form.querySelector('.btn-publicar');
+    const textoOriginal = btnPublicar.innerHTML;
+    
+    // Validar campos
+    const titulo = form.querySelector('input[name="titulo_post"]').value.trim();
+    const contenido = form.querySelector('textarea[name="contenido_post"]').value.trim();
+    const tipoPost = form.querySelector('select[name="tipo_post"]').value;
+    
+    if (!titulo || !contenido) {
+        alert('Por favor completa todos los campos obligatorios');
+        return false;
+    }
+    
+    if (titulo.length < 3) {
+        alert('El título debe tener al menos 3 caracteres');
+        return false;
+    }
+    
+    if (contenido.length < 10) {
+        alert('El contenido debe tener al menos 10 caracteres');
+        return false;
+    }
+    
+    // Deshabilitar botón
+    btnPublicar.disabled = true;
+    btnPublicar.innerHTML = '⏳ Publicando...';
+    
+    // Preparar datos del formulario
+    const formData = new FormData(form);
+    
+    // Enviar datos
+    fetch('ajax/crear_post.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            mostrarNotificacion(data.message, 'success');
+            
+            // Limpiar formulario
+            form.reset();
+            document.getElementById('preview-imagenes').innerHTML = '';
+            imagenesSeleccionadas = [];
+            
+            // Recargar página para mostrar el nuevo post
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+            
+        } else {
+            mostrarNotificacion(data.message, 'error');
+            btnPublicar.disabled = false;
+            btnPublicar.innerHTML = textoOriginal;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarNotificacion('Error de conexión al publicar el post', 'error');
+        btnPublicar.disabled = false;
+        btnPublicar.innerHTML = textoOriginal;
+    });
+    
+    return false;
+}
 
 // Toggle like en posts
 function toggleLike(boton) {
@@ -219,65 +289,6 @@ function compartirEnInstagram() {
     copiarEnlace();
 }
 
-// Validar formulario antes de enviar
-document.addEventListener('DOMContentLoaded', function() {
-    const formCrearPost = document.getElementById('formCrearPost');
-    
-    if (formCrearPost) {
-        formCrearPost.addEventListener('submit', function(e) {
-            const titulo = document.querySelector('input[name="titulo_post"]').value.trim();
-            const contenido = document.querySelector('textarea[name="contenido_post"]').value.trim();
-            
-            if (!titulo || !contenido) {
-                e.preventDefault();
-                alert('Por favor completa el título y el contenido del post');
-                return false;
-            }
-            
-            if (titulo.length < 3) {
-                e.preventDefault();
-                alert('El título debe tener al menos 3 caracteres');
-                return false;
-            }
-            
-            if (contenido.length < 10) {
-                e.preventDefault();
-                alert('El contenido debe tener al menos 10 caracteres');
-                return false;
-            }
-            
-            // Mostrar indicador de carga
-            const botonPublicar = formCrearPost.querySelector('.btn-publicar');
-            botonPublicar.innerHTML = '⏳ Publicando...';
-            botonPublicar.disabled = true;
-        });
-    }
-    
-    // Contador de caracteres para el contenido
-    const textareaContenido = document.querySelector('.textarea-contenido-post');
-    if (textareaContenido) {
-        const maxCaracteres = 500;
-        
-        // Crear contador
-        const contador = document.createElement('div');
-        contador.style.cssText = 'text-align: right; font-size: 12px; color: #666; margin-top: 4px;';
-        contador.innerHTML = `0 / ${maxCaracteres} caracteres`;
-        textareaContenido.parentNode.insertBefore(contador, textareaContenido.nextSibling);
-        
-        textareaContenido.addEventListener('input', function() {
-            const longitud = this.value.length;
-            contador.innerHTML = `${longitud} / ${maxCaracteres} caracteres`;
-            
-            if (longitud > maxCaracteres * 0.9) {
-                contador.style.color = '#e74c3c';
-            } else if (longitud > maxCaracteres * 0.7) {
-                contador.style.color = '#f39c12';
-            } else {
-                contador.style.color = '#666';
-            }
-        });
-    }
-});
 
 // Animación de carga de imágenes
 function mostrarCargandoImagen() {
