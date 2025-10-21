@@ -592,7 +592,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
         <div class="contenido-modal-alerta">
             <div class="encabezado-modal-alerta">
                 <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
-                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">x</button>
             </div>
             
             <div class="cuerpo-modal-alerta">
@@ -624,7 +624,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
     <script src="js/scripts.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
     <script>
-    window.diasConEventosCalendario = <?php echo json_encode($dias_con_eventos); ?>;
+        window.diasConEventosCalendario = <?php echo json_encode($dias_con_eventos); ?>;
     </script>
 </body>
 </html>

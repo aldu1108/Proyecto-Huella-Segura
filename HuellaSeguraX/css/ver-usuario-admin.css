@@ -1,0 +1,301 @@
+.detalle-usuario {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.usuario-header {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 30px;
+    border: 2px solid rgba(209, 124, 65, 0.1);
+}
+
+.usuario-foto {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #d17c41;
+    box-shadow: 0 8px 20px rgba(209, 124, 65, 0.3);
+}
+
+.usuario-foto-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+    border: 5px solid #d17c41;
+    box-shadow: 0 8px 20px rgba(209, 124, 65, 0.3);
+}
+
+.usuario-info-principal {
+    flex: 1;
+}
+
+.usuario-info-principal h2 {
+    font-size: 32px;
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+    font-weight: 700;
+}
+
+.badge-rol {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-usuario {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.badge-veterinario {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.badge-admin {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.badge-demo {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+}
+
+.badge-activo {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+}
+
+.badge-inactivo {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+}
+
+.badge-suspendido {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: white;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.info-item {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.info-item:hover {
+    border-color: #d17c41;
+    transform: translateX(5px);
+}
+
+.info-item strong {
+    display: block;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.seccion {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+    border: 2px solid rgba(209, 124, 65, 0.1);
+}
+
+.seccion h3 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #d17c41;
+    font-weight: 700;
+}
+
+.lista-mascotas,
+.lista-publicaciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta-mascota,
+.tarjeta-publicacion {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-mascota:hover,
+.tarjeta-publicacion:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-color: #d17c41;
+}
+
+.tarjeta-mascota h4,
+.tarjeta-publicacion h4 {
+    font-size: 18px;
+    color: #d17c41;
+    margin: 0 0 15px 0;
+    font-weight: 700;
+}
+
+.tarjeta-mascota p,
+.tarjeta-publicacion p {
+    margin: 8px 0;
+    color: #495057;
+    font-size: 14px;
+}
+
+.sin-datos {
+    text-align: center;
+    padding: 40px;
+    color: #95a5a6;
+    font-style: italic;
+    font-size: 16px;
+}
+
+.botones-accion {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.boton {
+    padding: 15px 32px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.boton-editar {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.boton-editar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+}
+
+.boton-eliminar {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.boton-eliminar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+}
+
+.boton-volver {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+}
+
+.boton-volver:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(149, 165, 166, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .usuario-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .usuario-foto,
+    .usuario-foto-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+
+    .usuario-info-principal h2 {
+        font-size: 24px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lista-mascotas,
+    .lista-publicaciones {
+        grid-template-columns: 1fr;
+    }
+
+    .botones-accion {
+        flex-direction: column;
+    }
+
+    .boton {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .seccion {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .detalle-usuario {
+        padding: 15px;
+    }
+
+    .usuario-foto,
+    .usuario-foto-placeholder {
+        width: 100px;
+        height: 100px;
+        font-size: 36px;
+    }
+
+    .badge-rol {
+        font-size: 10px;
+        padding: 6px 12px;
+    }
+}

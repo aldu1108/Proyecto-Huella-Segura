@@ -1,6 +1,7 @@
 <?php
 include_once('config/conexion.php');
 session_start();
+date_default_timezone_set('America/Argentina/Buenos_Aires'); // O tu zona horaria
 
 $mensaje_error = "";
 
