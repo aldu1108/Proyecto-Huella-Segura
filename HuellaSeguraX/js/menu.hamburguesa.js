@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
         menuLateral.classList.add('activo');
         overlayMenu.classList.add('activo');
         document.body.style.overflow = 'hidden';
+
+        // Cerrar panel de notificaciones si está abierto
+        const panelNotif = document.getElementById('panelNotificaciones');
+        if (panelNotif && panelNotif.classList.contains('activo')) {
+            if (typeof toggleNotificaciones === 'function') {
+                toggleNotificaciones();
+            }
+        }
     }
     
     function cerrarMenu() {
@@ -23,6 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cerrar menú al hacer clic en overlay
     if (overlayMenu) {
         overlayMenu.addEventListener('click', cerrarMenu);
+        // También cerrar notificaciones si están abiertas
+        const panelNotif = document.getElementById('panelNotificaciones');
+        if (panelNotif && panelNotif.classList.contains('activo')) {
+            if (typeof toggleNotificaciones === 'function') {
+                toggleNotificaciones();
+            }
+        }
+        
     }
     
     // Cerrar menú al presionar Escape
@@ -39,7 +55,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Función placeholder para notificaciones
-function toggleNotificaciones() {
-    alert('Función de notificaciones en desarrollo');
-}

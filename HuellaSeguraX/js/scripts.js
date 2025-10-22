@@ -67,11 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
     animarTarjetas();
 });
 
-// Función para notificaciones
-function toggleNotificaciones() {
-    console.log('Toggle notificaciones');
-    mostrarMensaje('No tienes notificaciones nuevas', 'info');
-}
 
 // Función para mostrar mensajes
 function mostrarMensaje(texto, tipo = 'info') {

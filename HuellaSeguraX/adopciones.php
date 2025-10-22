@@ -168,6 +168,7 @@ function tiempoTranscurrido($fecha)
     <!-- Header -->
     <header>
         <?php include_once('includes/menu_hamburguesa.php'); ?>
+        <?php include_once('includes/crear_notificacion.php'); ?>
     </header>
     <!-- Contenido principal -->
     <main class="main-content">
@@ -573,7 +574,9 @@ function tiempoTranscurrido($fecha)
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
+    
     <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/adopciones.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
 </body>
