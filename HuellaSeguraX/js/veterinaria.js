@@ -601,3 +601,169 @@ document.addEventListener('keydown', function(event) {
         cerrarModalConsulta();
     }
 });
+
+function mostrarModalAgregarPaciente() {
+    const modal = document.getElementById('modalAgregarPaciente');
+    if (modal) {
+        modal.classList.add('activo');
+        document.body.style.overflow = 'hidden';
+        
+        // Asegurar que los campos de nuevo dueño estén visibles por defecto
+        const camposNuevoDueno = document.getElementById('camposNuevoDueno');
+        if (camposNuevoDueno) {
+            camposNuevoDueno.style.display = 'block';
+        }
+    }
+}
+
+function cerrarModalAgregarPaciente() {
+    const modal = document.getElementById('modalAgregarPaciente');
+    if (modal) {
+        modal.classList.remove('activo');
+        document.body.style.overflow = 'auto';
+        
+        // Limpiar formulario
+        const formulario = document.getElementById('formularioPaciente');
+        if (formulario) {
+            formulario.reset();
+        }
+        
+        // Limpiar preview
+        eliminarPreview();
+        
+        // Reset selector de dueño
+        const selectDueno = document.getElementById('selectDuenoExistente');
+        if (selectDueno) {
+            selectDueno.value = '';
+        }
+        
+        // Mostrar campos de nuevo dueño
+        const camposNuevoDueno = document.getElementById('camposNuevoDueno');
+        if (camposNuevoDueno) {
+            camposNuevoDueno.style.display = 'block';
+        }
+    }
+}
+
+function toggleNuevoDueno() {
+    const select = document.getElementById('selectDuenoExistente');
+    const camposNuevoDueno = document.getElementById('camposNuevoDueno');
+    
+    // Campos del nuevo dueño
+    const inputNombre = document.getElementById('inputNombreDueno');
+    const inputApellido = document.getElementById('inputApellidoDueno');
+    const inputEmail = document.getElementById('inputEmailDueno');
+    const inputPassword = document.getElementById('inputPasswordDueno');
+    
+    if (select.value === '') {
+        // Mostrar campos de nuevo dueño
+        camposNuevoDueno.style.display = 'block';
+        
+        // Hacer campos requeridos
+        inputNombre.required = true;
+        inputApellido.required = true;
+        inputEmail.required = true;
+        inputPassword.required = true;
+    } else {
+        // Ocultar campos de nuevo dueño
+        camposNuevoDueno.style.display = 'none';
+        
+        // Quitar requerimiento
+        inputNombre.required = false;
+        inputApellido.required = false;
+        inputEmail.required = false;
+        inputPassword.required = false;
+        
+        // Limpiar valores
+        inputNombre.value = '';
+        inputApellido.value = '';
+        inputEmail.value = '';
+        inputPassword.value = '';
+    }
+}
+
+function previewImagenPaciente(input) {
+    const preview = document.getElementById('previewFotoPaciente');
+    const img = preview.querySelector('img');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+function eliminarPreview() {
+    const preview = document.getElementById('previewFotoPaciente');
+    const input = document.getElementById('inputFotoPaciente');
+    
+    if (preview) {
+        preview.style.display = 'none';
+        const img = preview.querySelector('img');
+        if (img) {
+            img.src = '';
+        }
+    }
+    
+    if (input) {
+        input.value = '';
+    }
+}
+
+function mostrarCamposNuevoDueno() {
+    const select = document.getElementById('selectDuenoExistente');
+    if (select) {
+        select.value = '';
+        toggleNuevoDueno();
+    }
+}
+
+// Cerrar modal al hacer clic fuera
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('modalAgregarPaciente');
+    if (modal && e.target === modal) {
+        cerrarModalAgregarPaciente();
+    }
+});
+
+// Cerrar modal con tecla ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('modalAgregarPaciente');
+        if (modal && modal.classList.contains('activo')) {
+            cerrarModalAgregarPaciente();
+        }
+    }
+});
+// Función para filtrar pacientes por dueño en la sección Pacientes
+function filtrarPacientesPorDueno(idDueno) {
+    const tarjetasPacientes = document.querySelectorAll('#seccionPacientes .tarjeta-paciente');
+    let pacientesVisibles = 0;
+    
+    tarjetasPacientes.forEach(tarjeta => {
+        if (!idDueno || tarjeta.dataset.dueno === idDueno) {
+            tarjeta.style.display = 'flex';
+            pacientesVisibles++;
+        } else {
+            tarjeta.style.display = 'none';
+        }
+    });
+    
+    // Actualizar el select
+    const duenoSelect = document.querySelector('#seccionPacientes .filtro-mascota');
+    if (duenoSelect && idDueno) {
+        duenoSelect.value = idDueno;
+        
+        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
+        showMessage(`Mostrando ${pacientesVisibles} paciente(s) de ${nombreDueno}`, 'info');
+    } else if (!idDueno) {
+        showMessage(`Mostrando todos los pacientes (${pacientesVisibles} total)`, 'info');
+    }
+}

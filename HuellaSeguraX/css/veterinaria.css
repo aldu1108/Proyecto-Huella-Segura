@@ -1263,3 +1263,394 @@
 .tarjeta-cita-pendiente {
     animation: slideIn 0.3s ease;
 }
+
+.modal-agregar-paciente {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.modal-agregar-paciente.activo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenido-modal-paciente-moderno {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.encabezado-modal-paciente-moderno {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 28px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    border-radius: 16px 16px 0 0;
+}
+
+.titulo-modal-paciente-moderno {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.boton-cerrar-modal-paciente-moderno {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #666;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.boton-cerrar-modal-paciente-moderno:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.formulario-paciente-moderno {
+    padding: 28px;
+}
+
+.grupo-input-moderno {
+    margin-bottom: 20px;
+}
+
+.etiqueta-input-moderno {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.requerido-asterisco {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.input-moderno,
+.select-moderno {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: white;
+    color: #333;
+}
+
+.input-moderno:focus,
+.select-moderno:focus {
+    outline: none;
+    border-color: #27AE60;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.input-moderno::placeholder {
+    color: #999;
+}
+
+.fila-inputs-moderno {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* File input personalizado */
+.contenedor-file-moderno {
+    position: relative;
+}
+
+.input-file-moderno {
+    display: none;
+}
+
+.label-file-moderno {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    color: #666;
+}
+
+.label-file-moderno:hover {
+    border-color: #27AE60;
+    background: #e8f5e9;
+    color: #27AE60;
+}
+
+.icono-file {
+    font-size: 20px;
+}
+
+.texto-file {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Preview de imagen */
+.preview-foto-paciente-moderno {
+    margin-top: 15px;
+    position: relative;
+    display: inline-block;
+}
+
+.preview-foto-paciente-moderno img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 3px solid #fff;
+    object-fit: cover;
+}
+
+.boton-eliminar-preview {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.boton-eliminar-preview:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+}
+
+/* Separador */
+.separador-modal {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #ddd, transparent);
+    margin: 30px 0;
+}
+
+/* Sección del dueño */
+.seccion-dueno-moderno {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.subtitulo-seccion-moderno {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #27AE60;
+}
+
+.enlace-crear-dueno {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.boton-enlace-crear {
+    background: none;
+    border: none;
+    color: #27AE60;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 8px;
+    transition: all 0.2s ease;
+}
+
+.boton-enlace-crear:hover {
+    color: #1e8449;
+}
+
+.alerta-info-moderno {
+    background: #E3F2FD;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #2196F3;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.icono-info {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.alerta-info-moderno p {
+    margin: 0;
+    color: #1976D2;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.texto-ayuda-moderno {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* Botones del modal */
+.botones-modal-moderno {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.boton-cancelar-moderno,
+.boton-guardar-moderno {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.boton-cancelar-moderno {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.boton-cancelar-moderno:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.boton-guardar-moderno {
+    background: #27AE60;
+    color: white;
+}
+
+.boton-guardar-moderno:hover {
+    background: #1e8449;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+/* Animación para campos del nuevo dueño */
+#camposNuevoDueno {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+    }
+    to {
+        opacity: 1;
+        max-height: 1000px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-agregar-paciente {
+        padding: 10px;
+        align-items: flex-start;
+    }
+    
+    .contenido-modal-paciente-moderno {
+        max-width: 100%;
+        margin: 20px 0;
+    }
+    
+    .encabezado-modal-paciente-moderno,
+    .formulario-paciente-moderno {
+        padding: 20px;
+    }
+    
+    .fila-inputs-moderno {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .botones-modal-moderno {
+        flex-direction: column;
+    }
+    
+    .seccion-dueno-moderno {
+        padding: 15px;
+    }
+}
+
+/* Scrollbar personalizado para el modal */
+.contenido-modal-paciente-moderno::-webkit-scrollbar {
+    width: 8px;
+}
+
+.contenido-modal-paciente-moderno::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 16px 16px 0;
+}
+
+.contenido-modal-paciente-moderno::-webkit-scrollbar-thumb {
+    background: #27AE60;
+    border-radius: 4px;
+}
+
+.contenido-modal-paciente-moderno::-webkit-scrollbar-thumb:hover {
+    background: #1e8449;
+}
