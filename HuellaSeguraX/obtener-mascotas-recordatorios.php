@@ -18,7 +18,7 @@ $verificar = "SELECT id_recordatorio FROM recordatorios_personales
 $resultado = $conexion->query($verificar);
 
 if (!$resultado || $resultado->num_rows == 0) {
-    echo json_encode(['success' => false, 'message' => 'Recordatorio no encontrado']);
+    echo json_encode(['success' => false, 'message' => 'No autorizado']);
     exit();
 }
 
@@ -27,8 +27,8 @@ $consulta = "SELECT id_mascota FROM recordatorio_mascota WHERE id_recordatorio =
 $resultado = $conexion->query($consulta);
 
 $mascotas = [];
-if ($resultado && $resultado->num_rows > 0) {
-    while ($row = $resultado->fetch_assoc()) {
+if ($resultado) {
+    while($row = $resultado->fetch_assoc()) {
         $mascotas[] = (int)$row['id_mascota'];
     }
 }
