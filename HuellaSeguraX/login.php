@@ -136,7 +136,7 @@ if ($_POST) {
             </div>
 
             <div class="forgot-password">
-                <a href="recuperar-contraseña.php">¿Olvidaste tu contraseña?</a>
+                <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit" class="btn-login">Iniciar Sesión</button>
