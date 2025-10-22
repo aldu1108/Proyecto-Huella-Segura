@@ -48,11 +48,11 @@ if ($conexion->query($consulta_recordatorio)) {
             header("Location: perfil-mascota.php?id=$mascota_id&error=error_relacion");
         }
     } else {
-        // Si es para múltiples mascotas, volver a la página principal
+        // Si es para múltiples mascotas, volver al index con ancla al calendario
         if ($exito) {
-            header("Location: index.php?exito=recordatorio_agregado");
+            header("Location: index.php?exito=recordatorio_agregado#calendario");
         } else {
-            header("Location: index.php?error=error_relacion");
+            header("Location: index.php?error=error_relacion#calendario");
         }
     }
 } else {

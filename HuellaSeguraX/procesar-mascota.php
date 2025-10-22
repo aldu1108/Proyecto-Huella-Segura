@@ -58,16 +58,16 @@ if ($_POST) {
         $stmt->bind_param("isssiss", $usuario_id, $tipo, $sexo, $nombre_mascota, $edad_mascota, $cumpleaños_mascota, $foto_mascota);
 
         if ($stmt->execute()) {
-            header("Location: mis-mascotas.php?mensaje=mascota_agregada&nombre=" . urlencode($nombre_mascota));
+            header("Location: index.php?mensaje=mascota_agregada&nombre=" . urlencode($nombre_mascota));
         } else {
-            header("Location: mis-mascotas.php?error=error_agregar");
+            header("Location: index.php?error=error_agregar");
         }
         $stmt->close();
     } else {
-        header("Location: mis-mascotas.php?error=error_base_datos");
+        header("Location: index.php?error=error_base_datos");
     }
 } else {
-    header("Location: mis-mascotas.php");
+    header("Location: index.php");
 }
 
 cerrarConexion();

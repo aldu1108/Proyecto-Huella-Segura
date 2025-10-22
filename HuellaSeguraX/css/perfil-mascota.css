@@ -1089,38 +1089,78 @@
         transform: translateY(-10px);
     }
 }
-
 .acciones-evento,
 .acciones-urgente,
 .acciones-proximo {
+    display: flex;
+    gap: 8px;
     position: relative;
     z-index: 10;
+    flex-shrink: 0;
 }
 
 .btn-accion-evento,
 .btn-accion-pequeno,
 .btn-accion-mini {
+    background: linear-gradient(135deg, #FFF9E6 0%, #FFE8B3 100%);
+    border: 2px solid #FFD580;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #CC6600;
     position: relative;
     z-index: 11;
-}
-
-/* Estilo para eventos vencidos */
-.evento-vencido {
-    opacity: 0.6;
-    background: #f8f9fa !important;
-}
-
-.evento-vencido .titulo-evento {
-    text-decoration: line-through;
-    color: #999 !important;
-}
-
-.estado-vencido {
-    background: #6c757d;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 8px;
-    font-size: 10px;
     font-weight: 600;
-    text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(255, 165, 0, 0.2);
+}
+
+.btn-accion-evento {
+    font-size: 16px;
+    padding: 10px 14px;
+}
+
+.btn-accion-pequeno {
+    font-size: 15px;
+    padding: 8px 12px;
+}
+
+.btn-accion-mini {
+    font-size: 14px;
+    padding: 7px 11px;
+}
+
+.btn-accion-evento.btn-editar,
+.btn-accion-pequeno.btn-editar,
+.btn-accion-mini.btn-editar {
+    background: linear-gradient(135deg, #FFF3CD 0%, #FFE8A1 100%);
+    color: #D35400;
+    border-color: #FFC107;
+}
+
+.btn-accion-evento.btn-editar:hover,
+.btn-accion-pequeno.btn-editar:hover,
+.btn-accion-mini.btn-editar:hover {
+    background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+    color: white;
+    border-color: #FF9800;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+}
+
+.btn-accion-evento.btn-eliminar,
+.btn-accion-pequeno.btn-eliminar,
+.btn-accion-mini.btn-eliminar {
+    background: linear-gradient(135deg, #FFE5E5 0%, #FFCCCC 100%);
+    color: #E74C3C;
+    border-color: #FFAAAA;
+}
+
+.btn-accion-evento.btn-eliminar:hover,
+.btn-accion-pequeno.btn-eliminar:hover,
+.btn-accion-mini.btn-eliminar:hover {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    border-color: #C0392B;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
