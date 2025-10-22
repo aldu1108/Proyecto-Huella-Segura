@@ -10,73 +10,6 @@ if (!isset($_SESSION['rol'])) {
 $usuario_id = $_SESSION['usuario_id'];
 $rol_usuario = $_SESSION['rol'];
 
-// Procesar formulario de nuevo post
-$mensaje_exito = '';
-$mensaje_error = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['titulo_post']) && $rol_usuario !== 'demo') {
-    
-    // Validar que vengan los datos
-    if (empty($_POST['titulo_post']) || empty($_POST['contenido_post']) || empty($_POST['tipo_post'])) {
-        $mensaje_error = "Por favor completa todos los campos obligatorios";
-    } else {
-        $titulo = $conexion->real_escape_string(trim($_POST['titulo_post']));
-        $contenido = $conexion->real_escape_string(trim($_POST['contenido_post']));
-        $tipo_post = $conexion->real_escape_string($_POST['tipo_post']);
-        $imagenes = [];
-        
-        // Crear directorio si no existe
-        if (!file_exists('imagenes/posts')) {
-            if (!mkdir('imagenes/posts', 0777, true)) {
-                $mensaje_error = "Error: No se pudo crear la carpeta de imágenes";
-            }
-        }
-        
-        // Procesar múltiples imágenes solo si no hay errores previos
-        if (empty($mensaje_error) && isset($_FILES['imagenes_post']) && !empty($_FILES['imagenes_post']['name'][0])) {
-            $total_imagenes = count($_FILES['imagenes_post']['name']);
-            
-            for ($i = 0; $i < $total_imagenes && $i < 5; $i++) { // Máximo 5 imágenes
-                if ($_FILES['imagenes_post']['error'][$i] === 0) {
-                    $extension = strtolower(pathinfo($_FILES['imagenes_post']['name'][$i], PATHINFO_EXTENSION));
-                    $extensiones_permitidas = ['jpg', 'jpeg', 'png', 'gif'];
-                    
-                    if (in_array($extension, $extensiones_permitidas) && $_FILES['imagenes_post']['size'][$i] <= 5000000) {
-                        $nombre_archivo = 'post_' . $usuario_id . '_' . time() . '_' . $i . '.' . $extension;
-                        $ruta_destino = 'imagenes/posts/' . $nombre_archivo;
-                        
-                        if (move_uploaded_file($_FILES['imagenes_post']['tmp_name'][$i], $ruta_destino)) {
-                            $imagenes[] = $nombre_archivo;
-                        } else {
-                            $mensaje_error = "Error al subir la imagen " . ($i + 1);
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Solo insertar si no hay errores
-        if (empty($mensaje_error)) {
-            $imagenes_str = !empty($imagenes) ? implode(',', $imagenes) : NULL;
-            
-            // Insertar post en la base de datos
-            $sql_insert = "INSERT INTO post_comunidad (titulo, contenido, fecha, id_usuario, tipo_post, imagen_post) 
-                           VALUES ('$titulo', '$contenido', NOW(), $usuario_id, '$tipo_post', " . 
-                           ($imagenes_str ? "'$imagenes_str'" : "NULL") . ")";
-            
-            // Debug: descomentar para ver la consulta SQL
-            // echo "SQL: " . $sql_insert . "<br>";
-            
-            if ($conexion->query($sql_insert)) {
-                $mensaje_exito = "¡Post publicado exitosamente!";
-                header("Location: comunidad.php?success=1");
-                exit();
-            } else {
-                $mensaje_error = "Error al publicar el post en la base de datos: " . $conexion->error . "<br>SQL: " . $sql_insert;
-            }
-        }
-    }
-}
 
 // Obtener estadísticas REALES de la comunidad (se actualizan al refrescar)
 $consulta_miembros = "SELECT COUNT(*) as total FROM usuarios WHERE estado = 'activo'";
@@ -102,20 +35,35 @@ $total_ayudas = $resultado_ayudas->fetch_assoc()['total'];
 if ($rol_usuario === 'demo') { 
     $resultado_posts = null; 
 } else { 
-    $consulta_posts = "SELECT p.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario, 
-        p.conteo_likes as total_likes, 
-        p.conteo_comentarios as total_comentarios, 
-        (SELECT COUNT(*) FROM likes_post WHERE id_post = p.id_post AND id_usuario = $usuario_id) as usuario_dio_like 
-        FROM post_comunidad p 
-        JOIN usuarios u ON p.id_usuario = u.id_usuario 
-        ORDER BY p.fecha DESC LIMIT 20"; 
+    $consulta_posts = "SELECT a.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario, 
+        a.conteo_likes as total_likes, 
+        a.conteo_comentarios as total_comentarios, 
+        (SELECT COUNT(*) FROM likes_post WHERE id_post = a.id_post AND id_usuario = $usuario_id) as usuario_dio_like 
+        FROM post_comunidad a 
+        JOIN usuarios u ON a.id_usuario = u.id_usuario 
+        ORDER BY a.fecha DESC LIMIT 20"; 
     
     $resultado_posts = $conexion->query($consulta_posts);
 }
 
-// Obtener eventos próximos
-$consulta_eventos = "SELECT * FROM eventos_comunidad WHERE fecha >= CURDATE() ORDER BY fecha ASC LIMIT 5";
+// Obtener eventos próximos REALES
+$consulta_eventos = "SELECT e.*, u.nombre_usuario, u.apellido_usuario,
+                     (SELECT COUNT(*) FROM asistentes_evento WHERE id_evento = e.id_evento AND id_usuario = $usuario_id) as usuario_participa
+                     FROM eventos_comunidad e
+                     JOIN usuarios u ON e.id_usuario = u.id_usuario
+                     WHERE e.fecha >= NOW() AND e.estado = 'activo'
+                     ORDER BY e.fecha ASC LIMIT 10";
 $resultado_eventos = $conexion->query($consulta_eventos);
+
+        // Obtener grupos de la comunidad
+$consulta_grupos = "SELECT g.*, u.nombre_usuario, u.apellido_usuario,
+                    (SELECT COUNT(*) FROM miembros_grupo WHERE id_grupo = g.id_grupo AND id_usuario = $usuario_id) as usuario_es_miembro
+                    FROM grupos_comunidad g
+                    JOIN usuarios u ON g.id_creador = u.id_usuario
+                    WHERE g.estado = 'activo'
+                    ORDER BY g.contador_miembros DESC LIMIT 20";
+$resultado_grupos = $conexion->query($consulta_grupos);
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -136,17 +84,6 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 
     <!-- Contenido principal -->
     <main class="main-content">
-        <!-- Mensajes de éxito/error -->
-        <?php if ($mensaje_exito): ?>
-            <div class="mensaje-exito"><?php echo $mensaje_exito; ?></div>
-        <?php endif; ?>
-        <?php if ($mensaje_error): ?>
-            <div class="mensaje-error"><?php echo $mensaje_error; ?></div>
-        <?php endif; ?>
-        <?php if (isset($_GET['success'])): ?>
-            <div class="mensaje-exito">¡Post publicado exitosamente!</div>
-        <?php endif; ?>
-
         <!-- Header de comunidad -->
         <section class="comunidad-header">
             <h2 class="comunidad-title">Comunidad PetCare</h2>
@@ -184,7 +121,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
         <section class="feed-section" id="feedSection">
             <!-- Crear post -->
             <div class="create-post">
-                <form method="POST" enctype="multipart/form-data" id="formCrearPost" <?php echo $rol_usuario == 'demo' ? 'onsubmit="return false;"' : ''; ?>>
+                <form enctype="multipart/form-data" id="formCrearPost" <?php echo $rol_usuario == 'demo' ? 'onsubmit="return false;"' : 'onsubmit="return enviarPost(event);"'; ?>>
                         <input type="text" name="titulo_post" placeholder="Título del post" required maxlength="100" class="input-titulo-post" <?php echo $rol_usuario == 'demo' ? 'readonly onclick="mostrarModalAlerta(\'Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños\')"' : ''; ?>>
                         
                         <textarea name="contenido_post" placeholder="¿Qué quieres compartir con la comunidad?" required maxlength="500" class="textarea-contenido-post" <?php echo $rol_usuario == 'demo' ? 'readonly onclick="mostrarModalAlerta(\'Inicia sesión para crear posts\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños\')"' : ''; ?>></textarea>
@@ -230,6 +167,7 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                 <?php if ($rol_usuario !== 'demo' && $resultado_posts && $resultado_posts->num_rows > 0): ?>
                     <?php while ($post = $resultado_posts->fetch_assoc()): ?>
                         <div class="post-card">
+                            <!-- Header del post con menú de opciones -->
                             <div class="post-header">
                                 <div class="user-avatar" style="background-image: url('imagenes/<?php echo $post['foto_usuario']; ?>')"></div>
                                 <div class="user-info">
@@ -255,6 +193,26 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                                 }
                                 if ($badge_text): ?>
                                     <span class="post-badge <?php echo $badge_class; ?>"><?php echo $badge_text; ?></span>
+                                <?php endif; ?>
+                                
+                                <?php 
+                                // Verificar si el usuario actual puede eliminar este post
+                                $puede_eliminar_post = ($post['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
+                                
+                                if ($puede_eliminar_post): ?>
+                                    <div class="post-menu-container">
+                                        <button class="btn-menu-post" onclick="toggleMenuPost(<?php echo $post['id_post']; ?>)" title="Opciones">
+                                            ⋮
+                                        </button>
+                                        <div class="post-menu-opciones" id="menu-post-<?php echo $post['id_post']; ?>" style="display: none;">
+                                            <button class="menu-opcion-eliminar" onclick="eliminarPost(<?php echo $post['id_post']; ?>, this)">
+                                                🗑️ Eliminar post
+                                            </button>
+                                            <?php if ($rol_usuario == 'admin' && $post['id_usuario'] != $usuario_id): ?>
+                                                <span class="menu-nota-admin">Como administrador</span>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
                                 <?php endif; ?>
                             </div>
                             <div class="post-content">
@@ -288,54 +246,66 @@ $resultado_eventos = $conexion->query($consulta_eventos);
                                 </button>
                             </div>
                             
-                            <!-- Sección de comentarios (colapsable) -->
-                            <div class="comentarios-seccion" id="comentarios-<?php echo $post['id_post']; ?>" style="display: none;">
-                                <div class="comentarios-lista">
-                                    <?php
-                                    // Obtener comentarios de este post
-                                    $post_id = $post['id_post'];
-                                    $consulta_comentarios = "SELECT c.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario 
-                                                            FROM comentarios_comunidad c 
-                                                            JOIN usuarios u ON c.id_usuario = u.id_usuario 
-                                                            WHERE c.id_post = $post_id 
-                                                            ORDER BY c.fecha ASC";
-                                    $resultado_comentarios = $conexion->query($consulta_comentarios);
-                                    
-                                    if ($resultado_comentarios && $resultado_comentarios->num_rows > 0):
-                                        while ($comentario = $resultado_comentarios->fetch_assoc()): ?>
-                                            <div class="comentario-item">
-                                                <div class="comentario-avatar" style="background-image: url('imagenes/<?php echo $comentario['foto_usuario']; ?>')"></div>
-                                                <div class="comentario-contenido">
-                                                    <div class="comentario-header">
-                                                        <span class="comentario-autor"><?php echo htmlspecialchars($comentario['nombre_usuario'] . ' ' . $comentario['apellido_usuario']); ?></span>
-                                                        <span class="comentario-fecha"><?php echo date('d/m/Y H:i', strtotime($comentario['fecha'])); ?></span>
-                                                    </div>
-                                                    <p class="comentario-texto"><?php echo nl2br(htmlspecialchars($comentario['contenido'])); ?></p>
-                                                </div>
-                                            </div>
-                                        <?php endwhile;
-                                    else: ?>
-                                        <p class="sin-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <!-- Formulario para nuevo comentario -->
-                                <div class="comentario-form">
-                                    <div class="comentario-input-wrapper">
-                                        <textarea 
-                                            class="comentario-input" 
-                                            placeholder="Escribe un comentario..." 
-                                            maxlength="500"
-                                            data-post-id="<?php echo $post['id_post']; ?>"
-                                            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); enviarComentario(this);}"
-                                        ></textarea>
-                                        <button class="btn-enviar-comentario" onclick="enviarComentario(this.previousElementSibling)">
-                                            ➤
-                                        </button>
-                                    </div>
-                                    <small class="comentario-ayuda">Presiona Enter para enviar, Shift+Enter para nueva línea</small>
-                                </div>
-                            </div>
+                            <!-- Sección de comentarios (colapsable) - REEMPLAZAR en comunidad.php -->
+<div class="comentarios-seccion" id="comentarios-<?php echo $post['id_post']; ?>" style="display: none;">
+    <div class="comentarios-lista">
+        <?php
+        // Obtener comentarios de este post
+        $post_id = $post['id_post'];
+        $consulta_comentarios = "SELECT c.*, u.nombre_usuario, u.apellido_usuario, u.foto_usuario 
+                                FROM comentarios_comunidad c 
+                                JOIN usuarios u ON c.id_usuario = u.id_usuario 
+                                WHERE c.id_post = $post_id 
+                                ORDER BY c.fecha ASC";
+        $resultado_comentarios = $conexion->query($consulta_comentarios);
+        
+        if ($resultado_comentarios && $resultado_comentarios->num_rows > 0):
+            while ($comentario = $resultado_comentarios->fetch_assoc()): 
+                // Verificar si el usuario actual puede eliminar este comentario
+                $puede_eliminar = ($comentario['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
+            ?>
+                <div class="comentario-item">
+                    <div class="comentario-avatar" style="background-image: url('imagenes/<?php echo $comentario['foto_usuario']; ?>')"></div>
+                    <div class="comentario-contenido">
+                        <div class="comentario-header">
+                            <span class="comentario-autor"><?php echo htmlspecialchars($comentario['nombre_usuario'] . ' ' . $comentario['apellido_usuario']); ?></span>
+                            <span class="comentario-fecha"><?php echo date('d/m/Y H:i', strtotime($comentario['fecha'])); ?></span>
+                            
+                            <?php if ($puede_eliminar): ?>
+                                <button class="btn-eliminar-comentario" 
+                                        onclick="eliminarComentario(<?php echo $comentario['id_comentario']; ?>, this)"
+                                        data-post-id="<?php echo $post_id; ?>"
+                                        title="Eliminar comentario">
+                                    🗑️
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                        <p class="comentario-texto"><?php echo nl2br(htmlspecialchars($comentario['contenido'])); ?></p>
+                    </div>
+                </div>
+            <?php endwhile;
+        else: ?>
+            <p class="sin-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+        <?php endif; ?>
+    </div>
+    
+    <!-- Formulario para nuevo comentario -->
+    <div class="comentario-form">
+        <div class="comentario-input-wrapper">
+            <textarea 
+                class="comentario-input" 
+                placeholder="Escribe un comentario..." 
+                maxlength="500"
+                data-post-id="<?php echo $post['id_post']; ?>"
+                onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); enviarComentario(this);}"
+            ></textarea>
+            <button class="btn-enviar-comentario" onclick="enviarComentario(this.previousElementSibling)">
+                ➤
+            </button>
+        </div>
+        <small class="comentario-ayuda">Presiona Enter para enviar, Shift+Enter para nueva línea</small>
+    </div>
+</div>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -393,115 +363,150 @@ $resultado_eventos = $conexion->query($consulta_eventos);
 
         <!-- Sección Eventos -->
         <section class="eventos-section" id="eventosSection" style="display: none;">
-            <div class="section-header">
-                <h3>Próximos Eventos</h3>
-                <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear eventos\n\nRegístrate para poder:\n• Organizar eventos para mascotas\n• Invitar a otros miembros\n• Gestionar asistentes')">Crear Evento</button>
-                <?php else: ?>
-                    <button class="btn-create">Crear Evento</button>
+    <div>
+        
+    <div class="section-header">
+            <h3>Próximos Eventos</h3>
+            <button class="btn-create" onclick="mostrarModalCrearEvento()">Crear Evento</button>
+    </div>
+<!-- Sección de eventos con menú de opciones -->
+<div class="eventos-list">
+    
+    <?php if ($rol_usuario !== 'demo' && $resultado_eventos && $resultado_eventos->num_rows > 0): ?>
+        <?php while ($evento = $resultado_eventos->fetch_assoc()): 
+            $fecha_evento = new DateTime($evento['fecha']);
+            $dia = $fecha_evento->format('d');
+            $mes = $fecha_evento->format('M');
+            
+            // Verificar si el usuario actual puede eliminar este evento
+            $puede_eliminar_evento = ($evento['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
+            $es_creador = ($evento['id_usuario'] == $usuario_id);
+        ?>
+            <div class="evento-card">
+                <?php if ($puede_eliminar_evento): ?>
+                    <div class="evento-menu-container">
+                        <button class="btn-menu-evento" onclick="toggleMenuEvento(<?php echo $evento['id_evento']; ?>)" title="Opciones">
+                            ⋮
+                        </button>
+                        <div class="evento-menu-opciones" id="menu-evento-<?php echo $evento['id_evento']; ?>" style="display: none;">
+                            <button class="menu-opcion-eliminar-evento" onclick="eliminarEvento(<?php echo $evento['id_evento']; ?>, this)">
+                                🗑️ Eliminar evento
+                            </button>
+                            <?php if ($rol_usuario == 'admin' && !$es_creador): ?>
+                                <span class="menu-nota-admin-evento">Como administrador</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 <?php endif; ?>
-            </div>
-
-            <div class="eventos-list">
-                <div class="evento-card">
-                    <div class="evento-date">
-                        <div class="date-day">15</div>
-                        <div class="date-month">Feb</div>
-                    </div>
-                    <div class="evento-info">
-                        <h4>Adopción Solidaria</h4>
-                        <div class="evento-details">
-                            🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
-                        </div>
-                        <?php if ($rol_usuario == 'demo'): ?>
-                            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos\n\nCrea una cuenta para participar en eventos de la comunidad')">Unirse al Evento</button>
-                        <?php else: ?>
-                            <button class="btn-join">Unirse al Evento</button>
-                        <?php endif; ?>
-                    </div>
+                
+                <div class="evento-date">
+                    <div class="date-day"><?php echo $dia; ?></div>
+                    <div class="date-month"><?php echo ucfirst($mes); ?></div>
                 </div>
-
-                <div class="evento-card">
-                    <div class="evento-date">
-                        <div class="date-day">18</div>
-                        <div class="date-month">Feb</div>
+                <div class="evento-info">
+                    <h4><?php echo htmlspecialchars($evento['titulo']); ?></h4>
+                    <p class="evento-descripcion"><?php echo htmlspecialchars($evento['descripcion']); ?></p>
+                    <div class="evento-details">
+                        🕐 <?php echo $fecha_evento->format('H:i'); ?> 
+                        📍 <?php echo htmlspecialchars($evento['ubicacion']); ?> 
+                        👥 <?php echo $evento['contador_asistentes']; ?> asistirán
                     </div>
-                    <div class="evento-info">
-                        <h4>Taller de Primeros Auxilios</h4>
-                        <div class="evento-details">
-                            🕐 16:00 📍 Centro Veterinario 👥 12 asistirán
-                        </div>
-                        <button class="btn-join">Unirse al Evento</button>
-                    </div>
+                    <?php if ($rol_usuario == 'demo'): ?>
+                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
+                    <?php else: ?>
+                        <button class="btn-join <?php echo $evento['usuario_participa'] > 0 ? 'btn-joined' : ''; ?>" 
+                                data-evento-id="<?php echo $evento['id_evento']; ?>"
+                                onclick="toggleParticipacion(this)">
+                            <?php echo $evento['usuario_participa'] > 0 ? 'Participando' : 'Unirse al Evento'; ?>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
-        </section>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <!-- Eventos de ejemplo para demo -->
+        <div class="evento-card">
+            <div class="evento-date">
+                <div class="date-day">15</div>
+                <div class="date-month">Nov</div>
+            </div>
+            <div class="evento-info">
+                <h4>Adopción Solidaria</h4>
+                <p class="evento-descripcion">Jornada de adopción de mascotas rescatadas</p>
+                <div class="evento-details">
+                    🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
+                </div>
+                <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+</section>
 
         <!-- Sección Grupos -->
-        <section class="grupos-section" id="gruposSection" style="display: none;">
-            <div class="section-header">
-                <h3>Grupos Populares</h3>
-                <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear grupos\n\nRegístrate para poder:\n• Crear grupos temáticos\n• Moderar discusiones\n• Conectar con dueños similares')">Crear Grupo</button>
-                <?php else: ?>
-                    <button class="btn-create">Crear Grupo</button>
+<section class="grupos-section" id="gruposSection" style="display: none;">
+    <div class="section-header">
+        <h3>Grupos Populares</h3>
+        <?php if ($rol_usuario == 'demo'): ?>
+            <button class="btn-create" onclick="mostrarModalAlerta('Inicia sesión para crear grupos')">Crear Grupo</button>
+        <?php else: ?>
+            <button class="btn-create" onclick="mostrarModalCrearGrupo()">Crear Grupo</button>
+        <?php endif; ?>
+    </div>
+
+    <!-- Sección de grupos con menú de opciones - REEMPLAZAR en comunidad.php -->
+<div class="grupos-list">
+    <?php if ($rol_usuario !== 'demo' && $resultado_grupos && $resultado_grupos->num_rows > 0): ?>
+        <?php while ($grupo = $resultado_grupos->fetch_assoc()): 
+            // Verificar si el usuario actual puede eliminar este grupo
+            $puede_eliminar_grupo = ($grupo['id_creador'] == $usuario_id) || ($rol_usuario == 'admin');
+            $es_creador = ($grupo['id_creador'] == $usuario_id);
+        ?>
+            <div class="grupo-card">
+                
+                <?php if ($puede_eliminar_grupo): ?>
+                    <div class="grupo-menu-container">
+                        <button class="btn-menu-grupo" onclick="toggleMenuGrupo(<?php echo $grupo['id_grupo']; ?>)" title="Opciones">
+                            ⋮
+                        </button>
+                        <div class="grupo-menu-opciones" id="menu-grupo-<?php echo $grupo['id_grupo']; ?>" style="display: none;">
+                            <button class="menu-opcion-eliminar-grupo" onclick="eliminarGrupo(<?php echo $grupo['id_grupo']; ?>, this)">
+                                🗑️ Eliminar grupo
+                            </button>
+                            <?php if ($rol_usuario == 'admin' && !$es_creador): ?>
+                                <span class="menu-nota-admin-grupo">Como administrador</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 <?php endif; ?>
+                
+                <div class="grupo-icon"><?php echo $grupo['icono']; ?></div>
+                <div class="grupo-info">
+                    <h4><?php echo htmlspecialchars($grupo['nombre_grupo']); ?></h4>
+                    <p><?php echo $grupo['contador_miembros']; ?> miembros</p>
+                    <p class="grupo-descripcion-mini"><?php echo htmlspecialchars(substr($grupo['descripcion'], 0, 60)); ?>...</p>
+                </div>
+                <button class="btn-join <?php echo $grupo['usuario_es_miembro'] > 0 ? 'btn-joined' : ''; ?>" 
+                        data-grupo-id="<?php echo $grupo['id_grupo']; ?>"
+                        onclick="toggleMiembroGrupo(this)">
+                    <?php echo $grupo['usuario_es_miembro'] > 0 ? 'Miembro' : 'Unirse'; ?>
+                </button>
             </div>
-
-            <div class="grupos-list">
-                <div class="grupo-card">
-                    <div class="grupo-icon">🐕</div>
-                    <div class="grupo-info">
-                        <h4>Dueños de Golden Retriever</h4>
-                        <p>234 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-
-                <div class="grupo-card">
-                    <div class="grupo-icon">🐱</div>
-                    <div class="grupo-info">
-                        <h4>Gatos de Madrid</h4>
-                        <p>189 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-
-                <div class="grupo-card">
-                    <div class="grupo-icon">🏥</div>
-                    <div class="grupo-info">
-                        <h4>Primeros Auxilios Pet</h4>
-                        <p>156 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
-
-                <div class="grupo-card">
-                    <div class="grupo-icon">❤️</div>
-                    <div class="grupo-info">
-                        <h4>Adopción Responsable</h4>
-                        <p>203 miembros</p>
-                    </div>
-                    <?php if ($rol_usuario == 'demo'): ?>
-                        <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos\n\nCrea una cuenta para formar parte de grupos temáticos')">Unirse</button>
-                    <?php else: ?>
-                        <button class="btn-join">Unirse</button>
-                    <?php endif; ?>
-                </div>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <!-- Grupos de ejemplo para demo -->
+        <div class="grupo-card">
+            <div class="grupo-icon">🐕</div>
+            <div class="grupo-info">
+                <h4>Dueños de Golden Retriever</h4>
+                <p>234 miembros</p>
             </div>
-        </section>
+            <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a grupos')">Unirse</button>
+        </div>
+    <?php endif; ?>
+</div>
+</section>
+
     </main>
 
     <!-- Modal de alerta para usuarios demo -->
@@ -576,6 +581,100 @@ $resultado_eventos = $conexion->query($consulta_eventos);
             </div>
         </div>
     </div>
+
+    <!-- Modal para crear evento -->
+    <div id="modalCrearEvento" class="modal-crear-evento"  style="display: none;">
+        <div class="modal-crear-evento-contenido">
+            <div class="modal-crear-evento-header">
+                <h3>Crear Nuevo Evento</h3>
+                <button class="cerrar-modal-evento" onclick="cerrarModalCrearEvento()">&times;</button>
+            </div>
+            <div class="modal-crear-evento-body">
+                <form id="formCrearEvento" onsubmit="return enviarEvento(event)">
+                    <div class="form-group">
+                        <label for="titulo_evento">Título del Evento *</label>
+                        <input type="text" id="titulo_evento" name="titulo_evento" required maxlength="100" 
+                               placeholder="Ej: Jornada de Adopción">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion_evento">Descripción *</label>
+                        <textarea id="descripcion_evento" name="descripcion_evento" required maxlength="255" 
+                                  rows="4" placeholder="Describe el evento y lo que se hará"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fecha_evento">Fecha *</label>
+                            <input type="date" id="fecha_evento" name="fecha_evento" required 
+                                   min="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hora_evento">Hora *</label>
+                            <input type="time" id="hora_evento" name="hora_evento" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ubicacion_evento">Ubicación *</label>
+                        <input type="text" id="ubicacion_evento" name="ubicacion_evento" required maxlength="100"
+                               placeholder="Ej: Parque Central">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancelar" onclick="cerrarModalCrearEvento()">Cancelar</button>
+                        <button type="submit" class="btn-crear-evento">Crear Evento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear grupo -->
+<div id="modalCrearGrupo" class="modal-crear-evento" style="display: none;">
+    <div class="modal-crear-evento-contenido">
+        <div class="modal-crear-evento-header">
+            <h3>Crear Nuevo Grupo</h3>
+            <button class="cerrar-modal-evento" onclick="cerrarModalCrearGrupo()">&times;</button>
+        </div>
+        <div class="modal-crear-evento-body">
+            <form id="formCrearGrupo" onsubmit="return enviarGrupo(event)">
+                <div class="form-group">
+                    <label for="nombre_grupo">Nombre del Grupo *</label>
+                    <input type="text" id="nombre_grupo" name="nombre_grupo" required maxlength="100" 
+                           placeholder="Ej: Amantes de los Beagles">
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion_grupo">Descripción *</label>
+                    <textarea id="descripcion_grupo" name="descripcion_grupo" required maxlength="500" 
+                              rows="4" placeholder="Describe el propósito del grupo"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="icono_grupo">Icono del Grupo *</label>
+                    <select id="icono_grupo" name="icono_grupo" required class="select-icono">
+                        <option value="🐕">🐕 Perro</option>
+                        <option value="🐱">🐱 Gato</option>
+                        <option value="🐾">🐾 Huellas</option>
+                        <option value="❤️">❤️ Corazón</option>
+                        <option value="🏥">🏥 Veterinaria</option>
+                        <option value="🎓">🎓 Educación</option>
+                        <option value="🏃">🏃 Actividad</option>
+                        <option value="👥">👥 Comunidad</option>
+                        <option value="🌟">🌟 Especial</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalCrearGrupo(this)">Cancelar</button>
+                    <button type="submit" class="btn-crear-grupo" id="btnSubmit">Crear Grupo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- Navegación inferior -->
     <nav>
