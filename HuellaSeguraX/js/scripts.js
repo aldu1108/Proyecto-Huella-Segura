@@ -154,8 +154,19 @@ function generarCalendario(mes, año) {
     const hoy = new Date();
     const esHoy = (dia) => hoy.getDate() === dia && hoy.getMonth() === mes && hoy.getFullYear() === año;
     
-    // Obtener días con eventos desde PHP (se pasan como variable global)
-    const diasConEventos = window.diasConEventosCalendario || [];
+    // Obtener eventos del mes y calcular días con eventos
+    const eventosMes = window.indexCalendarioData ? window.indexCalendarioData.eventosMes : [];
+    const diasConEventos = [];
+    
+    eventosMes.forEach(evento => {
+        const fechaEvento = new Date(evento.fecha);
+        if (fechaEvento.getMonth() === mes && fechaEvento.getFullYear() === año) {
+            const dia = fechaEvento.getDate();
+            if (!diasConEventos.includes(dia)) {
+                diasConEventos.push(dia);
+            }
+        }
+    });
     
     let html = '';
     
@@ -220,8 +231,106 @@ function seleccionarDia(dia) {
         d.classList.remove('seleccionado')
     );
     
-    event.target.classList.add('seleccionado');
-    console.log(`Día seleccionado: ${dia}/${mesActual + 1}/${añoActual}`);
+    if (event && event.target) {
+        event.target.classList.add('seleccionado');
+    }
+    
+    const fechaSeleccionada = `${añoActual}-${String(mesActual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+    mostrarEventosDiaIndex(fechaSeleccionada, dia);
+}
+
+function mostrarEventosDiaIndex(fecha, dia) {
+    const eventos = window.indexCalendarioData ? 
+        window.indexCalendarioData.eventosMes.filter(e => e.fecha.startsWith(fecha)) : [];
+    
+    const hoy = new Date();
+    const [año, mes, diaStr] = fecha.split('-');
+    const fechaSelec = new Date(parseInt(año), parseInt(mes) - 1, parseInt(diaStr));
+    
+    let tituloFecha = '';
+    
+    if (fechaSelec.getDate() === hoy.getDate() && 
+        fechaSelec.getMonth() === hoy.getMonth() && 
+        fechaSelec.getFullYear() === hoy.getFullYear()) {
+        tituloFecha = 'Hoy';
+    } else {
+        const opciones = { day: 'numeric', month: 'long' };
+        tituloFecha = fechaSelec.toLocaleDateString('es-ES', opciones);
+    }
+    
+    const tituloElement = document.getElementById('tituloEventosDia');
+    const contadorElement = document.getElementById('contadorEventosDia');
+    
+    if (tituloElement) {
+        tituloElement.textContent = `📅 ${tituloFecha}`;
+    }
+    if (contadorElement) {
+        contadorElement.textContent = eventos.length;
+    }
+    
+    const listaEventos = document.getElementById('listaEventosDia');
+    if (!listaEventos) return;
+    
+    if (eventos.length === 0) {
+        listaEventos.innerHTML = `
+            <div class="sin-eventos">
+                <div class="icono-grande">📅</div>
+                <p>No hay eventos para este día</p>
+                <small>Agenda una cita o crea un recordatorio</small>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    eventos.forEach(evento => {
+        let icono = '📝';
+        let tipoTexto = 'Recordatorio';
+        let nombreMascota = evento.nombre_mascota ? ` • ${evento.nombre_mascota}` : '';
+        
+        if (evento.tipo === 'recordatorio') {
+            icono = '📝';
+            tipoTexto = 'Recordatorio';
+        } else if (evento.tipo === 'cita') {
+            icono = '💊';
+            tipoTexto = 'Cita Veterinaria';
+        } else if (evento.tipo === 'evento') {
+            icono = '🎉';
+            tipoTexto = 'Evento Comunidad';
+            nombreMascota = '';
+        }
+        
+        const fechaEvento = new Date(evento.fecha);
+        const hora = fechaEvento.toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'});
+        
+        const ahora = new Date();
+        const esVencido = fechaEvento < ahora;
+        const claseVencido = esVencido ? 'evento-vencido' : '';
+        
+        const urlDestino = evento.tipo === 'cita' ? 'veterinaria.php' : 
+                         evento.tipo === 'evento' ? 'comunidad.php' : 
+                         evento.id_mascota ? `perfil-mascota.php?id=${evento.id_mascota}` : '#';
+        
+        const esClickeable = evento.tipo === 'cita' || evento.tipo === 'evento' || evento.id_mascota;
+        
+        html += `
+            <div class="evento-hoy ${claseVencido}" ${esClickeable ? `onclick="window.location.href='${urlDestino}'" style="cursor: pointer;"` : ''}>
+                <div class="icono-evento">${icono}</div>
+                <div class="info-evento">
+                    <div class="titulo-evento">${evento.titulo}${nombreMascota}</div>
+                    <div class="detalles-evento">${tipoTexto} • ${hora}</div>
+                </div>
+                ${evento.tipo === 'recordatorio' ? `
+                    <div class="acciones-evento" onclick="event.stopPropagation()">
+                        <button class="btn-accion-evento btn-editar" onclick="event.stopPropagation(); editarEvento('${evento.tipo}', ${evento.id_evento})" title="Editar">✏️</button>
+                        <button class="btn-accion-evento btn-eliminar" onclick="event.stopPropagation(); eliminarEvento('${evento.tipo}', ${evento.id_evento})" title="Eliminar">🗑️</button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    });
+    
+    listaEventos.innerHTML = html;
 }
 
 // Funcionalidad de búsqueda
@@ -462,5 +571,176 @@ function togglePassword(button) {
     icon.classList.add('fa-eye');
   }
 }
+// ==========================================
+// GESTIÓN DE MODALES
+// ==========================================
+
+function mostrarModalRecordatorio() {
+    const modal = document.getElementById('modalRecordatorio');
+    if (modal) {
+        const form = modal.querySelector('form');
+        form.reset();
+        form.action = 'procesar-recordatorio.php';
+        
+        modal.querySelector('.modal-header h3').textContent = '📝 Nuevo Recordatorio';
+        
+        // Eliminar input hidden si existe
+        const idRecordatorioInput = form.querySelector('input[name="id_recordatorio"]');
+        if (idRecordatorioInput) {
+            idRecordatorioInput.remove();
+        }
+        
+        // Establecer fecha mínima de hoy
+        const hoy = new Date().toISOString().split('T')[0];
+        const inputFecha = form.querySelector('input[name="fecha"]');
+        if (inputFecha) {
+            inputFecha.setAttribute('min', hoy);
+            inputFecha.value = hoy;
+        }
+        
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function cerrarModalRecordatorio() {
+    const modal = document.getElementById('modalRecordatorio');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// ==========================================
+// EDITAR Y ELIMINAR EVENTOS (INDEX) - VERSIÓN MEJORADA
+// ==========================================
+
+function editarEvento(tipo, id) {
+    // Prevenir propagación del evento
+    if (typeof event !== 'undefined') {
+        event.stopPropagation();
+    }
+
+    if (tipo === 'recordatorio') {
+        // Mostrar indicador de carga
+        const btn = event.target;
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '⏳';
+        btn.disabled = true;
+
+        fetch(`obtener-recordatorio.php?id=${id}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const modal = document.getElementById('modalRecordatorio');
+                    if (!modal) {
+                        throw new Error('Modal no encontrado');
+                    }
+
+                    const form = modal.querySelector('form');
+                    
+                    // Cambiar título del modal
+                    modal.querySelector('.modal-header h3').textContent = '✏️ Editar Recordatorio';
+                    
+                    // Llenar formulario
+                    form.querySelector('input[name="titulo"]').value = data.recordatorio.titulo;
+                    const descTextarea = form.querySelector('textarea[name="descripcion"]');
+                    if (descTextarea) {
+                        descTextarea.value = data.recordatorio.descripcion || '';
+                    }
+                    
+                    // Procesar fecha y hora
+                    const fechaHora = new Date(data.recordatorio.fecha);
+                    const fechaStr = fechaHora.toISOString().split('T')[0];
+                    const horaStr = fechaHora.toTimeString().substring(0, 5);
+                    
+                    form.querySelector('input[name="fecha"]').value = fechaStr;
+                    form.querySelector('input[name="hora"]').value = horaStr;
+                    
+                    // Seleccionar mascotas asociadas
+                    const checkboxesMascotas = form.querySelectorAll('input[name="mascotas[]"]');
+                    if (checkboxesMascotas.length > 0 && data.recordatorio.mascotas) {
+                        checkboxesMascotas.forEach(checkbox => {
+                            checkbox.checked = data.recordatorio.mascotas.includes(parseInt(checkbox.value));
+                        });
+                    }
+                    
+                    // Agregar o actualizar input hidden con ID
+                    let idInput = form.querySelector('input[name="id_recordatorio"]');
+                    if (!idInput) {
+                        idInput = document.createElement('input');
+                        idInput.type = 'hidden';
+                        idInput.name = 'id_recordatorio';
+                        form.appendChild(idInput);
+                    }
+                    idInput.value = id;
+                    
+                    // Cambiar action del formulario
+                    form.action = 'editar-recordatorio.php';
+                    
+                    // Mostrar modal
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    throw new Error(data.message || 'Error al cargar el recordatorio');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cargar el recordatorio: ' + error.message);
+            })
+            .finally(() => {
+                // Restaurar botón
+                if (btn) {
+                    btn.innerHTML = textoOriginal;
+                    btn.disabled = false;
+                }
+            });
+    }
+}
+
+function eliminarEvento(tipo, id) {
+    // Prevenir propagación del evento
+    if (typeof event !== 'undefined') {
+        event.stopPropagation();
+    }
+
+    const mensaje = tipo === 'recordatorio' ? 'recordatorio' : 'cita';
+    const confirmacion = confirm(`¿Estás seguro de que deseas eliminar este ${mensaje}?\n\nEsta acción no se puede deshacer.`);
+    
+    if (confirmacion) {
+        // Mostrar indicador de carga
+        const btn = event.target;
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '⏳';
+        btn.disabled = true;
+        
+        window.location.href = `eliminar-evento.php?tipo=${tipo}&id=${id}`;
+    }
+}
+
+// Cerrar modal con ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        cerrarModalRecordatorio();
+    }
+});
+
+// Cerrar modal haciendo clic fuera
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('modalRecordatorio');
+    if (modal && e.target === modal) {
+        cerrarModalRecordatorio();
+    }
+});
+
+// Exportar funciones globalmente
+window.mostrarModalRecordatorio = mostrarModalRecordatorio;
+window.cerrarModalRecordatorio = cerrarModalRecordatorio;
+window.editarEvento = editarEvento;
+window.eliminarEvento = eliminarEvento;
 
 console.log('Scripts de Huella Segura cargados completamente');
