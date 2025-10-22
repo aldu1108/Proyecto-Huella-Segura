@@ -691,6 +691,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
         <?php endif; ?>
 
         <!-- Seccion Historial Medico  -->
+         <section class="seccion-veterinaria seccion-historial" id="seccionHistorial">
                     <div class="encabezado-agenda">
                         <h4 class="subtitulo-historial">📅 Citas Realizadas</h4>
                         <div class="filtros-historial">
