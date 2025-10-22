@@ -67,11 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
     animarTarjetas();
 });
 
-// Función para notificaciones
-function toggleNotificaciones() {
-    console.log('Toggle notificaciones');
-    mostrarMensaje('No tienes notificaciones nuevas', 'info');
-}
 
 // Función para mostrar mensajes
 function mostrarMensaje(texto, tipo = 'info') {
@@ -139,6 +134,10 @@ const meses = [
 ];
 
 function initCalendario() {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+    
     const diasCalendario = document.getElementById('diasCalendario');
     if (diasCalendario) {
         generarCalendario(mesActual, añoActual);
@@ -146,13 +145,17 @@ function initCalendario() {
 }
 
 function generarCalendario(mes, año) {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+
     const primerDia = new Date(año, mes, 1).getDay();
     const diasEnMes = new Date(año, mes + 1, 0).getDate();
     const hoy = new Date();
     const esHoy = (dia) => hoy.getDate() === dia && hoy.getMonth() === mes && hoy.getFullYear() === año;
     
-    // Días con eventos (ejemplo)
-    const diasConEventos = [15, 16, 21];
+    // Obtener días con eventos desde PHP (se pasan como variable global)
+    const diasConEventos = window.diasConEventosCalendario || [];
     
     let html = '';
     
@@ -173,7 +176,7 @@ function generarCalendario(mes, año) {
     }
     
     // Días del próximo mes
-    const celdasTotales = 42;
+    const celdasTotales = 35;
     const celdasUsadas = primerDia + diasEnMes;
     const diasProximoMes = celdasTotales - celdasUsadas;
     
@@ -193,6 +196,10 @@ function generarCalendario(mes, año) {
 }
 
 function cambiarMes(direccion) {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+
     mesActual += direccion;
     if (mesActual > 11) {
         mesActual = 0;
@@ -205,6 +212,10 @@ function cambiarMes(direccion) {
 }
 
 function seleccionarDia(dia) {
+    if (window.perfilMascotaPage) {
+        return;
+    }
+    
     document.querySelectorAll('.dia-calendario.seleccionado').forEach(d => 
         d.classList.remove('seleccionado')
     );
@@ -427,5 +438,29 @@ window.PetCareApp = {
     copyToClipboard,
     isMobile
 };
+
+function mostrarModalRecordatorio() {
+    document.getElementById('modalRecordatorio').style.display = 'flex';
+}
+
+function cerrarModalRecordatorio() {
+    document.getElementById('modalRecordatorio').style.display = 'none';
+}
+
+// Función toggle password
+function togglePassword(button) {
+  const input = button.previousElementSibling;
+  const icon = button.querySelector('i');
+
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
 
 console.log('Scripts de Huella Segura cargados completamente');

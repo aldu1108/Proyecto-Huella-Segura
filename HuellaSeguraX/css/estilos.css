@@ -2355,6 +2355,11 @@ body {
     font-size: 16px;
 }
 
+.password-toggle:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+}
+
 .forgot-password {
     text-align: right;
     margin-bottom: 24px;
@@ -2711,6 +2716,8 @@ button:focus {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    cursor: pointer;
 }
 
 .mascota-photo {

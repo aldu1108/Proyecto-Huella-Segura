@@ -324,3 +324,854 @@
     background: #f8f9fa;
     border-radius: 12px;
 }
+
+/* Estilos para botones de propietario */
+.boton-encontrado {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+.boton-encontrado:hover {
+    background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.boton-editar-reporte {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.boton-editar-reporte:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+}
+
+.boton-eliminar-reporte {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.boton-eliminar-reporte:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Responsive para botones */
+@media (max-width: 768px) {
+    .acciones-reporte {
+        flex-wrap: wrap;
+    }
+
+    .boton-encontrado,
+    .boton-editar-reporte,
+    .boton-eliminar-reporte {
+        flex: 1 1 100%;
+        min-width: 100%;
+        justify-content: center;
+    }
+}
+
+.info-mascota-editar {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    margin-bottom: 1rem;
+}
+
+.info-mascota-editar p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.info-mascota-editar strong {
+    color: #2c3e50;
+}
+
+.tarjeta-reporte {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-reporte:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Badges superiores */
+.etiqueta-estado {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+}
+
+.etiqueta-recompensa {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+}
+
+/* Contenedor de imagen */
+.contenido-reporte {
+    display: flex;
+    flex-direction: column;
+}
+
+.foto-reporte {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Header del usuario */
+.header-usuario-reporte {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 12px;
+    background: white;
+}
+
+.avatar-usuario-reporte {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #f0f0f0;
+    flex-shrink: 0;
+}
+
+.info-usuario-reporte {
+    flex: 1;
+    min-width: 0;
+}
+
+.nombre-usuario-reporte {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tiempo-publicacion-reporte {
+    font-size: 12px;
+    color: #95a5a6;
+    margin: 2px 0 0 0;
+}
+
+/* Información de la mascota */
+.info-reporte {
+    padding: 0 20px 16px;
+}
+
+.info-reporte h4 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 8px 0;
+}
+
+.info-reporte p {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-reporte p strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Acciones del reporte */
+.acciones-reporte {
+    padding: 16px 20px;
+    border-top: 1px solid #ecf0f1;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: white;
+}
+
+/* Botones de acción - Estilo de adopciones */
+.acciones-reporte button {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.acciones-reporte button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.acciones-reporte button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Botón Encontrada - Verde */
+.boton-encontrado {
+    background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.25);
+}
+
+.boton-encontrado:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.35);
+}
+
+.boton-encontrado:active {
+    transform: translateY(0);
+}
+
+/* Botón Editar - Azul */
+.boton-editar-reporte {
+    background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.25);
+}
+
+.boton-editar-reporte:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.35);
+}
+
+.boton-editar-reporte:active {
+    transform: translateY(0);
+}
+
+/* Botón Eliminar - Rojo */
+.boton-eliminar-reporte {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
+}
+
+.boton-eliminar-reporte:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
+}
+
+.boton-eliminar-reporte:active {
+    transform: translateY(0);
+}
+
+/* Botón Contactar - Morado (principal) */
+.boton-contactar {
+    background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    font-size: 15px;
+    padding: 14px 24px;
+}
+
+.boton-contactar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+}
+
+.boton-contactar:active {
+    transform: translateY(0);
+}
+
+/* Botones secundarios (Compartir, Ver detalles) */
+.boton-compartir-reporte,
+.boton-ver-detalles {
+    background: white;
+    color: #2c3e50;
+    border: 2px solid #ecf0f1;
+    min-width: 48px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.boton-compartir-reporte:hover,
+.boton-ver-detalles:hover {
+    background: #f8f9fa;
+    border-color: #bdc3c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.boton-compartir-reporte:active,
+.boton-ver-detalles:active {
+    transform: translateY(0);
+}
+
+/* Grid de botones del propietario */
+.botones-propietario-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+}
+
+/* Mensaje de ayuda */
+.mensaje-ayuda {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #FFF9E6 0%, #FFF3D6 100%);
+    border-top: 2px solid #F39C12;
+    font-size: 13px;
+    color: #7f6b4d;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* Grid de reportes */
+.contenedor-reportes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedor-reportes {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .foto-reporte {
+        height: 240px;
+    }
+
+    .acciones-reporte {
+        flex-direction: column;
+    }
+
+    .acciones-reporte button {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .boton-compartir-reporte,
+    .boton-ver-detalles {
+        min-width: 100%;
+    }
+}
+
+/* Sin reportes */
+.sin-reportes {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.sin-reportes p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.sin-reportes p:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Modal Base */
+.modal-overlay-perdidas {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay-perdidas.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-container-perdidas {
+    background: white;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s ease;
+    overflow: hidden;
+}
+
+/* Modal Header */
+.modal-header-perdidas {
+    padding: 30px 30px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-icon-perdidas {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    animation: scaleIn 0.5s ease;
+}
+
+.modal-icon-perdidas.success {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.modal-icon-perdidas.warning {
+    background: linear-gradient(135deg, #f39c12, #f1c40f);
+    box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
+}
+
+.modal-icon-perdidas.danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+}
+
+.modal-title-perdidas {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 10px;
+}
+
+.modal-subtitle-perdidas {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.modal-close-perdidas {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-perdidas:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+    transform: rotate(90deg);
+}
+
+/* Modal Body */
+.modal-body-perdidas {
+    padding: 20px 30px;
+}
+
+.modal-mascota-info-perdidas {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal-mascota-avatar-perdidas {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-mascota-datos-perdidas h4 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.modal-mascota-datos-perdidas p {
+    margin: 0;
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.modal-success-box {
+    background: #d4edda;
+    border-left: 4px solid #27ae60;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-success-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #155724;
+    line-height: 1.5;
+}
+
+.modal-success-box ul {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.modal-success-box li {
+    font-size: 13px;
+    color: #155724;
+    margin: 5px 0;
+}
+
+.modal-warning-box-perdidas {
+    background: #fff3cd;
+    border-left: 4px solid #f39c12;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-warning-box-perdidas p {
+    margin: 0;
+    font-size: 14px;
+    color: #856404;
+    line-height: 1.5;
+}
+
+.modal-danger-box-perdidas {
+    background: #f8d7da;
+    border-left: 4px solid #e74c3c;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.modal-danger-box-perdidas p {
+    margin: 0;
+    font-size: 14px;
+    color: #721c24;
+    line-height: 1.5;
+}
+
+.modal-danger-box-perdidas ul {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+.modal-danger-box-perdidas li {
+    font-size: 13px;
+    color: #721c24;
+    margin: 5px 0;
+}
+
+/* Form Inputs */
+.form-group-perdidas {
+    margin-bottom: 20px;
+}
+
+.form-label-perdidas {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.form-input-perdidas,
+.form-textarea-perdidas {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input-perdidas:focus,
+.form-textarea-perdidas:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+}
+
+.form-textarea-perdidas {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.campo-ubicacion-perdidas {
+    display: flex;
+    gap: 10px;
+}
+
+.campo-ubicacion-perdidas .form-input-perdidas {
+    flex: 1;
+}
+
+.boton-gps-modal {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.boton-gps-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.grupo-campos-perdidas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.checkbox-recompensa-modal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.checkbox-recompensa-modal input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.checkbox-recompensa-modal label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Modal Footer */
+.modal-footer-perdidas {
+    padding: 20px 30px 30px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn-perdidas {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-btn-cancel-perdidas {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.modal-btn-cancel-perdidas:hover {
+    background: #bdc3c7;
+    color: #2c3e50;
+    transform: translateY(-2px);
+}
+
+.modal-btn-success-perdidas {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.modal-btn-success-perdidas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+}
+
+.modal-btn-confirm-perdidas {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.modal-btn-confirm-perdidas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+}
+
+.modal-btn-danger-perdidas {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.modal-btn-danger-perdidas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .modal-container-perdidas {
+        border-radius: 20px 20px 0 0;
+        margin-top: auto;
+    }
+
+    .modal-footer-perdidas {
+        flex-direction: column-reverse;
+    }
+
+    .modal-btn-perdidas {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .grupo-campos-perdidas {
+        grid-template-columns: 1fr;
+    }
+}

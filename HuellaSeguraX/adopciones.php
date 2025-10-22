@@ -1,6 +1,7 @@
 <?php
 include_once('config/conexion.php');
 session_start();
+date_default_timezone_set('America/Argentina/Buenos_Aires'); // O tu zona horaria
 
 if (!isset($_SESSION['rol'])) {
     header("Location: login.php");
@@ -21,7 +22,9 @@ if ($rol_usuario === 'demo') {
 }
 
 // Obtener publicaciones de adopción con información más completa
-$consulta_adopciones = "SELECT p.*, pa.*, m.*, u.nombre_usuario, u.telefono_usuario, u.email_usuario
+$consulta_adopciones = "SELECT p.*, pa.*, m.*, 
+                        u.nombre_usuario, u.telefono_usuario, u.email_usuario, u.foto_usuario,
+                        p.fecha as fecha_publicacion
                         FROM publicaciones p 
                         JOIN publicacion_adopcion pa ON p.id_anuncio = pa.id_publicacion
                         JOIN mascotas m ON p.id_mascota = m.id_mascota
@@ -30,9 +33,9 @@ $consulta_adopciones = "SELECT p.*, pa.*, m.*, u.nombre_usuario, u.telefono_usua
                         ORDER BY p.fecha DESC";
 $resultado_adopciones = $conexion->query($consulta_adopciones);
 
-// Calcular total de adoptados (solicitudes con estado 'aprobada' o 'adoptado')
-$consulta_adoptados = "SELECT COUNT(*) as total FROM solicitud_adopcion 
-                       WHERE estado = 'aprobada' OR estado = 'adoptado'";
+// Calcular total de adoptados (mascotas con estado 'adoptado')
+$consulta_adoptados = "SELECT COUNT(*) as total FROM mascotas 
+                       WHERE estado = 'adoptado'";
 $resultado_adoptados = $conexion->query($consulta_adoptados);
 
 // Contar estadísticas
@@ -53,6 +56,21 @@ if (isset($_GET['exito'])) {
         case 'publicacion_creada':
             $nombre = isset($_GET['mascota']) ? $_GET['mascota'] : 'tu mascota';
             $mensaje = "¡Publicación de adopción de $nombre creada exitosamente! Esperamos que encuentre un hogar pronto.";
+            $tipo_mensaje = 'success';
+            break;
+        case 'marcada_adoptada':
+            $nombre = isset($_GET['mascota']) ? $_GET['mascota'] : 'la mascota';
+            $mensaje = "¡Felicitaciones! $nombre ha sido marcada como adoptada. Esperamos que disfrute de su nuevo hogar.";
+            $tipo_mensaje = 'success';
+            break;
+        case 'adopcion_editada':
+            $nombre = isset($_GET['mascota']) ? $_GET['mascota'] : 'la mascota';
+            $mensaje = "Publicación de adopción de $nombre actualizada correctamente.";
+            $tipo_mensaje = 'success';
+            break;
+        case 'adopcion_eliminada':
+            $nombre = isset($_GET['mascota']) ? $_GET['mascota'] : 'la mascota';
+            $mensaje = "Publicación de adopción de $nombre eliminada correctamente.";
             $tipo_mensaje = 'success';
             break;
     }
@@ -84,10 +102,54 @@ if (isset($_GET['error'])) {
             $mensaje = 'Por favor completa todos los campos requeridos.';
             $tipo_mensaje = 'error';
             break;
+        case 'sin_permisos':
+            $mensaje = 'No tienes permisos para realizar esta acción.';
+            $tipo_mensaje = 'error';
+            break;
+        case 'datos_invalidos':
+            $mensaje = 'Los datos enviados no son válidos.';
+            $tipo_mensaje = 'error';
+            break;
+        case 'error_actualizar':
+            $mensaje = 'Error al actualizar el estado de la adopción.';
+            $tipo_mensaje = 'error';
+            break;
+        case 'error_editar':
+            $mensaje = 'Error al editar la publicación de adopción.';
+            $tipo_mensaje = 'error';
+            break;
+        case 'error_eliminar':
+            $mensaje = 'Error al eliminar la publicación de adopción.';
+            $tipo_mensaje = 'error';
+            break;
+        case 'accion_invalida':
+            $mensaje = 'Acción no válida.';
+            $tipo_mensaje = 'error';
+            break;
         default:
             $mensaje = 'Ocurrió un error inesperado.';
             $tipo_mensaje = 'error';
             break;
+    }
+}
+function tiempoTranscurrido($fecha)
+{
+    $ahora = new DateTime();
+    $fecha_pub = new DateTime($fecha);
+    $diferencia = $ahora->diff($fecha_pub);
+
+    if ($diferencia->y > 0) {
+        return $diferencia->y . ' año' . ($diferencia->y > 1 ? 's' : '');
+    } elseif ($diferencia->m > 0) {
+        return $diferencia->m . ' mes' . ($diferencia->m > 1 ? 'es' : '');
+    } elseif ($diferencia->d > 0) {
+        return $diferencia->d . ' día' . ($diferencia->d > 1 ? 's' : '');
+    } elseif ($diferencia->h > 0) {
+        return $diferencia->h . ' hora' . ($diferencia->h > 1 ? 's' : '');
+    } elseif ($diferencia->i > 0) {
+        return $diferencia->i . ' minuto' . ($diferencia->i > 1 ? 's' : '');
+    } else {
+        return 'Ahora mismo';
     }
 }
 ?>
@@ -100,11 +162,13 @@ if (isset($_GET['error'])) {
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/adopciones.css">
     <link rel="stylesheet" href="css/modal-alerta-demo.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <!-- Header -->
     <header>
         <?php include_once('includes/menu_hamburguesa.php'); ?>
+        <?php include_once('includes/crear_notificacion.php'); ?>
     </header>
     <!-- Contenido principal -->
     <main class="main-content">
@@ -170,110 +234,102 @@ if (isset($_GET['error'])) {
             <!-- Mascotas en adopción -->
             <div class="lista-adopciones">
                 <?php if ($resultado_adopciones && $resultado_adopciones->num_rows > 0): ?>
-                        <?php while ($adopcion = $resultado_adopciones->fetch_assoc()): ?>
-                                <div class="tarjeta-adopcion">
-                                    <div class="badge-adopcion">ADOPCIÓN</div>
-                            
-                                    <div class="contenido-adopcion">
-                                        <img src="imagenes/<?php echo htmlspecialchars($adopcion['foto_mascota']); ?>" 
-                                             alt="<?php echo htmlspecialchars($adopcion['nombre_mascota']); ?>" 
-                                             class="foto-mascota-adopcion"
-                                             onerror="this.src='imagenes/mascota-default.jpg'">
-                                
-                                        <div class="info-adopcion">
-                                            <div class="encabezado-adopcion">
-                                                <div class="info-basica-adopcion">
-                                                    <h3><?php echo htmlspecialchars($adopcion['nombre_mascota']); ?></h3>
-                                                    <p class="detalles-basicos">
-                                                        <?php echo ucfirst($adopcion['tipo']); ?> • 
-                                                        <?php echo $adopcion['edad_mascota']; ?> años • 
-                                                        <?php echo $adopcion['sexo'] ? ($adopcion['sexo'] == 'macho' ? '♂' : '♀') : ''; ?>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                    
-                                            <p class="descripcion-adopcion"><?php echo nl2br(htmlspecialchars(substr($adopcion['descripcion'], 0, 150))); ?>...</p>
-                                    
-                                            <div class="meta-adopcion">
-                                                <span>📍 <?php echo htmlspecialchars($adopcion['lugar_adopcion']); ?></span>
-                                                <span>📅 <?php echo date('d/m/Y', strtotime($adopcion['fecha'])); ?></span>
-                                                <span>🏠 <?php echo htmlspecialchars($adopcion['nombre_usuario']); ?></span>
-                                            </div>
-                                    
-                                            <div class="estados-adopcion">
-                                                <span class="estado-badge estado-vacunado">✅ Disponible</span>
-                                            </div>
+                    <?php while ($adopcion = $resultado_adopciones->fetch_assoc()): ?>
+                            <div class="tarjeta-reporte">
+                                <!-- Badge de adopción -->
+                                <div class="etiqueta-estado adopcion-badge">ADOPCIÓN</div>
+                                        
+                                    <!-- Contenido del reporte -->
+                                    <div class="contenido-reporte">
+                                        <!-- Header con usuario y tiempo -->
+                                        <div class="header-usuario-reporte">
+                                            <div class="avatar-usuario-reporte" style="background-image: url('imagenes/<?php echo htmlspecialchars($adopcion['foto_usuario'] ?? 'usuario-default.jpg'); ?>')">
+                                </div>
+                                <div class="info-usuario-reporte">
+                                    <h4 class="nombre-usuario-reporte">
+                                        <?php echo htmlspecialchars($adopcion['nombre_usuario']); ?>
+                                    </h4>
+                                    <p class="tiempo-publicacion-reporte">Hace
+                                        <?php echo tiempoTranscurrido($adopcion['fecha_publicacion']); ?>
+                                    </p>
+                                </div>
+                                </div>
+                        
+                                <!-- Imagen de la mascota -->
+                                <img src="imagenes/<?php echo htmlspecialchars($adopcion['foto_mascota']); ?>"
+                                    alt="<?php echo htmlspecialchars($adopcion['nombre_mascota']); ?>" class="foto-reporte" onerror="this.src='imagenes/mascota-default.jpg'">
+                                            
+                                                    <!-- Información de la mascota -->
+                                                    <div class=" info-reporte">
+                                <h4>
+                                    <?php echo htmlspecialchars($adopcion['nombre_mascota']); ?>
+                                </h4>
+                                <p>
+                                    <?php echo ucfirst($adopcion['tipo']); ?> •
+                                    <?php echo $adopcion['sexo'] ? ucfirst($adopcion['sexo']) : 'No especificado'; ?>
+                                </p>
+                                <p><strong>Edad:</strong>
+                                    <?php echo $adopcion['edad_mascota']; ?> años</p>
+                                                        <p>📅 Publicado hace <?php echo tiempoTranscurrido($adopcion['fecha_publicacion']); ?>
+                                </p>
+                                <p>📍
+                                    <?php echo htmlspecialchars($adopcion['lugar_adopcion']); ?></p>
+                                                
+                                                        <?php if (!empty($adopcion['condiciones'])): ?>
+                                                                <div class="descripcion-condiciones">
+                                                                    <strong>Condiciones:</strong> <?php echo nl2br(htmlspecialchars(substr($adopcion['condiciones'], 0, 100))); ?><?php echo strlen($adopcion['condiciones']) > 100 ? '...' : ''; ?>
                                         </div>
+                                    <?php endif; ?>
                                     </div>
-                            
-                                    <!-- Mostrar botones según sea propietario o no -->
+                                    </div>
+                        
+                                    <!-- Acciones -->
+                                <div class="acciones-reporte">
                                     <?php if ($adopcion['id_usuario'] == $usuario_id && $rol_usuario != 'demo'): ?>
-                                        <!-- Botones para el propietario de la mascota -->
-                                        <div class="botones-propietario">
-                                            <button class="boton-editar-adopcion"
-                                                onclick="editarAdopcion(<?php echo $adopcion['id_adopcion']; ?>, '<?php echo addslashes($adopcion['condiciones']); ?>', '<?php echo addslashes($adopcion['lugar_adopcion']); ?>', '<?php echo addslashes($adopcion['nombre_mascota']); ?>')">
-                                                ✏️ Editar
-                                            </button>
-                                            <button class="boton-eliminar-adopcion"
-                                                onclick="eliminarAdopcion(<?php echo $adopcion['id_adopcion']; ?>, '<?php echo addslashes($adopcion['nombre_mascota']); ?>')">
-                                                🗑️ Eliminar
-                                            </button>
-                                        </div>
+                                        <!-- Botones para el propietario -->
+                                        <button class="boton-marcar-adoptada"
+                                            onclick="marcarComoAdoptada(<?php echo $adopcion['id_adopcion']; ?>, 
+                                                                        '<?php echo addslashes($adopcion['nombre_mascota']); ?>',
+                                                                        '<?php echo htmlspecialchars($adopcion['foto_mascota']); ?>')">
+                                            ✅ Adoptada
+                                        </button>
+
+                                        <button class="boton-editar-reporte"
+                                            onclick="editarAdopcion(<?php echo $adopcion['id_adopcion']; ?>, 
+                                                                '<?php echo addslashes($adopcion['condiciones']); ?>', 
+                                                                '<?php echo addslashes($adopcion['lugar_adopcion']); ?>', 
+                                                                '<?php echo addslashes($adopcion['nombre_mascota']); ?>')">
+                                            ✏️ Editar
+                                        </button>
+
+                                        <button class="boton-eliminar-reporte"
+                                            onclick="eliminarAdopcion(<?php echo $adopcion['id_adopcion']; ?>, 
+                                                                    '<?php echo addslashes($adopcion['nombre_mascota']); ?>',
+                                                                    '<?php echo htmlspecialchars($adopcion['foto_mascota']); ?>')">
+                                            🗑️ Eliminar
+                                        </button>
                                     <?php elseif ($rol_usuario == 'demo'): ?>
-                                        <!-- Botón para usuarios demo -->
-                                        <button class="boton-interesa-adoptar"
+                                        <button class="boton-contactar"
                                             onclick="mostrarModalAlerta('Inicia sesión para solicitar adopciones\n\nRegístrate para poder:\n• Solicitar adoptar mascotas\n• Contactar con los dueños\n• Completar el proceso de adopción')">
-                                            ❤️ Me interesa adoptar →
+                                            ❤️ Me interesa adoptar
                                         </button>
                                     <?php else: ?>
-                                        <!-- Botón para otros usuarios registrados -->
-                                        <button class="boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
-                                            ❤️ Me interesa adoptar →
+                                        <button class="boton-contactar boton-interesa-adoptar" data-id-adopcion="<?php echo $adopcion['id_adopcion']; ?>"
+                                                                data-nombre=" <?php echo htmlspecialchars($adopcion['nombre_mascota'], ENT_QUOTES); ?>">
+                                            ❤️ Me interesa adoptar
                                         </button>
                                     <?php endif; ?>
-                                </div>
-                        <?php endwhile; ?>
+                        </div>
+                        
+                        </div>
+                    <?php endwhile; ?>
                 <?php else: ?>
-                        <!-- Mascotas de ejemplo si no hay datos -->
-                        <div class="tarjeta-adopcion">
-                            <div class="badge-adopcion">ADOPCIÓN</div>
-                        
-                            <div class="contenido-adopcion">
-                                <img src="imagenes/perro.jpg" alt="Carlos" class="foto-mascota-adopcion">
-                            
-                                <div class="info-adopcion">
-                                    <div class="encabezado-adopcion">
-                                        <div class="info-basica-adopcion">
-                                            <h3>Carlos</h3>
-                                            <p class="detalles-basicos">Mestizo • 2 años • ♂</p>
-                                        </div>
-                                    </div>
-                                
-                                    <p class="descripcion-adopcion">Carlos es un perro muy cariñoso y juguetón. Le encanta pasear y es perfecto para familias activas.</p>
-                                
-                                    <div class="meta-adopcion">
-                                        <span>📍 Madrid Centro</span>
-                                        <span>📅 Hace 5 días</span>
-                                        <span>🏠 Refugio Esperanza</span>
-                                    </div>
-                                
-                                    <div class="estados-adopcion">
-                                        <span class="estado-badge estado-vacunado">✅ Vacunado</span>
-                                        <span class="estado-badge estado-esterilizado">💉 Esterilizado</span>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                            <?php if ($rol_usuario == 'demo'): ?>
-                                <button class="boton-interesa-adoptar" onclick="mostrarModalAlerta('Inicia sesión para solicitar adopciones\n\nEste es un ejemplo de mascota en adopción.')">
-                                    ❤️ Me interesa adoptar →
-                                </button>
-                            <?php else: ?>
-                                <button class="boton-interesa-adoptar" data-id-adopcion="0" data-alert="Este es un ejemplo. Registra mascotas para ver funcionalidad completa.">
-                                    ❤️ Me interesa adoptar →
-                                </button>
-                            <?php endif; ?>
+                        <!-- Sin adopciones disponibles -->
+                        <div class="mensaje-vacio" style="text-align: center; padding: 60px 20px; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px;">
+                            <p style="font-size: 64px; margin: 0;">❤️</p>
+                            <h3 style="margin: 20px 0 10px; color: #2c3e50; text-align: center;">No hay mascotas en adopción</h3>
+                            <p style="margin: 0; font-size: 16px; text-align: center;">En este momento no hay publicaciones activas de adopción.</p>
+                            <p style="margin: 10px 0 0; font-size: 14px; color: #95a5a6; text-align: center;">¡Sé el primero en publicar una mascota para adopción!</p>
                         </div>
                 <?php endif; ?>
             </div>
@@ -382,6 +438,107 @@ if (isset($_GET['error'])) {
             </form>
         </div>
     </div>
+    
+    <!-- Modal Marcar como Adoptada -->
+    <div class="modal-overlay" id="modalAdoptada">
+        <div class="modal-container">
+            <div class="modal-header">
+                <button class="modal-close" onclick="cerrarModalAdoptada()">×</button>
+                <div class="modal-icon success">✓</div>
+                <h3 class="modal-title">Marcar como Adoptada</h3>
+                <p class="modal-subtitle">Esta acción cambiará el estado de tu mascota</p>
+            </div>
+            
+            <div class="modal-body">
+                <div class="modal-mascota-info" id="mascotaInfoAdoptada">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                
+                <div class="modal-warning-box">
+                    <p><strong>⚠️ Ten en cuenta:</strong><br>
+                    Al marcar como adoptada, la publicación se cerrará y la mascota cambiará de estado en el sistema.</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="cerrarModalAdoptada()">
+                    Cancelar
+                </button>
+                <button class="modal-btn modal-btn-success" onclick="confirmarAdoptada()">
+                    ✓ Confirmar Adopción
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Adopción -->
+    <div class="modal-overlay" id="modalEditar">
+        <div class="modal-container">
+            <div class="modal-header">
+                <button class="modal-close" onclick="cerrarModalEditar()">×</button>
+                <div class="modal-icon warning">✏️</div>
+                <h3 class="modal-title">Editar Publicación</h3>
+                <p class="modal-subtitle" id="subtituloEditar">Modifica los detalles de la adopción</p>
+            </div>
+            
+            <div class="modal-body">
+                <form id="formEditar">
+                    <input type="hidden" id="idAdopcionEditar">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Condiciones de adopción</label>
+                        <textarea class="form-textarea" id="condicionesEditar" placeholder="Ejemplo: Hogar con jardín, experiencia previa, etc." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Lugar de entrega</label>
+                        <input type="text" class="form-input" id="lugarEditar" placeholder="Ciudad, barrio o zona específica" required>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="cerrarModalEditar()">
+                    Cancelar
+                </button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmarEditar()">
+                    ✏️ Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Eliminar Adopción -->
+    <div class="modal-overlay" id="modalEliminar">
+        <div class="modal-container">
+            <div class="modal-header">
+                <button class="modal-close" onclick="cerrarModalEliminar()">×</button>
+                <div class="modal-icon danger">🗑️</div>
+                <h3 class="modal-title">Eliminar Publicación</h3>
+                <p class="modal-subtitle">Esta acción no se puede deshacer</p>
+            </div>
+            
+            <div class="modal-body">
+                <div class="modal-mascota-info" id="mascotaInfoEliminar">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                
+                <div class="modal-danger-box">
+                    <p><strong>🚨 Advertencia:</strong><br>
+                    Al eliminar esta publicación, se perderán todas las solicitudes de adopción asociadas y no podrás recuperarla.</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="cerrarModalEliminar()">
+                    Cancelar
+                </button>
+                <button class="modal-btn modal-btn-danger" onclick="confirmarEliminar()">
+                    🗑️ Eliminar Publicación
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal de alerta para usuarios demo -->
     <div class="modal-alerta-demo" id="modalAlertaDemo">
@@ -417,7 +574,9 @@ if (isset($_GET['error'])) {
         <?php include_once('includes/footer.php'); ?>
     </nav>
 
+    
     <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/adopciones.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
 </body>

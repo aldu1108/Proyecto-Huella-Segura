@@ -1,6 +1,7 @@
 let pasoActual = 1;
 const totalPasos = 3;
 let datosReporte = {};
+let datosModalPerdidaActual = {};
 
 function mostrarFormularioReporte() {
     document.getElementById('modalReporte').style.display = 'flex';
@@ -44,6 +45,11 @@ function mostrarPaso(numeroPaso) {
 }
 
 function siguientePaso(siguientePasoNum) {
+    // Si estamos en modo edición, no validar (el submit normal se encarga)
+    if (window.modoEdicion) {
+        return true;
+    }
+
     if (validarPasoActual()) {
         guardarDatosPaso();
         pasoActual = siguientePasoNum;
@@ -61,8 +67,26 @@ function anteriorPaso(anteriorPasoNum) {
 }
 
 function validarPasoActual() {
+    // Si estamos en modo edición, no validar
+    if (window.modoEdicion) {
+        return true;
+    }
+
     const pasoDiv = document.getElementById('paso' + pasoActual);
-    const camposRequeridos = pasoDiv.querySelectorAll('input[required], select[required]');
+
+    // Solo validar campos que estén visibles (display !== 'none')
+    const camposRequeridos = Array.from(pasoDiv.querySelectorAll('input[required], select[required]'))
+        .filter(campo => {
+            // Verificar que el campo y sus padres estén visibles
+            let elemento = campo;
+            while (elemento && elemento !== pasoDiv) {
+                if (window.getComputedStyle(elemento).display === 'none') {
+                    return false;
+                }
+                elemento = elemento.parentElement;
+            }
+            return true;
+        });
 
     let esValido = true;
     camposRequeridos.forEach(campo => {
@@ -205,7 +229,7 @@ function compartirReporte(nombre) {
     } else {
         const url = window.location.href;
         const texto = `Ayuda a encontrar a ${nombre}. Mascota perdida: ${url}`;
-        
+
         if (navigator.clipboard) {
             navigator.clipboard.writeText(texto).then(() => {
                 alert('Enlace copiado al portapapeles. Compártelo en redes sociales.');
@@ -221,8 +245,210 @@ function verDetallesReporte(idReporte) {
 }
 
 // Cerrar modal con tecla Escape
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         cerrarFormularioReporte();
     }
 });
+
+// Variable global para detectar modo edición
+let modoEdicionGlobal = false;
+
+// ==================== FUNCIONES CON MODALES SOFISTICADOS ====================
+
+// Marcar mascota como encontrada (con modal sofisticado)
+function marcarComoEncontrada(idPublicacion, nombreMascota, foto = 'mascota-default.jpg') {
+    mostrarModalEncontrada(idPublicacion, nombreMascota, foto);
+}
+
+// Editar reporte - redirige con parámetro de edición
+function editarReporte(idPublicacion, nombreMascota = 'esta mascota') {
+    // Por ahora mantiene la redirección, pero con el modal preparado
+    window.location.href = `mascotas-perdidas.php?editar=${idPublicacion}`;
+    // Para usar el modal en el futuro: mostrarModalEditarPerdida(idPublicacion, nombreMascota);
+}
+
+// Eliminar reporte (con modal sofisticado)
+function eliminarReporte(idPublicacion, nombreMascota, foto = 'mascota-default.jpg') {
+    mostrarModalEliminarPerdida(idPublicacion, nombreMascota, foto);
+}
+
+// ==================== MODAL ENCONTRADA ====================
+function mostrarModalEncontrada(idPublicacion, nombreMascota, foto = 'mascota-default.jpg') {
+    datosModalPerdidaActual = { idPublicacion, nombreMascota };
+
+    document.getElementById('mascotaInfoEncontrada').innerHTML = `
+        <img src="imagenes/${foto}" alt="${nombreMascota}" class="modal-mascota-avatar-perdidas" onerror="this.src='imagenes/mascota-default.jpg'">
+        <div class="modal-mascota-datos-perdidas">
+            <h4>${nombreMascota}</h4>
+            <p>Se marcará como encontrada</p>
+        </div>
+    `;
+
+    document.getElementById('modalEncontrada').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalEncontrada() {
+    document.getElementById('modalEncontrada').classList.remove('active');
+    document.body.style.overflow = '';
+    datosModalPerdidaActual = {};
+}
+
+function confirmarEncontrada() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'procesar-estado-mascota.php';
+    form.innerHTML = `
+        <input type="hidden" name="id_publicacion" value="${datosModalPerdidaActual.idPublicacion}">
+        <input type="hidden" name="accion" value="encontrada">
+    `;
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// ==================== MODAL EDITAR ====================
+function mostrarModalEditarPerdida(idPublicacion, nombreMascota) {
+    datosModalPerdidaActual = { idPublicacion, nombreMascota };
+
+    // Aquí deberías cargar los datos actuales del reporte
+    // Por ahora, redirigimos a la página de edición como antes
+    window.location.href = `mascotas-perdidas.php?editar=${idPublicacion}`;
+}
+
+function cerrarModalEditarPerdida() {
+    document.getElementById('modalEditarPerdida').classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('formEditarPerdida').reset();
+    document.getElementById('campoRecompensaEditar').style.display = 'none';
+    datosModalPerdidaActual = {};
+}
+
+function toggleRecompensaModal() {
+    const checkbox = document.getElementById('checkboxRecompensaEditar');
+    const campo = document.getElementById('campoRecompensaEditar');
+    campo.style.display = checkbox.checked ? 'block' : 'none';
+}
+
+function obtenerUbicacionModal() {
+    if (!navigator.geolocation) {
+        alert('Tu navegador no soporta geolocalización');
+        return;
+    }
+
+    const input = document.getElementById('ubicacionEditar');
+    const boton = event.target;
+    boton.textContent = '⏳';
+
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            const lat = position.coords.latitude.toFixed(6);
+            const lng = position.coords.longitude.toFixed(6);
+            input.value = `${lat}, ${lng}`;
+            boton.textContent = '✅';
+            setTimeout(() => boton.textContent = '📍', 2000);
+        },
+        function (error) {
+            alert('No se pudo obtener la ubicación');
+            boton.textContent = '📍';
+        }
+    );
+}
+
+function confirmarEditarPerdida() {
+    const fecha = document.getElementById('fechaPerdidaEditar').value;
+    const hora = document.getElementById('horaPerdidaEditar').value;
+    const ubicacion = document.getElementById('ubicacionEditar').value;
+    const descripcion = document.getElementById('descripcionEditar').value;
+    const recompensa = document.getElementById('checkboxRecompensaEditar').checked
+        ? document.getElementById('recompensaEditar').value
+        : '0';
+
+    if (!fecha || !ubicacion) {
+        alert('Por favor completa los campos requeridos');
+        return;
+    }
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'procesar-mascota-perdida.php';
+    form.innerHTML = `
+        <input type="hidden" name="id_publicacion" value="${datosModalPerdidaActual.idPublicacion}">
+        <input type="hidden" name="fecha_perdida" value="${fecha}">
+        <input type="hidden" name="hora_perdida" value="${hora}">
+        <input type="hidden" name="ultima_ubicacion" value="${ubicacion}">
+        <input type="hidden" name="descripcion" value="${descripcion}">
+        <input type="hidden" name="recompensa" value="${recompensa}">
+    `;
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// ==================== MODAL ELIMINAR ====================
+function mostrarModalEliminarPerdida(idPublicacion, nombreMascota, foto = 'mascota-default.jpg') {
+    datosModalPerdidaActual = { idPublicacion, nombreMascota };
+
+    document.getElementById('mascotaInfoEliminarPerdida').innerHTML = `
+        <img src="imagenes/${foto}" alt="${nombreMascota}" class="modal-mascota-avatar-perdidas" onerror="this.src='imagenes/mascota-default.jpg'">
+        <div class="modal-mascota-datos-perdidas">
+            <h4>${nombreMascota}</h4>
+            <p>Reporte de mascota perdida</p>
+        </div>
+    `;
+
+    document.getElementById('modalEliminarPerdida').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalEliminarPerdida() {
+    document.getElementById('modalEliminarPerdida').classList.remove('active');
+    document.body.style.overflow = '';
+    datosModalPerdidaActual = {};
+}
+
+function confirmarEliminarPerdida() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'procesar-estado-mascota.php';
+    form.innerHTML = `
+        <input type="hidden" name="id_publicacion" value="${datosModalPerdidaActual.idPublicacion}">
+        <input type="hidden" name="accion" value="eliminar">
+    `;
+    document.body.appendChild(form);
+    form.submit();
+}
+
+// Cerrar modales con ESC
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        cerrarModalEncontrada();
+        cerrarModalEditarPerdida();
+        cerrarModalEliminarPerdida();
+    }
+});
+
+// Cerrar al hacer clic fuera
+document.querySelectorAll('.modal-overlay-perdidas').forEach(modal => {
+    modal.addEventListener('click', function (e) {
+        if (e.target === this) {
+            cerrarModalEncontrada();
+            cerrarModalEditarPerdida();
+            cerrarModalEliminarPerdida();
+        }
+    });
+});
+
+// Hacer funciones globales
+window.mostrarModalEncontrada = mostrarModalEncontrada;
+window.mostrarModalEditarPerdida = mostrarModalEditarPerdida;
+window.mostrarModalEliminarPerdida = mostrarModalEliminarPerdida;
+window.cerrarModalEncontrada = cerrarModalEncontrada;
+window.cerrarModalEditarPerdida = cerrarModalEditarPerdida;
+window.cerrarModalEliminarPerdida = cerrarModalEliminarPerdida;
+
+// Hacer funciones globales
+window.marcarComoEncontrada = marcarComoEncontrada;
+window.editarReporte = editarReporte;
+window.eliminarReporte = eliminarReporte;
+
+console.log('Sistema de mascotas perdidas cargado correctamente');

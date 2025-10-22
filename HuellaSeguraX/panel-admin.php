@@ -55,6 +55,7 @@ try {
     <title>Panel Administrativo - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/panel-admin.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 
 <body class="admin-panel">
@@ -128,12 +129,9 @@ try {
                 <button class="boton-accion usuarios" onclick="verUsuarios()">
                     👥 Gestionar Usuarios
                 </button>
-                <button class="boton-accion veterinarios" onclick="verVeterinarios()">
-                    🩺 Verificar Veterinarios
-                </button>
-                <button class="boton-accion reportes" onclick="verReportes()">
+                <!--<button class="boton-accion reportes" onclick="verReportes()">
                     📋 Ver Reportes
-                </button>
+                </button>-->
                 <button class="boton-accion configuracion" onclick="configurarSistema()">
                     ⚙️ Configuración Sistema
                 </button>

@@ -1,6 +1,7 @@
 <?php
 include_once('config/conexion.php');
 session_start();
+date_default_timezone_set('America/Argentina/Buenos_Aires'); // O tu zona horaria
 
 $mensaje_error = "";
 
@@ -48,7 +49,7 @@ if ($_POST) {
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/login-admin.css">
 </head>
-<body class="admin-login-body">
+<body class="admin-login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed; background-size: cover;">
     <!-- Header simple -->
     <div class="login-header">
         <h1 class="login-logo">🛡️ Panel Administrativo</h1>
@@ -80,7 +81,7 @@ if ($_POST) {
             <button type="submit" class="btn-login admin-btn">🛡️ Acceder al Panel</button>
         </form>
         
-        <div class="divider">
+        <div class="texto-credencial">
             <span>Credenciales para prueba</span>
         </div>
         
@@ -92,7 +93,6 @@ if ($_POST) {
         
         <div class="admin-links">
             <a href="login.php">← Volver al login de usuarios</a>
-            <a href="login-veterinario.php">Acceso veterinarios →</a>
         </div>
         
         <div class="admin-warning">

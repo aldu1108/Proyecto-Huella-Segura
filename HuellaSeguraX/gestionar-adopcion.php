@@ -2,114 +2,129 @@
 include_once('config/conexion.php');
 session_start();
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] === 'demo') {
+    header("Location: adopciones.php?error=sin_permisos");
     exit();
 }
 
 $usuario_id = $_SESSION['usuario_id'];
-$accion = $_GET['accion'] ?? $_POST['accion'] ?? '';
+$accion = $_GET['accion'] ?? '';
 
-if ($accion === 'editar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $id_adopcion = (int) $_POST['id_adopcion'];
-        $condiciones = trim($_POST['condiciones']);
-        $lugar_adopcion = trim($_POST['lugar_adopcion']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_adopcion = intval($_POST['id_adopcion'] ?? 0);
 
-        if (empty($condiciones) || empty($lugar_adopcion)) {
-            throw new Exception("Todos los campos son requeridos");
-        }
-
-        mysqli_autocommit($conexion, FALSE);
-
-        // Obtener info de la mascota para actualizar descripción completa
-        $stmt_info = $conexion->prepare("SELECT m.nombre_mascota, m.tipo, m.sexo, m.edad_mascota, p.id_anuncio
-                                         FROM publicacion_adopcion pa
-                                         JOIN publicaciones p ON pa.id_publicacion = p.id_anuncio
-                                         JOIN mascotas m ON p.id_mascota = m.id_mascota
-                                         WHERE pa.id_adopcion = ? AND p.id_usuario = ?");
-        $stmt_info->bind_param("ii", $id_adopcion, $usuario_id);
-        $stmt_info->execute();
-        $resultado = $stmt_info->get_result();
-
-        if ($resultado->num_rows == 0) {
-            throw new Exception("No tienes permisos o no se encontró la publicación");
-        }
-
-        $mascota = $resultado->fetch_assoc();
-
-        // Reconstruir descripción completa
-        $descripcion_completa = "💜 BUSCA HOGAR 💜\n\n";
-        $descripcion_completa .= "Nombre: " . $mascota['nombre_mascota'] . "\n";
-        $descripcion_completa .= "Tipo: " . ucfirst($mascota['tipo']) . "\n";
-        if (!empty($mascota['sexo'])) {
-            $descripcion_completa .= "Sexo: " . ucfirst($mascota['sexo']) . "\n";
-        }
-        if (!empty($mascota['edad_mascota'])) {
-            $descripcion_completa .= "Edad: " . $mascota['edad_mascota'] . " años\n";
-        }
-        $descripcion_completa .= "\nCondiciones de adopción:\n" . $condiciones;
-        $descripcion_completa .= "\n\nLugar de entrega: " . $lugar_adopcion;
-        $descripcion_completa .= "\n\n¿Le darías un hogar lleno de amor a " . $mascota['nombre_mascota'] . "? ¡Contáctanos! ❤️";
-
-        // Actualizar publicacion_adopcion
-        $stmt1 = $conexion->prepare("UPDATE publicacion_adopcion SET condiciones = ?, lugar_adopcion = ? WHERE id_adopcion = ?");
-        $stmt1->bind_param("ssi", $condiciones, $lugar_adopcion, $id_adopcion);
-        $stmt1->execute();
-
-        // Actualizar descripción en publicaciones
-        $stmt2 = $conexion->prepare("UPDATE publicaciones SET descripcion = ? WHERE id_anuncio = ? AND id_usuario = ?");
-        $stmt2->bind_param("sii", $descripcion_completa, $mascota['id_anuncio'], $usuario_id);
-        $stmt2->execute();
-
-        if ($stmt1->affected_rows > 0 || $stmt2->affected_rows > 0) {
-            mysqli_commit($conexion);
-            header("Location: adopciones.php?exito=publicacion_editada");
-        } else {
-            throw new Exception("No se realizaron cambios");
-        }
-    } catch (Exception $e) {
-        mysqli_rollback($conexion);
-        header("Location: adopciones.php?error=error_editar&detalle=" . urlencode($e->getMessage()));
+    if ($id_adopcion <= 0) {
+        header("Location: adopciones.php?error=datos_invalidos");
+        exit();
     }
-} elseif ($accion === 'eliminar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $id_adopcion = (int) $_POST['id_adopcion'];
 
-        // Verificar solicitudes pendientes
-        $stmt_check = $conexion->prepare("SELECT COUNT(*) as total FROM solicitud_adopcion WHERE id_adopcion = ? AND estado = 'pendiente'");
-        $stmt_check->bind_param("i", $id_adopcion);
-        $stmt_check->execute();
-        $solicitudes_pendientes = $stmt_check->get_result()->fetch_assoc()['total'];
+    // Verificar que la adopción pertenece al usuario
+    $sql_verificar = "SELECT pa.*, p.id_usuario, p.id_mascota, m.nombre_mascota 
+                      FROM publicacion_adopcion pa 
+                      JOIN publicaciones p ON pa.id_publicacion = p.id_anuncio 
+                      JOIN mascotas m ON p.id_mascota = m.id_mascota
+                      WHERE pa.id_adopcion = ? AND p.id_usuario = ?";
+    $stmt = $conexion->prepare($sql_verificar);
+    $stmt->bind_param("ii", $id_adopcion, $usuario_id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-        if ($solicitudes_pendientes > 0) {
-            throw new Exception("No puedes eliminar: tienes solicitudes pendientes");
-        }
+    if ($resultado->num_rows === 0) {
+        header("Location: adopciones.php?error=sin_permisos");
+        exit();
+    }
 
-        mysqli_autocommit($conexion, FALSE);
+    $adopcion = $resultado->fetch_assoc();
+    $id_publicacion = $adopcion['id_publicacion'];
+    $id_mascota = $adopcion['id_mascota'];
+    $nombre_mascota = $adopcion['nombre_mascota'];
 
-        // Eliminar solicitudes
-        $stmt1 = $conexion->prepare("DELETE FROM solicitud_adopcion WHERE id_adopcion = ?");
-        $stmt1->bind_param("i", $id_adopcion);
-        $stmt1->execute();
+    switch ($accion) {
+        case 'adoptada':
+            // Cambiar estado de la publicación a 'inactivo'
+            $sql_publicacion = "UPDATE publicaciones SET estado = 'inactivo' WHERE id_anuncio = ?";
+            $stmt = $conexion->prepare($sql_publicacion);
+            $stmt->bind_param("i", $id_publicacion);
 
-        // Eliminar publicación completa
-        $stmt2 = $conexion->prepare("DELETE p, pa FROM publicaciones p 
-                                    JOIN publicacion_adopcion pa ON p.id_anuncio = pa.id_publicacion 
-                                    WHERE pa.id_adopcion = ? AND p.id_usuario = ?");
-        $stmt2->bind_param("ii", $id_adopcion, $usuario_id);
+            // Cambiar estado de la mascota a 'adoptado'
+            $sql_mascota = "UPDATE mascotas SET estado = 'adoptado' WHERE id_mascota = ?";
+            $stmt2 = $conexion->prepare($sql_mascota);
+            $stmt2->bind_param("i", $id_mascota);
 
-        if ($stmt2->execute() && $stmt2->affected_rows > 0) {
-            mysqli_commit($conexion);
-            header("Location: adopciones.php?exito=publicacion_eliminada");
-        } else {
-            throw new Exception("No tienes permisos o no se encontró la publicación");
-        }
-    } catch (Exception $e) {
-        mysqli_rollback($conexion);
-        header("Location: adopciones.php?error=error_eliminar&detalle=" . urlencode($e->getMessage()));
+            if ($stmt->execute() && $stmt2->execute()) {
+                // Marcar la solicitud de adopción como 'aprobada' (esto incrementa el contador)
+                $sql_solicitudes = "UPDATE solicitud_adopcion SET estado = 'aprobada' 
+                                   WHERE id_adopcion = ? AND estado = 'pendiente' LIMIT 1";
+                $stmt3 = $conexion->prepare($sql_solicitudes);
+                $stmt3->bind_param("i", $id_adopcion);
+                $stmt3->execute();
+
+                // Rechazar las demás solicitudes pendientes
+                $sql_rechazar = "UPDATE solicitud_adopcion SET estado = 'rechazada' 
+                                WHERE id_adopcion = ? AND estado = 'pendiente'";
+                $stmt4 = $conexion->prepare($sql_rechazar);
+                $stmt4->bind_param("i", $id_adopcion);
+                $stmt4->execute();
+
+                header("Location: adopciones.php?exito=marcada_adoptada&mascota=" . urlencode($nombre_mascota));
+            } else {
+                header("Location: adopciones.php?error=error_actualizar");
+            }
+            break;
+
+        case 'editar':
+            $condiciones = $_POST['condiciones'] ?? '';
+            $lugar_adopcion = $_POST['lugar_adopcion'] ?? '';
+
+            if (empty($condiciones) || empty($lugar_adopcion)) {
+                header("Location: adopciones.php?error=campos_requeridos");
+                exit();
+            }
+
+            $sql_editar = "UPDATE publicacion_adopcion 
+                          SET condiciones = ?, lugar_adopcion = ? 
+                          WHERE id_adopcion = ?";
+            $stmt = $conexion->prepare($sql_editar);
+            $stmt->bind_param("ssi", $condiciones, $lugar_adopcion, $id_adopcion);
+
+            if ($stmt->execute()) {
+                header("Location: adopciones.php?exito=adopcion_editada&mascota=" . urlencode($nombre_mascota));
+            } else {
+                header("Location: adopciones.php?error=error_editar");
+            }
+            break;
+
+        case 'eliminar':
+            // Eliminar solicitudes de adopción asociadas
+            $sql_solicitudes = "DELETE FROM solicitud_adopcion WHERE id_adopcion = ?";
+            $stmt = $conexion->prepare($sql_solicitudes);
+            $stmt->bind_param("i", $id_adopcion);
+            $stmt->execute();
+
+            // Eliminar la publicación de adopción
+            $sql_adopcion = "DELETE FROM publicacion_adopcion WHERE id_adopcion = ?";
+            $stmt = $conexion->prepare($sql_adopcion);
+            $stmt->bind_param("i", $id_adopcion);
+
+            // Eliminar la publicación
+            $sql_publicacion = "DELETE FROM publicaciones WHERE id_anuncio = ?";
+            $stmt2 = $conexion->prepare($sql_publicacion);
+            $stmt2->bind_param("i", $id_publicacion);
+
+            if ($stmt->execute() && $stmt2->execute()) {
+                header("Location: adopciones.php?exito=adopcion_eliminada&mascota=" . urlencode($nombre_mascota));
+            } else {
+                header("Location: adopciones.php?error=error_eliminar");
+            }
+            break;
+
+        default:
+            header("Location: adopciones.php?error=accion_invalida");
+            break;
     }
 } else {
     header("Location: adopciones.php");
 }
+
+$conexion->close();
 ?>

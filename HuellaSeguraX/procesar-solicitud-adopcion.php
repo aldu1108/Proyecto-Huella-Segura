@@ -1,5 +1,6 @@
 <?php
 include_once('config/conexion.php');
+include_once('includes/crear_notificacion.php');
 session_start();
 
 // Verificar si hay sesión activa
@@ -95,6 +96,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$stmt_solicitud->execute()) {
             throw new Exception("Error al insertar solicitud de adopción: " . $stmt_solicitud->error);
         }
+
+        // CREAR NOTIFICACIÓN PARA EL PROPIETARIO
+        $nombre_solicitante = $_SESSION['nombre_usuario'] ?? 'Alguien';
+        notificarSolicitudAdopcion(
+            $conexion,
+            $adopcion_info['propietario_id'],
+            $usuario_id,
+            $adopcion_info['nombre_mascota'],
+            $nombre_solicitante
+        );
 
         // Confirmar transacción
         mysqli_commit($conexion);

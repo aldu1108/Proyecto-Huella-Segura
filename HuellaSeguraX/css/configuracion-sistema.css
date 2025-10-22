@@ -1,0 +1,442 @@
+/* Botón volver */
+.boton-volver {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.boton-volver:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Secciones de configuración */
+.seccion-config {
+    background: white;
+    padding: 32px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 2px solid rgba(209, 124, 65, 0.1);
+}
+
+.seccion-config h2 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    padding-bottom: 16px;
+    border-bottom: 3px solid #d17c41;
+}
+
+/* Grid de información del sistema */
+.info-sistema-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: white;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.info-icon {
+    font-size: 48px;
+    opacity: 0.9;
+}
+
+.info-datos {
+    flex: 1;
+}
+
+.info-numero {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.info-label {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+/* Formulario de configuración */
+.form-config {
+    display: grid;
+    gap: 24px;
+}
+
+.config-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.config-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 15px;
+}
+
+.input-config {
+    padding: 14px 18px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.input-config:focus {
+    outline: none;
+    border-color: #d17c41;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(209, 124, 65, 0.1);
+}
+
+.boton-guardar {
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.boton-guardar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
+}
+
+/* Grid de mantenimiento */
+.mantenimiento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.mantenimiento-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 28px;
+    border-radius: 16px;
+    text-align: center;
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.mantenimiento-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-color: #d17c41;
+}
+
+.card-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.mantenimiento-card h3 {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.mantenimiento-card p {
+    color: #7f8c8d;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.boton-accion-mant {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.boton-accion-mant.limpiar {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.boton-accion-mant.backup {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.boton-accion-mant.mantenimiento {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+.boton-accion-mant:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Toggle switch */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 30px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked+.toggle-slider {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.toggle-switch input:checked+.toggle-slider:before {
+    transform: translateX(30px);
+}
+
+/* Estadísticas avanzadas */
+.estadisticas-avanzadas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-item {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    border-color: #d17c41;
+    transform: translateX(5px);
+}
+
+.stat-item strong {
+    color: #2c3e50;
+    font-size: 15px;
+}
+
+.stat-item span {
+    color: #7f8c8d;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Logs del sistema */
+.logs-container {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.log-item {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 16px;
+    align-items: center;
+    border-left: 4px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.log-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.log-time {
+    font-family: 'Courier New', monospace;
+    color: #7f8c8d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.log-tipo {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.log-tipo.info {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.log-tipo.success {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.log-tipo.warning {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+}
+
+.log-tipo.error {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.log-mensaje {
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+/* Scrollbar personalizado */
+.logs-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.logs-container::-webkit-scrollbar-track {
+    background: #e9ecef;
+    border-radius: 10px;
+}
+
+.logs-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #d17c41, #b86835);
+    border-radius: 10px;
+}
+
+.logs-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #b86835, #a05529);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .seccion-config {
+        padding: 20px;
+    }
+
+    .info-sistema-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mantenimiento-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .estadisticas-avanzadas {
+        grid-template-columns: 1fr;
+    }
+
+    .log-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .acciones-admin {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .boton-volver,
+    .boton-logout {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-numero {
+        font-size: 28px;
+    }
+
+    .info-icon {
+        font-size: 40px;
+    }
+}

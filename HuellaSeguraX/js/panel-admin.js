@@ -1,58 +1,63 @@
-function verUsuarios() {
-    mostrarMensaje('✅ Función de gestión de usuarios - Por implementar', 'info');
-}
-
-function verVeterinarios() {
-    mostrarMensaje('✅ Función de verificación de veterinarios - Por implementar', 'info');
-}
-
-function verReportes() {
-    mostrarMensaje('✅ Función de reportes del sistema - Por implementar', 'info');
-}
-
-function configurarSistema() {
-    mostrarMensaje('✅ Función de configuración del sistema - Por implementar', 'info');
-}
-
+// Funciones para gestionar usuarios
 function verUsuario(email) {
-    mostrarMensaje(`📋 Viendo usuario: ${email}`, 'info');
+    window.location.href = `ver-usuario-admin.php?email=${encodeURIComponent(email)}`;
 }
 
 function editarUsuario(email) {
-    mostrarMensaje(`✏️ Editando usuario: ${email}`, 'warning');
+    window.location.href = `editar-usuario-admin.php?email=${encodeURIComponent(email)}`;
 }
 
-function aprobarVeterinario(email) {
-    // Función removida - ahora se usa enlace directo
+// Funciones para acciones rápidas
+function verUsuarios() {
+    window.location.href = 'gestionar-usuarios-admin.php';
 }
 
-function rechazarVeterinario(email) {
-    // Función removida - ahora se usa enlace directo
+function verVeterinarios() {
+    window.location.href = 'gestionar-veterinarios.php';
 }
 
-function mostrarMensaje(mensaje, tipo) {
-    const div = document.createElement('div');
-    div.className = `mensaje-admin mensaje-${tipo}`;
-    div.innerHTML = `
-        <span>${mensaje}</span>
-        <button onclick="this.parentElement.remove()">✕</button>
-    `;
+function verReportes() {
+    window.location.href = 'ver-reportes.php';
+}
 
-    div.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${tipo === 'success' ? '#27ae60' : tipo === 'error' ? '#e74c3c' : tipo === 'warning' ? '#f39c12' : '#3498db'};
-        color: white;
-        padding: 12px 16px;
-        border-radius: 8px;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    `;
+function configurarSistema() {
+    window.location.href = 'configuracion-sistema.php';
+}
 
-    document.body.appendChild(div);
-    setTimeout(() => div.remove(), 4000);
+// Función para auto-cerrar mensajes después de 5 segundos
+document.addEventListener('DOMContentLoaded', function () {
+    const mensajes = document.querySelectorAll('.mensaje-admin');
+    if (mensajes.length > 0) {
+        setTimeout(() => {
+            mensajes.forEach(mensaje => {
+                mensaje.style.opacity = '0';
+                setTimeout(() => mensaje.remove(), 300);
+            });
+        }, 5000);
+    }
+
+    // Actualizar reloj en tiempo real
+    actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+});
+
+// Función para actualizar el reloj
+function actualizarReloj() {
+    const infoItems = document.querySelectorAll('.info-item');
+    infoItems.forEach(item => {
+        const strong = item.querySelector('strong');
+        if (strong && strong.textContent.includes('⏰ Hora:')) {
+            const now = new Date();
+            const horas = String(now.getHours()).padStart(2, '0');
+            const minutos = String(now.getMinutes()).padStart(2, '0');
+            const segundos = String(now.getSeconds()).padStart(2, '0');
+            // Reemplazar todo el contenido del item manteniendo el strong
+            item.innerHTML = `<strong>⏰ Hora:</strong> ${horas}:${minutos}:${segundos}`;
+        }
+    });
+}
+
+// Función para confirmar eliminación
+function confirmarEliminacion(nombre) {
+    return confirm(`¿Estás seguro de que deseas eliminar al usuario ${nombre}? Esta acción no se puede deshacer.`);
 }

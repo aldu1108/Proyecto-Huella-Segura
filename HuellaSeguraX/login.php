@@ -91,6 +91,8 @@ if ($_POST) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body class="login-body"
       style="background: url('imagenes/fondo-login.png') no-repeat center center fixed;
@@ -128,7 +130,9 @@ if ($_POST) {
                        class="login-input"
                        placeholder="Ingrese su contraseña"
                        required>
-                <button type="button" class="password-toggle">👁</button>
+                <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
             </div>
 
             <div class="forgot-password">

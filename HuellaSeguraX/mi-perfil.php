@@ -138,6 +138,7 @@ $fecha_registro_formateada = formatearFecha(date('Y-m-d'));
     <title>Mi Perfil - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/mi-perfil.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <header>

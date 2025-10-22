@@ -74,6 +74,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/modal-alerta-demo.css">
     <link rel="stylesheet" href="css/comunidad.css">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <!-- Header -->

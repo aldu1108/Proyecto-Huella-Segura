@@ -1039,3 +1039,227 @@
 .boton-confirmar-eliminar:hover {
     background: #C0392B;
 }
+
+/* Sección de citas pendientes para veterinarios */
+.citas-pendientes-veterinario {
+    background: #FFF8E1;
+    border: 2px solid #FFA726;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(255, 167, 38, 0.2);
+}
+
+.badge-pendientes {
+    background: #FF6B6B;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.lista-citas-pendientes {
+    margin-top: 20px;
+}
+
+.tarjeta-cita-pendiente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border: 2px solid #FFE082;
+    border-left: 6px solid #FFA726;
+    border-radius: 15px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+}
+
+.tarjeta-cita-pendiente:hover {
+    box-shadow: 0 6px 20px rgba(255, 167, 38, 0.3);
+    transform: translateY(-3px);
+    border-color: #FF9800;
+}
+
+.acciones-cita-pendiente {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.boton-aceptar-cita {
+    background: #27AE60;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 140px;
+}
+
+.boton-aceptar-cita:hover {
+    background: #219A52;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.boton-rechazar-cita {
+    background: #E74C3C;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 140px;
+}
+
+.boton-rechazar-cita:hover {
+    background: #C0392B;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+/* Estados de citas actualizados */
+.estado-cita.pendiente {
+    background: #FFE082;
+    color: #F57C00;
+    font-weight: 600;
+}
+
+.estado-cita.aceptada {
+    background: #C8E6C9;
+    color: #2E7D32;
+    font-weight: 600;
+}
+
+.estado-cita.rechazada {
+    background: #FFCDD2;
+    color: #C62828;
+    font-weight: 600;
+}
+
+.estado-cita.programada {
+    background: #E3F2FD;
+    color: #1976D2;
+    font-weight: 600;
+}
+
+.estado-cita.completada {
+    background: #F3E5F5;
+    color: #8E24AA;
+    font-weight: 600;
+}
+
+.estado-cita.cancelada {
+    background: #FFEBEE;
+    color: #E74C3C;
+    font-weight: 600;
+}
+
+
+.citas-aceptadas {
+    border-left: 4px solid #27AE60;
+}
+
+.citas-pendientes-usuario {
+    border-left: 4px solid #FFA726;
+    background: #FFFBF0;
+}
+
+.encabezado-citas-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.encabezado-citas-seccion h4 {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    margin: 0;
+}
+
+.info-pendientes {
+    background: #FFF3CD;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid #FFA726;
+}
+
+.info-pendientes p {
+    margin: 0;
+    color: #856404;
+    font-size: 14px;
+}
+
+.tarjeta-cita.pendiente-aprobacion {
+    border-left: 4px solid #FFA726;
+    background: #FFFEF9;
+}
+
+.fecha-pendiente {
+    background: #FFE082 !important;
+}
+
+/* Responsive para citas pendientes */
+@media (max-width: 768px) {
+    .citas-pendientes-veterinario {
+        padding: 16px;
+    }
+
+    .tarjeta-cita-pendiente {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+    
+    .acciones-cita-pendiente {
+        width: 100%;
+        flex-direction: row;
+        margin-left: 0;
+        margin-top: 16px;
+    }
+    
+    .boton-aceptar-cita,
+    .boton-rechazar-cita {
+        flex: 1;
+        min-width: auto;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .badge-pendientes {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .encabezado-agenda,
+    .encabezado-citas-seccion {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+/* Mejoras visuales para estados */
+.estado-cita {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+
+.tarjeta-cita-pendiente {
+    animation: slideIn 0.3s ease;
+}

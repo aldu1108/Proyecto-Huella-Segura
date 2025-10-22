@@ -21,7 +21,6 @@ if ($rol_usuario === 'demo') {
     $resultado_mascotas = $conexion->query($consulta_mascotas);
 }
 
-// Obtener eventos próximos de esta semana
 // Variables para fechas
 $fecha_hoy = date('Y-m-d');
 $fecha_fin_semana = date('Y-m-d', strtotime('+7 days'));
@@ -34,16 +33,25 @@ if ($rol_usuario === 'demo') {
     $resultado_citas_proximas = null;
     $total_citas_hoy = 0;
 } else {
-    // Usuario normal - ejecutar consultas
-    $consulta_eventos = "SELECT c.id_cita as id_evento, c.fecha, c.motivo as titulo, 
-                        'cita' as tipo, m.nombre_mascota, m.foto_mascota
-                         FROM citas_veterinarias c
-                         JOIN mascotas m ON c.id_mascota = m.id_mascota
-                         WHERE m.id_usuario = $usuario_id 
-                         AND DATE(c.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 
-                         AND c.estado = 'programada'
-                         ORDER BY c.fecha ASC LIMIT 5";
+    // Obtener EVENTOS de comunidad a los que está unido
+    $consulta_eventos = "SELECT e.id_evento, e.fecha, e.titulo, e.descripcion, 'comunidad' as tipo
+                        FROM eventos_comunidad e
+                        JOIN asistentes_evento ae ON e.id_evento = ae.id_evento
+                        WHERE ae.id_usuario = $usuario_id 
+                        AND DATE(e.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana'
+                        ORDER BY e.fecha ASC LIMIT 5";
     $resultado_eventos = $conexion->query($consulta_eventos);
+
+    // Obtener RECORDATORIOS (citas veterinarias)
+    $consulta_recordatorios = "SELECT c.id_cita as id_recordatorio, c.fecha, c.motivo as titulo, 
+                            'cita' as tipo, m.nombre_mascota, m.foto_mascota
+                            FROM citas_veterinarias c
+                            JOIN mascotas m ON c.id_mascota = m.id_mascota
+                            WHERE m.id_usuario = $usuario_id 
+                            AND DATE(c.fecha) BETWEEN '$fecha_hoy' AND '$fecha_fin_semana' 
+                            AND c.estado = 'programada'
+                            ORDER BY c.fecha ASC";
+    $resultado_recordatorios = $conexion->query($consulta_recordatorios);
 
     $consulta_citas_hoy = "SELECT c.*, m.nombre_mascota, m.foto_mascota 
                            FROM citas_veterinarias c 
@@ -65,6 +73,27 @@ if ($rol_usuario === 'demo') {
     $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
     
     $total_citas_hoy = $resultado_citas_hoy ? $resultado_citas_hoy->num_rows : 0;
+
+    // Obtener días con recordatorios para el calendario
+    $consulta_dias_recordatorios = "SELECT DISTINCT DAY(c.fecha) as dia
+                                    FROM citas_veterinarias c
+                                    JOIN mascotas m ON c.id_mascota = m.id_mascota
+                                    WHERE m.id_usuario = $usuario_id 
+                                    AND MONTH(c.fecha) = MONTH(CURDATE())
+                                    AND YEAR(c.fecha) = YEAR(CURDATE())
+                                    AND c.estado = 'programada'
+                                    UNION
+                                    SELECT DISTINCT DAY(fecha) as dia
+                                    FROM recordatorios_personales
+                                    WHERE id_usuario = $usuario_id
+                                    AND MONTH(fecha) = MONTH(CURDATE())
+                                    AND YEAR(fecha) = YEAR(CURDATE())
+                                    AND completado = 0";
+    $resultado_dias = $conexion->query($consulta_dias_recordatorios);
+    $dias_con_eventos = [];
+    while($dia = $resultado_dias->fetch_assoc()) {
+        $dias_con_eventos[] = (int)$dia['dia'];
+    }
 }
 
 // Obtener mascotas perdidas (esta consulta sí funciona para demo)
@@ -82,19 +111,11 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - PetCare</title>
+    <title>Inicio - Huella Segura</title>
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/modal-alerta-demo.css">
-    <!-- Icono  -->
-    <link rel="icon" type="image/png" href="imagenes/logo-hs.png">
-
-    <!-- Opcional: para distintas resoluciones -->
-    <link rel="icon" type="image/png" sizes="32x32" href="imagenes/logo-hs.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="imagenes/logo-hs.png">
-
-    <!-- Para cuando alguien guarda la webapp en la pantalla de inicio en iPhone/iPad -->
-    <link rel="apple-touch-icon" href="imagenes/logo-hs.png">
+    <?php include_once("includes/logo.php"); ?>
 </head>
 <body>
     <header>
@@ -202,13 +223,13 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
 
             <div class="mini-calendario">
                 <div class="encabezado-dias">
-                    <div class="dia-semana">Su</div>
-                    <div class="dia-semana">Mo</div>
-                    <div class="dia-semana">Tu</div>
-                    <div class="dia-semana">We</div>
-                    <div class="dia-semana">Th</div>
-                    <div class="dia-semana">Fr</div>
-                    <div class="dia-semana">Sa</div>
+                    <div class="dia-semana">D</div>
+                    <div class="dia-semana">L</div>
+                    <div class="dia-semana">M</div>
+                    <div class="dia-semana">X</div>
+                    <div class="dia-semana">J</div>
+                    <div class="dia-semana">V</div>
+                    <div class="dia-semana">S</div>
                 </div>
                 
                 <div class="dias-calendario" id="diasCalendario">
@@ -295,7 +316,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                 </div>
 
                 <div class="proximos-eventos">
-                    <h4 class="titulo-proximos">Próximos eventos esta semana</h4>
+                    <h4 class="titulo-proximos">Próximos eventos</h4>
                     <?php if ($resultado_eventos && $resultado_eventos->num_rows > 0): ?>
                         <?php while($evento = $resultado_eventos->fetch_assoc()): ?>
                             <div class="evento-proximo">
@@ -359,7 +380,74 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                 <h3>🔔 Recordatorios Urgentes</h3>
                 <span class="count"><?php echo $total_citas_hoy; ?> para hoy</span>
             </div>
-            
+
+            <?php if ($rol_usuario == 'demo'): ?>
+                <button class="btn-agregar-recordatorio" onclick="mostrarModalAlerta('Inicia sesión para agregar recordatorios')" style="
+                    background: #f8d43c;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    margin-bottom: 1rem;
+                    font-weight: 500;
+                ">
+                    + Agregar Recordatorio
+                </button>
+            <?php else: ?>
+                <button class="btn-agregar-recordatorio" onclick="mostrarModalRecordatorio()" style="
+                    background: #f8d43c;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    margin-bottom: 1rem;
+                    font-weight: 500;
+                ">
+                    + Agregar Recordatorio
+                </button>
+            <!-- Modal agregar recordatorio -->
+            <div id="modalRecordatorio" class="modal-alerta-demo" style="display: none;">
+                <div class="contenido-modal-alerta" style="max-width: 500px;">
+                    <div class="encabezado-modal-alerta">
+                        <h3 class="titulo-modal-alerta">📝 Nuevo Recordatorio</h3>
+                        <button class="boton-cerrar-modal-alerta" onclick="cerrarModalRecordatorio()">×</button>
+                    </div>
+                    
+                    <form method="POST" action="procesar-recordatorio.php" class="cuerpo-modal-alerta">
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Título</label>
+                            <input type="text" name="titulo" required maxlength="100" 
+                                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Descripción</label>
+                            <textarea name="descripcion" maxlength="255" rows="3"
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="flex: 1;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Fecha</label>
+                                <input type="date" name="fecha" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Hora</label>
+                                <input type="time" name="hora" required 
+                                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
+                            </div>
+                        </div>
+                        
+                        <div class="botones-modal-alerta">
+                            <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalRecordatorio()">Cancelar</button>
+                            <button type="submit" class="boton-login-alerta">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <div class="urgente-list">
                 <?php if ($rol_usuario == 'demo'): ?>
                     <div style="text-align: center; padding: 40px; color: #666;">
@@ -404,7 +492,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
                     <?php while($cita_proxima = $resultado_citas_proximas->fetch_assoc()): ?>
                         <div class="proximo-item">
                             <span class="proximo-info">
-                                🌅 <?php echo date('D j', strtotime($cita_proxima['fecha'])); ?> • 
+                                <?php echo date('D j', strtotime($cita_proxima['fecha'])); ?> • 
                                 <?php echo htmlspecialchars($cita_proxima['nombre_mascota']); ?> • 
                                 <?php echo htmlspecialchars($cita_proxima['motivo']); ?>
                             </span>
@@ -504,7 +592,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
         <div class="contenido-modal-alerta">
             <div class="encabezado-modal-alerta">
                 <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
-                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
+                <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">x</button>
             </div>
             
             <div class="cuerpo-modal-alerta">
@@ -535,5 +623,8 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
 
     <script src="js/scripts.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
+    <script>
+        window.diasConEventosCalendario = <?php echo json_encode($dias_con_eventos); ?>;
+    </script>
 </body>
 </html>
