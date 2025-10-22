@@ -257,21 +257,35 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 }
 $citas_hoy_count = $conexion->query($consulta_citas_hoy)->fetch_assoc()['total'];
 
-// Obtener historial médico simple
-$consulta_historial_simple = "SELECT h.*, m.nombre_mascota, m.tipo,
-                               u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
-                               FROM historiales_medicos h 
-                               JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                               LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
-                               LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                               WHERE m.id_usuario = $usuario_id 
-                               ORDER BY h.fecha DESC LIMIT 20";
+// Obtener historial médico
+if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
+    // Veterinario: ver TODOS los historiales médicos del sistema
+    $consulta_historial_simple = "SELECT h.*, m.nombre_mascota, m.tipo, m.id_usuario as id_dueno,
+                                   u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+                                   owner.nombre_usuario as nombre_dueno, owner.apellido_usuario as apellido_dueno
+                                   FROM historiales_medicos h 
+                                   JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                   JOIN usuarios owner ON m.id_usuario = owner.id_usuario
+                                   LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
+                                   LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                                   ORDER BY h.fecha DESC LIMIT 50";
+} else {
+    // Usuario normal: solo sus registros
+    $consulta_historial_simple = "SELECT h.*, m.nombre_mascota, m.tipo,
+                                   u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario
+                                   FROM historiales_medicos h 
+                                   JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                   LEFT JOIN veterinario v ON h.id_veterinario = v.id_veterinario
+                                   LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
+                                   WHERE m.id_usuario = $usuario_id 
+                                   ORDER BY h.fecha DESC LIMIT 20";
+}
 $resultado_historial = $conexion->query($consulta_historial_simple);
 
+
 // Obtener citas pasadas para mostrar en el historial
-// CAMBIO: Si es veterinario, mostrar sus citas pasadas
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
-    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica,
+    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario as id_dueno, v.clinica as vet_clinica,
                                u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
                                owner.nombre_usuario as nombre_dueno, owner.apellido_usuario as apellido_dueno,
                                DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
@@ -283,7 +297,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                WHERE c.id_veterinario = $id_veterinario_actual 
                                AND DATE(c.fecha) < '$fecha_hoy' 
                                AND c.estado IN ('aceptada', 'completada')
-                               ORDER BY c.fecha DESC LIMIT 10";
+                               ORDER BY c.fecha DESC LIMIT 20";
 } else {
     $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, 
                                u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
@@ -812,10 +826,11 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 
             <div class="registros-medicos">
                 <!-- Consultas médicas registradas (SOLO PARA USUARIOS NORMALES) -->
-                <?php if ($rol_usuario !== 'veterinario' && $resultado_historial && $resultado_historial->num_rows > 0): ?>
-                    <h4 class="subtitulo-historial">📋 Consultas Médicas Registradas</h4>
-                    <?php while($historial = $resultado_historial->fetch_assoc()): ?>
-                        <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>">
+                    <?php if ($rol_usuario !== 'veterinario' && $resultado_historial && $resultado_historial->num_rows > 0): ?>
+                        <h4 class="subtitulo-historial">📋 Consultas Médicas Registradas</h4>
+                        <?php while($historial = $resultado_historial->fetch_assoc()): ?>
+                          <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>">
+                        <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>" data-dueno="<?php echo $historial['id_dueno'] ?? ''; ?>">
                             <div class="encabezado-registro">
                                 <div class="fecha-registro">
                                     📅 <?php echo date('d M Y', strtotime($historial['fecha'])); ?>
@@ -853,11 +868,52 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                         </div>
                     <?php endwhile; ?>
                 <?php endif; ?>
+                    <!-- Citas pasadas (PARA VETERINARIOS) -->
 
+                    <?php if ($rol_usuario === 'veterinario' && $resultado_historial && $resultado_historial->num_rows > 0): ?>
+                        <h4 class="subtitulo-historial">📋 Consultas Médicas Registradas</h4>
+                        <?php while($historial = $resultado_historial->fetch_assoc()): ?>
+                            <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>" data-dueno="<?php echo $historial['id_dueno']; ?>">
+                                <div class="encabezado-registro">
+                                    <div class="fecha-registro">
+                                        📅 <?php echo date('d M Y', strtotime($historial['fecha'])); ?>
+                                    </div>
+                                    <div class="mascota-registro">
+                                        🐕 <?php echo htmlspecialchars($historial['nombre_mascota']); ?>
+                                    </div>
+                                    <div class="tipo-registro">
+                                        <span class="badge-consulta">📋 Consulta Médica</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="contenido-registro">
+                                    <div class="paciente-cita">
+                                        <h5>👤 Dueño</h5>
+                                        <p><?php echo htmlspecialchars($historial['nombre_dueno'] . ' ' . $historial['apellido_dueno']); ?></p>
+                                    </div>
+                                    
+                                    <div class="diagnostico">
+                                        <h5>📋 Diagnóstico</h5>
+                                        <p><?php echo htmlspecialchars($historial['diagnostico']); ?></p>
+                                    </div>
+                                    
+                                    <div class="tratamiento">
+                                        <h5>💊 Tratamiento</h5>
+                                        <p><?php echo htmlspecialchars($historial['tratamiento']); ?></p>
+                                    </div>
+                                    
+                                    <div class="veterinario-registro">
+                                        <h5>👩‍⚕️ Veterinario</h5>
+                                        <p><?php echo htmlspecialchars(($historial['nombre_veterinario'] && $historial['apellido_veterinario']) ? $historial['nombre_veterinario'] . ' ' . $historial['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    <?php endif; ?>
                 <!-- Citas pasadas (PARA TODOS) -->
-                <?php if ($resultado_citas_pasadas && $resultado_citas_pasadas->num_rows > 0): ?>
-                    <?php while($cita_pasada = $resultado_citas_pasadas->fetch_assoc()): ?>
-                        <div class="registro-medico" data-mascota="<?php echo $cita_pasada['id_mascota']; ?>" data-dueno="<?php echo $cita_pasada['id_usuario'] ?? ''; ?>">
+               <?php if ($resultado_citas_pasadas && $resultado_citas_pasadas->num_rows > 0): ?>
+                 <?php while($cita_pasada = $resultado_citas_pasadas->fetch_assoc()): ?>
+                    <div class="registro-medico" data-mascota="<?php echo $cita_pasada['id_mascota']; ?>" data-dueno="<?php echo $cita_pasada['id_dueno'] ?? ''; ?>">
                             <div class="encabezado-registro">
                                 <div class="fecha-registro">
                                     📅 <?php echo date('d M Y', strtotime($cita_pasada['fecha'])); ?>
@@ -1143,15 +1199,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                         endif; 
                         ?>
                     </select>
-                </div>
-
-                <!-- Enlace para crear nuevo dueño -->
-                <div class="enlace-crear-dueno" id="enlaceCrearDueno">
-                    <button type="button" class="boton-enlace-crear" onclick="mostrarCamposNuevoDueno()">
-                        ➕ O crear un nuevo usuario que podrá iniciar sesión en el sistema
-                    </button>
-                </div>
-
+                    </div>
                 <!-- Campos para nuevo dueño -->
                 <div id="camposNuevoDueno" style="display: block;">
                     <div class="alerta-info-moderno">

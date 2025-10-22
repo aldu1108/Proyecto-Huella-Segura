@@ -27,6 +27,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fechaConsulta) {
         fechaConsulta.removeAttribute('max');
     }
+
+    // Script para redirección automática a sección
+    const urlParams = new URLSearchParams(window.location.search);
+    const seccion = urlParams.get('seccion');
+    
+    if (seccion) {
+        const botonSeccion = document.querySelector(`[data-seccion="${seccion}"]`);
+        if (botonSeccion) {
+            setTimeout(() => botonSeccion.click(), 100);
+        }
+    }
 });
 
 // Navegación entre secciones
@@ -196,10 +207,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Funciones para pacientes
+// ========================================
+// FUNCIONES PARA PACIENTES (VETERINARIO)
+// ========================================
+
 function verHistorialPaciente(idMascota) {
-    showMessage('Cargando historial médico...', 'info');
-    
     // Cambiar a la sección historial
     const btnHistorial = document.querySelector('[data-seccion="historial"]');
     if (btnHistorial) {
@@ -208,21 +220,249 @@ function verHistorialPaciente(idMascota) {
     
     // Filtrar por mascota después de un breve delay
     setTimeout(() => {
-        filtrarHistorial(idMascota);
+        // Filtrar los registros médicos por mascota
+        const registros = document.querySelectorAll('.registro-medico');
+        let registrosVisibles = 0;
+        
+        registros.forEach(registro => {
+            if (registro.dataset.mascota === idMascota.toString()) {
+                registro.style.display = 'block';
+                registrosVisibles++;
+            } else {
+                registro.style.display = 'none';
+            }
+        });
+        
+        // Actualizar el select del filtro para que coincida
+        const mascotaSelect = document.querySelector('#seccionHistorial .filtro-mascota');
+        if (mascotaSelect) {
+            // Si el select filtra por dueño (veterinario), obtener el dueño de la mascota
+            const primeraOpcion = mascotaSelect.querySelector('option:not([value=""])');
+            if (primeraOpcion && primeraOpcion.textContent.includes('@')) {
+                // Es un select de usuarios, buscar el dueño de esta mascota
+                const tarjetaPaciente = document.querySelector(`.tarjeta-paciente [onclick*="verHistorialPaciente(${idMascota})"]`);
+                if (tarjetaPaciente) {
+                    const tarjeta = tarjetaPaciente.closest('.tarjeta-paciente');
+                    const idDueno = tarjeta?.dataset.dueno;
+                    if (idDueno) {
+                        mascotaSelect.value = idDueno;
+                    }
+                }
+            }
+        }
+        
+        // Obtener nombre de la mascota para el mensaje
+        const tarjetaPaciente = document.querySelector(`.tarjeta-paciente [onclick*="verHistorialPaciente(${idMascota})"]`);
+        let nombreMascota = 'el paciente';
+        if (tarjetaPaciente) {
+            const tarjeta = tarjetaPaciente.closest('.tarjeta-paciente');
+            const nombreElement = tarjeta?.querySelector('.detalles-cita h5');
+            if (nombreElement) {
+                nombreMascota = nombreElement.textContent;
+            }
+        }
+        
+        if (registrosVisibles > 0) {
+            showMessage(`📋 Mostrando ${registrosVisibles} registro(s) médico(s) de ${nombreMascota}`, 'success');
+        } else {
+            showMessage(`ℹ️ ${nombreMascota} no tiene registros médicos aún`, 'info');
+        }
     }, 300);
 }
 
 function agendarCitaPaciente(idMascota) {
-    mostrarFormularioCita();
-    
-    // Preseleccionar la mascota
-    setTimeout(() => {
-        const selectMascota = document.querySelector('select[name="id_mascota"]');
-        if (selectMascota) {
-            selectMascota.value = idMascota;
-        }
-    }, 100);
+    // Mostrar modal especial para veterinario
+    mostrarModalCitaPaciente(idMascota);
 }
+
+// Modal específico para agendar cita a paciente (veterinario)
+function mostrarModalCitaPaciente(idMascota) {
+    // Crear modal si no existe
+    let modal = document.getElementById('modalCitaPaciente');
+    
+    if (!modal) {
+        modal = crearModalCitaPaciente();
+        document.body.appendChild(modal);
+    }
+    
+    // Mostrar modal
+    modal.style.display = 'flex';
+    
+    // Asignar id de mascota al campo hidden
+    const inputIdMascota = document.getElementById('inputIdMascotaPaciente');
+    if (inputIdMascota) {
+        inputIdMascota.value = idMascota;
+    }
+    
+    // Configurar fecha mínima (hoy)
+    const inputFecha = document.querySelector('#formularioCitaPaciente [name="fecha"]');
+    if (inputFecha) {
+        const hoy = new Date();
+        const fechaMin = hoy.toISOString().split('T')[0];
+        inputFecha.min = fechaMin;
+        inputFecha.value = fechaMin;
+    }
+    
+    // Obtener nombre de la mascota para mostrarlo
+    obtenerNombreMascota(idMascota);
+}
+
+function crearModalCitaPaciente() {
+    const modal = document.createElement('div');
+    modal.id = 'modalCitaPaciente';
+    modal.className = 'modal-nueva-cita';
+    
+    modal.innerHTML = `
+        <div class="contenido-modal-cita">
+            <div class="encabezado-modal-cita">
+                <h3 class="titulo-modal-cita">📅 Agendar Cita para Paciente</h3>
+                <button class="boton-cerrar-modal-cita" onclick="cerrarModalCitaPaciente()">×</button>
+            </div>
+            
+            <form class="formulario-cita" id="formularioCitaPaciente" method="POST" action="agendar-cita-paciente.php">
+                <input type="hidden" name="id_mascota" id="inputIdMascotaPaciente">
+                
+                <div class="info-paciente-seleccionado">
+                    <p>🐾 <strong>Paciente:</strong> <span id="nombreMascotaSeleccionada">Cargando...</span></p>
+                </div>
+                
+                <div class="grupo-input-cita">
+                    <label class="etiqueta-input-cita requerido">Motivo de la Cita</label>
+                    <select class="select-cita" name="motivo" required>
+                        <option value="">Seleccionar motivo</option>
+                        <option value="Consulta General">Consulta General</option>
+                        <option value="Vacunación">Vacunación</option>
+                        <option value="Revisión">Revisión</option>
+                        <option value="Urgencia">Urgencia</option>
+                        <option value="Control">Control</option>
+                        <option value="Cirugía">Cirugía</option>
+                        <option value="Análisis">Análisis</option>
+                        <option value="Desparasitación">Desparasitación</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input-cita">
+                    <label class="etiqueta-input-cita requerido">Fecha</label>
+                    <input type="date" class="input-cita" name="fecha" required>
+                </div>
+
+                <div class="grupo-input-cita">
+                    <label class="etiqueta-input-cita requerido">Hora</label>
+                    <select class="select-cita" name="hora" required>
+                        <option value="">Seleccionar hora</option>
+                        <option value="09:00">09:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="14:00">02:00 PM</option>
+                        <option value="15:00">03:00 PM</option>
+                        <option value="16:00">04:00 PM</option>
+                        <option value="17:00">05:00 PM</option>
+                        <option value="18:00">06:00 PM</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input-cita">
+                    <label class="etiqueta-input-cita">Clínica</label>
+                    <input type="text" class="input-cita" name="clinica" placeholder="Nombre de la clínica">
+                </div>
+
+                <div class="grupo-input-cita">
+                    <label class="etiqueta-input-cita">Observaciones</label>
+                    <textarea class="textarea-cita" name="observaciones" placeholder="Observaciones adicionales..."></textarea>
+                </div>
+            </form>
+
+            <div class="botones-modal-cita">
+                <button type="button" class="boton-cancelar-cita" onclick="cerrarModalCitaPaciente()">Cancelar</button>
+                <button type="button" class="boton-agendar-cita" onclick="guardarCitaPaciente()">Agendar Cita</button>
+            </div>
+        </div>
+    `;
+    
+    return modal;
+}
+
+function cerrarModalCitaPaciente() {
+    const modal = document.getElementById('modalCitaPaciente');
+    if (modal) {
+        modal.style.display = 'none';
+        const form = document.getElementById('formularioCitaPaciente');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+function guardarCitaPaciente() {
+    const form = document.getElementById('formularioCitaPaciente');
+    
+    // Validar campos requeridos
+    const camposRequeridos = form.querySelectorAll('[required]');
+    let valido = true;
+    
+    camposRequeridos.forEach(campo => {
+        if (!campo.value.trim()) {
+            campo.style.borderColor = '#e74c3c';
+            valido = false;
+        } else {
+            campo.style.borderColor = '#E8F4FD';
+        }
+    });
+    
+    if (!valido) {
+        showMessage('Por favor completa todos los campos requeridos', 'error');
+        return;
+    }
+    
+    // VALIDACIÓN: Fecha no puede ser pasada
+    const fecha = form.querySelector('[name="fecha"]').value;
+    const fechaHoy = new Date();
+    fechaHoy.setHours(0, 0, 0, 0);
+    
+    const fechaSeleccionada = new Date(fecha + 'T00:00:00');
+    
+    if (fechaSeleccionada < fechaHoy) {
+        showMessage('No puedes agendar citas para fechas pasadas. Selecciona hoy o una fecha futura.', 'error');
+        form.querySelector('[name="fecha"]').style.borderColor = '#e74c3c';
+        return;
+    }
+    
+    // Enviar formulario
+    form.submit();
+}
+
+function obtenerNombreMascota(idMascota) {
+    // Buscar el nombre de la mascota en las tarjetas de pacientes
+    const todasLasTarjetas = document.querySelectorAll('.tarjeta-paciente');
+    
+    todasLasTarjetas.forEach(tarjeta => {
+        // Verificar si esta tarjeta tiene un botón con el id correcto
+        const botonCita = tarjeta.querySelector(`button[onclick*="agendarCitaPaciente(${idMascota})"]`);
+        if (botonCita) {
+            const nombreMascota = tarjeta.querySelector('.detalles-cita h5');
+            if (nombreMascota) {
+                const spanNombre = document.getElementById('nombreMascotaSeleccionada');
+                if (spanNombre) {
+                    spanNombre.textContent = nombreMascota.textContent;
+                }
+            }
+        }
+    });
+}
+
+// Cerrar modal de cita paciente al hacer clic fuera
+document.addEventListener('click', function(e) {
+    const modalCitaPaciente = document.getElementById('modalCitaPaciente');
+    if (modalCitaPaciente && e.target === modalCitaPaciente) {
+        cerrarModalCitaPaciente();
+    }
+});
+
+// ========================================
+// FIN FUNCIONES PARA PACIENTES
+// ========================================
 
 function filtrarHistorial(idMascota) {
     const registros = document.querySelectorAll('.registro-medico');
@@ -249,31 +489,6 @@ function filtrarHistorial(idMascota) {
     }
 }
 
-function filtrarHistorialPorDueno(idDueno) {
-    // Filtrar registros médicos por dueño (para veterinarios)
-    const registros = document.querySelectorAll('.registro-medico');
-    let registrosVisibles = 0;
-    
-    registros.forEach(registro => {
-        if (!idDueno || registro.dataset.dueno === idDueno) {
-            registro.style.display = 'block';
-            registrosVisibles++;
-        } else {
-            registro.style.display = 'none';
-        }
-    });
-    
-    // Actualizar el select en la sección historial
-    const duenoSelect = document.querySelector('#seccionHistorial .filtro-mascota');
-    if (duenoSelect && idDueno) {
-        duenoSelect.value = idDueno;
-        
-        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
-        showMessage(`Mostrando ${registrosVisibles} registro(s) de ${nombreDueno}`, 'info');
-    } else if (!idDueno) {
-        showMessage(`Mostrando todos los registros (${registrosVisibles} total)`, 'info');
-    }
-}
 function filtrarHistorialPorDueno(idDueno) {
     // Filtrar registros médicos por dueño (para veterinarios)
     const registros = document.querySelectorAll('.registro-medico');
@@ -349,6 +564,31 @@ function filtrarAgendaPorDueno(idDueno) {
         showMessage(`Mostrando ${citasVisibles} cita(s) de ${nombreDueno}`, 'info');
     } else if (!idDueno) {
         showMessage(`Mostrando todas las citas (${citasVisibles} total)`, 'info');
+    }
+}
+
+function filtrarPacientesPorDueno(idDueno) {
+    const tarjetasPacientes = document.querySelectorAll('#seccionPacientes .tarjeta-paciente');
+    let pacientesVisibles = 0;
+    
+    tarjetasPacientes.forEach(tarjeta => {
+        if (!idDueno || tarjeta.dataset.dueno === idDueno) {
+            tarjeta.style.display = 'flex';
+            pacientesVisibles++;
+        } else {
+            tarjeta.style.display = 'none';
+        }
+    });
+    
+    // Actualizar el select
+    const duenoSelect = document.querySelector('#seccionPacientes .filtro-mascota');
+    if (duenoSelect && idDueno) {
+        duenoSelect.value = idDueno;
+        
+        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
+        showMessage(`Mostrando ${pacientesVisibles} paciente(s) de ${nombreDueno}`, 'info');
+    } else if (!idDueno) {
+        showMessage(`Mostrando todos los pacientes (${pacientesVisibles} total)`, 'info');
     }
 }
 
@@ -469,6 +709,59 @@ estilosAnimaciones.textContent = `
         transition: opacity 0.3s ease;
     }
     
+    /* Estilos para modal de cita paciente */
+    .info-paciente-seleccionado {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .info-paciente-seleccionado p {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .info-paciente-seleccionado strong {
+        font-weight: 600;
+    }
+
+    #nombreMascotaSeleccionada {
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #modalCitaPaciente {
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    #modalCitaPaciente .contenido-modal-cita {
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
     @media (max-width: 768px) {
         .acciones-paciente {
             flex-direction: row !important;
@@ -518,6 +811,15 @@ estilosAnimaciones.textContent = `
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 16px !important;
+        }
+
+        .info-paciente-seleccionado {
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+
+        .info-paciente-seleccionado p {
+            font-size: 13px;
         }
     }
 `;
@@ -599,8 +901,13 @@ document.addEventListener('keydown', function(event) {
         cerrarModalEliminarCita();
         cerrarModalCita();
         cerrarModalConsulta();
+        cerrarModalCitaPaciente();
     }
 });
+
+// ========================================
+// FUNCIONES MODAL AGREGAR PACIENTE
+// ========================================
 
 function mostrarModalAgregarPaciente() {
     const modal = document.getElementById('modalAgregarPaciente');
@@ -725,7 +1032,7 @@ function mostrarCamposNuevoDueno() {
     }
 }
 
-// Cerrar modal al hacer clic fuera
+// Cerrar modal agregar paciente al hacer clic fuera
 document.addEventListener('click', function(e) {
     const modal = document.getElementById('modalAgregarPaciente');
     if (modal && e.target === modal) {
@@ -733,7 +1040,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Cerrar modal con tecla ESC
+// Cerrar modal agregar paciente con tecla ESC
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         const modal = document.getElementById('modalAgregarPaciente');
@@ -742,28 +1049,3 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-// Función para filtrar pacientes por dueño en la sección Pacientes
-function filtrarPacientesPorDueno(idDueno) {
-    const tarjetasPacientes = document.querySelectorAll('#seccionPacientes .tarjeta-paciente');
-    let pacientesVisibles = 0;
-    
-    tarjetasPacientes.forEach(tarjeta => {
-        if (!idDueno || tarjeta.dataset.dueno === idDueno) {
-            tarjeta.style.display = 'flex';
-            pacientesVisibles++;
-        } else {
-            tarjeta.style.display = 'none';
-        }
-    });
-    
-    // Actualizar el select
-    const duenoSelect = document.querySelector('#seccionPacientes .filtro-mascota');
-    if (duenoSelect && idDueno) {
-        duenoSelect.value = idDueno;
-        
-        const nombreDueno = duenoSelect.options[duenoSelect.selectedIndex]?.text || 'este dueño';
-        showMessage(`Mostrando ${pacientesVisibles} paciente(s) de ${nombreDueno}`, 'info');
-    } else if (!idDueno) {
-        showMessage(`Mostrando todos los pacientes (${pacientesVisibles} total)`, 'info');
-    }
-}
