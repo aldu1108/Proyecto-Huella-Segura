@@ -16,7 +16,7 @@ if (isset($_SESSION['usuario_id']) && $_SESSION['rol'] != 'demo' && $_SESSION['r
 if (isset($_POST['demo_login'])) {
     $_SESSION['usuario_id'] = -1; // ID especial para demo
     $_SESSION['usuario_nombre'] = 'Demo';
-    $_SESSION['usuario_apellido'] = 'User'; 
+    $_SESSION['usuario_apellido'] = 'User';
     $_SESSION['rol'] = 'demo';
     header("Location: index.php");
     exit();
@@ -42,11 +42,11 @@ if ($_POST) {
 
             // Verificar contraseña (en un caso real usarías password_verify)
             if ($contraseña == $usuario['contraseña_usuario']) {
-                
+
                 // Verificar si es veterinario pendiente (tiene registro en tabla veterinario con certificado = 0)
                 $consulta_vet_pendiente = "SELECT certificado FROM veterinario WHERE id_usuario = " . $usuario['id_usuario'];
                 $resultado_vet_pendiente = $conexion->query($consulta_vet_pendiente);
-                
+
                 if ($resultado_vet_pendiente && $resultado_vet_pendiente->num_rows > 0) {
                     // Es veterinario
                     $vet_data = $resultado_vet_pendiente->fetch_assoc();
@@ -86,6 +86,7 @@ if ($_POST) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -94,8 +95,8 @@ if ($_POST) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php include_once("includes/logo.php"); ?>
 </head>
-<body class="login-body"
-      style="background: url('imagenes/fondo-login.png') no-repeat center center fixed;
+
+<body class="login-body" style="background: url('imagenes/fondo-login.png') no-repeat center center fixed;
              background-size: cover;">
 
     <!-- Header centrado -->
@@ -117,26 +118,16 @@ if ($_POST) {
 
         <form class="login-form" method="POST" action="">
             <div class="input-group">
-                <input type="email"
-                       name="email"
-                       class="login-input"
-                       placeholder="Ingrese su correo electrónico"
-                       required>
+                <input type="email" name="email" class="login-input" placeholder="Ingrese su correo electrónico"
+                    required>
             </div>
 
             <div class="input-group">
-                <input type="password"
-                       name="contraseña"
-                       class="login-input"
-                       placeholder="Ingrese su contraseña"
-                       required>
+                <input type="password" name="contraseña" class="login-input" placeholder="Ingrese su contraseña"
+                    required>
                 <button type="button" class="password-toggle" onclick="togglePassword(this)">
                     <i class="fa-solid fa-eye"></i>
                 </button>
-            </div>
-
-            <div class="forgot-password">
-                <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit" class="btn-login">Iniciar Sesión</button>
@@ -170,4 +161,5 @@ if ($_POST) {
     <script src="js/login.js"></script>
     <script src="js/scripts.js"></script>
 </body>
+
 </html>
