@@ -732,6 +732,7 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/perfil-mascota.js"></script>
     <script>
     window.mascotaData = {

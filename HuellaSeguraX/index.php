@@ -838,6 +838,7 @@ $resultado_perdidas = $conexion->query($consulta_perdidas);
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
     <script src=></script>
     <script>

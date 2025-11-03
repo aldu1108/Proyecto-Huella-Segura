@@ -682,6 +682,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
     </nav>
 
     <script src="js/scripts.js" ></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
     <script src="js/comunidad.js"></script>
 </body>

@@ -360,6 +360,7 @@ $fecha_registro_formateada = formatearFecha(date('Y-m-d'));
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/mi-perfil.js"></script>
 </body>
 

@@ -1475,6 +1475,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
     </nav>
 
     <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/veterinaria.js"></script>
     <script src="js/modal-alerta-demo.js"></script>
 </body>

@@ -235,7 +235,8 @@ if (isset($_GET['error'])) {
     </nav>
 
     <!-- JavaScript -->
-     <script src="js/scripts.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/notificaciones.js"></script>
     <script src="js/mis-mascotas.js"></script>
 </body>
 </html>
