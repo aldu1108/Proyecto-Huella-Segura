@@ -102,7 +102,7 @@ if ($_POST) {
     <!-- Header centrado -->
     <div class="login-header">
         <h1 class="login-logo">Huella Segura</h1>
-        <p class="login-subtitle">Tu compañero para el cuidado de mascotas 🐕</p>
+        <p class="login-subtitle">Tu compañero para el cuidado de mascotas</p>
     </div>
 
     <!-- Contenedor de login -->
@@ -140,16 +140,27 @@ if ($_POST) {
         <form method="POST" action="">
             <input type="hidden" name="demo_login" value="1">
             <button type="submit" class="btn-demo">
-                ❤️ Probar con Cuenta Demo
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#8B1A10">
+                    <path d="M0 0h24v24H0V0z" fill="none" />
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>Probar con Cuenta Demo
             </button>
         </form>
 
         <button class="btn-veterinario" onclick="window.location.href='registro-veterinario.php'">
-            🩺 Registrarse como Veterinario
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                <path
+                    d="M540-80q-108 0-184-76t-76-184v-23q-86-14-143-80.5T80-600v-240h120v-40h80v160h-80v-40h-40v160q0 66 47 113t113 47q66 0 113-47t47-113v-160h-40v40h-80v-160h80v40h120v240q0 90-57 156.5T360-363v23q0 75 52.5 127.5T540-160q75 0 127.5-52.5T720-340v-67q-35-12-57.5-43T640-520q0-50 35-85t85-35q50 0 85 35t35 85q0 39-22.5 70T800-407v67q0 108-76 184T540-80Zm220-400q17 0 28.5-11.5T800-520q0-17-11.5-28.5T760-560q-17 0-28.5 11.5T720-520q0 17 11.5 28.5T760-480Zm0-40Z" />
+            </svg> Registrarse como Veterinario
         </button>
 
         <button class="btn-admin" onclick="window.location.href='login-admin.php'">
-            🛡️ Acceso Administrativo
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#EFEFEF">
+                <path d="M0 0h24v24H0V0z" fill="none" />
+                <path
+                    d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+            </svg> Acceso Administrativo
         </button>
 
         <div class="register-link">
