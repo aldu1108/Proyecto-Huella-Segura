@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Crear título y descripción para la publicación
         $titulo_publicacion = "En adopción: " . $nombre_mascota . " (" . ucfirst($tipo_mascota) . ")";
 
-        $descripcion_completa = "💝 BUSCA HOGAR 💝\n\n";
+        $descripcion_completa = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#EA3323\"><path d=\"m425-445-36-55q-5-8-13-12t-17-4H112q-9-23-12.5-44.5T96-605q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 23-4 45t-13 45H617l-60-93q-5-8-13.5-12t-17.5-4q-11 0-18.5 6T495-602l-70 157Zm55 325-50-45q-108-96-174-162T153-444h189l60 93q5 8 13.5 11.5T433-336q11 0 19-5.5t12-15.5l70-156 35 54q5 8 13 12t17 4h207q-37 51-103.5 117T528-163l-48 43Z\"/></svg> BUSCA HOGAR <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#EA3323\"><path d=\"m425-445-36-55q-5-8-13-12t-17-4H112q-9-23-12.5-44.5T96-605q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 23-4 45t-13 45H617l-60-93q-5-8-13.5-12t-17.5-4q-11 0-18.5 6T495-602l-70 157Zm55 325-50-45q-108-96-174-162T153-444h189l60 93q5 8 13.5 11.5T433-336q11 0 19-5.5t12-15.5l70-156 35 54q5 8 13 12t17 4h207q-37 51-103.5 117T528-163l-48 43Z\"/></svg>\n\n";
         $descripcion_completa .= "Nombre: " . $nombre_mascota . "\n";
         $descripcion_completa .= "Tipo: " . ucfirst($tipo_mascota) . "\n";
 
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $descripcion_completa .= "\nCondiciones de adopción:\n" . $condiciones;
         $descripcion_completa .= "\n\nLugar de entrega: " . $lugar_adopcion;
-        $descripcion_completa .= "\n\n¿Le darías un hogar lleno de amor a " . $nombre_mascota . "? ¡Contáctanos! ❤️";
+        $descripcion_completa .= "\n\n¿Le darías un hogar lleno de amor a " . $nombre_mascota . "? ¡Contáctanos! <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#EA3323\"><path d=\"m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z\"/></svg>";
 
         // Iniciar transacción
         mysqli_autocommit($conexion, FALSE);

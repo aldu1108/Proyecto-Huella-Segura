@@ -74,11 +74,11 @@ if (isset($_GET['exito'])) {
             break;
              case 'paciente_agregado':
             $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : 'el paciente';
-            $mensaje_exito = "✅ ¡Paciente agregado exitosamente! $nombre ha sido registrado.";
+            $mensaje_exito = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#75FB4C\"><path d=\"m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z\"/></svg> ¡Paciente agregado exitosamente! $nombre ha sido registrado.";
             break;
         case 'paciente_y_dueno_creados':
             $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : 'el paciente';
-            $mensaje_exito = "✅ ¡Paciente y dueño creados exitosamente! $nombre y su dueño pueden ahora iniciar sesión.";
+            $mensaje_exito = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#75FB4C\"><path d=\"m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z\"/></svg> ¡Paciente y dueño creados exitosamente! $nombre y su dueño pueden ahora iniciar sesión.";
             break;
     }
 }
@@ -375,44 +375,44 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
         <!-- Mostrar mensajes -->
         <?php if (isset($mensaje_exito)): ?>
             <div id="mensajeExito" class="mensaje-exito" style="background: #27AE60; color: white; padding: 16px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
-                ✅ <?php echo $mensaje_exito; ?>
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#75FB4C"><path d="m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z"/></svg> <?php echo $mensaje_exito; ?>
             </div>
         <?php endif; ?>
 
         <?php if (isset($mensaje_error)): ?>
             <div id="mensajeError" class="mensaje-error" style="background: #E74C3C; color: white; padding: 16px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
-                ✖ <?php echo $mensaje_error; ?>
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg> <?php echo $mensaje_error; ?>
             </div>
         <?php endif; ?>
 
         <!-- Header del área veterinaria -->
         <section class="header-veterinaria">
-            <h2 class="titulo-veterinaria">🏥 Área Veterinaria</h2>
+            <h2 class="titulo-veterinaria"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#DF9D9B"><path d="M236-118 117-236q-22-20.93-22-50.97Q95-317 117-338l506-504q20.67-21 50.34-21Q703-863 724-842l119 118q21 20.93 21 50.97Q864-643 843-622L337-118q-20.67 21-50.34 21Q257-97 236-118Zm278-107 221-221 109 109q21 20 20.5 50T842-236L724-117q-20.93 21-50.97 21Q643-96 622-117L514-225Zm-34.21-142q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm-77-77q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm154 0q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM225-514 114.92-624.08Q94-645 95-675t22-51l119-117q20.93-21 50.97-21Q317-864 338-843l108 108-221 221Zm254.79-7q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Z"/></svg> Área Veterinaria</h2>
             <p class="subtitulo-veterinaria">Gestión completa de la salud de tus mascotas</p>
         </section>
 
         <!-- Estadísticas veterinaria -->
         <section class="estadisticas-vet">
             <div class="tarjeta-stat-vet hoy">
-                <span class="icono-stat-vet">📅</span>
+                <span class="icono-stat-vet"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#DF9D9B"><path d="M236-118 117-236q-22-20.93-22-50.97Q95-317 117-338l506-504q20.67-21 50.34-21Q703-863 724-842l119 118q21 20.93 21 50.97Q864-643 843-622L337-118q-20.67 21-50.34 21Q257-97 236-118Zm278-107 221-221 109 109q21 20 20.5 50T842-236L724-117q-20.93 21-50.97 21Q643-96 622-117L514-225Zm-34.21-142q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm-77-77q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm154 0q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM225-514 114.92-624.08Q94-645 95-675t22-51l119-117q20.93-21 50.97-21Q317-864 338-843l108 108-221 221Zm254.79-7q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Z"/></svg></span>
                 <div class="numero-stat-vet"><?php echo $citas_hoy_count; ?></div>
                 <div class="texto-stat-vet">Citas Hoy</div>
             </div>
 
             <div class="tarjeta-stat-vet pendiente">
-                <span class="icono-stat-vet">⏰</span>
+                <span class="icono-stat-vet"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-96q-70 0-131.13-26.6-61.14-26.6-106.4-71.87-45.27-45.26-71.87-106.4Q144-362 144-432t26.6-131.13q26.6-61.14 71.87-106.4 45.26-45.27 106.4-71.87Q410-768 480-768t131.13 26.6q61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-502 816-432t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-96 480-96Zm100-200 51-51-115-115v-162h-72v192l136 136ZM237-845l51 51-170 170-51-51 170-170Zm486 0 170 170-51 51-170-170 51-51Z"/></svg></span>
                 <div class="numero-stat-vet"><?php echo $citas_pendientes; ?></div>
                 <div class="texto-stat-vet">Citas Pendientes</div>
             </div>
 
             <div class="tarjeta-stat-vet completadas">
-                <span class="icono-stat-vet">📋</span>
+                <span class="icono-stat-vet"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg></span>
                 <div class="numero-stat-vet"><?php echo $total_consultas; ?></div>
                 <div class="texto-stat-vet"><?php echo ($rol_usuario === 'veterinario') ? 'Citas Completadas' : 'Consultas Realizadas'; ?></div>
             </div>
 
             <div class="tarjeta-stat-vet">
-                <span class="icono-stat-vet">🐾</span>
+                <span class="icono-stat-vet"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg></span>
                 <div class="numero-stat-vet"><?php echo $resultado_mascotas->num_rows; ?></div>
                 <div class="texto-stat-vet">Mis Mascotas</div>
             </div>
@@ -420,12 +420,12 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 
         <!-- Navegacion de secciones -->
         <nav class="navegacion-veterinaria">
-            <button class="boton-seccion-vet activo" data-seccion="agenda">📅 Mi Agenda</button>
+            <button class="boton-seccion-vet activo" data-seccion="agenda"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Mi Agenda</button>
             <?php if ($rol_usuario === 'veterinario'): ?>
-                <button class="boton-seccion-vet" data-seccion="pacientes">🐕 Pacientes</button>
+                <button class="boton-seccion-vet" data-seccion="pacientes"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> Pacientes</button>
             <?php endif; ?>
-            <button class="boton-seccion-vet" data-seccion="historial">📋 Historial</button>
-            <button class="boton-seccion-vet" data-seccion="documentos">📄 Documentos</button>
+            <button class="boton-seccion-vet" data-seccion="historial"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Historial</button>
+            <button class="boton-seccion-vet" data-seccion="documentos"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M336-240h288v-72H336v72Zm0-144h288v-72H336v72ZZm263.72-96Q234-96 213-117.15T192-168v-624q0-29.7 21.15-50.85Q234.3-864 264-864h312l192 192v504q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72ZM528-624h168L528-792v168Z"/></svg> Documentos</button>
         </nav>
 
             <!-- Seccion Mi Agenda -->
@@ -477,7 +477,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                         <!-- TARJETA 1: Citas Aceptadas/Confirmadas -->
                         <div class="proximas-citas citas-aceptadas">
                             <div class="encabezado-citas-seccion">
-                                <h4>✅ Citas Confirmadas</h4>
+                                <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#75FB4C"><path d="m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z"/></svg> Citas Confirmadas</h4>
                             </div>
                             
                             <?php 
@@ -496,16 +496,16 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                         </div>
                                         <div class="detalles-cita">
                                             <h5><?php echo htmlspecialchars($cita['motivo']); ?></h5>
-                                            <p>🐕 <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
                                             <?php if ($rol_usuario === 'veterinario'): ?>
-                                                <p>👤 <strong>Dueño:</strong> <?php echo htmlspecialchars($cita['nombre_dueno'] . ' ' . $cita['apellido_dueno']); ?></p>
-                                                <p>📱 <strong>Teléfono:</strong> <?php echo htmlspecialchars($cita['telefono_usuario'] ?: 'No disponible'); ?></p>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.5-49T480-432q63 0 124.5 17T721-366q22 13 34.5 34t12.5 44v96H192Z"/></svg> <strong>Dueño:</strong> <?php echo htmlspecialchars($cita['nombre_dueno'] . ' ' . $cita['apellido_dueno']); ?></p>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M288-48q-29.7 0-50.85-21.15Q216-90.3 216-120v-720q0-33 19.5-52.5T288-912h384q29.7 0 50.85 21.15Q744-869.7 744-840v144q20 0 34 14t14 34v96q0 20-14 34t-34 14v384q0 29.7-21.15 50.85Q701.7-48 672-48H288Zm191.79-672q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Z"/></svg> <strong>Teléfono:</strong> <?php echo htmlspecialchars($cita['telefono_usuario'] ?: 'No disponible'); ?></p>
                                             <?php endif; ?>
-                                            <p>🏥 <strong>Clínica:</strong> <?php echo htmlspecialchars($cita['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
-                                            <p>⏰ <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
-                                            <p>📅 <strong>Fecha completa:</strong> <?php echo date('d/m/Y H:i', strtotime($cita['fecha'])); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M432-288h96v-96h96v-96h-96v-96h-96v96h-96v96h96v96ZM192-144v-456l288-216 288 216v456H192Z"/></svg> <strong>Clínica:</strong> <?php echo htmlspecialchars($cita['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-96q-70 0-131.13-26.6-61.14-26.6-106.4-71.87-45.27-45.26-71.87-106.4Q144-362 144-432t26.6-131.13q26.6-61.14 71.87-106.4 45.26-45.27 106.4-71.87Q410-768 480-768t131.13 26.6q61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-502 816-432t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-96 480-96Zm100-200 51-51-115-115v-162h-72v192l136 136ZM237-845l51 51-170 170-51-51 170-170Zm486 0 170 170-51 51-170-170 51-51Z"/></svg> <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <strong>Fecha completa:</strong> <?php echo date('d/m/Y H:i', strtotime($cita['fecha'])); ?></p>
                                             <?php if ($cita['especialidad']): ?>
-                                                <p>👨‍⚕️ <strong>Especialidad:</strong> <?php echo htmlspecialchars($cita['especialidad']); ?></p>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 67.92 47.5 115.46Q465-168 533-167q68-1 115.5-48.54T696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 97.62-69 166.31T533-96Z"/></svg> <strong>Especialidad:</strong> <?php echo htmlspecialchars($cita['especialidad']); ?></p>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -513,19 +513,19 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                         <div class="estado-cita <?php echo $cita['estado']; ?>">
                                             <?php 
                                                 $estados_texto = [
-                                                    'pendiente' => '⏳ Pendiente',
-                                                    'aceptada' => '✅ Aceptada',
-                                                    'rechazada' => '❌ Rechazada',
-                                                    'programada' => '📅 Programada',
-                                                    'completada' => '✔️ Completada',
-                                                    'cancelada' => '🚫 Cancelada'
+                                                    'pendiente' => '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M480-516q65 0 110.5-45.5T636-672v-120H324v120q0 65 45.5 110.5T480-516ZM192-96v-72h60v-120q0-59 28-109.5t78-82.5q-49-32-77.5-82.5T252-672v-120h-60v-72h576v72h-60v120q0 59-28.5 109.5T602-480q50 32 78 82.5T708-288v120h60v72H192Z"/></svg> Pendiente',
+                                                    'aceptada' => '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#75FB4C"><path d="m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z"/></svg> Aceptada',
+                                                    'rechazada' => '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Rechazada',
+                                                    'programada' => '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Programada',
+                                                    'completada' => '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#75FB4C"><path d="M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"/></svg> Completada',
+                                                    'cancelada' => '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Cancelada'
                                                 ];
                                                 echo $estados_texto[$cita['estado']] ?? ucfirst($cita['estado']);
                                             ?>
                                         </div>
                                         <div class="botones-cita">
                                             <button class="boton-eliminar-cita" onclick="confirmarEliminarCita(<?php echo $cita['id_cita']; ?>, '<?php echo htmlspecialchars($cita['nombre_mascota']); ?>', '<?php echo htmlspecialchars($cita['motivo']); ?>')">
-                                                🗑️ Eliminar
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg> Eliminar
                                             </button>
                                         </div>
                                     </div>
@@ -546,7 +546,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                         <?php if ($rol_usuario === 'veterinario' && isset($resultado_citas_pendientes)): ?>
                         <div class="proximas-citas citas-pendientes-veterinario">
                             <div class="encabezado-citas-seccion">
-                                <h4>🔔 Citas Pendientes de Aprobación</h4>
+                                <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#d35400"><path d="M192-216v-72h48v-240q0-87 53.5-153T432-763v-53q0-20 14-34t34-14q20 0 34 14t14 34v53q85 16 138.5 82T720-528v240h48v72H192ZM479.79-96Q450-96 429-117.15T408-168h144q0 30-21.21 51t-51 21Z"/></svg> Citas Pendientes de Aprobación</h4>
                                 <span class="badge-pendientes"><?php echo $citas_pendientes_vet; ?> pendientes</span>
                             </div>
 
@@ -559,22 +559,27 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                                     <span class="dia"><?php echo date('d', strtotime($cita['fecha'])); ?></span>
                                                     <span class="mes"><?php echo date('M', strtotime($cita['fecha'])); ?></span>
                                                 </div>
-                                                <div class="detalles-cita">
-                                                    <h5>📋 <?php echo htmlspecialchars($cita['motivo']); ?></h5>
-                                                    <p>🐕 <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
-                                                    <p>👤 <strong>Dueño:</strong> <?php echo htmlspecialchars($cita['nombre_dueno'] . ' ' . $cita['apellido_dueno']); ?></p>
-                                                    <p>📱 <strong>Teléfono:</strong> <?php echo htmlspecialchars($cita['telefono_usuario'] ?: 'No disponible'); ?></p>
-                                                    <p>📧 <strong>Email:</strong> <?php echo htmlspecialchars($cita['email_usuario']); ?></p>
-                                                    <p>⏰ <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
-                                                    <p>📅 <strong>Fecha:</strong> <?php echo date('d/m/Y', strtotime($cita['fecha'])); ?></p>
-                                                </div>
+                                                 <div class="detalles-cita">
+                                            <h5><?php echo htmlspecialchars($cita['motivo']); ?></h5>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
+                                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.5-49T480-432q63 0 124.5 17T721-366q22 13 34.5 34t12.5 44v96H192Z"/></svg> <strong>Dueño:</strong> <?php echo htmlspecialchars($cita['nombre_dueno'] . ' ' . $cita['apellido_dueno']); ?></p>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M288-48q-29.7 0-50.85-21.15Q216-90.3 216-120v-720q0-33 19.5-52.5T288-912h384q29.7 0 50.85 21.15Q744-869.7 744-840v144q20 0 34 14t14 34v96q0 20-14 34t-34 14v384q0 29.7-21.15 50.85Q701.7-48 672-48H288Zm191.79-672q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Z"/></svg> <strong>Teléfono:</strong> <?php echo htmlspecialchars($cita['telefono_usuario'] ?: 'No disponible'); ?></p>
+                                            <?php endif; ?>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M432-288h96v-96h96v-96h-96v-96h-96v96h-96v96h96v96ZM192-144v-456l288-216 288 216v456H192Z"/></svg> <strong>Clínica:</strong> <?php echo htmlspecialchars($cita['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-96q-70 0-131.13-26.6-61.14-26.6-106.4-71.87-45.27-45.26-71.87-106.4Q144-362 144-432t26.6-131.13q26.6-61.14 71.87-106.4 45.26-45.27 106.4-71.87Q410-768 480-768t131.13 26.6q61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-502 816-432t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-96 480-96Zm100-200 51-51-115-115v-162h-72v192l136 136ZM237-845l51 51-170 170-51-51 170-170Zm486 0 170 170-51 51-170-170 51-51Z"/></svg> <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <strong>Fecha completa:</strong> <?php echo date('d/m/Y H:i', strtotime($cita['fecha'])); ?></p>
+                                            <?php if ($cita['especialidad']): ?>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 67.92 47.5 115.46Q465-168 533-167q68-1 115.5-48.54T696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 97.62-69 166.31T533-96Z"/></svg> <strong>Especialidad:</strong> <?php echo htmlspecialchars($cita['especialidad']); ?></p>
+                                            <?php endif; ?>
+                                        </div>
                                             </div>
                                             <div class="acciones-cita-pendiente">
                                                 <form method="POST" action="gestionar-citas-veterinario.php" style="display: inline;">
                                                     <input type="hidden" name="accion" value="aceptar_cita">
                                                     <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
                                                     <button type="submit" class="boton-aceptar-cita" onclick="return confirm('¿Confirmas que deseas ACEPTAR esta cita?')">
-                                                        ✅ Aceptar
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#75FB4C"><path d="m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z"/></svg> Aceptar
                                                     </button>
                                                 </form>
                                                 
@@ -582,7 +587,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                                     <input type="hidden" name="accion" value="rechazar_cita">
                                                     <input type="hidden" name="id_cita" value="<?php echo $cita['id_cita']; ?>">
                                                     <button type="submit" class="boton-rechazar-cita" onclick="return confirm('¿Estás seguro de RECHAZAR esta cita?')">
-                                                        ❌ Rechazar
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg> Rechazar
                                                     </button>
                                                 </form>
                                             </div>
@@ -591,7 +596,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                 </div>
                             <?php else: ?>
                                 <div class="sin-citas">
-                                    <p>✅ No tienes citas pendientes de aprobar</p>
+                                    <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#75FB4C"><path d="m429-336 238-237-51-51-187 186-85-84-51 51 136 135ZM216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h528q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Z"/></svg> No tienes citas pendientes de aprobar</p>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -599,7 +604,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                         <!-- TARJETA 2: Citas Pendientes de Aprobación USUARIOS NORMALES -->
                         <div class="proximas-citas citas-pendientes-usuario">
                             <div class="encabezado-citas-seccion">
-                                <h4>⏳ Citas Pendientes de Aprobación</h4>
+                                <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M480-516q65 0 110.5-45.5T636-672v-120H324v120q0 65 45.5 110.5T480-516ZM192-96v-72h60v-120q0-59 28-109.5t78-82.5q-49-32-77.5-82.5T252-672v-120h-60v-72h576v72h-60v120q0 59-28.5 109.5T602-480q50 32 78 82.5T708-288v120h60v72H192Z"/></svg> Citas Pendientes de Aprobación</h4>
                                 <?php if ($rol_usuario == 'demo'): ?>
                                     <button class="boton-nueva-cita" onclick="mostrarModalAlerta('Para agendar citas veterinarias necesitas una cuenta registrada.', ['Agendar citas con veterinarios', 'Recibir recordatorios automáticos', 'Gestionar horarios de tus mascotas', 'Llevar control de consultas'])">
                                         + Agendar Nueva Cita
@@ -612,7 +617,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                             </div>
                             
                             <div class="info-pendientes">
-                                <p>💡 Estas citas están esperando la confirmación del veterinario</p>
+                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFF55"><path d="M479.79-96Q450-96 429-117.15T408-168h144q0 30-21.21 51t-51 21ZM336-216v-72h288v72H336Zm-15-120q-62-38-95.5-102.5T192-576q0-120 84-204t204-84q120 0 204 84t84 204q0 73-33.5 137.5T639-336H321Z"/></svg> Estas citas están esperando la confirmación del veterinario</p>
                             </div>
 
                             <?php 
@@ -631,22 +636,22 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                         </div>
                                         <div class="detalles-cita">
                                             <h5><?php echo htmlspecialchars($cita['motivo']); ?></h5>
-                                            <p>🐕 <strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
-                                            <p>🏥 <strong>Clínica:</strong> <?php echo htmlspecialchars($cita['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
-                                            <p>⏰ <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
-                                            <p>📅 <strong>Fecha completa:</strong> <?php echo date('d/m/Y H:i', strtotime($cita['fecha'])); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg><strong>Mascota:</strong> <?php echo htmlspecialchars($cita['nombre_mascota']); ?> (<?php echo ucfirst($cita['tipo']); ?>)</p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M432-288h96v-96h96v-96h-96v-96h-96v96h-96v96h96v96ZM192-144v-456l288-216 288 216v456H192Z"/></svg> <strong>Clínica:</strong> <?php echo htmlspecialchars($cita['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-96q-70 0-131.13-26.6-61.14-26.6-106.4-71.87-45.27-45.26-71.87-106.4Q144-362 144-432t26.6-131.13q26.6-61.14 71.87-106.4 45.26-45.27 106.4-71.87Q410-768 480-768t131.13 26.6q61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-502 816-432t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-96 480-96Zm100-200 51-51-115-115v-162h-72v192l136 136ZM237-845l51 51-170 170-51-51 170-170Zm486 0 170 170-51 51-170-170 51-51Z"/></svg> <strong>Hora:</strong> <?php echo date('H:i', strtotime($cita['fecha'])); ?></p>
+                                            <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <strong>Fecha completa:</strong> <?php echo date('d/m/Y H:i', strtotime($cita['fecha'])); ?></p>
                                             <?php if ($cita['especialidad']): ?>
-                                                <p>👨‍⚕️ <strong>Especialidad:</strong> <?php echo htmlspecialchars($cita['especialidad']); ?></p>
+                                                <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 67.92 47.5 115.46Q465-168 533-167q68-1 115.5-48.54T696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 97.62-69 166.31T533-96Z"/></svg> <strong>Especialidad:</strong> <?php echo htmlspecialchars($cita['especialidad']); ?></p>
                                             <?php endif; ?>
                                         </div>
                                     </div>
                                     <div class="acciones-cita">
                                         <div class="estado-cita pendiente">
-                                            ⏳ Pendiente
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M480-516q65 0 110.5-45.5T636-672v-120H324v120q0 65 45.5 110.5T480-516ZM192-96v-72h60v-120q0-59 28-109.5t78-82.5q-49-32-77.5-82.5T252-672v-120h-60v-72h576v72h-60v120q0 59-28.5 109.5T602-480q50 32 78 82.5T708-288v120h60v72H192Z"/></svg> Pendiente
                                         </div>
                                         <div class="botones-cita">
                                             <button class="boton-eliminar-cita" onclick="confirmarEliminarCita(<?php echo $cita['id_cita']; ?>, '<?php echo htmlspecialchars($cita['nombre_mascota']); ?>', '<?php echo htmlspecialchars($cita['motivo']); ?>')">
-                                                🗑️ Eliminar
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg> Eliminar
                                             </button>
                                         </div>
                                     </div>
@@ -735,7 +740,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                     <img src="imagenes/<?php echo htmlspecialchars($mascota['foto_mascota']); ?>" alt="<?php echo htmlspecialchars($mascota['nombre_mascota']); ?>">
                                 <?php else: ?>
                                     <div class="placeholder-paciente">
-                                        <?php echo ($mascota['tipo'] == 'perro') ? '🐕' : (($mascota['tipo'] == 'gato') ? '🐱' : '🐾'); ?>
+                                        <?php echo ($mascota['tipo'] == 'perro') ? '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg>' : (($mascota['tipo'] == 'gato') ? '🐱' : '🐾'); ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -743,29 +748,29 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                 <h5><?php echo htmlspecialchars($mascota['nombre_mascota']); ?></h5>
                                 <p><strong>Tipo:</strong> <?php echo ucfirst($mascota['tipo']); ?> • <?php echo $mascota['edad_mascota']; ?> años</p>
                                 <p><strong>Sexo:</strong> <?php echo ucfirst($mascota['sexo']); ?></p>
-                                <p><strong>Nacimiento:</strong> 📅 <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
+                                <p><strong>Nacimiento:</strong> <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <?php echo date('d M Y', strtotime($mascota['cumpleaños_mascota'])); ?></p>
                                 <p style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0;">
-                                    <strong>👤 Dueño:</strong> <?php echo htmlspecialchars($mascota['nombre_dueno'] . ' ' . $mascota['apellido_dueno']); ?>
+                                    <strong><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.5-49T480-432q63 0 124.5 17T721-366q22 13 34.5 34t12.5 44v96H192Z"/></svg> Dueño:</strong> <?php echo htmlspecialchars($mascota['nombre_dueno'] . ' ' . $mascota['apellido_dueno']); ?>
                                 </p>
                                 <?php if (!empty($mascota['telefono_usuario'])): ?>
                                     <p><strong>📱 Teléfono:</strong> <?php echo htmlspecialchars($mascota['telefono_usuario']); ?></p>
                                 <?php endif; ?>
-                                <p><strong>📧 Email:</strong> <?php echo htmlspecialchars($mascota['email_usuario']); ?></p>
+                                <p><strong><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M168-192q-29 0-50.5-21.5T96-264v-432q0-29 21.5-50.5T168-768h624q30 0 51 21.5t21 50.5v432q0 29-21 50.5T792-192H168Zm312-240 312-179v-85L480-517 168-696v85l312 179Z"/></svg> Email:</strong> <?php echo htmlspecialchars($mascota['email_usuario']); ?></p>
                             </div>
                         </div>
                         <div class="acciones-paciente">
                             <button class="boton-ver-historial" onclick="verHistorialPaciente(<?php echo $mascota['id_mascota']; ?>)">
-                                📋 Ver Historial
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Ver Historial
                             </button>
                             <button class="boton-nueva-cita-paciente" onclick="agendarCitaPaciente(<?php echo $mascota['id_mascota']; ?>)">
-                                📅 Nueva Cita
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Nueva Cita
                             </button>
                         </div>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
                 <div class="sin-citas">
-                    <p>📋 No hay pacientes registrados en el sistema</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> No hay pacientes registrados en el sistema</p>
                     <button class="boton-agendar-primera" onclick="mostrarModalAgregarPaciente()">
                         + Agregar Primer Paciente
                     </button>
@@ -778,7 +783,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
         <!-- Seccion Historial Medico  -->
          <section class="seccion-veterinaria seccion-historial" id="seccionHistorial">
                     <div class="encabezado-agenda">
-                        <h4 class="subtitulo-historial">📅 Citas Realizadas</h4>
+                        <h4 class="subtitulo-historial"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Citas Realizadas</h4>
                         <div class="filtros-historial">
                             <?php if ($rol_usuario === 'veterinario'): ?>
                                 <select class="filtro-mascota" onchange="filtrarHistorialPorDueno(this.value)">
@@ -827,41 +832,41 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
             <div class="registros-medicos">
                 <!-- Consultas médicas registradas (SOLO PARA USUARIOS NORMALES) -->
                     <?php if ($rol_usuario !== 'veterinario' && $resultado_historial && $resultado_historial->num_rows > 0): ?>
-                        <h4 class="subtitulo-historial">📋 Consultas Médicas Registradas</h4>
+                        <h4 class="subtitulo-historial"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Consultas Médicas Registradas</h4>
                         <?php while($historial = $resultado_historial->fetch_assoc()): ?>
                           <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>">
                         <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>" data-dueno="<?php echo $historial['id_dueno'] ?? ''; ?>">
                             <div class="encabezado-registro">
                                 <div class="fecha-registro">
-                                    📅 <?php echo date('d M Y', strtotime($historial['fecha'])); ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <?php echo date('d M Y', strtotime($historial['fecha'])); ?>
                                 </div>
                                 <div class="mascota-registro">
-                                    🐕 <?php echo htmlspecialchars($historial['nombre_mascota']); ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> <?php echo htmlspecialchars($historial['nombre_mascota']); ?>
                                 </div>
                                 <div class="tipo-registro">
-                                    <span class="badge-consulta">📋 Consulta Médica</span>
+                                    <span class="badge-consulta"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Consulta Médica</span>
                                 </div>
                             </div>
                             
                             <div class="contenido-registro">
                                 <div class="diagnostico">
-                                    <h5>📋 Diagnóstico</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Diagnóstico</h5>
                                     <p><?php echo htmlspecialchars($historial['diagnostico']); ?></p>
                                 </div>
                                 
                                 <div class="tratamiento">
-                                    <h5>💊 Tratamiento</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M354-144q-87.73 0-148.87-61.13Q144-266.27 144-354q0-42 16-81t45-68l252-252q29-29 68-45t81-16q87.73 0 148.87 61.13Q816-693.73 816-606q0 42-16 81t-45 68L503-205q-29 29-68 45t-81 16Zm249-264 101-100q20-20 30-45t10-52.67q0-57.24-40.55-97.78Q662.91-744 605.67-744 578-744 553-734t-45 30L408-603l195 195ZM354.33-216Q382-216 407-226t45-30l100-101-195-195-100 100q-20 20-30.5 45T216-354.33q0 57.24 40.55 97.78Q297.09-216 354.33-216Z"/></svg> Tratamiento</h5>
                                     <p><?php echo htmlspecialchars($historial['tratamiento']); ?></p>
                                 </div>
                                 
                                 <div class="veterinario-registro">
-                                    <h5>👩‍⚕️ Veterinario</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 68.33 47.56 116.17Q465.12-167 533.06-167t115.44-47.83Q696-262.67 696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 98.03-68.69 167.02Q630.62-96 533-96Zm199-360q20.4 0 34.2-13.8Q780-483.6 780-504q0-20.4-13.8-34.2Q752.4-552 732-552q-20.4 0-34.2 13.8Q684-524.4 684-504q0 20.4 13.8 34.2Q711.6-456 732-456Zm0-48Z"/></svg> Veterinario</h5>
                                     <p><?php echo htmlspecialchars(($historial['nombre_veterinario'] && $historial['apellido_veterinario']) ? $historial['nombre_veterinario'] . ' ' . $historial['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                 </div>
 
                                 <div class="acciones-consulta">
                                     <button class="boton-eliminar-consulta" onclick="confirmarEliminarConsulta(<?php echo $historial['id_historial']; ?>, '<?php echo htmlspecialchars($historial['nombre_mascota']); ?>')">
-                                        🗑️ Eliminar Consulta
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg> Eliminar Consulta
                                     </button>
                                 </div>
                             </div>
@@ -871,18 +876,18 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                     <!-- Citas pasadas (PARA VETERINARIOS) -->
 
                     <?php if ($rol_usuario === 'veterinario' && $resultado_historial && $resultado_historial->num_rows > 0): ?>
-                        <h4 class="subtitulo-historial">📋 Consultas Médicas Registradas</h4>
+                        <h4 class="subtitulo-historial"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Consultas Médicas Registradas</h4>
                         <?php while($historial = $resultado_historial->fetch_assoc()): ?>
                             <div class="registro-medico" data-mascota="<?php echo $historial['id_mascota']; ?>" data-dueno="<?php echo $historial['id_dueno']; ?>">
                                 <div class="encabezado-registro">
                                     <div class="fecha-registro">
-                                        📅 <?php echo date('d M Y', strtotime($historial['fecha'])); ?>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <?php echo date('d M Y', strtotime($historial['fecha'])); ?>
                                     </div>
                                     <div class="mascota-registro">
-                                        🐕 <?php echo htmlspecialchars($historial['nombre_mascota']); ?>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> <?php echo htmlspecialchars($historial['nombre_mascota']); ?>
                                     </div>
                                     <div class="tipo-registro">
-                                        <span class="badge-consulta">📋 Consulta Médica</span>
+                                        <span class="badge-consulta"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Consulta Médica</span>
                                     </div>
                                 </div>
                                 
@@ -893,17 +898,17 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                     </div>
                                     
                                     <div class="diagnostico">
-                                        <h5>📋 Diagnóstico</h5>
+                                        <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#7CA7D8"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Diagnóstico</h5>
                                         <p><?php echo htmlspecialchars($historial['diagnostico']); ?></p>
                                     </div>
                                     
                                     <div class="tratamiento">
-                                        <h5>💊 Tratamiento</h5>
+                                        <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M354-144q-87.73 0-148.87-61.13Q144-266.27 144-354q0-42 16-81t45-68l252-252q29-29 68-45t81-16q87.73 0 148.87 61.13Q816-693.73 816-606q0 42-16 81t-45 68L503-205q-29 29-68 45t-81 16Zm249-264 101-100q20-20 30-45t10-52.67q0-57.24-40.55-97.78Q662.91-744 605.67-744 578-744 553-734t-45 30L408-603l195 195ZM354.33-216Q382-216 407-226t45-30l100-101-195-195-100 100q-20 20-30.5 45T216-354.33q0 57.24 40.55 97.78Q297.09-216 354.33-216Z"/></svg> Tratamiento</h5>
                                         <p><?php echo htmlspecialchars($historial['tratamiento']); ?></p>
                                     </div>
                                     
                                     <div class="veterinario-registro">
-                                        <h5>👩‍⚕️ Veterinario</h5>
+                                        <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 68.33 47.56 116.17Q465.12-167 533.06-167t115.44-47.83Q696-262.67 696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 98.03-68.69 167.02Q630.62-96 533-96Zm199-360q20.4 0 34.2-13.8Q780-483.6 780-504q0-20.4-13.8-34.2Q752.4-552 732-552q-20.4 0-34.2 13.8Q684-524.4 684-504q0 20.4 13.8 34.2Q711.6-456 732-456Zm0-48Z"/></svg><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 67.92 47.5 115.46Q465-168 533-167q68-1 115.5-48.54T696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 97.62-69 166.31T533-96Z"/></svg> Veterinario</h5>
                                         <p><?php echo htmlspecialchars(($historial['nombre_veterinario'] && $historial['apellido_veterinario']) ? $historial['nombre_veterinario'] . ' ' . $historial['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                     </div>
                                 </div>
@@ -916,13 +921,13 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                     <div class="registro-medico" data-mascota="<?php echo $cita_pasada['id_mascota']; ?>" data-dueno="<?php echo $cita_pasada['id_dueno'] ?? ''; ?>">
                             <div class="encabezado-registro">
                                 <div class="fecha-registro">
-                                    📅 <?php echo date('d M Y', strtotime($cita_pasada['fecha'])); ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> <?php echo date('d M Y', strtotime($cita_pasada['fecha'])); ?>
                                 </div>
                                 <div class="mascota-registro">
-                                    🐕 <?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> <?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?>
                                 </div>
                                 <div class="tipo-registro">
-                                    <span class="badge-cita">📅 Cita Realizada</span>
+                                    <span class="badge-cita"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Cita Realizada</span>
                                 </div>
                             </div>
                             
@@ -934,30 +939,30 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                 
                                 <?php if ($rol_usuario === 'veterinario'): ?>
                                     <div class="paciente-cita">
-                                        <h5>👤 Paciente (Dueño)</h5>
+                                        <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.5-49T480-432q63 0 124.5 17T721-366q22 13 34.5 34t12.5 44v96H192Z"/></svg> Paciente (Dueño)</h5>
                                         <p><?php echo htmlspecialchars($cita_pasada['nombre_dueno'] . ' ' . $cita_pasada['apellido_dueno']); ?></p>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <div class="clinica-cita">
-                                    <h5>🏥 Clínica</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M432-288h96v-96h96v-96h-96v-96h-96v96h-96v96h96v96ZM192-144v-456l288-216 288 216v456H192Z"/></svg> Clínica</h5>
                                     <p><?php echo htmlspecialchars($cita_pasada['vet_clinica'] ?: 'Clínica Veterinaria'); ?></p>
                                 </div>
                                 
                                 <?php if ($rol_usuario !== 'veterinario'): ?>
                                 <div class="veterinario-registro">
-                                    <h5>👩‍⚕️ Veterinario</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M533-96q-97.62 0-166.31-68.98Q298-233.97 298-332v-30q-85-11-143.5-74.5T96-588v-228h120v-48h72v168h-72v-48h-48v156.46q0 64.54 45.5 110.04T324-432q65 0 110.5-45.5T480-587.54V-744h-48v48h-72v-168h72v48h120v228q0 84.35-51.5 146.67Q449-379 370-364v33q0 67.92 47.5 115.46Q465-168 533-167q68-1 115.5-48.54T696-331v-59.37Q659-401 635.5-432T612-504q0-50 35-85t85-35q50 0 85 35t35 85q0 41-23.5 72T768-390v58q0 97.62-69 166.31T533-96Z"/></svg> Veterinario</h5>
                                     <p><?php echo htmlspecialchars(($cita_pasada['nombre_veterinario'] && $cita_pasada['apellido_veterinario']) ? $cita_pasada['nombre_veterinario'] . ' ' . $cita_pasada['apellido_veterinario'] : 'Dr. Veterinario'); ?></p>
                                 </div>
                                 <?php endif; ?>
 
                                 <div class="fecha-completa-cita">
-                                    <h5>📅 Fecha Completa</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M216-96q-29.7 0-50.85-21.5Q144-139 144-168v-528q0-29 21.15-50.5T216-768h72v-96h72v96h240v-96h72v96h72q29.7 0 50.85 21.5Q816-725 816-696v528q0 29-21.15 50.5T744-96H216Zm0-72h528v-360H216v360Z"/></svg> Fecha Completa</h5>
                                     <p><?php echo date('d/m/Y H:i', strtotime($cita_pasada['fecha'])); ?></p>
                                 </div>
 
                                 <div class="mascota-detalle-cita">
-                                    <h5>🐕 Mascota</h5>
+                                    <h5><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> Mascota</h5>
                                     <p><?php echo htmlspecialchars($cita_pasada['nombre_mascota']); ?> (<?php echo ucfirst($cita_pasada['tipo']); ?>)</p>
                                 </div>            
 
@@ -973,12 +978,12 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 
                 <?php if (($rol_usuario !== 'veterinario' && (!$resultado_historial || $resultado_historial->num_rows == 0)) && (!$resultado_citas_pasadas || $resultado_citas_pasadas->num_rows == 0)): ?>
                     <div class="sin-registros">
-                        <h4>📋 Sin Registros Médicos</h4>
+                        <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Sin Registros Médicos</h4>
                         <p>Aún no hay registros médicos o citas realizadas para tus mascotas</p>
                     </div>
                 <?php elseif ($rol_usuario === 'veterinario' && (!$resultado_citas_pasadas || $resultado_citas_pasadas->num_rows == 0)): ?>
                     <div class="sin-registros">
-                        <h4>📋 Sin Citas Realizadas</h4>
+                        <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Sin Citas Realizadas</h4>
                         <p>Aún no tienes citas completadas en tu historial</p>
                     </div>
                 <?php endif; ?>
@@ -991,18 +996,18 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                 <h3>Documentos Médicos</h3>
                 <?php if ($rol_usuario == 'demo'): ?>
                     <button class="boton-subir-documento" onclick="mostrarModalAlerta('Inicia sesión para subir documentos\n\nRegístrate para poder:\n• Subir documentos médicos\n• Organizar certificados\n• Mantener registros actualizados')">
-                        📎 Subir Documento
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> Subir Documento
                     </button>
                 <?php else: ?>
                     <button class="boton-subir-documento" onclick="mostrarSubirDocumento()">
-                        📎 Subir Documento
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> Subir Documento
                     </button>
                 <?php endif; ?>
             </div>
 
             <div class="categorias-documentos">
                 <div class="categoria-doc">
-                    <h4>🧾 Certificados de Vacunación</h4>
+                    <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M240-96q-40 0-68-28t-28-68v-144h96v-528h576v660q0 45-31.5 76.5T708-96H240Zm467.79-72q15.21 0 25.71-10.35T744-204v-588H312v456h360v132q0 15.3 10.29 25.65Q692.58-168 707.79-168ZM360-600v-72h336v72H360Zm0 120v-72h336v72H360Z"/></svg> Certificados de Vacunación</h4>
                     <div class="lista-documentos">
                         <?php
                         $consulta_docs_vacunas = "SELECT dm.*, h.fecha, m.nombre_mascota 
@@ -1017,7 +1022,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                             while($doc = $resultado_vacunas->fetch_assoc()):
                         ?>
                             <div class="documento-item">
-                                <span class="icono-doc">📄</span>
+                                <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M336-240h288v-72H336v72Zm0-144h288v-72H336v72ZM263.72-96Q234-96 213-117.15T192-168v-624q0-29.7 21.15-50.85Q234.3-864 264-864h312l192 192v504q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72ZM528-624h168L528-792v168Z"/></svg></span>
                                 <div class="info-doc">
                                     <strong>Certificado de Vacunación - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
                                     <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
@@ -1036,7 +1041,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                 </div>
 
                 <div class="categoria-doc">
-                    <h4>🧾 Análisis y Estudios</h4>
+                    <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M240-96q-40 0-68-28t-28-68v-144h96v-528h576v660q0 45-31.5 76.5T708-96H240Zm467.79-72q15.21 0 25.71-10.35T744-204v-588H312v456h360v132q0 15.3 10.29 25.65Q692.58-168 707.79-168ZM360-600v-72h336v72H360Zm0 120v-72h336v72H360Z"/></svg> Análisis y Estudios</h4>
                     <div class="lista-documentos">
                         <?php
                         $consulta_docs_analisis = "SELECT dm.*, h.fecha, m.nombre_mascota 
@@ -1051,7 +1056,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                             while($doc = $resultado_analisis->fetch_assoc()):
                         ?>
                             <div class="documento-item">
-                                <span class="icono-doc">📊</span>
+                                <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m107-384-59-42 192-312 120 144 168-264 120 168 146-222 58 42-202 307-119-166-163 257-119-143-142 231Zm468.77 144Q616-240 644-267.77q28-27.78 28-68Q672-376 644.23-404q-27.78-28-68-28Q536-432 508-404.23q-28 27.78-28 68Q480-296 507.77-268q27.78 28 68 28ZM765-96l-98-98q-19.91 13-43.13 19.5Q600.65-168 576-168q-70 0-119-49t-49-119q0-70 49-119t119-49q70 0 119 49t49 119q0 24.65-6.5 47.87T718-245l98 98-51 51Z"/></svg></span>
                                 <div class="info-doc">
                                     <strong>Análisis - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
                                     <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
@@ -1070,7 +1075,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                 </div>
 
                 <div class="categoria-doc">
-                    <h4>📋 Recetas Médicas</h4>
+                    <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Recetas Médicas</h4>
                     <div class="lista-documentos">
                         <?php
                         $consulta_docs_recetas = "SELECT dm.*, h.fecha, m.nombre_mascota 
@@ -1085,7 +1090,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                             while($doc = $resultado_recetas->fetch_assoc()):
                         ?>
                             <div class="documento-item">
-                                <span class="icono-doc">📋</span>
+                                <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg></span>
                                 <div class="info-doc">
                                     <strong>Receta Médica - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
                                     <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
@@ -1109,7 +1114,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 <div class="modal-agregar-paciente" id="modalAgregarPaciente">
     <div class="contenido-modal-paciente-moderno">
         <div class="encabezado-modal-paciente-moderno">
-            <h3 class="titulo-modal-paciente-moderno">🐾 Agregar Nuevo Paciente</h3>
+            <h3 class="titulo-modal-paciente-moderno"> Agregar Nuevo Paciente</h3>
             <button class="boton-cerrar-modal-paciente-moderno" onclick="cerrarModalAgregarPaciente()">×</button>
         </div>
         
@@ -1126,9 +1131,9 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                     <label class="etiqueta-input-moderno">Tipo <span class="requerido-asterisco">*</span></label>
                     <select class="select-moderno" name="tipo" required>
                         <option value="">Seleccionar tipo</option>
-                        <option value="perro">🐕 Perro</option>
-                        <option value="gato">🐱 Gato</option>
-                        <option value="otro">🐾 Otro</option>
+                        <option value="perro"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FBE6A3"><path d="M384-96q-55 0-93.5-38.5T252-228q0-14 2.5-19.5t.5-7.5q-2-2-8 .5t-19 2.5q-55 0-93.5-38.5T96-384q0-55 38.5-93.5T228-516q23 0 45 8t40 24l163-163q-16-17-24-39.5t-8-45.5q0-55 38.5-93.5T576-864q55 0 93.5 38.5T708-732q0 14-2.5 19.5t-.5 7.5q2 2 7.5-.5T732-708q55 0 93.5 38.5T864-576q0 55-38.5 93.5T732-444q-23 0-45-8.5T646-477L483-314q16 19 24.5 41t8.5 45q0 55-38.5 93.5T384-96Z"/></svg> Perro</option>
+                        <option value="gato"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M120-384q-30 0-51-21t-21-51v-336q0-30 21-51t51-21h720q30 0 51 21t21 51v336q0 30-21 51t-51 21H120Zm25 144-4-72 671-35 4 72-671 35Zm-1 120v-72h672v72H144Zm276-384q75 0 143-28.5T672-624q2 44 38 70t82 26v-192q-46 0-82 26t-38 70q-42-61-109.5-90.5T420-744q-75 0-144 28.5T168-624q38 64 107.5 92T420-504Z"/></svg> Gato</option>
+                        <option value="otro"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> Otro</option>
                     </select>
                 </div>
                 
@@ -1159,7 +1164,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                 <div class="contenedor-file-moderno">
                     <input type="file" class="input-file-moderno" name="foto_mascota" id="inputFotoPaciente" accept="image/*" onchange="previewImagenPaciente(this)">
                     <label for="inputFotoPaciente" class="label-file-moderno">
-                        <span class="icono-file">📷</span>
+                        <span class="icono-file"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-264q72 0 120-49t48-119q0-69-48-118.5T480-600q-72 0-120 49.5T312-432q0 70 48 119t120 49Zm0-72q-42 0-69-27t-27-68q0-40 27-68.5t69-28.5q42 0 69 28.5t27 68.5q0 41-27 68t-69 27ZM168-144q-29 0-50.5-21.5T96-216v-432q0-29 21.5-50.5T168-720h120l72-96h240l72 96h120q30 0 51 21.5t21 50.5v432q0 29-21 50.5T792-144H168Z"/></svg></span>
                         <span class="texto-file">Seleccionar imagen</span>
                     </label>
                 </div>
@@ -1174,7 +1179,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 
             <!-- Información del dueño -->
             <div class="seccion-dueno-moderno">
-                <h4 class="subtitulo-seccion-moderno">👤 Información del Dueño</h4>
+                <h4 class="subtitulo-seccion-moderno"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.5-49T480-432q63 0 124.5 17T721-366q22 13 34.5 34t12.5 44v96H192Z"/></svg> Información del Dueño</h4>
                 
                 <div class="grupo-input-moderno">
                     <label class="etiqueta-input-moderno">Seleccionar dueño existente</label>
@@ -1203,7 +1208,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                 <!-- Campos para nuevo dueño -->
                 <div id="camposNuevoDueno" style="display: block;">
                     <div class="alerta-info-moderno">
-                        <span class="icono-info">💡</span>
+                        <span class="icono-info"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFF55"><path d="M407.74-240Q378-240 357-261.15 336-282.3 336-312v-67q-57-37.3-88.5-95.65Q216-533 216-600q0-110.31 76.78-187.16 76.78-76.84 187-76.84T667-787.16q77 76.85 77 187.16 0 66.82-31.5 125.41T624-379v67q0 29.7-21.18 50.85Q581.65-240 551.91-240H407.74ZM408-96q-20.4 0-34.2-13.8Q360-123.6 360-144v-24h240v24q0 20.4-13.8 34.2Q572.4-96 552-96H408Z"/></svg></span>
                         <p>Se creará un nuevo usuario que podrá iniciar sesión con estos datos</p>
                     </div>
 
@@ -1393,7 +1398,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
             </div>
             
             <div class="cuerpo-modal-eliminar">
-                <div class="icono-advertencia">⚠️</div>
+                <div class="icono-advertencia"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffea00" stroke-width="0.5"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.61617 3.6419C10.6736 1.80296 13.3268 1.80296 14.3841 3.6419L22.4271 17.6296C23.4813 19.463 22.1579 21.7504 20.0431 21.7504H3.95721C1.84242 21.7504 0.519055 19.463 1.57322 17.6296L9.61617 3.6419ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V9C11.25 8.58579 11.5858 8.25 12 8.25ZM12.5675 17.5008C12.8446 17.1929 12.8196 16.7187 12.5117 16.4416C12.2038 16.1645 11.7296 16.1894 11.4525 16.4973L11.4425 16.5084C11.1654 16.8163 11.1904 17.2905 11.4983 17.5676C11.8062 17.8447 12.2804 17.8197 12.5575 17.5119L12.5675 17.5008Z" fill="#ffea00"></path></svg></div>
                 <p>¿Estás seguro de que deseas eliminar esta cita veterinaria?</p>
                 <p><strong>Mascota:</strong> <span id="mascotaEliminarCita"></span></p>
                 <p><strong>Motivo:</strong> <span id="motivoEliminarCita"></span></p>
@@ -1421,7 +1426,7 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
             </div>
             
             <div class="cuerpo-modal-eliminar">
-                <div class="icono-advertencia">⚠️</div>
+                <div class="icono-advertencia"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffea00" stroke-width="0.5"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.61617 3.6419C10.6736 1.80296 13.3268 1.80296 14.3841 3.6419L22.4271 17.6296C23.4813 19.463 22.1579 21.7504 20.0431 21.7504H3.95721C1.84242 21.7504 0.519055 19.463 1.57322 17.6296L9.61617 3.6419ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V9C11.25 8.58579 11.5858 8.25 12 8.25ZM12.5675 17.5008C12.8446 17.1929 12.8196 16.7187 12.5117 16.4416C12.2038 16.1645 11.7296 16.1894 11.4525 16.4973L11.4425 16.5084C11.1654 16.8163 11.1904 17.2905 11.4983 17.5676C11.8062 17.8447 12.2804 17.8197 12.5575 17.5119L12.5675 17.5008Z" fill="#ffea00"></path></svg></div>
                 <p>¿Estás seguro de que deseas eliminar esta consulta médica?</p>
                 <p><strong>Mascota:</strong> <span id="mascotaEliminar"></span></p>
                 <p class="texto-advertencia">Esta acción no se puede deshacer.</p>
@@ -1443,12 +1448,12 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
     <div class="modal-alerta-demo" id="modalAlertaDemo">
         <div class="contenido-modal-alerta">
             <div class="encabezado-modal-alerta">
-                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <h3 class="titulo-modal-alerta"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffea00" stroke-width="0.5"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.61617 3.6419C10.6736 1.80296 13.3268 1.80296 14.3841 3.6419L22.4271 17.6296C23.4813 19.463 22.1579 21.7504 20.0431 21.7504H3.95721C1.84242 21.7504 0.519055 19.463 1.57322 17.6296L9.61617 3.6419ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V9C11.25 8.58579 11.5858 8.25 12 8.25ZM12.5675 17.5008C12.8446 17.1929 12.8196 16.7187 12.5117 16.4416C12.2038 16.1645 11.7296 16.1894 11.4525 16.4973L11.4425 16.5084C11.1654 16.8163 11.1904 17.2905 11.4983 17.5676C11.8062 17.8447 12.2804 17.8197 12.5575 17.5119L12.5675 17.5008Z" fill="#ffea00"></path></svg> Funcionalidad no disponible</h3>
                 <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
             </div>
             
             <div class="cuerpo-modal-alerta">
-                <div class="icono-alerta-demo">🔒</div>
+                <div class="icono-alerta-demo"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M263.72-96Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624h24v-96q0-79.68 56.23-135.84 56.22-56.16 136-56.16Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Zm216.49-192Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM360-624h240v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85v96Z"/></svg></div>
                 <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
                 
                 <div class="detalles-alerta">
@@ -1463,8 +1468,8 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
 
             <div class="botones-modal-alerta">
                 <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
-                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔓 Iniciar Sesión</button>
-                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M263.72-96Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624h24v-96q0-79.68 56.23-135.84 56.22-56.16 136-56.16Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Zm216.49-192Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM360-624h240v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85v96Z"/></svg> Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#AAC1F0"><path d="M336-240h288v-72H336v72Zm0-144h288v-72H336v72ZM263.72-96Q234-96 213-117.15T192-168v-624q0-29.7 21.15-50.85Q234.3-864 264-864h312l192 192v504q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72ZM528-624h168L528-792v168Z"/></svg> Registrarse</button>
             </div>
         </div>
     </div>

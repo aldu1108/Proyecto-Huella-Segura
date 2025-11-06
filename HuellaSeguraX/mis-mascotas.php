@@ -43,7 +43,7 @@ if (isset($_GET['mensaje'])) {
     switch ($_GET['mensaje']) {
         case 'mascota_agregada':
             $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : 'la mascota';
-            $mensaje = "¡$nombre ha sido agregada exitosamente! 🐾";
+            $mensaje = "¡$nombre ha sido agregada exitosamente! ";
             $tipo_mensaje = 'success';
             break;
     }
@@ -111,7 +111,7 @@ if (isset($_GET['error'])) {
         <!-- Barra de búsqueda -->
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Buscar mascotas, veterinarios, recordatorios...">
-            <button class="filter-btn">🔍</button>
+            <button class="filter-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"/></svg></button>
         </div>
 
         <!-- Sección Mis Mascotas -->
@@ -159,9 +159,9 @@ if (isset($_GET['error'])) {
 
             <!-- Sugerencia adopción -->
             <div class="adopcion-banner">
-                <h4>🐾 ¿Buscas una nueva mascota?</h4>
+                <h4> ¿Buscas una nueva mascota?</h4>
                 <p>Hay mascotas esperando un hogar. La adopción es amor puro.</p>
-                <button class="btn-adopcion">❤️ Ver Mascotas en Adopción</button>
+                <button class="btn-adopcion"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> Ver Mascotas en Adopción</button>
             </div>
         </section>
     </main>
