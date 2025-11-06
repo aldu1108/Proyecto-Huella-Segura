@@ -159,10 +159,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($recompensa > 0) {
-            $descripcion_completa .= "\n\n💰 RECOMPENSA: €" . number_format($recompensa, 2);
+            $descripcion_completa .= "\n\n<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#75FB4C\"><path d=\"M444-144v-80q-51-11-87.5-46T305-357l74-30q8 36 40.5 64.5T487-294q39 0 64-20t25-52q0-30-22.5-50T474-456q-78-28-114-61.5T324-604q0-50 32.5-86t87.5-47v-79h72v79q72 12 96.5 55t25.5 45l-70 29q-8-26-32-43t-53-17q-35 0-58 18t-23 44q0 26 25 44.5t93 41.5q70 23 102 60t32 94q0 57-37 96t-101 49v77h-72Z\"/></svg> RECOMPENSA: €" . number_format($recompensa, 2);
         }
 
-        $descripcion_completa .= "\n\n¿Has visto a " . $nombre_mascota . "? ¡Contacta inmediatamente! 📞";
+        $descripcion_completa .= "\n\n¿Has visto a " . $nombre_mascota . "? ¡Contacta inmediatamente! <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"20px\" viewBox=\"0 -960 960 960\" width=\"20px\" fill=\"#5985E1\"><path d=\"M744-481q0-109-77.5-186.5T480-745v-72q70 0 131 26.5t106.5 72Q763-673 789.5-612T816-481h-72Zm-144 0q0-50-35-85t-85-35v-72q80 0 136 56t56 136h-72Zm163 336q-121-9-229.5-59.5T339-341q-86-86-136-194.5T144-765q-2-21 12.5-36.5T192-817h136q17 0 29.5 10.5T374-780l24 107q2 13-1.5 25T385-628l-97 98q20 38 46 73t58 66q30 30 64 55.5t72 45.5l99-96q8-8 20-11.5t25-1.5l107 23q17 5 27 17.5t10 29.5v136q0 21-16 35.5T763-145Z\"/></svg>";
 
         // Iniciar transacción
         mysqli_autocommit($conexion, FALSE);
