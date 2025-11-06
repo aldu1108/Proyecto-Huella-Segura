@@ -112,9 +112,9 @@ $resultado_grupos = $conexion->query($consulta_grupos);
 
         <!-- Navegación de secciones -->
         <nav class="section-nav">
-            <button class="section-btn active" data-section="feed">📰 Feed</button>
-            <button class="section-btn" data-section="eventos">📅 Eventos</button>
-            <button class="section-btn" data-section="grupos">👥 Grupos</button>
+            <button class="section-btn active" data-section="feed"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#CCCCCC"><path d="M160-120q-33 0-56.5-23.5T80-200v-640l67 67 66-67 67 67 67-67 66 67 67-67 67 67 66-67 67 67 67-67 66 67 67-67v640q0 33-23.5 56.5T800-120H160Zm0-80h280v-240H160v240Zm360 0h280v-80H520v80Zm0-160h280v-80H520v80ZM160-520h640v-120H160v120Z"/></svg> Feed</button>
+            <button class="section-btn" data-section="eventos"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Z"/></svg> Eventos</button>
+            <button class="section-btn" data-section="grupos"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm320 280q34 0 56.5-20t23.5-60q1-34-22.5-57T680-360q-34 0-57 23t-23 57q0 34 23 57t57 23ZM864-40 762-142q-18 11-38.5 16.5T680-120q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 43.5T818-198L920-96l-56 56ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q32 0 64.5 3.5T489-425q-24 32-36.5 69T440-280q0 32 8 62.5t24 57.5H40Zm720-480q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113Z"/></svg> Grupos</button>
         </nav>
 
         <!-- Sección Feed -->
@@ -131,28 +131,28 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 <label for="tipo_post">Tipo de post:</label>
                                 <select name="tipo_post" id="tipo_post" required <?php echo $rol_usuario == 'demo' ? 'disabled' : ''; ?>>
                                     <option value="general">General</option>
-                                    <option value="logro">🏆 Logro</option>
-                                    <option value="paseo">🐾 Paseo</option>
-                                    <option value="ayuda">❤️ Ayuda</option>
+                                    <option value="logro"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M280-120v-80h160v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80v-80h400v80h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h160v80H280Zm0-408v-152h-80v40q0 38 22 68.5t58 43.5Zm400 0q36-13 58-43.5t22-68.5v-40h-80v152Z"/></svg> Logro</option>
+                                    <option value="paseo"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="M194-80v-271l197 197q54-54 96.5-116.5T530-409q0-56-22-107.5T447-607L334-720h140l160-160 82 82q40 40 62 90.5T800-600q0 57-22 107.5T716-402l-82 82v240H194Zm197-187L183-475q-11-11-17-26t-6-31q0-16 6-30.5t17-25.5l84-85 124 123q28 28 43.5 64.5T450-409q0 40-15 76.5T391-267Z"/></svg> Paseo</option>
+                                    <option value="ayuda"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg> Ayuda</option>
                                 </select>
                             </div>
                             
                             <div class="acciones-post">
                                 <?php if ($rol_usuario == 'demo'): ?>
                                     <button type="button" class="btn-adjuntar" onclick="mostrarModalAlerta('Inicia sesión para adjuntar imágenes\n\nRegístrate para compartir fotos de tus mascotas con la comunidad')">
-                                        📎 Adjuntar imágenes
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="M720-330q0 104-73 177T470-80q-104 0-177-73t-73-177v-370q0-75 52.5-127.5T400-880q75 0 127.5 52.5T580-700v350q0 46-32 78t-78 32q-46 0-78-32t-32-78v-370h80v370q0 13 8.5 21.5T470-320q13 0 21.5-8.5T500-350v-350q-1-42-29.5-71T400-800q-42 0-71 29t-29 71v370q-1 71 49 120.5T470-160q70 0 119-49.5T640-330v-390h80v390Z"/></svg> Adjuntar imágenes
                                     </button>
                                     <button type="button" class="btn-publicar" onclick="mostrarModalAlerta('Inicia sesión para publicar\n\nRegístrate para poder:\n• Compartir experiencias con tu mascota\n• Hacer preguntas a la comunidad\n• Conectar con otros dueños')">
-                                        ✉️ Publicar
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F3F3F3"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/></svg> Publicar
                                     </button>
                                 <?php else: ?>
                                     <label for="imagenes_post" class="btn-adjuntar">
-                                        📎 Adjuntar imágenes
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#cb7a17ff"><path d="M720-330q0 104-73 177T470-80q-104 0-177-73t-73-177v-370q0-75 52.5-127.5T400-880q75 0 127.5 52.5T580-700v350q0 46-32 78t-78 32q-46 0-78-32t-32-78v-370h80v370q0 13 8.5 21.5T470-320q13 0 21.5-8.5T500-350v-350q-1-42-29.5-71T400-800q-42 0-71 29t-29 71v370q-1 71 49 120.5T470-160q70 0 119-49.5T640-330v-390h80v390Z"/></svg> Adjuntar imágenes
                                         <input type="file" name="imagenes_post[]" id="imagenes_post" accept="image/*" multiple style="display: none;" onchange="previsualizarImagenes(this)">
                                     </label>
                                     
                                     <button type="submit" name="crear_post" class="btn-publicar">
-                                        ✉️ Publicar
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F3F3F3"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/></svg> Publicar
                                     </button>
                                 <?php endif; ?>
                             </div>
@@ -180,15 +180,15 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 switch($post['tipo_post']) {
                                     case 'logro':
                                         $badge_class = 'badge-logro';
-                                        $badge_text = '🏆 Logro';
+                                        $badge_text = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="18px" fill="#F19E39"><path d="M280-120v-80h160v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80v-80h400v80h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h160v80H280Zm0-408v-152h-80v40q0 38 22 68.5t58 43.5Zm400 0q36-13 58-43.5t22-68.5v-40h-80v152Z"/></svg> Logro';
                                         break;
                                     case 'paseo':
                                         $badge_class = 'badge-paseo';
-                                        $badge_text = '🐾 Paseo';
+                                        $badge_text = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="18px" fill="#cb7a17ff"><path d="M194-80v-271l197 197q54-54 96.5-116.5T530-409q0-56-22-107.5T447-607L334-720h140l160-160 82 82q40 40 62 90.5T800-600q0 57-22 107.5T716-402l-82 82v240H194Zm197-187L183-475q-11-11-17-26t-6-31q0-16 6-30.5t17-25.5l84-85 124 123q28 28 43.5 64.5T450-409q0 40-15 76.5T391-267Z"/></svg> Paseo';
                                         break;
                                     case 'ayuda':
                                         $badge_class = 'badge-ayuda';
-                                        $badge_text = '❤️ Ayuda';
+                                        $badge_text = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="18px" fill="#EA3323"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg> Ayuda';
                                         break;
                                 }
                                 if ($badge_text): ?>
@@ -206,7 +206,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                         </button>
                                         <div class="post-menu-opciones" id="menu-post-<?php echo $post['id_post']; ?>" style="display: none;">
                                             <button class="menu-opcion-eliminar" onclick="eliminarPost(<?php echo $post['id_post']; ?>, this)">
-                                                🗑️ Eliminar post
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm80-160h80v-360h-80v360Zm160 0h80v-360h-80v360Z"/></svg> Eliminar post
                                             </button>
                                             <?php if ($rol_usuario == 'admin' && $post['id_usuario'] != $usuario_id): ?>
                                                 <span class="menu-nota-admin">Como administrador</span>
@@ -236,13 +236,13 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 <button class="action-btn btn-like <?php echo $post['usuario_dio_like'] > 0 ? 'liked' : ''; ?>" 
                                         data-post-id="<?php echo $post['id_post']; ?>"
                                         onclick="toggleLike(this)">
-                                    ❤️ <?php echo $post['total_likes']; ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> <?php echo $post['total_likes']; ?>
                                 </button>
                                 <button class="action-btn btn-comentarios" onclick="toggleComentarios(<?php echo $post['id_post']; ?>)">
-                                    💬 <?php echo $post['total_comentarios']; ?>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EFEFEF"><path d="M168-192q-29.7 0-50.85-21.16Q96-234.32 96-264.04v-432.24Q96-726 117.15-747T168-768h624q29.7 0 50.85 21.16Q864-725.68 864-695.96v432.24Q864-234 842.85-213T792-192H168Zm48-120h528v-72H216v72Zm0-132h528v-72H216v72Zm0-132h384v-72H216v72Z"/></svg> <?php echo $post['total_comentarios']; ?>
                                 </button>
                                 <button class="action-btn btn-compartir" onclick="compartirPost(<?php echo $post['id_post']; ?>, '<?php echo htmlspecialchars($post['titulo']); ?>')">
-                                    🔤 Compartir
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0000F5"><path d="M648-96q-50 0-85-35t-35-85q0-9 4-29L295-390q-16 14-36.05 22-20.04 8-42.95 8-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 43 8t36 22l237-145q-2-7-3-13.81-1-6.81-1-15.19 0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-43-8t-36-22L332-509q2 7 3 13.81 1 6.81 1 15.19 0 8.38-1 15.19-1 6.81-3 13.81l237 145q16-14 36.05-22 20.04-8 42.95-8 50 0 85 35t35 85q0 50-35 85t-85 35Z"/></svg> Compartir
                                 </button>
                             </div>
                             
@@ -276,7 +276,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                         onclick="eliminarComentario(<?php echo $comentario['id_comentario']; ?>, this)"
                                         data-post-id="<?php echo $post_id; ?>"
                                         title="Eliminar comentario">
-                                    🗑️
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm80-160h80v-360h-80v360Zm160 0h80v-360h-80v360Z"/></svg>
                                 </button>
                             <?php endif; ?>
                         </div>
@@ -300,7 +300,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); enviarComentario(this);}"
             ></textarea>
             <button class="btn-enviar-comentario" onclick="enviarComentario(this.previousElementSibling)">
-                ➤
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999"><path d="M120-160v-240l320-80-320-80v-240l760 320-760 320Z"/></svg>
             </button>
         </div>
         <small class="comentario-ayuda">Presiona Enter para enviar, Shift+Enter para nueva línea</small>
@@ -317,7 +317,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 <h4>María García</h4>
                                 <p>Hace 2 horas</p>
                             </div>
-                            <span class="post-badge badge-logro">🏆 Logro</span>
+                            <span class="post-badge badge-logro"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M288-144v-72h156v-124q-42-8-77.5-33.5T313-434q-73-9-121-62.5T144-622v-26q0-30 21-51t51-21h72v-96h384v96h72q30 0 51 21t21 51v24q0 72-48 126.5T647-434q-18 35-53.5 60.5T516-340v124h156v72H288Zm0-372v-132h-72v24q0 37 19 65.5t53 42.5Zm384 0q34-14 53-42.5t19-65.5v-24h-72v132Z"/></svg> Logro</span>
                         </div>
                         <div class="post-content">
                             <h3 class="post-titulo">¡Primer examen veterinario aprobado!</h3>
@@ -326,13 +326,13 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                         </div>
                         <div class="post-actions">
                             <?php if ($rol_usuario == 'demo'): ?>
-                                <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para dar me gusta')">❤️ 24</button>
-                                <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para comentar')">💬 5</button>
-                                <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para compartir')">🔤 Compartir</button>
+                                <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para dar me gusta')"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> <?php echo $post['total_likes']; ?> 24</button>
+                                <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para comentar')"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EFEFEF"><path d="M168-192q-29.7 0-50.85-21.16Q96-234.32 96-264.04v-432.24Q96-726 117.15-747T168-768h624q29.7 0 50.85 21.16Q864-725.68 864-695.96v432.24Q864-234 842.85-213T792-192H168Zm48-120h528v-72H216v72Zm0-132h528v-72H216v72Zm0-132h384v-72H216v72Z"/></svg> <?php echo $post['total_comentarios']; ?>5</button>
+                                <button class="action-btn" onclick="mostrarModalAlerta('Inicia sesión para compartir')"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0000F5"><path d="M648-96q-50 0-85-35t-35-85q0-9 4-29L295-390q-16 14-36.05 22-20.04 8-42.95 8-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 43 8t36 22l237-145q-2-7-3-13.81-1-6.81-1-15.19 0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-43-8t-36-22L332-509q2 7 3 13.81 1 6.81 1 15.19 0 8.38-1 15.19-1 6.81-3 13.81l237 145q16-14 36.05-22 20.04-8 42.95-8 50 0 85 35t35 85q0 50-35 85t-85 35Z"/></svg> Compartir</button>
                             <?php else: ?>
-                                <button class="action-btn">❤️ 24</button>
-                                <button class="action-btn">💬 5</button>
-                                <button class="action-btn">🔤 Compartir</button>
+                                <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> <?php echo $post['total_likes']; ?> 24</button>
+                                <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EFEFEF"><path d="M168-192q-29.7 0-50.85-21.16Q96-234.32 96-264.04v-432.24Q96-726 117.15-747T168-768h624q29.7 0 50.85 21.16Q864-725.68 864-695.96v432.24Q864-234 842.85-213T792-192H168Zm48-120h528v-72H216v72Zm0-132h528v-72H216v72Zm0-132h384v-72H216v72Z"/></svg> <?php echo $post['total_comentarios']; ?>5</button>
+                                <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0000F5"><path d="M648-96q-50 0-85-35t-35-85q0-9 4-29L295-390q-16 14-36.05 22-20.04 8-42.95 8-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 43 8t36 22l237-145q-2-7-3-13.81-1-6.81-1-15.19 0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-43-8t-36-22L332-509q2 7 3 13.81 1 6.81 1 15.19 0 8.38-1 15.19-1 6.81-3 13.81l237 145q16-14 36.05-22 20.04-8 42.95-8 50 0 85 35t35 85q0 50-35 85t-85 35Z"/></svg>  Compartir</button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -344,17 +344,17 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                                 <h4>Carlos Ruiz</h4>
                                 <p>Hace 4 horas</p>
                             </div>
-                            <span class="post-badge badge-ayuda">❤️ Ayuda</span>
+                            <span class="post-badge badge-ayuda"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> <?php echo $post['total_likes']; ?> Ayuda</span>
                         </div>
                         <div class="post-content">
                             <h3 class="post-titulo">Busco veterinario especialista en gatos</h3>
                             <p>¿Alguien sabe de un buen veterinario especialista en gatos en la zona de Salamanca? Mi gatito necesita una revisión especializada.</p>
-                            <div class="location-tag">📍 Madrid, Salamanca</div>
+                            <div class="location-tag"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0000F5"><path d="M648-96q-50 0-85-35t-35-85q0-9 4-29L295-390q-16 14-36.05 22-20.04 8-42.95 8-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 43 8t36 22l237-145q-2-7-3-13.81-1-6.81-1-15.19 0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-43-8t-36-22L332-509q2 7 3 13.81 1 6.81 1 15.19 0 8.38-1 15.19-1 6.81-3 13.81l237 145q16-14 36.05-22 20.04-8 42.95-8 50 0 85 35t35 85q0 50-35 85t-85 35Z"/></svg>  Madrid, Salamanca</div>
                         </div>
                         <div class="post-actions">
-                            <button class="action-btn">❤️ 12</button>
-                            <button class="action-btn">💬 8</button>
-                            <button class="action-btn">🔤 Compartir</button>
+                            <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> <?php echo $post['total_likes']; ?> 14</button>
+                                <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EFEFEF"><path d="M168-192q-29.7 0-50.85-21.16Q96-234.32 96-264.04v-432.24Q96-726 117.15-747T168-768h624q29.7 0 50.85 21.16Q864-725.68 864-695.96v432.24Q864-234 842.85-213T792-192H168Zm48-120h528v-72H216v72Zm0-132h528v-72H216v72Zm0-132h384v-72H216v72Z"/></svg> <?php echo $post['total_comentarios']; ?>8</button>
+                                <button class="action-btn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0000F5"><path d="M648-96q-50 0-85-35t-35-85q0-9 4-29L295-390q-16 14-36.05 22-20.04 8-42.95 8-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 43 8t36 22l237-145q-2-7-3-13.81-1-6.81-1-15.19 0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-43-8t-36-22L332-509q2 7 3 13.81 1 6.81 1 15.19 0 8.38-1 15.19-1 6.81-3 13.81l237 145q16-14 36.05-22 20.04-8 42.95-8 50 0 85 35t35 85q0 50-35 85t-85 35Z"/></svg>  Compartir</button>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -390,7 +390,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                         </button>
                         <div class="evento-menu-opciones" id="menu-evento-<?php echo $evento['id_evento']; ?>" style="display: none;">
                             <button class="menu-opcion-eliminar-evento" onclick="eliminarEvento(<?php echo $evento['id_evento']; ?>, this)">
-                                🗑️ Eliminar evento
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg> Eliminar evento
                             </button>
                             <?php if ($rol_usuario == 'admin' && !$es_creador): ?>
                                 <span class="menu-nota-admin-evento">Como administrador</span>
@@ -407,9 +407,9 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                     <h4><?php echo htmlspecialchars($evento['titulo']); ?></h4>
                     <p class="evento-descripcion"><?php echo htmlspecialchars($evento['descripcion']); ?></p>
                     <div class="evento-details">
-                        🕐 <?php echo $fecha_evento->format('H:i'); ?> 
-                        📍 <?php echo htmlspecialchars($evento['ubicacion']); ?> 
-                        👥 <?php echo $evento['contador_asistentes']; ?> asistirán
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M480-96q-70 0-131.13-26.6-61.14-26.6-106.4-71.87-45.27-45.26-71.87-106.4Q144-362 144-432t26.6-131.13q26.6-61.14 71.87-106.4 45.26-45.27 106.4-71.87Q410-768 480-768t131.13 26.6q61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-502 816-432t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-96 480-96Zm100-200 51-51-115-115v-162h-72v192l136 136ZM237-845l51 51-170 170-51-51 170-170Zm486 0 170 170-51 51-170-170 51-51Z"/></svg> <?php echo $fecha_evento->format('H:i'); ?> 
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M480.21-480Q510-480 531-501.21t21-51Q552-582 530.79-603t-51-21Q450-624 429-602.79t-21 51Q408-522 429.21-501t51 21ZM480-96Q323.03-227.11 245.51-339.55 168-452 168-549q0-134 89-224.5T479.5-864q133.5 0 223 90.5T792-549q0 97-77 209T480-96Z"/></svg> <?php echo htmlspecialchars($evento['ubicacion']); ?> 
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M48-264v-57q0-39 39-63t105-24q14 0 26 1t23 3q-12 18-18.5 39.11Q216-343.77 216-322v58H48Zm216 0v-58q0-28 14.5-50t43.5-39q29-17 69-25t89.5-8q49.5 0 89 8t68.5 25q29 16 43.5 38.69Q696-349.62 696-322v58H264Zm480 0v-58q0-22-6.5-42.5T719-404q9-2 20.5-3t28.5-1q66 0 105 24t39 63v57H744ZM192-456q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm576 0q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm-288-36q-45 0-76.5-31.52T372-600.07q0-44.93 31.52-76.43 31.52-31.5 76.55-31.5 44.93 0 76.43 31.55Q588-644.9 588-600q0 45-31.55 76.5T480-492Z"/></svg> <?php echo $evento['contador_asistentes']; ?> asistirán
                     </div>
                     <?php if ($rol_usuario == 'demo'): ?>
                         <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
@@ -434,7 +434,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 <h4>Adopción Solidaria</h4>
                 <p class="evento-descripcion">Jornada de adopción de mascotas rescatadas</p>
                 <div class="evento-details">
-                    🕐 10:00 📍 Parque del Retiro 👥 45 asistirán
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M480-96q-70 0-131.13-26.6-61.14-26.6-106.4-71.87-45.27-45.26-71.87-106.4Q144-362 144-432t26.6-131.13q26.6-61.14 71.87-106.4 45.26-45.27 106.4-71.87Q410-768 480-768t131.13 26.6q61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-502 816-432t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-96 480-96Zm100-200 51-51-115-115v-162h-72v192l136 136ZM237-845l51 51-170 170-51-51 170-170Zm486 0 170 170-51 51-170-170 51-51Z"/></svg> 10:00 <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M480.21-480Q510-480 531-501.21t21-51Q552-582 530.79-603t-51-21Q450-624 429-602.79t-21 51Q408-522 429.21-501t51 21ZM480-96Q323.03-227.11 245.51-339.55 168-452 168-549q0-134 89-224.5T479.5-864q133.5 0 223 90.5T792-549q0 97-77 209T480-96Z"/></svg> Parque del Retiro <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M48-264v-57q0-39 39-63t105-24q14 0 26 1t23 3q-12 18-18.5 39.11Q216-343.77 216-322v58H48Zm216 0v-58q0-28 14.5-50t43.5-39q29-17 69-25t89.5-8q49.5 0 89 8t68.5 25q29 16 43.5 38.69Q696-349.62 696-322v58H264Zm480 0v-58q0-22-6.5-42.5T719-404q9-2 20.5-3t28.5-1q66 0 105 24t39 63v57H744ZM192-456q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm576 0q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm-288-36q-45 0-76.5-31.52T372-600.07q0-44.93 31.52-76.43 31.52-31.5 76.55-31.5 44.93 0 76.43 31.55Q588-644.9 588-600q0 45-31.55 76.5T480-492Z"/></svg> 45 asistirán
                 </div>
                 <button class="btn-join" onclick="mostrarModalAlerta('Inicia sesión para unirte a eventos')">Unirse al Evento</button>
             </div>
@@ -471,7 +471,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                         </button>
                         <div class="grupo-menu-opciones" id="menu-grupo-<?php echo $grupo['id_grupo']; ?>" style="display: none;">
                             <button class="menu-opcion-eliminar-grupo" onclick="eliminarGrupo(<?php echo $grupo['id_grupo']; ?>, this)">
-                                🗑️ Eliminar grupo
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg> Eliminar grupo
                             </button>
                             <?php if ($rol_usuario == 'admin' && !$es_creador): ?>
                                 <span class="menu-nota-admin-grupo">Como administrador</span>
@@ -496,7 +496,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
     <?php else: ?>
         <!-- Grupos de ejemplo para demo -->
         <div class="grupo-card">
-            <div class="grupo-icon">🐕</div>
+            <div class="grupo-icon"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg></div>
             <div class="grupo-info">
                 <h4>Dueños de Golden Retriever</h4>
                 <p>234 miembros</p>
@@ -513,12 +513,12 @@ $resultado_grupos = $conexion->query($consulta_grupos);
     <div class="modal-alerta-demo" id="modalAlertaDemo">
         <div class="contenido-modal-alerta">
             <div class="encabezado-modal-alerta">
-                <h3 class="titulo-modal-alerta">⚠️ Funcionalidad no disponible</h3>
+                <h3 class="titulo-modal-alerta"><svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffea00" stroke-width="0.5"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.61617 3.6419C10.6736 1.80296 13.3268 1.80296 14.3841 3.6419L22.4271 17.6296C23.4813 19.463 22.1579 21.7504 20.0431 21.7504H3.95721C1.84242 21.7504 0.519055 19.463 1.57322 17.6296L9.61617 3.6419ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V9C11.25 8.58579 11.5858 8.25 12 8.25ZM12.5675 17.5008C12.8446 17.1929 12.8196 16.7187 12.5117 16.4416C12.2038 16.1645 11.7296 16.1894 11.4525 16.4973L11.4425 16.5084C11.1654 16.8163 11.1904 17.2905 11.4983 17.5676C11.8062 17.8447 12.2804 17.8197 12.5575 17.5119L12.5675 17.5008Z" fill="#ffea00"></path></svg> Funcionalidad no disponible</h3>
                 <button class="boton-cerrar-modal-alerta" onclick="cerrarModalAlerta()">×</button>
             </div>
             
-            <div class="cuerpo-modal-alerta">
-                <div class="icono-alerta-demo">🔒</div>
+                <div class="cuerpo-modal-alerta">
+                <div class="icono-alerta-demo"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg></div>
                 <p id="mensajeAlertaDemo">Para acceder a esta función necesitas iniciar sesión o registrarte.</p>
                 
                 <div class="detalles-alerta">
@@ -531,10 +531,10 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 </div>
             </div>
 
-            <div class="botones-modal-alerta">
+             <div class="botones-modal-alerta">
                 <button type="button" class="boton-cancelar-alerta" onclick="cerrarModalAlerta()">Más tarde</button>
-                <button type="button" class="boton-login-alerta" onclick="irALogin()">🔓 Iniciar Sesión</button>
-                <button type="button" class="boton-registro-alerta" onclick="irARegistro()">📝 Registrarse</button>
+                <button type="button" class="boton-login-alerta" onclick="irALogin()"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#F19E39"><path d="M280-400q-33 0-56.5-23.5T200-480q0-33 23.5-56.5T280-560q33 0 56.5 23.5T360-480q0 33-23.5 56.5T280-400Zm0 160q-100 0-170-70T40-480q0-100 70-170t170-70q67 0 121.5 33t86.5 87h352l120 120-180 180-80-60-80 60-85-60h-47q-32 54-86.5 87T280-240Zm0-80q56 0 98.5-34t56.5-86h125l58 41 82-61 71 55 75-75-40-40H435q-14-52-56.5-86T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Z"/></svg> Iniciar Sesión</button>
+                <button type="button" class="boton-registro-alerta" onclick="irARegistro()"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg> Registrarse</button>
             </div>
         </div>
     </div>
@@ -576,7 +576,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 </div>
                 <div class="compartir-link">
                     <input type="text" id="linkCompartir" readonly>
-                    <button class="btn-copiar-link" onclick="copiarEnlace()">📋 Copiar enlace</button>
+                    <button class="btn-copiar-link" onclick="copiarEnlace()"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm0-72h528v-528H216v528Zm72-72h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8ZM216-216v-528 528Z"/></svg> Copiar enlace</button>
                 </div>
             </div>
         </div>
@@ -655,15 +655,15 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 <div class="form-group">
                     <label for="icono_grupo">Icono del Grupo *</label>
                     <select id="icono_grupo" name="icono_grupo" required class="select-icono">
-                        <option value="🐕">🐕 Perro</option>
-                        <option value="🐱">🐱 Gato</option>
-                        <option value="🐾">🐾 Huellas</option>
-                        <option value="❤️">❤️ Corazón</option>
-                        <option value="🏥">🏥 Veterinaria</option>
-                        <option value="🎓">🎓 Educación</option>
-                        <option value="🏃">🏃 Actividad</option>
-                        <option value="👥">👥 Comunidad</option>
-                        <option value="🌟">🌟 Especial</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192-96v-283l202 203q53-49 96-106t43-129q0-55-20-106t-59-90L327-720h153l144-144 60 59q42 41 64.5 94T771-599q0 60-23 114.5T681-389l-57 53v240H192Zm204-180L192-481q-8-11-12.5-23t-4.5-25q0-14 4.5-27.5T195-579l86-86 124 110q29 29 42.5 66t13.5 78q0 39-18 74t-47 61Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192-96v-283l202 203q53-49 96-106t43-129q0-55-20-106t-59-90L327-720h153l144-144 60 59q42 41 64.5 94T771-599q0 60-23 114.5T681-389l-57 53v240H192Zm204-180L192-481q-8-11-12.5-23t-4.5-25q0-14 4.5-27.5T195-579l86-86 124 110q29 29 42.5 66t13.5 78q0 39-18 74t-47 61Z"/></svg> Perro</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M120-384q-30 0-51-21t-21-51v-336q0-30 21-51t51-21h720q30 0 51 21t21 51v336q0 30-21 51t-51 21H120Zm25 144-4-72 671-35 4 72-671 35Zm-1 120v-72h672v72H144Zm276-384q75 0 143-28.5T672-624q2 44 38 70t82 26v-192q-46 0-82 26t-38 70q-42-61-109.5-90.5T420-744q-75 0-144 28.5T168-624q38 64 107.5 92T420-504Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M120-384q-30 0-51-21t-21-51v-336q0-30 21-51t51-21h720q30 0 51 21t21 51v336q0 30-21 51t-51 21H120Zm25 144-4-72 671-35 4 72-671 35Zm-1 120v-72h672v72H144Zm276-384q75 0 143-28.5T672-624q2 44 38 70t82 26v-192q-46 0-82 26t-38 70q-42-61-109.5-90.5T420-744q-75 0-144 28.5T168-624q38 64 107.5 92T420-504Z"/></svg> Gato</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M192.23-480Q152-480 124-507.77q-28-27.78-28-68Q96-616 123.77-644q27.78-28 68-28Q232-672 260-644.23q28 27.78 28 68Q288-536 260.23-508q-27.78 28-68 28Zm168-144Q320-624 292-651.77q-28-27.78-28-68Q264-760 291.77-788q27.78-28 68-28Q400-816 428-788.23q28 27.78 28 68Q456-680 428.23-652q-27.78 28-68 28Zm240 0Q560-624 532-651.77q-28-27.78-28-68Q504-760 531.77-788q27.78-28 68-28Q640-816 668-788.23q28 27.78 28 68Q696-680 668.23-652q-27.78 28-68 28Zm178 151Q736-473 706-502.77q-30-29.78-30-72Q676-617 705.77-647q29.78-30 72-30Q820-677 850-647.23q30 29.78 30 72Q880-533 850.23-503q-29.78 30-72 30ZM285-95q-38 0-65-31t-27-76q0-47 32-81t63-69q26-30 46-61t43-62q20-26 45.5-39.5T480-528q32 0 58 13t45 39q23 31 43 61.5t46 61.5q30 36 63 69.5t33 81.82Q768-158 740.5-127 713-96 674-96q-50 0-97-12t-97-12q-50 0-97.5 12.5T285-95Z"/></svg> Huellas</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m480-144-50-45q-100-89-165-152.5t-102.5-113Q125-504 110.5-545T96-629q0-89 61-150t150-61q49 0 95 21t78 59q32-38 78-59t95-21q89 0 150 61t61 150q0 43-14 83t-51.5 89q-37.5 49-103 113.5T528-187l-48 43Z"/></svg> Corazón</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#DF9D9B"><path d="M236-118 117-236q-22-20.93-22-50.97Q95-317 117-338l506-504q20.67-21 50.34-21Q703-863 724-842l119 118q21 20.93 21 50.97Q864-643 843-622L337-118q-20.67 21-50.34 21Q257-97 236-118Zm278-107 221-221 109 109q21 20 20.5 50T842-236L724-117q-20.93 21-50.97 21Q643-96 622-117L514-225Zm-34.21-142q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm-77-77q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm154 0q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM225-514 114.92-624.08Q94-645 95-675t22-51l119-117q20.93-21 50.97-21Q317-864 338-843l108 108-221 221Zm254.79-7q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#DF9D9B"><path d="M236-118 117-236q-22-20.93-22-50.97Q95-317 117-338l506-504q20.67-21 50.34-21Q703-863 724-842l119 118q21 20.93 21 50.97Q864-643 843-622L337-118q-20.67 21-50.34 21Q257-97 236-118Zm278-107 221-221 109 109q21 20 20.5 50T842-236L724-117q-20.93 21-50.97 21Q643-96 622-117L514-225Zm-34.21-142q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm-77-77q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Zm154 0q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM225-514 114.92-624.08Q94-645 95-675t22-51l119-117q20.93-21 50.97-21Q317-864 338-843l108 108-221 221Zm254.79-7q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5Z"/></svg> Veterinaria</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M840-288v-276L480-384 48-600l432-216 432 216v312h-72ZM480-144 216-276v-159l264 132 264-132v159L480-144Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M840-288v-276L480-384 48-600l432-216 432 216v312h-72ZM480-144 216-276v-159l264 132 264-132v159L480-144Z"/></svg> Educación</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M552-96v-213l-76-75-32 160-252-51 14-70 181 36 52-263-79 34v106h-72v-154l185-78q9-4 18.5-6t19.5-2q27 0 48.5 12.5T595-623l14 23q30 51 68 73.5t91 22.5v72q-57 0-106.5-25T577-528l-23 120 70 70v242h-72Zm24-600q-35 0-59.5-24.5T492-780q0-35 24.5-59.5T576-864q35 0 59.5 24.5T660-780q0 35-24.5 59.5T576-696Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M552-96v-213l-76-75-32 160-252-51 14-70 181 36 52-263-79 34v106h-72v-154l185-78q9-4 18.5-6t19.5-2q27 0 48.5 12.5T595-623l14 23q30 51 68 73.5t91 22.5v72q-57 0-106.5-25T577-528l-23 120 70 70v242h-72Zm24-600q-35 0-59.5-24.5T492-780q0-35 24.5-59.5T576-864q35 0 59.5 24.5T660-780q0 35-24.5 59.5T576-696Z"/></svg> Actividad</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M48-264v-57q0-39 39-63t105-24q14 0 26 1t23 3q-12 18-18.5 39.11Q216-343.77 216-322v58H48Zm216 0v-58q0-28 14.5-50t43.5-39q29-17 69-25t89.5-8q49.5 0 89 8t68.5 25q29 16 43.5 38.69Q696-349.62 696-322v58H264Zm480 0v-58q0-22-6.5-42.5T719-404q9-2 20.5-3t28.5-1q66 0 105 24t39 63v57H744ZM192-456q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm576 0q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm-288-36q-45 0-76.5-31.52T372-600.07q0-44.93 31.52-76.43 31.52-31.5 76.55-31.5 44.93 0 76.43 31.55Q588-644.9 588-600q0 45-31.55 76.5T480-492Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M48-264v-57q0-39 39-63t105-24q14 0 26 1t23 3q-12 18-18.5 39.11Q216-343.77 216-322v58H48Zm216 0v-58q0-28 14.5-50t43.5-39q29-17 69-25t89.5-8q49.5 0 89 8t68.5 25q29 16 43.5 38.69Q696-349.62 696-322v58H264Zm480 0v-58q0-22-6.5-42.5T719-404q9-2 20.5-3t28.5-1q66 0 105 24t39 63v57H744ZM192-456q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm576 0q-30 0-51-21t-21-51q0-30 21-51t51-21q30 0 51 21t21 51q0 30-21 51t-51 21Zm-288-36q-45 0-76.5-31.52T372-600.07q0-44.93 31.52-76.43 31.52-31.5 76.55-31.5 44.93 0 76.43 31.55Q588-644.9 588-600q0 45-31.55 76.5T480-492Z"/></svg> Comunidad</option>
+                        <option value="<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFF55"><path d="m243-144 63-266L96-589l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Z"/></svg>"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFF55"><path d="m243-144 63-266L96-589l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Z"/></svg> Especial</option>
                     </select>
                 </div>
 

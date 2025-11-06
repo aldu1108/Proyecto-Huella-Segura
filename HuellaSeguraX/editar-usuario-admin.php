@@ -131,10 +131,10 @@ $usuario = $resultado->fetch_assoc();
 <body class="admin-panel">
     <header class="header-admin">
         <div class="logo-admin">
-            <h1>🛡️ Panel Administrativo</h1>
+            <h1><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5985E1"><path d="M480-96q-135-33-223.5-152.84Q168-368.69 168-515v-229l312-120 312 120v229q0 146.31-88.5 266.16Q615-129 480-96Z"/></svg> Panel Administrativo</h1>
         </div>
         <div class="acciones-admin">
-            <a href="panel-admin.php" class="boton-logout">⬅️ Volver al Panel</a>
+            <a href="panel-admin.php" class="boton-logout"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M384-288 192-480l192-192 51 51-105 105h438v72H330l105 105-51 51Z"/></svg> Volver al Panel</a>
         </div>
     </header>
 
@@ -147,7 +147,7 @@ $usuario = $resultado->fetch_assoc();
 
         <!-- Formulario de datos básicos -->
         <form method="POST" class="formulario-edicion">
-            <h2>✏️ Editar Información del Usuario</h2>
+            <h2><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFF55"><path d="M144-144v-153l498-498q11-11 24-16t27-5q14 0 27 5t24 16l51 51q11 11 16 24t5 27q0 14-5 27t-16 24L297-144H144Zm549-498 51-51-51-51-51 51 51 51Z"/></svg> Editar Información del Usuario</h2>
 
             <input type="hidden" name="email_original" value="<?php echo htmlspecialchars($email); ?>">
 
@@ -202,17 +202,17 @@ $usuario = $resultado->fetch_assoc();
 
             <div class="grupo-botones">
                 <button type="submit" name="guardar_cambios" class="boton boton-guardar">
-                    💾 Guardar Cambios
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M816-672v456q0 29.7-21.15 50.85Q773.7-144 744-144H216q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h456l144 144ZM480-252q45 0 76.5-31.5T588-360q0-45-31.5-76.5T480-468q-45 0-76.5 31.5T372-360q0 45 31.5 76.5T480-252ZM264-552h336v-144H264v144Z"/></svg> Guardar Cambios
                 </button>
                 <a href="ver-usuario.php?email=<?php echo urlencode($email); ?>" class="boton boton-cancelar">
-                    ❌ Cancelar
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg> Cancelar
                 </a>
             </div>
         </form>
 
         <!-- Formulario de cambio de contraseña -->
         <form method="POST" class="formulario-edicion seccion-peligro">
-            <h3>🔒 Cambiar Contraseña</h3>
+            <h3><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M263.72-96Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624h24v-96q0-79.68 56.23-135.84 56.22-56.16 136-56.16Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Zm216.49-192Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM360-624h240v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85v96Z"/></svg> Cambiar Contraseña</h3>
             <p style="color: #666; margin-bottom: 15px;">
                 Esta acción cambiará la contraseña del usuario. Úsala con precaución.
             </p>
@@ -230,7 +230,7 @@ $usuario = $resultado->fetch_assoc();
             </div>
 
             <button type="submit" name="cambiar_contrasena" class="boton boton-guardar">
-                🔐 Actualizar Contraseña
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39"><path d="M263.72-96Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624h24v-96q0-79.68 56.23-135.84 56.22-56.16 136-56.16Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Zm216.49-192Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM360-624h240v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85v96Z"/></svg> Actualizar Contraseña
             </button>
         </form>
     </div>

@@ -99,7 +99,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
 
     <main class="main-content">
         <div class="contenedor-busqueda">
-            <h1>🔍 Resultados de búsqueda</h1>
+            <h1><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d35400"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg> Resultados de búsqueda</h1>
             
             <!-- Barra de búsqueda en página de resultados -->
             <form action="buscar.php" method="GET" class="form-busqueda-pagina">
@@ -109,18 +109,17 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
                        placeholder="Buscar..." 
                        value="<?php echo htmlspecialchars($termino); ?>"
                        required>
-                <button type="submit" class="boton-buscar-pagina">🔍 Buscar</button>
+                <button type="submit" class="boton-buscar-pagina"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d35400"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg> Buscar</button>
             </form>
 
             <?php if (empty($termino)): ?>
                 <div class="sin-resultados">
-                    <div style="font-size: 64px;">🔍</div>
+                    <div style="font-size: 64px;"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d35400"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
                     <h3>Ingresa un término para buscar</h3>
                     <p>Puedes buscar mascotas, veterinarios, adopciones y más</p>
                 </div>
             <?php elseif ($total_resultados == 0): ?>
                 <div class="sin-resultados">
-                    <div style="font-size: 64px;">😕</div>
                     <h3>No se encontraron resultados para "<?php echo htmlspecialchars($termino); ?>"</h3>
                     <p>Intenta con otros términos de búsqueda</p>
                 </div>
@@ -150,7 +149,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
                 <!-- Veterinarios -->
                 <?php if (!empty($resultados['veterinarios'])): ?>
                     <section class="seccion-resultados">
-                        <h2>🩺 Veterinarios (<?php echo count($resultados['veterinarios']); ?>)</h2>
+                        <h2><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5985E1"><path d="M540-80q-108 0-184-76t-76-184v-23q-86-14-143-80.5T80-600v-240h120v-40h80v160h-80v-40h-40v160q0 66 47 113t113 47q66 0 113-47t47-113v-160h-40v40h-80v-160h80v40h120v240q0 90-57 156.5T360-363v23q0 75 52.5 127.5T540-160q75 0 127.5-52.5T720-340v-67q-35-12-57.5-43T640-520q0-50 35-85t85-35q50 0 85 35t35 85q0 39-22.5 70T800-407v67q0 108-76 184T540-80Zm220-400q17 0 28.5-11.5T800-520q0-17-11.5-28.5T760-560q-17 0-28.5 11.5T720-520q0 17 11.5 28.5T760-480Zm0-40Z"/></svg> Veterinarios (<?php echo count($resultados['veterinarios']); ?>)</h2>
                         <div class="grid-resultados">
                             <?php foreach ($resultados['veterinarios'] as $vet): ?>
                                 <a href="veterinaria.php?vet=<?php echo $vet['id_usuario']; ?>" class="card-resultado">
@@ -160,7 +159,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
                                     <div class="info-resultado">
                                         <h4>Dr. <?php echo htmlspecialchars($vet['nombre_usuario'] . ' ' . $vet['apellido_usuario']); ?></h4>
                                         <p><?php echo htmlspecialchars($vet['especialidad']); ?></p>
-                                        <p style="font-size: 0.85rem; color: #666;">🏥 <?php echo htmlspecialchars($vet['clinica']); ?></p>
+                                        <p style="font-size: 0.85rem; color: #666;"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#DF9D9B"><path d="M480-254 330-104q-23 23-56 23t-56-23L104-218q-23-23-23-56t23-56l150-150-150-150q-23-23-23-56t23-56l114-114q23-23 56-23t56 23l150 150 150-150q23-23 56-23t56 23l114 114q23 23 23 56t-23 56L706-480l150 150q23 23 23 56t-23 56L742-104q-23 23-56 23t-56-23L480-254Zm0-266q17 0 28.5-11.5T520-560q0-17-11.5-28.5T480-600q-17 0-28.5 11.5T440-560q0 17 11.5 28.5T480-520Zm-170-16 114-114-150-150-114 114 150 150Zm90 96q17 0 28.5-11.5T440-480q0-17-11.5-28.5T400-520q-17 0-28.5 11.5T360-480q0 17 11.5 28.5T400-440Zm80 80q17 0 28.5-11.5T520-400q0-17-11.5-28.5T480-440q-17 0-28.5 11.5T440-400q0 17 11.5 28.5T480-360Zm80-80q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520q-17 0-28.5 11.5T520-480q0 17 11.5 28.5T560-440Zm-24 130 150 150 114-114-150-150-114 114ZM339-621Zm282 282Z"/></svg> <?php echo htmlspecialchars($vet['clinica']); ?></p>
                                     </div>
                                 </a>
                             <?php endforeach; ?>
@@ -171,7 +170,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
                 <!-- Adopciones -->
                 <?php if (!empty($resultados['adopciones'])): ?>
                     <section class="seccion-resultados">
-                        <h2>❤️ En Adopción (<?php echo count($resultados['adopciones']); ?>)</h2>
+                        <h2><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg> En Adopción (<?php echo count($resultados['adopciones']); ?>)</h2>
                         <div class="grid-resultados">
                             <?php foreach ($resultados['adopciones'] as $adopcion): ?>
                                 <a href="adopciones.php?id=<?php echo $adopcion['id_anuncio']; ?>" class="card-resultado">
@@ -181,7 +180,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
                                     <div class="info-resultado">
                                         <h4><?php echo htmlspecialchars($adopcion['nombre_mascota']); ?></h4>
                                         <p><?php echo ucfirst($adopcion['tipo']); ?></p>
-                                        <p style="font-size: 0.85rem; color: #666;">📍 <?php echo htmlspecialchars($adopcion['lugar_adopcion']); ?></p>
+                                        <p style="font-size: 0.85rem; color: #666;"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg> <?php echo htmlspecialchars($adopcion['lugar_adopcion']); ?></p>
                                     </div>
                                     <span class="badge-adopcion">En adopción</span>
                                 </a>
@@ -204,7 +203,7 @@ $total_resultados = count($resultados['mascotas']) + count($resultados['veterina
                                         <h4><?php echo htmlspecialchars($perdida['nombre_mascota']); ?></h4>
                                         <p><?php echo ucfirst($perdida['tipo']); ?></p>
                                         <p style="font-size: 0.85rem; color: #666;">
-                                            📍 <?php echo htmlspecialchars($perdida['ultima_ubicacion']); ?> • 
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/></svg> <?php echo htmlspecialchars($perdida['ultima_ubicacion']); ?> • 
                                             <?php 
                                             $dias = (time() - strtotime($perdida['fecha_perdida'])) / (60 * 60 * 24);
                                             echo 'Hace ' . floor($dias) . ' días';

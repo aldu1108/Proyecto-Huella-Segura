@@ -34,10 +34,10 @@ if ($_GET && isset($_GET['accion']) && isset($_GET['email'])) {
             $update_rol = "UPDATE usuarios SET rol = 'veterinario' WHERE id_usuario = " . $veterinario['id_usuario'];
 
             if ($conexion->query($update_vet) && $conexion->query($update_rol)) {
-                $mensaje = "✅ Veterinario $nombre_completo APROBADO exitosamente. Ya puede acceder al sistema.";
+                $mensaje = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#75FB4C\"><path d=\"M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z\"/></svg> Veterinario $nombre_completo APROBADO exitosamente. Ya puede acceder al sistema.";
                 $tipo = "success";
         } else {
-            $mensaje = "❌ Error al aprobar al veterinario $nombre_completo";
+            $mensaje = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#EA3323\"><path d=\"m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z\"/></svg> Error al aprobar al veterinario $nombre_completo";
             $tipo = "error";
         }
 
@@ -47,15 +47,15 @@ if ($_GET && isset($_GET['accion']) && isset($_GET['email'])) {
             $delete_user = "DELETE FROM usuarios WHERE id_usuario = " . $veterinario['id_usuario'];
 
             if ($conexion->query($delete_vet) && $conexion->query($delete_user)) {
-                $mensaje = "❌ Veterinario $nombre_completo RECHAZADO y eliminado del sistema.";
+                $mensaje = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#EA3323\"><path d=\"m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z\"/></svg> Veterinario $nombre_completo RECHAZADO y eliminado del sistema.";
                 $tipo = "warning";
             } else {
-                $mensaje = "❌ Error al rechazar al veterinario $nombre_completo";
+                $mensaje = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#EA3323\"><path d=\"m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z\"/></svg> Error al rechazar al veterinario $nombre_completo";
                 $tipo = "error";
             }
         }
     } else {
-        $mensaje = "❌ Veterinario no encontrado o ya procesado";
+        $mensaje = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#EA3323\"><path d=\"m336-280-56-56 144-144-144-143 56-56 144 144 143-144 56 56-144 143 144 144-56 56-143-144-144 144Z\"/></svg> Veterinario no encontrado o ya procesado";
         $tipo = "error";
     }
 }
