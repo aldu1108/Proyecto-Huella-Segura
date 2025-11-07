@@ -482,7 +482,7 @@ function tiempoTranscurrido($fecha)
                                         <div class="grupo-input campo-completo">
                                             <label class="etiqueta-input requerido">Última ubicación conocida</label>
                                             <div class="campo-ubicacion">
-                                                <input type="text" class="input-form" placeholder="<svg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px' fill='#EA3323'><path d='M480.21-480Q510-480 531-501.21t21-51Q552-582 530.79-603t-51-21Q450-624 429-602.79t-21 51Q408-522 429.21-501t51 21ZM480-96Q323.03-227.11 245.51-339.55 168-452 168-549q0-134 89-224.5T479.5-864q133.5 0 223 90.5T792-549q0 97-77 209T480-96Z'/></svg> Dirección o punto de referencia"
+                                                <input type="text" class="input-form" placeholder="Dirección o punto de referencia"
                                                     name="ultima_ubicacion" required
                                                     value="<?php echo $modo_edicion ? htmlspecialchars($reporte_editar['ultima_ubicacion']) : ''; ?>">
                                                 <button type="button" class="boton-gps" onclick="obtenerUbicacion()">GPS</button>
@@ -677,7 +677,7 @@ function tiempoTranscurrido($fecha)
         <div class="modal-container-perdidas">
             <div class="modal-header-perdidas">
                 <button class="modal-close-perdidas" onclick="cerrarModalEncontrada()">×</button>
-                <div class="modal-icon-perdidas success">🎉</div>
+                <div class="modal-icon-perdidas success"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#8B7DBE"><path d="m243-145 63-266L96-590l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Zm430-527 22-89-71-59 94-8 36-84 37 84 93 8-71 59 21 89-80-47-81 47Z"/></svg></div>
                 <h3 class="modal-title-perdidas">¡Excelente Noticia!</h3>
                 <p class="modal-subtitle-perdidas">Marcar mascota como encontrada</p>
             </div>
