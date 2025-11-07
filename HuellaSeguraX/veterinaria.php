@@ -215,9 +215,12 @@ $fecha_hoy = date('Y-m-d');
 // CAMBIO: Si es veterinario, mostrar citas donde él es el veterinario asignado
 // Si es usuario normal, mostrar citas de sus mascotas
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
-    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario, v.clinica as vet_clinica, v.especialidad,
-                          u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
-                          owner.nombre_usuario as nombre_dueno, owner.apellido_usuario as apellido_dueno,
+    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario, 
+                          v.clinica as vet_clinica, v.especialidad,
+                          u.nombre_usuario as nombre_veterinario, 
+                          u.apellido_usuario as apellido_veterinario,
+                          owner.nombre_usuario as nombre_dueno, 
+                          owner.apellido_usuario as apellido_dueno,
                           owner.telefono_usuario, owner.email_usuario,
                           DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                           FROM citas_veterinarias c 
@@ -230,14 +233,17 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                           AND c.estado IN ('pendiente', 'aceptada', 'programada')
                           ORDER BY c.fecha ASC LIMIT 10";
 } else {
-    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario, v.clinica as vet_clinica, v.especialidad,
-                          u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+    $consulta_proximas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario, 
+                          v.clinica as vet_clinica, v.especialidad,
+                          u.nombre_usuario as nombre_veterinario, 
+                          u.apellido_usuario as apellido_veterinario,
                           DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                           FROM citas_veterinarias c 
                           JOIN mascotas m ON c.id_mascota = m.id_mascota 
                           LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
                           LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                          WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) >= '$fecha_hoy' 
+                          WHERE m.id_usuario = $usuario_id 
+                          AND DATE(c.fecha) >= '$fecha_hoy' 
                           AND c.estado IN ('pendiente', 'aceptada', 'programada')
                           ORDER BY c.fecha ASC LIMIT 5";
 }
@@ -285,9 +291,12 @@ $resultado_historial = $conexion->query($consulta_historial_simple);
 
 // Obtener citas pasadas para mostrar en el historial
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
-    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario as id_dueno, v.clinica as vet_clinica,
-                               u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
-                               owner.nombre_usuario as nombre_dueno, owner.apellido_usuario as apellido_dueno,
+    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario as id_dueno, 
+                               v.clinica as vet_clinica, v.especialidad,
+                               u.nombre_usuario as nombre_veterinario, 
+                               u.apellido_usuario as apellido_veterinario,
+                               owner.nombre_usuario as nombre_dueno, 
+                               owner.apellido_usuario as apellido_dueno,
                                DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                                FROM citas_veterinarias c 
                                JOIN mascotas m ON c.id_mascota = m.id_mascota 
@@ -299,14 +308,17 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
                                AND c.estado IN ('aceptada', 'completada')
                                ORDER BY c.fecha DESC LIMIT 20";
 } else {
-    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, v.clinica as vet_clinica, 
-                               u.nombre_usuario as nombre_veterinario, u.apellido_usuario as apellido_veterinario,
+    $consulta_citas_pasadas = "SELECT c.*, m.nombre_mascota, m.tipo, 
+                               v.clinica as vet_clinica, v.especialidad,
+                               u.nombre_usuario as nombre_veterinario, 
+                               u.apellido_usuario as apellido_veterinario,
                                DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
                                FROM citas_veterinarias c 
                                JOIN mascotas m ON c.id_mascota = m.id_mascota 
                                LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
                                LEFT JOIN usuarios u ON v.id_usuario = u.id_usuario
-                               WHERE m.id_usuario = $usuario_id AND DATE(c.fecha) < '$fecha_hoy' 
+                               WHERE m.id_usuario = $usuario_id 
+                               AND DATE(c.fecha) < '$fecha_hoy' 
                                AND c.estado IN ('aceptada', 'completada')
                                ORDER BY c.fecha DESC LIMIT 10";
 }
@@ -342,12 +354,18 @@ $resultado_citas_pendientes = null;
 if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
     // CAMBIO: Obtener citas pendientes SIN veterinario asignado O asignadas a este veterinario
     $consulta_pendientes = "SELECT c.*, m.nombre_mascota, m.tipo, m.id_usuario,
-                        u.nombre_usuario as nombre_dueno,
-                            u.telefono_usuario, u.email_usuario,
-                            DATE(c.fecha) as fecha_solo, TIME(c.fecha) as hora_solo
+                            owner.nombre_usuario as nombre_dueno,
+                            owner.apellido_usuario as apellido_dueno,
+                            owner.telefono_usuario, 
+                            owner.email_usuario,
+                            v.clinica as vet_clinica,
+                            v.especialidad,
+                            DATE(c.fecha) as fecha_solo, 
+                            TIME(c.fecha) as hora_solo
                             FROM citas_veterinarias c 
                             JOIN mascotas m ON c.id_mascota = m.id_mascota 
-                            JOIN usuarios u ON m.id_usuario = u.id_usuario
+                            JOIN usuarios owner ON m.id_usuario = owner.id_usuario
+                            LEFT JOIN veterinario v ON c.id_veterinario = v.id_veterinario
                             WHERE (c.id_veterinario IS NULL OR c.id_veterinario = $id_veterinario_actual) 
                             AND c.estado = 'pendiente'
                             ORDER BY c.fecha ASC";
