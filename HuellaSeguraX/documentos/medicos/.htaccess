@@ -1,0 +1,7 @@
+# Bloquear ejecución de scripts
+php_flag engine off
+AddType application/octet-stream .php .php3 .php4 .php5 .php6 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
+# Solo permitir descarga
+<FilesMatch "\.(pdf|doc|docx|jpg|jpeg|png)$">
+    Header set Content-Disposition attachment
+</FilesMatch>

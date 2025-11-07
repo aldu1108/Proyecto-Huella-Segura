@@ -1685,6 +1685,410 @@
 #modalCitaPaciente {
     animation: fadeIn 0.3s ease;
 }
+/* ========================================
+   ESTILOS PARA MODAL SUBIR DOCUMENTO
+   ======================================== */
+
+.modal-subir-documento {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.contenido-modal-documento {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+.encabezado-modal-documento {
+    padding: 24px 28px;
+    text-align: center;
+    position: relative;
+    border-bottom: 2px solid #E8F4FD;
+}
+
+.titulo-modal-documento {
+    font-size: 20px;
+    color: #333;
+    margin: 0;
+    font-weight: 600;
+}
+
+.boton-cerrar-modal-documento {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.boton-cerrar-modal-documento:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.formulario-documento {
+    padding: 28px;
+}
+
+.grupo-input-documento {
+    margin-bottom: 20px;
+}
+
+.etiqueta-input-documento {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.etiqueta-input-documento.requerido::after {
+    content: " *";
+    color: #E74C3C;
+}
+
+.input-documento,
+.select-documento,
+.textarea-documento {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.input-documento:focus,
+.select-documento:focus,
+.textarea-documento:focus {
+    border-color: #3498db;
+}
+
+.textarea-documento {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.texto-ayuda-documento {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* File input personalizado */
+.contenedor-file-documento {
+    position: relative;
+}
+
+.input-file-documento {
+    display: none;
+}
+
+.label-file-documento {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    color: #666;
+}
+
+.label-file-documento:hover {
+    border-color: #3498db;
+    background: #e3f2fd;
+    color: #3498db;
+}
+
+.icono-file {
+    font-size: 20px;
+}
+
+.texto-file {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Preview del archivo */
+.preview-archivo-documento {
+    margin-top: 15px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.icono-archivo {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.info-archivo {
+    flex: 1;
+}
+
+.nombre-archivo {
+    font-size: 14px;
+    color: #333;
+    word-break: break-word;
+}
+
+.boton-eliminar-preview-doc {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.boton-eliminar-preview-doc:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+}
+
+/* Alerta informativa */
+.alerta-info-documento {
+    background: #E3F2FD;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #2196F3;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.alerta-info-documento .icono-info {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.alerta-info-documento p {
+    margin: 0;
+    color: #1976D2;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Botones del modal */
+.botones-modal-documento {
+    display: flex;
+    gap: 12px;
+    padding: 24px 28px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.boton-cancelar-documento,
+.boton-subir-documento-modal {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.boton-cancelar-documento {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.boton-cancelar-documento:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.boton-subir-documento-modal {
+    background: #3498db;
+    color: white;
+}
+
+.boton-subir-documento-modal:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.spinner-boton {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   ESTILOS PARA ACCIONES DE DOCUMENTOS
+   ======================================== */
+
+.acciones-doc {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.boton-ver-doc,
+.boton-descargar-doc,
+.boton-eliminar-doc {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.boton-ver-doc {
+    background: #e8f4f8;
+    color: #3498db;
+}
+
+.boton-ver-doc:hover {
+    background: #d0e9f2;
+    transform: translateY(-1px);
+}
+
+.boton-descargar-doc {
+    background: #e8f5e8;
+    color: #27ae60;
+}
+
+.boton-descargar-doc:hover {
+    background: #d0ebd0;
+    transform: translateY(-1px);
+}
+
+.boton-eliminar-doc {
+    background: #ffebee;
+    color: #e74c3c;
+}
+
+.boton-eliminar-doc:hover {
+    background: #ffcdd2;
+    transform: translateY(-1px);
+}
+
+/* Modal confirmar eliminación documento */
+.modal-confirmar-eliminar-documento {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-subir-documento {
+        padding: 10px;
+    }
+    
+    .contenido-modal-documento {
+        max-width: 100%;
+        margin: 20px 0;
+    }
+    
+    .encabezado-modal-documento,
+    .formulario-documento,
+    .botones-modal-documento {
+        padding: 20px;
+    }
+    
+    .botones-modal-documento {
+        flex-direction: column;
+    }
+    
+    .acciones-doc {
+        flex-direction: column;
+    }
+    
+    .boton-ver-doc,
+    .boton-descargar-doc,
+    .boton-eliminar-doc {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Scrollbar personalizado para el modal */
+.contenido-modal-documento::-webkit-scrollbar {
+    width: 8px;
+}
+
+.contenido-modal-documento::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 16px 16px 0;
+}
+
+.contenido-modal-documento::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 4px;
+}
+
+.contenido-modal-documento::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
 
 @keyframes fadeIn {
     from {

@@ -1009,124 +1009,225 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
         </section>
 
         <!-- Sección Documentos -->
-        <section class="seccion-veterinaria seccion-documentos" id="seccionDocumentos">
-            <div class="encabezado-documentos">
-                <h3>Documentos Médicos</h3>
-                <?php if ($rol_usuario == 'demo'): ?>
-                    <button class="boton-subir-documento" onclick="mostrarModalAlerta('Inicia sesión para subir documentos\n\nRegístrate para poder:\n• Subir documentos médicos\n• Organizar certificados\n• Mantener registros actualizados')">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> Subir Documento
-                    </button>
-                <?php else: ?>
-                    <button class="boton-subir-documento" onclick="mostrarSubirDocumento()">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> Subir Documento
-                    </button>
+<section class="seccion-veterinaria seccion-documentos" id="seccionDocumentos">
+    <div class="encabezado-documentos">
+    <h3>Documentos Médicos</h3>
+    <?php if ($rol_usuario === 'veterinario'): ?>
+        <!-- Botón para veterinarios -->
+        <button class="boton-subir-documento" onclick="mostrarSubirDocumento('')">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> 
+            Subir Documento
+        </button>
+    <?php elseif ($rol_usuario == 'demo'): ?>
+        <!-- Botón para usuarios demo -->
+        <button class="boton-subir-documento" onclick="mostrarModalAlerta('Inicia sesión para subir documentos', ['Subir documentos médicos', 'Organizar certificados', 'Mantener registros actualizados'])">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> 
+            Subir Documento
+        </button>
+    <?php else: ?>
+        <!-- Botón para usuarios normales (no pueden subir) -->
+        <button class="boton-subir-documento" style="opacity: 0.5; cursor: not-allowed;" disabled title="Solo veterinarios pueden subir documentos">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#666666"><path d="M696-312q0 89.86-63.07 152.93Q569.86-96 480-96q-91 0-153.5-65.5T264-319v-389q0-65 45.5-110.5T420-864q66 0 111 48t45 115v365q0 40.15-27.93 68.07Q520.15-240 480-240q-41 0-68.5-29.09T384-340v-380h72v384q0 10.4 6.8 17.2 6.8 6.8 17.2 6.8 10.4 0 17.2-6.8 6.8-6.8 6.8-17.2v-372q0-35-24.5-59.5T419.8-792q-35.19 0-59.5 25.5Q336-741 336-706v394q0 60 42 101.5T480-168q60 1 102-43t42-106v-403h72v408Z"/></svg> 
+            Subir Documento
+        </button>
+    <?php endif; ?>
+</div>
+
+    <div class="categorias-documentos">
+        <!-- CERTIFICADOS DE VACUNACIÓN -->
+        <div class="categoria-doc">
+            <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M240-96q-40 0-68-28t-28-68v-144h96v-528h576v660q0 45-31.5 76.5T708-96H240Zm467.79-72q15.21 0 25.71-10.35T744-204v-588H312v456h360v132q0 15.3 10.29 25.65Q692.58-168 707.79-168ZM360-600v-72h336v72H360Zm0 120v-72h336v72H360Z"/></svg> Certificados de Vacunación</h4>
+            <div class="lista-documentos">
+                <?php
+                // Consulta para veterinario: ver TODOS los documentos de vacunación
+                if ($rol_usuario === 'veterinario') {
+                    $consulta_docs_vacunas = "SELECT dm.*, h.fecha, h.id_historial, m.nombre_mascota, m.id_mascota,
+                                               u.nombre_usuario as nombre_dueno, u.apellido_usuario as apellido_dueno
+                                               FROM documento_medico dm 
+                                               JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
+                                               JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                               JOIN usuarios u ON m.id_usuario = u.id_usuario
+                                               WHERE dm.tipo = 'vacuna'
+                                               ORDER BY h.fecha DESC";
+                } else {
+                    $consulta_docs_vacunas = "SELECT dm.*, h.fecha, h.id_historial, m.nombre_mascota, m.id_mascota
+                                             FROM documento_medico dm 
+                                             JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
+                                             JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                             WHERE m.id_usuario = $usuario_id AND dm.tipo = 'vacuna'
+                                             ORDER BY h.fecha DESC";
+                }
+                $resultado_vacunas = $conexion->query($consulta_docs_vacunas);
+                
+                if ($resultado_vacunas && $resultado_vacunas->num_rows > 0):
+                    while($doc = $resultado_vacunas->fetch_assoc()):
+                ?>
+                    <div class="documento-item" data-documento-id="<?php echo $doc['id_documento']; ?>">
+                        <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M336-240h288v-72H336v72Zm0-144h288v-72H336v72ZM263.72-96Q234-96 213-117.15T192-168v-624q0-29.7 21.15-50.85Q234.3-864 264-864h312l192 192v504q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72ZM528-624h168L528-792v168Z"/></svg></span>
+                        <div class="info-doc">
+                            <strong>Certificado de Vacunación - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <p>Dueño: <?php echo htmlspecialchars($doc['nombre_dueno'] . ' ' . $doc['apellido_dueno']); ?></p>
+                            <?php endif; ?>
+                            <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
+                        </div>
+                        <div class="acciones-doc">
+                            <button class="boton-ver-doc" onclick="verDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#3498db"><path d="M480-336q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Zm0-72q-40 0-68-28t-28-68q0-40 28-68t68-28q40 0 68 28t28 68q0 40-28 68t-68 28Zm0 192q-134 0-244.5-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q64-118 174.5-190T480-800q134 0 244.5 72T899-538q5 9 7.5 18.5T909-500q0 10-2.5 19.5T899-462q-64 118-174.5 190T480-200Z"/></svg>
+                                Ver
+                            </button>
+                            <button class="boton-descargar-doc" onclick="descargarDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#27ae60"><path d="M480-336 288-528l51-51 105 105v-342h72v342l105-105 51 51-192 192ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z"/></svg>
+                                Descargar
+                            </button>
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <button class="boton-eliminar-doc" onclick="confirmarEliminarDocumento(<?php echo $doc['id_documento']; ?>, <?php echo $doc['id_historial']; ?>, '<?php echo htmlspecialchars($doc['archivo']); ?>', '<?php echo htmlspecialchars($doc['nombre_mascota']); ?>')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e74c3c"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg>
+                                    Eliminar
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php 
+                    endwhile;
+                else: 
+                ?>
+                    <div class="sin-citas" style="padding: 20px;">
+                        <p>No hay certificados de vacunación registrados</p>
+                    </div>
                 <?php endif; ?>
             </div>
+        </div>
 
-            <div class="categorias-documentos">
-                <div class="categoria-doc">
-                    <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M240-96q-40 0-68-28t-28-68v-144h96v-528h576v660q0 45-31.5 76.5T708-96H240Zm467.79-72q15.21 0 25.71-10.35T744-204v-588H312v456h360v132q0 15.3 10.29 25.65Q692.58-168 707.79-168ZM360-600v-72h336v72H360Zm0 120v-72h336v72H360Z"/></svg> Certificados de Vacunación</h4>
-                    <div class="lista-documentos">
-                        <?php
-                        $consulta_docs_vacunas = "SELECT dm.*, h.fecha, m.nombre_mascota 
-                                                 FROM documento_medico dm 
-                                                 JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
-                                                 JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                                                 WHERE m.id_usuario = $usuario_id AND dm.tipo = 'vacuna'
-                                                 ORDER BY h.fecha DESC";
-                        $resultado_vacunas = $conexion->query($consulta_docs_vacunas);
-                        
-                        if ($resultado_vacunas && $resultado_vacunas->num_rows > 0):
-                            while($doc = $resultado_vacunas->fetch_assoc()):
-                        ?>
-                            <div class="documento-item">
-                                <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M336-240h288v-72H336v72Zm0-144h288v-72H336v72ZM263.72-96Q234-96 213-117.15T192-168v-624q0-29.7 21.15-50.85Q234.3-864 264-864h312l192 192v504q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72ZM528-624h168L528-792v168Z"/></svg></span>
-                                <div class="info-doc">
-                                    <strong>Certificado de Vacunación - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
-                                    <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
-                                </div>
-                                <button class="boton-ver-doc" onclick="verDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">Ver</button>
-                            </div>
-                        <?php 
-                            endwhile;
-                        else: 
-                        ?>
-                            <div class="sin-citas" style="padding: 20px;">
-                                <p>No hay certificados de vacunación registrados</p>
-                            </div>
-                        <?php endif; ?>
+        <!-- ANÁLISIS Y ESTUDIOS -->
+        <div class="categoria-doc">
+            <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M240-96q-40 0-68-28t-28-68v-144h96v-528h576v660q0 45-31.5 76.5T708-96H240Zm467.79-72q15.21 0 25.71-10.35T744-204v-588H312v456h360v132q0 15.3 10.29 25.65Q692.58-168 707.79-168ZM360-600v-72h336v72H360Zm0 120v-72h336v72H360Z"/></svg> Análisis y Estudios</h4>
+            <div class="lista-documentos">
+                <?php
+                if ($rol_usuario === 'veterinario') {
+                    $consulta_docs_analisis = "SELECT dm.*, h.fecha, h.id_historial, m.nombre_mascota, m.id_mascota,
+                                               u.nombre_usuario as nombre_dueno, u.apellido_usuario as apellido_dueno
+                                               FROM documento_medico dm 
+                                               JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
+                                               JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                               JOIN usuarios u ON m.id_usuario = u.id_usuario
+                                               WHERE dm.tipo = 'analisis'
+                                               ORDER BY h.fecha DESC";
+                } else {
+                    $consulta_docs_analisis = "SELECT dm.*, h.fecha, h.id_historial, m.nombre_mascota, m.id_mascota
+                                              FROM documento_medico dm 
+                                              JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
+                                              JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                              WHERE m.id_usuario = $usuario_id AND dm.tipo = 'analisis'
+                                              ORDER BY h.fecha DESC";
+                }
+                $resultado_analisis = $conexion->query($consulta_docs_analisis);
+                
+                if ($resultado_analisis && $resultado_analisis->num_rows > 0):
+                    while($doc = $resultado_analisis->fetch_assoc()):
+                ?>
+                    <div class="documento-item" data-documento-id="<?php echo $doc['id_documento']; ?>">
+                        <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m107-384-59-42 192-312 120 144 168-264 120 168 146-222 58 42-202 307-119-166-163 257-119-143-142 231Zm468.77 144Q616-240 644-267.77q28-27.78 28-68Q672-376 644.23-404q-27.78-28-68-28Q536-432 508-404.23q-28 27.78-28 68Q480-296 507.77-268q27.78 28 68 28ZM765-96l-98-98q-19.91 13-43.13 19.5Q600.65-168 576-168q-70 0-119-49t-49-119q0-70 49-119t119-49q70 0 119 49t49 119q0 24.65-6.5 47.87T718-245l98 98-51 51Z"/></svg></span>
+                        <div class="info-doc">
+                            <strong>Análisis - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <p>Dueño: <?php echo htmlspecialchars($doc['nombre_dueno'] . ' ' . $doc['apellido_dueno']); ?></p>
+                            <?php endif; ?>
+                            <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
+                        </div>
+                        <div class="acciones-doc">
+                            <button class="boton-ver-doc" onclick="verDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#3498db"><path d="M480-336q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Zm0-72q-40 0-68-28t-28-68q0-40 28-68t68-28q40 0 68 28t28 68q0 40-28 68t-68 28Zm0 192q-134 0-244.5-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q64-118 174.5-190T480-800q134 0 244.5 72T899-538q5 9 7.5 18.5T909-500q0 10-2.5 19.5T899-462q-64 118-174.5 190T480-200Z"/></svg>
+                                Ver
+                            </button>
+                            <button class="boton-descargar-doc" onclick="descargarDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#27ae60"><path d="M480-336 288-528l51-51 105 105v-342h72v342l105-105 51 51-192 192ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z"/></svg>
+                                Descargar
+                            </button>
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <button class="boton-eliminar-doc" onclick="confirmarEliminarDocumento(<?php echo $doc['id_documento']; ?>, <?php echo $doc['id_historial']; ?>, '<?php echo htmlspecialchars($doc['archivo']); ?>', '<?php echo htmlspecialchars($doc['nombre_mascota']); ?>')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e74c3c"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg>
+                                    Eliminar
+                                </button>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
-
-                <div class="categoria-doc">
-                    <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#CCCCCC"><path d="M240-96q-40 0-68-28t-28-68v-144h96v-528h576v660q0 45-31.5 76.5T708-96H240Zm467.79-72q15.21 0 25.71-10.35T744-204v-588H312v456h360v132q0 15.3 10.29 25.65Q692.58-168 707.79-168ZM360-600v-72h336v72H360Zm0 120v-72h336v72H360Z"/></svg> Análisis y Estudios</h4>
-                    <div class="lista-documentos">
-                        <?php
-                        $consulta_docs_analisis = "SELECT dm.*, h.fecha, m.nombre_mascota 
-                                                  FROM documento_medico dm 
-                                                  JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
-                                                  JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                                                  WHERE m.id_usuario = $usuario_id AND dm.tipo = 'analisis'
-                                                  ORDER BY h.fecha DESC";
-                        $resultado_analisis = $conexion->query($consulta_docs_analisis);
-                        
-                        if ($resultado_analisis && $resultado_analisis->num_rows > 0):
-                            while($doc = $resultado_analisis->fetch_assoc()):
-                        ?>
-                            <div class="documento-item">
-                                <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="m107-384-59-42 192-312 120 144 168-264 120 168 146-222 58 42-202 307-119-166-163 257-119-143-142 231Zm468.77 144Q616-240 644-267.77q28-27.78 28-68Q672-376 644.23-404q-27.78-28-68-28Q536-432 508-404.23q-28 27.78-28 68Q480-296 507.77-268q27.78 28 68 28ZM765-96l-98-98q-19.91 13-43.13 19.5Q600.65-168 576-168q-70 0-119-49t-49-119q0-70 49-119t119-49q70 0 119 49t49 119q0 24.65-6.5 47.87T718-245l98 98-51 51Z"/></svg></span>
-                                <div class="info-doc">
-                                    <strong>Análisis - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
-                                    <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
-                                </div>
-                                <button class="boton-ver-doc" onclick="verDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">Ver</button>
-                            </div>
-                        <?php 
-                            endwhile;
-                        else: 
-                        ?>
-                            <div class="sin-citas" style="padding: 20px;">
-                                <p>No hay análisis o estudios registrados</p>
-                            </div>
-                        <?php endif; ?>
+                <?php 
+                    endwhile;
+                else: 
+                ?>
+                    <div class="sin-citas" style="padding: 20px;">
+                        <p>No hay análisis o estudios registrados</p>
                     </div>
-                </div>
-
-                <div class="categoria-doc">
-                    <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Recetas Médicas</h4>
-                    <div class="lista-documentos">
-                        <?php
-                        $consulta_docs_recetas = "SELECT dm.*, h.fecha, m.nombre_mascota 
-                                                 FROM documento_medico dm 
-                                                 JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
-                                                 JOIN mascotas m ON h.id_mascota = m.id_mascota 
-                                                 WHERE m.id_usuario = $usuario_id AND dm.tipo = 'receta'
-                                                 ORDER BY h.fecha DESC";
-                        $resultado_recetas = $conexion->query($consulta_docs_recetas);
-                        
-                        if ($resultado_recetas && $resultado_recetas->num_rows > 0):
-                            while($doc = $resultado_recetas->fetch_assoc()):
-                        ?>
-                            <div class="documento-item">
-                                <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg></span>
-                                <div class="info-doc">
-                                    <strong>Receta Médica - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
-                                    <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
-                                </div>
-                                <button class="boton-ver-doc" onclick="verDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">Ver</button>
-                            </div>
-                        <?php 
-                            endwhile;
-                        else: 
-                        ?>
-                            <div class="sin-citas" style="padding: 20px;">
-                                <p>No hay recetas médicas registradas</p>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
-        </section>
+        </div>
+
+        <!-- RECETAS MÉDICAS -->
+        <div class="categoria-doc">
+            <h4><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg> Recetas Médicas</h4>
+            <div class="lista-documentos">
+                <?php
+                if ($rol_usuario === 'veterinario') {
+                    $consulta_docs_recetas = "SELECT dm.*, h.fecha, h.id_historial, m.nombre_mascota, m.id_mascota,
+                                               u.nombre_usuario as nombre_dueno, u.apellido_usuario as apellido_dueno
+                                               FROM documento_medico dm 
+                                               JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
+                                               JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                               JOIN usuarios u ON m.id_usuario = u.id_usuario
+                                               WHERE dm.tipo = 'receta'
+                                               ORDER BY h.fecha DESC";
+                } else {
+                    $consulta_docs_recetas = "SELECT dm.*, h.fecha, h.id_historial, m.nombre_mascota, m.id_mascota
+                                             FROM documento_medico dm 
+                                             JOIN historiales_medicos h ON dm.id_historial = h.id_historial 
+                                             JOIN mascotas m ON h.id_mascota = m.id_mascota 
+                                             WHERE m.id_usuario = $usuario_id AND dm.tipo = 'receta'
+                                             ORDER BY h.fecha DESC";
+                }
+                $resultado_recetas = $conexion->query($consulta_docs_recetas);
+                
+                if ($resultado_recetas && $resultado_recetas->num_rows > 0):
+                    while($doc = $resultado_recetas->fetch_assoc()):
+                ?>
+                    <div class="documento-item" data-documento-id="<?php echo $doc['id_documento']; ?>">
+                        <span class="icono-doc"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#789DE5"><path d="M216-144q-29.7 0-50.85-21.15Q144-186.3 144-216v-528q0-29.7 21.15-50.85Q186.3-816 216-816h171q8-31 33.5-51.5T480-888q34 0 59.5 20.5T573-816h171q29.7 0 50.85 21.15Q816-773.7 816-744v528q0 29.7-21.15 50.85Q773.7-144 744-144H216Zm72-144h288v-72H288v72Zm0-156h384v-72H288v72Zm0-156h384v-72H288v72Zm192-168q10.4 0 17.2-6.8 6.8-6.8 6.8-17.2 0-10.4-6.8-17.2-6.8-6.8-17.2-6.8-10.4 0-17.2 6.8-6.8 6.8-6.8 17.2 0 10.4 6.8 17.2 6.8 6.8 17.2 6.8Z"/></svg></span>
+                        <div class="info-doc">
+                            <strong>Receta Médica - <?php echo htmlspecialchars($doc['nombre_mascota']); ?></strong>
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <p>Dueño: <?php echo htmlspecialchars($doc['nombre_dueno'] . ' ' . $doc['apellido_dueno']); ?></p>
+                            <?php endif; ?>
+                            <p>Subido el <?php echo date('d M Y', strtotime($doc['fecha'])); ?></p>
+                        </div>
+                        <div class="acciones-doc">
+                            <button class="boton-ver-doc" onclick="verDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#3498db"><path d="M480-336q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Zm0-72q-40 0-68-28t-28-68q0-40 28-68t68-28q40 0 68 28t28 68q0 40-28 68t-68 28Zm0 192q-134 0-244.5-72T61-462q-5-9-7.5-18.5T51-500q0-10 2.5-19.5T61-538q64-118 174.5-190T480-800q134 0 244.5 72T899-538q5 9 7.5 18.5T909-500q0 10-2.5 19.5T899-462q-64 118-174.5 190T480-200Z"/></svg>
+                                Ver
+                            </button>
+                            <button class="boton-descargar-doc" onclick="descargarDocumento('<?php echo htmlspecialchars($doc['archivo']); ?>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#27ae60"><path d="M480-336 288-528l51-51 105 105v-342h72v342l105-105 51 51-192 192ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z"/></svg>
+                                Descargar
+                            </button>
+                            <?php if ($rol_usuario === 'veterinario'): ?>
+                                <button class="boton-eliminar-doc" onclick="confirmarEliminarDocumento(<?php echo $doc['id_documento']; ?>, <?php echo $doc['id_historial']; ?>, '<?php echo htmlspecialchars($doc['archivo']); ?>', '<?php echo htmlspecialchars($doc['nombre_mascota']); ?>')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#e74c3c"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm72-144h72v-336h-72v336Zm120 0h72v-336h-72v336Z"/></svg>
+                                    Eliminar
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php 
+                    endwhile;
+                else: 
+                ?>
+                    <div class="sin-citas" style="padding: 20px;">
+                        <p>No hay recetas médicas registradas</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</section>
     </div>
    <!-- Modal para agregar paciente (mascota) como veterinario -->
 <div class="modal-agregar-paciente" id="modalAgregarPaciente">
@@ -1491,6 +1592,169 @@ if ($rol_usuario === 'veterinario' && $id_veterinario_actual) {
             </div>
         </div>
     </div>
+    <!-- Modal para subir documento -->
+<div class="modal-subir-documento" id="modalSubirDocumento">
+    <div class="contenido-modal-documento">
+        <div class="encabezado-modal-documento">
+            <h3 class="titulo-modal-documento">📄 Subir Documento Médico</h3>
+            <button class="boton-cerrar-modal-documento" onclick="cerrarModalSubirDocumento()">×</button>
+        </div>
+        
+        <form class="formulario-documento" id="formularioSubirDocumento" enctype="multipart/form-data">
+            
+            <!-- Tipo de documento -->
+            <div class="grupo-input-documento">
+                <label class="etiqueta-input-documento requerido">Tipo de Documento</label>
+                <select class="select-documento" name="tipo_documento" id="tipoDocumento" required>
+                    <option value="">Seleccionar tipo</option>
+                    <option value="vacuna">📋 Certificado de Vacunación</option>
+                    <option value="analisis">🔬 Análisis / Estudio</option>
+                    <option value="receta">💊 Receta Médica</option>
+                </select>
+            </div>
+
+            <!-- Seleccionar mascota -->
+            <div class="grupo-input-documento">
+                <label class="etiqueta-input-documento requerido">Paciente (Mascota)</label>
+                <select class="select-documento" name="id_mascota" id="mascotaDocumento" required>
+                    <option value="">Seleccionar mascota</option>
+                    <?php 
+                    // Obtener TODAS las mascotas para veterinarios
+                    if ($rol_usuario === 'veterinario') {
+                        $consulta_mascotas_docs = "SELECT m.id_mascota, m.nombre_mascota, m.tipo, 
+                                                   u.nombre_usuario, u.apellido_usuario
+                                                   FROM mascotas m 
+                                                   JOIN usuarios u ON m.id_usuario = u.id_usuario
+                                                   WHERE m.estado = 'activo'
+                                                   ORDER BY m.nombre_mascota ASC";
+                        $resultado_mascotas_docs = $conexion->query($consulta_mascotas_docs);
+                        
+                        if ($resultado_mascotas_docs && $resultado_mascotas_docs->num_rows > 0):
+                            while($mascota = $resultado_mascotas_docs->fetch_assoc()): 
+                    ?>
+                            <option value="<?php echo $mascota['id_mascota']; ?>">
+                                <?php echo htmlspecialchars($mascota['nombre_mascota']); ?> 
+                                (<?php echo ucfirst($mascota['tipo']); ?>) - 
+                                Dueño: <?php echo htmlspecialchars($mascota['nombre_usuario'] . ' ' . $mascota['apellido_usuario']); ?>
+                            </option>
+                    <?php 
+                            endwhile;
+                        endif;
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <!-- Título del documento -->
+            <div class="grupo-input-documento">
+                <label class="etiqueta-input-documento requerido">Título del Documento</label>
+                <input type="text" 
+                       class="input-documento" 
+                       name="titulo_documento" 
+                       id="tituloDocumento"
+                       placeholder="Ej: Vacuna Antirrábica 2025"
+                       maxlength="100"
+                       required>
+                <small class="texto-ayuda-documento">Máximo 100 caracteres</small>
+            </div>
+
+            <!-- Fecha del documento -->
+            <div class="grupo-input-documento">
+                <label class="etiqueta-input-documento requerido">Fecha del Documento</label>
+                <input type="date" 
+                       class="input-documento" 
+                       name="fecha_documento" 
+                       id="fechaDocumento"
+                       required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="grupo-input-documento">
+                <label class="etiqueta-input-documento">Descripción / Observaciones</label>
+                <textarea class="textarea-documento" 
+                          name="descripcion" 
+                          id="descripcionDocumento"
+                          placeholder="Observaciones adicionales sobre el documento..."
+                          maxlength="500"></textarea>
+                <small class="texto-ayuda-documento">Opcional - Máximo 500 caracteres</small>
+            </div>
+
+            <!-- Archivo -->
+            <div class="grupo-input-documento">
+                <label class="etiqueta-input-documento requerido">Archivo</label>
+                <div class="contenedor-file-documento">
+                    <input type="file" 
+                           class="input-file-documento" 
+                           name="archivo_documento" 
+                           id="inputArchivoDocumento"
+                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                           onchange="previewArchivoDocumento(this)"
+                           required>
+                    <label for="inputArchivoDocumento" class="label-file-documento">
+                        <span class="icono-file">📎</span>
+                        <span class="texto-file">Seleccionar archivo</span>
+                    </label>
+                </div>
+                <small class="texto-ayuda-documento">
+                    Formatos: PDF, DOC, DOCX, JPG, PNG - Máximo 10MB
+                </small>
+                
+                <!-- Preview del archivo -->
+                <div class="preview-archivo-documento" id="previewArchivoDocumento" style="display: none;">
+                    <div class="icono-archivo">📄</div>
+                    <div class="info-archivo">
+                        <span class="nombre-archivo"></span>
+                    </div>
+                    <button type="button" class="boton-eliminar-preview-doc" onclick="eliminarPreviewDocumento()">×</button>
+                </div>
+            </div>
+
+            <!-- Alerta informativa -->
+            <div class="alerta-info-documento">
+                <span class="icono-info">ℹ️</span>
+                <p>El documento quedará asociado al historial médico del paciente y será visible para su dueño.</p>
+            </div>
+
+        </form>
+
+        <div class="botones-modal-documento">
+            <button type="button" class="boton-cancelar-documento" onclick="cerrarModalSubirDocumento()">Cancelar</button>
+            <button type="submit" form="formularioSubirDocumento" class="boton-subir-documento-modal" id="btnSubirDocumento">
+                <span class="texto-boton">📤 Subir Documento</span>
+                <span class="spinner-boton" style="display: none;">⏳</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para confirmar eliminación de documento -->
+<div class="modal-confirmar-eliminar-documento" id="modalConfirmarEliminarDocumento">
+    <div class="contenido-modal-eliminar">
+        <div class="encabezado-modal-eliminar">
+            <h3 class="titulo-modal-eliminar">⚠️ Confirmar Eliminación de Documento</h3>
+            <button class="boton-cerrar-modal-eliminar" onclick="cerrarModalEliminarDocumento()">×</button>
+        </div>
+        
+        <div class="cuerpo-modal-eliminar">
+            <div class="icono-advertencia">⚠️</div>
+            <p>¿Estás seguro de que deseas eliminar este documento médico?</p>
+            <p><strong>Mascota:</strong> <span id="mascotaEliminarDoc"></span></p>
+            <p><strong>Archivo:</strong> <span id="archivoEliminarDoc"></span></p>
+            <p class="texto-advertencia">Esta acción eliminará tanto el archivo como el registro médico asociado y no se puede deshacer.</p>
+        </div>
+
+        <form id="formularioEliminarDocumento" style="display: none;">
+            <input type="hidden" name="id_documento" id="idDocumentoEliminar">
+            <input type="hidden" name="id_historial" id="idHistorialEliminar">
+            <input type="hidden" name="archivo" id="archivoEliminar">
+        </form>
+
+        <div class="botones-modal-eliminar">
+            <button type="button" class="boton-cancelar-eliminar" onclick="cerrarModalEliminarDocumento()">Cancelar</button>
+            <button type="button" class="boton-confirmar-eliminar" onclick="eliminarDocumento()">Sí, Eliminar Documento</button>
+        </div>
+    </div>
+</div>
 
     <!-- Navegación inferior -->
     <nav>

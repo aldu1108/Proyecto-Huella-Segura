@@ -592,15 +592,6 @@ function filtrarPacientesPorDueno(idDueno) {
     }
 }
 
-function mostrarSubirDocumento() {
-    showMessage('Función de subir documento en desarrollo. Pronto podrás subir archivos médicos.', 'info');
-}
-
-function verDocumento(archivo) {
-    showMessage(`Intentando abrir documento: ${archivo}`, 'info');
-    // Aquí podrías implementar la lógica para abrir el documento
-    // window.open('documentos/' + archivo, '_blank');
-}
 
 function showMessage(mensaje, tipo = 'info', duracion = 4000) {
     // Remover mensajes existentes
@@ -1049,3 +1040,287 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+function mostrarSubirDocumento(tipoDocumento = '') {
+    const modal = document.getElementById('modalSubirDocumento');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Si se especifica un tipo, preseleccionarlo
+        if (tipoDocumento) {
+            const selectTipo = document.getElementById('tipoDocumento');
+            if (selectTipo) {
+                selectTipo.value = tipoDocumento;
+            }
+        }
+        
+        // Establecer fecha de hoy por defecto
+        const inputFecha = document.getElementById('fechaDocumento');
+        if (inputFecha) {
+            const hoy = new Date();
+            inputFecha.value = hoy.toISOString().split('T')[0];
+        }
+    }
+}
+
+function cerrarModalSubirDocumento() {
+    const modal = document.getElementById('modalSubirDocumento');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Limpiar formulario
+        const formulario = document.getElementById('formularioSubirDocumento');
+        if (formulario) {
+            formulario.reset();
+        }
+        
+        // Limpiar preview
+        eliminarPreviewDocumento();
+    }
+}
+
+function previewArchivoDocumento(input) {
+    const preview = document.getElementById('previewArchivoDocumento');
+    const nombreArchivo = preview.querySelector('.nombre-archivo');
+    
+    if (input.files && input.files[0]) {
+        const archivo = input.files[0];
+        const tamanoMB = (archivo.size / 1024 / 1024).toFixed(2);
+        
+        // Validar tamaño
+        if (archivo.size > 10000000) {
+            showMessage('El archivo es demasiado grande. Máximo 10MB', 'error');
+            input.value = '';
+            preview.style.display = 'none';
+            return;
+        }
+        
+        // Validar extensión
+        const extension = archivo.name.split('.').pop().toLowerCase();
+        const extensionesPermitidas = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
+        
+        if (!extensionesPermitidas.includes(extension)) {
+            showMessage('Formato de archivo no permitido', 'error');
+            input.value = '';
+            preview.style.display = 'none';
+            return;
+        }
+        
+        // Mostrar preview
+        nombreArchivo.textContent = `${archivo.name} (${tamanoMB} MB)`;
+        preview.style.display = 'flex';
+        
+        // Cambiar texto del label
+        const textoFile = input.parentElement.querySelector('.texto-file');
+        if (textoFile) {
+            textoFile.textContent = 'Cambiar archivo';
+        }
+    } else {
+        preview.style.display = 'none';
+        const textoFile = input.parentElement.querySelector('.texto-file');
+        if (textoFile) {
+            textoFile.textContent = 'Seleccionar archivo';
+        }
+    }
+}
+
+function eliminarPreviewDocumento() {
+    const preview = document.getElementById('previewArchivoDocumento');
+    const input = document.getElementById('inputArchivoDocumento');
+    
+    if (preview) {
+        preview.style.display = 'none';
+        const nombreArchivo = preview.querySelector('.nombre-archivo');
+        if (nombreArchivo) {
+            nombreArchivo.textContent = '';
+        }
+    }
+    
+    if (input) {
+        input.value = '';
+        const textoFile = input.parentElement.querySelector('.texto-file');
+        if (textoFile) {
+            textoFile.textContent = 'Seleccionar archivo';
+        }
+    }
+}
+
+// Manejar el envío del formulario de subir documento
+document.addEventListener('DOMContentLoaded', function() {
+    const formulario = document.getElementById('formularioSubirDocumento');
+    
+    if (formulario) {
+        formulario.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar campos
+            const tipoDocumento = document.getElementById('tipoDocumento').value;
+            const mascota = document.getElementById('mascotaDocumento').value;
+            const titulo = document.getElementById('tituloDocumento').value.trim();
+            const fecha = document.getElementById('fechaDocumento').value;
+            const archivo = document.getElementById('inputArchivoDocumento').files[0];
+            
+            if (!tipoDocumento || !mascota || !titulo || !fecha || !archivo) {
+                showMessage('Por favor completa todos los campos obligatorios', 'error');
+                return;
+            }
+            
+            // Mostrar loading
+            const btnSubmit = document.getElementById('btnSubirDocumento');
+            const textoBoton = btnSubmit.querySelector('.texto-boton');
+            const spinnerBoton = btnSubmit.querySelector('.spinner-boton');
+            
+            btnSubmit.disabled = true;
+            textoBoton.style.display = 'none';
+            spinnerBoton.style.display = 'inline';
+            
+            // Crear FormData
+            const formData = new FormData(formulario);
+            
+            // Enviar con fetch
+            fetch('ajax/subir_documento.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    cerrarModalSubirDocumento();
+                    
+                    // Recargar la página después de 1.5 segundos
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Error al subir el documento', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('Error al procesar la solicitud', 'error');
+            })
+            .finally(() => {
+                // Restaurar botón
+                btnSubmit.disabled = false;
+                textoBoton.style.display = 'inline';
+                spinnerBoton.style.display = 'none';
+            });
+        });
+    }
+});
+function confirmarEliminarDocumento(idDocumento, idHistorial, archivo, nombreMascota) {
+    document.getElementById('idDocumentoEliminar').value = idDocumento;
+    document.getElementById('idHistorialEliminar').value = idHistorial;
+    document.getElementById('archivoEliminar').value = archivo;
+    document.getElementById('mascotaEliminarDoc').textContent = nombreMascota;
+    document.getElementById('archivoEliminarDoc').textContent = archivo;
+    document.getElementById('modalConfirmarEliminarDocumento').style.display = 'flex';
+}
+
+function cerrarModalEliminarDocumento() {
+    document.getElementById('modalConfirmarEliminarDocumento').style.display = 'none';
+}
+
+function eliminarDocumento() {
+    const idDocumento = document.getElementById('idDocumentoEliminar').value;
+    const idHistorial = document.getElementById('idHistorialEliminar').value;
+    const archivo = document.getElementById('archivoEliminar').value;
+    
+    // Crear FormData
+    const formData = new FormData();
+    formData.append('id_documento', idDocumento);
+    formData.append('id_historial', idHistorial);
+    formData.append('archivo', archivo);
+    
+    // Mostrar loading
+    const btnEliminar = document.querySelector('.boton-confirmar-eliminar');
+    const textoOriginal = btnEliminar.textContent;
+    btnEliminar.disabled = true;
+    btnEliminar.textContent = 'Eliminando...';
+    
+    // Enviar petición
+    fetch('ajax/eliminar_documento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(text => {
+        console.log('Respuesta del servidor:', text);
+        
+        try {
+            const data = JSON.parse(text);
+            
+            if (data.success) {
+                showMessage(data.message, 'success');
+                cerrarModalEliminarDocumento();
+                
+                // Eliminar el elemento del DOM con animación
+                const documentoItem = document.querySelector(`[data-documento-id="${idDocumento}"]`);
+                if (documentoItem) {
+                    documentoItem.style.transition = 'all 0.3s ease';
+                    documentoItem.style.opacity = '0';
+                    documentoItem.style.transform = 'translateX(-20px)';
+                    
+                    setTimeout(() => {
+                        documentoItem.remove();
+                        
+                        // Verificar si no quedan documentos en la categoría
+                        const categoria = documentoItem.closest('.categoria-doc');
+                        const listaDocumentos = categoria.querySelector('.lista-documentos');
+                        const documentosRestantes = listaDocumentos.querySelectorAll('.documento-item');
+                        
+                        if (documentosRestantes.length === 0) {
+                            // Mostrar mensaje de "sin documentos"
+                            listaDocumentos.innerHTML = `
+                                <div class="sin-citas" style="padding: 20px;">
+                                    <p>No hay documentos en esta categoría</p>
+                                </div>
+                            `;
+                        }
+                    }, 300);
+                }
+            } else {
+                showMessage(data.message || 'Error al eliminar el documento', 'error');
+            }
+        } catch (e) {
+            console.error('Error al parsear JSON:', e);
+            console.error('Texto recibido:', text);
+            showMessage('Error en la respuesta del servidor', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error de red:', error);
+        showMessage('Error de conexión con el servidor', 'error');
+    })
+    .finally(() => {
+        // Restaurar botón
+        btnEliminar.disabled = false;
+        btnEliminar.textContent = textoOriginal;
+    });
+}
+
+// Cerrar modal con ESC o click fuera
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('modalConfirmarEliminarDocumento');
+    if (modal && event.target === modal) {
+        cerrarModalEliminarDocumento();
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        cerrarModalEliminarDocumento();
+    }
+});
+
+function verDocumento(archivo) {
+    window.open('ver_documento.php?archivo=' + encodeURIComponent(archivo), '_blank');
+}
+
+function descargarDocumento(archivo) {
+    window.location.href = 'ver_documento.php?archivo=' + encodeURIComponent(archivo) + '&descargar=1';
+    showMessage('Descargando documento...', 'info');
+}
