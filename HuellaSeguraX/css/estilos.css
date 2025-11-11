@@ -1192,7 +1192,7 @@ button:focus {
 }
 
 .comunidad-title {
-    font-size: 24px;
+    font-size: 30px;
     color: #D35400;
     margin-bottom: 8px;
 }
@@ -2973,7 +2973,7 @@ button:focus {
 }
 
 .comunidad-title {
-    font-size: 24px;
+    font-size: 30px;
     color: #D35400;
     margin-bottom: 8px;
 }
@@ -3243,11 +3243,14 @@ button:focus {
 }
 
 /* Estilos específicos para mascotas perdidas */
+.mascotas-perdidas-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
 .titulo-mascotas-perdidas {
-    font-size: 28px;
-    color: #333;
+    font-size: 30px;
+    color: #D35400;
     margin-bottom: 8px;
-    font-weight: 700;
 }
 
 .subtitulo-mascotas-perdidas {
@@ -3683,15 +3686,14 @@ button:focus {
 
 /* Estilos específicos para adopciones */
 .adopciones-header {
-    text-align: left;
+    text-align: center;
     margin-bottom: 30px;
 }
 
-.titulo-adopciones {
-    font-size: 28px;
-    color: #333;
+.titulo-adopciones{
+    font-size: 30px;
+    color: #D35400;
     margin-bottom: 8px;
-    font-weight: 700;
 }
 
 .subtitulo-adopciones {
@@ -3953,11 +3955,14 @@ button:focus {
 }
 
 /* Estilos específicos para mascotas perdidas */
+.mascotas-perdidas-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
 .titulo-mascotas-perdidas {
-    font-size: 28px;
-    color: #333;
+    font-size: 30px;
+    color: #D35400;
     margin-bottom: 8px;
-    font-weight: 700;
 }
 
 .subtitulo-mascotas-perdidas {
@@ -4393,15 +4398,14 @@ button:focus {
 
 /* Estilos específicos para adopciones */
 .adopciones-header {
-    text-align: left;
+    text-align: center;
     margin-bottom: 30px;
 }
 
-.titulo-adopciones {
-    font-size: 28px;
-    color: #333;
+.titulo-adopciones{
+    font-size: 30px;
+    color: #D35400;
     margin-bottom: 8px;
-    font-weight: 700;
 }
 
 .subtitulo-adopciones {
