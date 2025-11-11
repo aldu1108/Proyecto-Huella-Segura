@@ -466,3 +466,62 @@ if (typeof window.perfilMascotaPage === 'undefined') {
     window.eliminarPeso = eliminarPeso;
 }
 })();
+
+// ==========================================
+// FUNCIONES PARA MODAL ELIMINAR MASCOTA
+// ==========================================
+
+function mostrarModalEliminar() {
+    const modal = document.getElementById('modalEliminar');
+    if (modal) {
+        modal.classList.add('activo');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function cerrarModalEliminar() {
+    const modal = document.getElementById('modalEliminar');
+    if (modal) {
+        modal.classList.remove('activo');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function confirmarEliminacion() {
+    const mascotaId = window.mascotaData.mascotaId;
+    if (mascotaId) {
+        window.location.href = `eliminar-mascota.php?id=${mascotaId}`;
+    } else {
+        alert('Error: No se pudo identificar la mascota');
+        cerrarModalEliminar();
+    }
+}
+
+// ==========================================
+// INICIALIZACIÓN DE EVENTOS
+// ==========================================
+
+// Agregar al DOMContentLoaded existente o crear uno nuevo
+document.addEventListener('DOMContentLoaded', function () {
+    // Cerrar modal eliminar al presionar ESC
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            cerrarModalEliminar();
+        }
+    });
+
+    // Cerrar modal eliminar al hacer clic fuera
+    const modalEliminar = document.getElementById('modalEliminar');
+    if (modalEliminar) {
+        modalEliminar.addEventListener('click', function (e) {
+            if (e.target === modalEliminar) {
+                cerrarModalEliminar();
+            }
+        });
+    }
+});
+
+// Exportar funciones al scope global
+window.mostrarModalEliminar = mostrarModalEliminar;
+window.cerrarModalEliminar = cerrarModalEliminar;
+window.confirmarEliminacion = confirmarEliminacion;

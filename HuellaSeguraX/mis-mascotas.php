@@ -81,7 +81,12 @@ if (isset($_GET['error'])) {
     <header>
         <?php include_once('includes/menu_hamburguesa.php'); ?>
     </header>
-
+    <?php if (isset($_GET['exito']) && $_GET['exito'] == 'mascota_eliminada'): ?>
+        <div class="mensaje-exito">
+            ✓ La mascota "<?php echo isset($_GET['nombre']) ? htmlspecialchars($_GET['nombre']) : ''; ?>" ha sido eliminada
+            correctamente
+        </div>
+    <?php endif; ?>
     <!-- Contenido principal -->
     <main class="main-content">
         <?php if (!empty($mensaje)): ?>
