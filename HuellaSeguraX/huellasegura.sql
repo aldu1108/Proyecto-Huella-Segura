@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-10-2025 a las 17:16:54
+-- Tiempo de generación: 11-11-2025 a las 03:14:08
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -39,8 +39,7 @@ CREATE TABLE `asistentes_evento` (
 --
 
 INSERT INTO `asistentes_evento` (`id_asistente`, `id_evento`, `id_usuario`, `fecha_union`) VALUES
-(8, 5, 12, '2025-10-21 04:11:13'),
-(9, 5, 6, '2025-10-22 14:08:41');
+(8, 5, 12, '2025-10-21 04:11:13');
 
 -- --------------------------------------------------------
 
@@ -72,7 +71,9 @@ INSERT INTO `citas_veterinarias` (`id_cita`, `fecha`, `motivo`, `estado`, `id_ma
 (13, '2025-10-02 19:00:00', 'Vacunación', 'programada', 9, 1),
 (17, '2025-10-05 14:00:00', 'Consulta General', 'rechazada', 10, NULL),
 (18, '2025-10-07 14:00:00', 'Revisión', 'aceptada', 10, 3),
-(19, '2025-10-04 19:00:00', 'Vacunación', 'rechazada', 9, NULL);
+(19, '2025-10-04 19:00:00', 'Vacunación', 'rechazada', 9, NULL),
+(21, '2025-10-22 17:00:00', 'Control', 'aceptada', 13, 3),
+(22, '2025-11-02 15:00:00', 'Vacunación', 'pendiente', 14, NULL);
 
 -- --------------------------------------------------------
 
@@ -87,17 +88,6 @@ CREATE TABLE `comentarios_comunidad` (
   `id_post` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `comentarios_comunidad`
---
-
-INSERT INTO `comentarios_comunidad` (`id_comentario`, `contenido`, `fecha`, `id_post`, `id_usuario`) VALUES
-(2, 'asdasdas', '2025-10-15 22:06:50', 4, 6),
-(7, 'dsadsa421421', '2025-10-16 04:16:16', 15, 6),
-(9, 'qasdsadasdsa', '2025-10-21 00:54:22', 15, 12),
-(10, 'sadsadsadsadsa', '2025-10-21 00:55:02', 18, 6),
-(11, 'sdasdasdadsa', '2025-10-21 00:55:21', 18, 12);
 
 -- --------------------------------------------------------
 
@@ -136,7 +126,7 @@ CREATE TABLE `eventos_comunidad` (
 --
 
 INSERT INTO `eventos_comunidad` (`id_evento`, `fecha`, `hora`, `titulo`, `descripcion`, `ubicacion`, `estado`, `contador_asistentes`, `id_mascota`, `id_usuario`) VALUES
-(5, '4444-04-04 04:04:00', '04:04:00', '4444444444', '4444444444', '4444444', 'activo', 2, 9, 6);
+(5, '4444-04-04 04:04:00', '04:04:00', '4444444444', '4444444444', '4444444', 'activo', 1, 9, 6);
 
 -- --------------------------------------------------------
 
@@ -159,7 +149,7 @@ CREATE TABLE `fichas_de_salud` (
 --
 
 INSERT INTO `fichas_de_salud` (`id_ficha`, `vacunas`, `esterilizado`, `peso`, `altura`, `documento`, `id_mascota`) VALUES
-(1, '', 0, 12, 0, '', 9);
+(1, '', 0, 13, 0, '', 9);
 
 -- --------------------------------------------------------
 
@@ -235,16 +225,8 @@ CREATE TABLE `likes_post` (
 --
 
 INSERT INTO `likes_post` (`id_like`, `id_post`, `id_usuario`, `fecha`) VALUES
-(37, 8, 6, '2025-10-01 04:03:57'),
-(41, 8, 7, '2025-10-01 04:13:38'),
-(44, 9, 7, '2025-10-01 04:13:44'),
-(46, 9, 6, '2025-10-01 21:22:11'),
-(47, 5, 6, '2025-10-01 21:22:24'),
-(49, 12, 6, '2025-10-16 03:50:01'),
-(50, 15, 6, '2025-10-16 04:16:10'),
-(52, 15, 12, '2025-10-21 00:54:18'),
-(53, 18, 6, '2025-10-21 00:54:59'),
-(54, 18, 12, '2025-10-21 00:55:17');
+(55, 4, 6, '2025-10-22 20:14:52'),
+(57, 4, 13, '2025-10-29 21:01:34');
 
 -- --------------------------------------------------------
 
@@ -273,13 +255,14 @@ INSERT INTO `mascotas` (`id_mascota`, `id_usuario`, `tipo`, `sexo`, `nombre_masc
 (2, 5, 'perro', 'hembra', 'morena', 13, '1212-12-12', 'mascota_5_1757988699.png', 'perdido'),
 (3, 5, 'gato', 'macho', 'javier', 5, '5555-05-05', 'mascota-default.jpg', 'perdido'),
 (4, 5, 'otro', 'macho', 'carlos', 5, '2025-09-05', 'mascota-default.jpg', 'perdido'),
-(5, 5, 'perro', 'macho', 'menem', 8, '2025-08-31', 'mascota-default.jpg', 'activo'),
 (6, 5, 'perro', 'hembra', 'mora', 11, '2025-09-15', 'mascota-default.jpg', 'activo'),
 (7, 5, 'gato', 'hembra', 'dulce', 3, '2025-09-06', 'mascota-default.jpg', 'activo'),
 (8, 0, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota-default.jpg', 'activo'),
 (9, 6, 'perro', 'hembra', 'Lola', 14, '2011-01-01', 'mascota_6_1759628874.jpg', 'activo'),
 (10, 12, 'perro', 'macho', 'Juan', 3, '2022-01-01', 'mascota-default.jpg', 'activo'),
-(13, 6, 'otro', 'macho', 'coqui', 4, '2021-01-01', 'mascota_6_1759602497.jpeg', 'activo');
+(13, 6, 'otro', 'macho', 'coqui', 4, '2021-01-01', 'mascota_6_1761174632.jpg', 'activo'),
+(14, 13, 'gato', 'macho', 'eze', 7, '2018-01-01', 'mascota-default.jpg', 'activo'),
+(15, 15, 'perro', 'macho', 'juan', 6, '2025-10-01', 'mascota-default.jpg', 'activo');
 
 -- --------------------------------------------------------
 
@@ -305,6 +288,39 @@ INSERT INTO `miembros_grupo` (`id_miembro`, `id_grupo`, `id_usuario`, `fecha_uni
 (10, 9, 6, '2025-10-21 00:50:02', 'admin'),
 (11, 2, 12, '2025-10-21 00:53:23', 'miembro'),
 (13, 3, 12, '2025-10-21 00:59:45', 'miembro');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notificaciones`
+--
+
+CREATE TABLE `notificaciones` (
+  `id_notificacion` int(11) NOT NULL,
+  `id_usuario_destino` int(11) NOT NULL,
+  `id_usuario_origen` int(11) DEFAULT NULL,
+  `tipo` enum('solicitud_adopcion','comentario_post','like_post','cita_aceptada','cita_rechazada','mascota_encontrada','mensaje') NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `mensaje` text NOT NULL,
+  `leida` tinyint(1) DEFAULT 0,
+  `url_relacionada` varchar(255) DEFAULT NULL,
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notificaciones`
+--
+
+INSERT INTO `notificaciones` (`id_notificacion`, `id_usuario_destino`, `id_usuario_origen`, `tipo`, `titulo`, `mensaje`, `leida`, `url_relacionada`, `fecha_creacion`) VALUES
+(1, 13, 14, 'solicitud_adopcion', 'Nueva solicitud de adopción', '<strong>Alguien</strong> quiere adoptar a <strong>eze</strong>', 1, 'mis-solicitudes-adopcion.php', '2025-10-22 02:58:03'),
+(2, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:10:48'),
+(3, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:11:45'),
+(4, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:12:21'),
+(5, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:13:14'),
+(6, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:27:19'),
+(7, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:31:08'),
+(8, 13, NULL, 'mensaje', 'Test', 'Esta es una notificación de prueba', 1, NULL, '2025-10-22 03:32:35'),
+(9, 13, 14, 'solicitud_adopcion', 'Nueva solicitud de adopción', '<strong>Alguien</strong> quiere adoptar a <strong>eze</strong>', 1, 'mis-solicitudes-adopcion.php', '2025-10-22 03:59:49');
 
 -- --------------------------------------------------------
 
@@ -359,23 +375,8 @@ CREATE TABLE `post_comunidad` (
 --
 
 INSERT INTO `post_comunidad` (`id_post`, `titulo`, `contenido`, `tipo_post`, `imagen_post`, `conteo_likes`, `conteo_comentarios`, `fecha`, `id_usuario`) VALUES
-(1, 'aaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaa', 'general', NULL, 0, 0, '2025-10-01 02:51:34', 6),
 (2, 'Holaa chicos este es el primer post', 'tomaaa el primer poust', 'general', NULL, 0, 0, '2025-10-01 02:52:46', 6),
-(3, 'holaaa', 'aaaaaaaaaaaa', 'general', 'post_6_1759300344_0.jpeg', 0, 0, '2025-10-01 03:32:24', 6),
-(4, 'aaaaaaaaaaaa', 'aaaaaaaaaaaaa', 'general', 'post_6_1759300406_0.jpg', 0, 1, '2025-10-01 03:33:26', 6),
-(5, 'aaaaaaaa', 'aaaaaaaaaaaaaaaa', 'general', 'post_6_1759300421_0.jpg,post_6_1759300421_1.jpeg,post_6_1759300421_2.jpg', 1, 0, '2025-10-01 03:33:41', 6),
-(6, 'se logro el poust', 'faltan los likes', 'logro', NULL, 0, 0, '2025-10-01 03:36:23', 6),
-(7, 'test', 'aaaaaaaaaaaa', 'paseo', NULL, 0, 0, '2025-10-01 03:36:42', 6),
-(8, 'ayuden', 'aaaaaaaaaaaaa', 'ayuda', NULL, 2, 0, '2025-10-01 03:36:52', 6),
-(9, 'aaaaaaaaaaaa', 'bbbbbbbbbbbbb', 'general', NULL, 2, 0, '2025-10-01 04:01:49', 6),
-(10, 'holissss', 'likeen si se ve!!!', 'logro', 'post_6_1759364737_0.jpeg', 0, 0, '2025-10-01 21:25:37', 6),
-(12, '33333', '33333333333333', 'general', NULL, 1, 0, '2025-10-16 03:49:58', 6),
-(15, '333333333333333', '4444444444444444444444', 'general', NULL, 2, 2, '2025-10-16 03:59:25', 6),
-(17, 'sadsadsadsa', 'dsadsadsadsa', 'general', NULL, 0, 0, '2025-10-21 00:54:33', 12),
-(18, 'sadsadsa', 'dsadsadasdsa', 'general', 'post_6_1761018894_0.png', 2, 2, '2025-10-21 00:54:54', 6),
-(19, 'sdadsadsa', 'dsadsadsadsadsa', 'logro', NULL, 0, 0, '2025-10-21 01:01:37', 12),
-(20, 'asdadsadsadsa', 'dsadsadsadsadsa', 'paseo', NULL, 0, 0, '2025-10-21 01:03:13', 12),
-(21, 'dsadsadsadsadsa', 'dsadsadsadsadsa', 'ayuda', NULL, 0, 0, '2025-10-21 01:03:18', 12);
+(10, 'holissss', 'likeen si se ve!!!', 'logro', 'post_6_1759364737_0.jpeg', 0, 0, '2025-10-01 21:25:37', 6);
 
 -- --------------------------------------------------------
 
@@ -403,12 +404,11 @@ INSERT INTO `publicaciones` (`id_anuncio`, `fecha`, `estado`, `titulo`, `descrip
 (2, '2025-09-16 03:00:00', 'activo', 'Se busca: morena (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: morena\nTipo: Perro\nFecha perdida: 04/09/2025 a las 07:28\nÚltima ubicación: tandil\n\nDetalles: nosé\n\n???? RECOMPENSA: €300.00\n\n¿Has visto a morena? ¡Contacta inmediatamente! ????', 'mascota_5_1757988699.png', 2, 5),
 (3, '2025-09-16 03:00:00', 'activo', 'Se busca: Luna (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: Luna\nTipo: Perro\nFecha perdida: 02/09/2025 a las 07:30\nÚltima ubicación: necochea\n\nDetalles: persiguió a otro perro\n\n¿Has visto a Luna? ¡Contacta inmediatamente! ????', 'luna-demo.jpg', 1, 5),
 (4, '2025-09-16 03:00:00', 'activo', 'Se busca: carlos (Otro)', '???? MASCOTA PERDIDA ????\n\nNombre: carlos\nTipo: Otro\nFecha perdida: 05/09/2025 a las 07:34\nÚltima ubicación: tandil\n\nDetalles: nosé\n\n???? RECOMPENSA: €20.00\n\n¿Has visto a carlos? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 4, 5),
-(5, '2025-09-16 03:00:00', 'activo', 'Se busca: menem (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: menem\nTipo: Perro\nFecha perdida: 05/09/2025 a las 06:50\nÚltima ubicación: necochea\n\nDetalles: nosé\n\n¿Has visto a menem? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 5, 5),
-(6, '2025-09-16 03:00:00', 'activo', 'Se busca: menem (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: menem\nTipo: Perro\nFecha perdida: 13/09/2025 a las 17:40\nÚltima ubicación: tandil\n\nDetalles: nosé\n\n???? RECOMPENSA: €49.00\n\n¿Has visto a menem? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 5, 5),
-(7, '2025-09-16 03:00:00', 'activo', 'En adopción: menem (Perro', '???? BUSCA HOGAR ????\n\nNombre: menem\nTipo: Perro\nSexo: Macho\nEdad: 8 años\n\nMotivo: no puedo cuidarlo\n\nCondiciones de adopción:\nle gusta los interiores\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a menem? ¡Contáctanos! ❤️', 'mascota-default.jpg', 5, 5),
 (12, '2025-09-24 03:00:00', 'activo', 'En adopción: mora (Perro)', '???? BUSCA HOGAR ????\n\nNombre: mora\nTipo: Perro\nSexo: Hembra\nEdad: 11 años\n\nMotivo: cccccc\n\nCondiciones de adopción:\nffffff\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a mora? ¡Contáctanos! ❤️', 'mascota-default.jpg', 6, 5),
 (13, '2025-09-24 03:00:00', 'activo', 'En adopción: dulce (Gato)', '???? BUSCA HOGAR ????\n\nNombre: dulce\nTipo: Gato\nSexo: Hembra\nEdad: 3 años\n\nMotivo: kkkkkk\n\nCondiciones de adopción:\nfffff\n\nLugar de entrega: tandil\n\n¿Le darías un hogar lleno de amor a dulce? ¡Contáctanos! ❤️', 'mascota-default.jpg', 7, 5),
-(15, '2025-10-04 03:24:17', 'activo', 'Se busca: Lola (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: Lola\nTipo: Perro\nFecha perdida: 21/04/2025 a las 03:42\nÚltima ubicación: mi casa\n\nDetalles: fdsfsdsd\n\n???? RECOMPENSA: €333.00\n\n¿Has visto a Lola? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 9, 6);
+(15, '2025-10-04 03:24:17', 'activo', 'Se busca: Lola (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: Lola\nTipo: Perro\nFecha perdida: 21/04/2025 a las 03:42\nÚltima ubicación: mi casa\n\nDetalles: fdsfsdsd\n\n???? RECOMPENSA: €333.00\n\n¿Has visto a Lola? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 9, 6),
+(18, '2025-11-11 01:49:49', 'activo', 'En adopción: eze (Perro)', '???? BUSCA HOGAR ????\r\n\r\nNombre: eze\r\nTipo: Perro\r\nSexo: Macho\r\nEdad: 7 años\r\n\r\nMotivo: rompe todo\r\n\r\nCondiciones de adopción:\r\npatio\r\n\r\nLugar de entrega: tandil\r\n\r\n¿Le darías un hogar lleno de amor a eze? ¡Contáctanos! ❤️', 'mascota-default.jpg', 14, 13),
+(19, '2025-11-11 01:50:00', 'activo', 'Se busca: eze (Perro)', '???? MASCOTA PERDIDA ????\n\nNombre: eze\nTipo: Gato\nFecha perdida: 03/10/2025 a las 07:09\nÚltima ubicación: necochea\n\nDetalles: tormenta\n\n???? RECOMPENSA: €50.00\n\n¿Has visto a eze? ¡Contacta inmediatamente! ????', 'mascota-default.jpg', 14, 13);
 
 -- --------------------------------------------------------
 
@@ -430,7 +430,8 @@ CREATE TABLE `publicacion_adopcion` (
 INSERT INTO `publicacion_adopcion` (`id_adopcion`, `condiciones`, `lugar_adopcion`, `id_publicacion`) VALUES
 (1, 'le gusta los interiores', 'tandil', 7),
 (2, 'ffffff', 'tandil', 12),
-(3, 'fffff', 'tandil', 13);
+(3, 'fffff', 'tandil', 13),
+(7, 'patio', 'tandil', 18);
 
 -- --------------------------------------------------------
 
@@ -457,7 +458,8 @@ INSERT INTO `publicacion_perdida` (`id_perdida`, `ultima_ubicacion`, `fecha_perd
 (4, 'tandil', '2025-09-05 03:00:00', 20, 4),
 (5, 'necochea', '2025-09-05 03:00:00', 0, 5),
 (6, 'tandil', '2025-09-13 03:00:00', 49, 6),
-(7, 'mi casa', '2025-04-21 03:00:00', 333, 15);
+(7, 'mi casa', '2025-04-21 03:00:00', 333, 15),
+(8, 'necochea', '2025-10-03 10:09:00', 50, 19);
 
 -- --------------------------------------------------------
 
@@ -482,10 +484,7 @@ INSERT INTO `recordatorios_personales` (`id_recordatorio`, `titulo`, `descripcio
 (1, 'pastillita', 'para lola', '2025-02-21 12:54:00', 6, 0),
 (2, 'pastillita', 'jiji', '2025-10-05 12:54:00', 6, 0),
 (3, 'pastillita', 'jiji', '2025-10-05 12:54:00', 6, 0),
-(4, 'f', 'fdsfs', '2025-10-05 10:00:00', 6, 0),
-(5, 'u', 'ñ', '2025-10-05 04:21:00', 6, 0),
-(6, 'lolaa', 'h', '2025-10-22 12:00:00', 6, 0),
-(7, 'pastilla', 'f', '2025-10-24 20:10:00', 6, 0);
+(8, 'paseo', 'gfdgdfg', '2025-11-12 15:31:00', 13, 0);
 
 -- --------------------------------------------------------
 
@@ -507,8 +506,9 @@ INSERT INTO `recordatorio_mascota` (`id`, `id_recordatorio`, `id_mascota`) VALUE
 (1, 2, 9),
 (2, 4, 9),
 (3, 5, 9),
-(4, 6, 9),
-(5, 7, 9);
+(4, 6, 13),
+(5, 7, 9),
+(6, 8, 14);
 
 -- --------------------------------------------------------
 
@@ -546,9 +546,11 @@ CREATE TABLE `seguimiento_peso` (
 
 INSERT INTO `seguimiento_peso` (`id_peso`, `peso`, `fecha`, `id_mascota`) VALUES
 (1, 12.00, '2025-04-05', 9),
-(2, 13.00, '2025-10-05', 9),
+(2, 16.00, '2025-10-05', 9),
 (3, 15.00, '2025-10-02', 9),
-(4, 2.00, '2024-08-15', 9);
+(4, 2.00, '2024-08-15', 9),
+(5, 34.00, '2025-10-29', 14),
+(6, 20.00, '2025-10-08', 14);
 
 -- --------------------------------------------------------
 
@@ -570,8 +572,7 @@ CREATE TABLE `solicitud_adopcion` (
 --
 
 INSERT INTO `solicitud_adopcion` (`id_solicitud`, `fecha`, `estado`, `descripcion`, `id_usuario`, `id_adopcion`) VALUES
-(1, '2025-09-24 03:00:00', 'pendiente', 'eeeee\n\nInformación adicional: ddddd', 1, 3),
-(2, '2025-09-25 03:00:00', 'pendiente', 'dddddd\n\nInformación adicional: jjjjjjj', 1, 1);
+(5, '2025-10-22 03:59:49', 'pendiente', 'kkkkkk\n\nInformación adicional: jjjjjj', 14, 7);
 
 -- --------------------------------------------------------
 
@@ -596,9 +597,13 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `email_usuario`, `contraseña_usuario`, `telefono_usuario`, `nombre_usuario`, `apellido_usuario`, `foto_usuario`, `estado`, `rol`) VALUES
-(6, 'ae@a', 'hola1234', '', 'aa', 'ee', 'usuario-default.jpg', 'activo', 'usuario'),
-(7, 'vete@v', 'veterinario', '', 'veterinario', 'iuju', 'veterinario-default.jpg', 'activo', 'veterinario'),
-(12, 'valen@gmail.com', '123456', '111111', 'Valen', 'Michou', 'usuario-default.jpg', 'activo', 'usuario');
+(6, 'paula06@gmail.com', 'PaulaG2006', '2494234567', 'Paula', 'Gonzalez', 'usuario-default.jpg', 'activo', 'usuario'),
+(7, 'veterinariahs@gmail.com', 'HuellaSegura01', '2494123456', 'Veterinario', 'Huella Segura', 'veterinario-default.jpg', 'activo', 'veterinario'),
+(12, 'valen@gmail.com', '123456', '111111', 'Valen', 'Michou', 'usuario-default.jpg', 'activo', 'usuario'),
+(13, 'vitovignoli2006@gmail.com', '123456', '02494634099', 'vito', 'vignoli', 'usuario-default.jpg', 'activo', 'usuario'),
+(14, 'dantevignoli2011@gmail.com', '1234567', '02494634099', 'dante', 'vignoli', 'usuario-default.jpg', 'activo', 'usuario'),
+(15, 'juamba@gmail.com', '123456789', '5676756763', 'juamba', 'perez', 'usuario-default.jpg', 'activo', 'usuario'),
+(16, 'ector@gmail.com', 'hector123', '123456789', 'hector ', 'alvarez', 'veterinario-default.jpg', 'activo', 'usuario');
 
 -- --------------------------------------------------------
 
@@ -625,7 +630,8 @@ INSERT INTO `veterinario` (`id_veterinario`, `certificado`, `especialidad`, `cli
 (4, 1, 'Medicina General', 'huella segura', 'siempre', 8),
 (5, 0, 'Cardiología', 'huella segura', 'casi siempre', 9),
 (6, 0, 'Dermatología', 'huella segura', 'lun a vie', 10),
-(7, 1, 'Cirugía', 'aca', 't', 11);
+(7, 1, 'Cirugía', 'aca', 't', 11),
+(8, 0, 'Cirugía', 'ramon santamarina', 'lunes a lunes', 16);
 
 --
 -- Índices para tablas volcadas
@@ -723,6 +729,16 @@ ALTER TABLE `miembros_grupo`
   ADD UNIQUE KEY `unique_miembro` (`id_grupo`,`id_usuario`),
   ADD KEY `fk_miembro_grupo` (`id_grupo`),
   ADD KEY `fk_miembro_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  ADD PRIMARY KEY (`id_notificacion`),
+  ADD KEY `idx_usuario_destino` (`id_usuario_destino`),
+  ADD KEY `idx_leida` (`leida`),
+  ADD KEY `idx_fecha` (`fecha_creacion`),
+  ADD KEY `fk_notif_usuario_origen` (`id_usuario_origen`);
 
 --
 -- Indices de la tabla `opinion_veterinario`
@@ -830,13 +846,13 @@ ALTER TABLE `veterinario`
 -- AUTO_INCREMENT de la tabla `asistentes_evento`
 --
 ALTER TABLE `asistentes_evento`
-  MODIFY `id_asistente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_asistente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `citas_veterinarias`
 --
 ALTER TABLE `citas_veterinarias`
-  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_cita` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios_comunidad`
@@ -878,79 +894,85 @@ ALTER TABLE `grupos_comunidad`
 -- AUTO_INCREMENT de la tabla `likes_post`
 --
 ALTER TABLE `likes_post`
-  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT de la tabla `mascotas`
 --
 ALTER TABLE `mascotas`
-  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_mascota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `miembros_grupo`
 --
 ALTER TABLE `miembros_grupo`
-  MODIFY `id_miembro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_miembro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `post_comunidad`
 --
 ALTER TABLE `post_comunidad`
-  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_post` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `publicaciones`
 --
 ALTER TABLE `publicaciones`
-  MODIFY `id_anuncio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_anuncio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion_adopcion`
 --
 ALTER TABLE `publicacion_adopcion`
-  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_adopcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion_perdida`
 --
 ALTER TABLE `publicacion_perdida`
-  MODIFY `id_perdida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_perdida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `recordatorios_personales`
 --
 ALTER TABLE `recordatorios_personales`
-  MODIFY `id_recordatorio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_recordatorio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `recordatorio_mascota`
 --
 ALTER TABLE `recordatorio_mascota`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `seguimiento_peso`
 --
 ALTER TABLE `seguimiento_peso`
-  MODIFY `id_peso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_peso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_adopcion`
 --
 ALTER TABLE `solicitud_adopcion`
-  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `veterinario`
 --
 ALTER TABLE `veterinario`
-  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_veterinario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas
@@ -962,6 +984,13 @@ ALTER TABLE `veterinario`
 ALTER TABLE `asistentes_evento`
   ADD CONSTRAINT `fk_asistente_evento` FOREIGN KEY (`id_evento`) REFERENCES `eventos_comunidad` (`id_evento`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_asistente_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  ADD CONSTRAINT `fk_notif_usuario_destino` FOREIGN KEY (`id_usuario_destino`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_notif_usuario_origen` FOREIGN KEY (`id_usuario_origen`) REFERENCES `usuarios` (`id_usuario`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
