@@ -89,7 +89,7 @@ $resultado_grupos = $conexion->query($consulta_grupos);
     <main class="main-content">
         <!-- Header de comunidad -->
         <section class="comunidad-header">
-            <h2 class="comunidad-title">Comunidad PetCare</h2>
+            <h2 class="comunidad-title">Comunidad</h2>
             <p class="comunidad-subtitle">Conecta con otros amantes de las mascotas</p>
 
             <!-- Estadísticas REALES -->

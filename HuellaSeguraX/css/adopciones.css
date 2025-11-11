@@ -82,10 +82,9 @@
 }
 
 .titulo-modal {
-    font-size: 20px;
-    color: #333;
+    font-size: 24px;
+    color: #d35400;
     margin-bottom: 8px;
-    font-weight: 600;
 }
 
 .boton-cerrar-modal {

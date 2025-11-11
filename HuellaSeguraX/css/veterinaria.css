@@ -5,15 +5,14 @@
 }
 
 .header-veterinaria {
-    text-align: left;
+    text-align: center;
     margin-bottom: 30px;
 }
 
 .titulo-veterinaria {
-    font-size: 28px;
-    color: #333;
+    font-size: 30px;
+    color: #D35400;
     margin-bottom: 8px;
-    font-weight: 700;
 }
 
 .subtitulo-veterinaria {
