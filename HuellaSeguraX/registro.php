@@ -124,7 +124,7 @@ if ($_POST) {
                 <label>
                     <input type="checkbox" id="terminos" required>
                     <span class="checkmark"></span>
-                    Acepto los <a href="terminos.php">términos y condiciones</a>
+                    Acepto los <a href="terminos.php"> términos y condiciones</a>
                 </label>
             </div>
             
