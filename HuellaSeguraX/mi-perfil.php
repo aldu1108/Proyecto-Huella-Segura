@@ -151,7 +151,6 @@ $fecha_registro_formateada = formatearFecha(date('Y-m-d'));
         <div class="perfil-container">
             <!-- Header del perfil -->
             <section class="perfil-header">
-<<<<<<< Updated upstream
                 <div class="avatar-container">
                     <div class="avatar-perfil" id="avatarPerfil">
                         <?php if (!empty($usuario['foto_usuario']) && $usuario['foto_usuario'] !== 'usuario-default.jpg'): ?>
@@ -203,54 +202,6 @@ $fecha_registro_formateada = formatearFecha(date('Y-m-d'));
                     <?php endif; ?>
                 </div>
             </section>
-=======
-    <div class="avatar-container">
-        <div class="avatar-perfil" id="avatarPerfil">
-            <?php if (!empty($usuario['foto_usuario']) && $usuario['foto_usuario'] !== 'usuario-default.jpg'): ?>
-                <img src="<?php echo htmlspecialchars($usuario['foto_usuario']); ?>" alt="Foto de perfil" id="imagenPerfil">
-            <?php else: ?>
-                <svg xmlns="http://www.w3.org/2000/svg" height="80px" viewBox="0 -960 960 960" width="80px" fill="#666666">
-                    <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
-                </svg>
-            <?php endif; ?>
-        </div>
-        <button class="btn-cambiar-foto" onclick="document.getElementById('inputFotoPerfil').click()">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
-                <path d="M480-260q75 0 127.5-52.5T660-440q0-75-52.5-127.5T480-620q-75 0-127.5 52.5T300-440q0 75 52.5 127.5T480-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM160-120q-33 0-56.5-23.5T80-200v-480q0-33 23.5-56.5T160-760h126l74-80h240l74 80h126q33 0 56.5 23.5T880-680v480q0 33-23.5 56.5T800-120H160Z"/>
-            </svg>
-            Cambiar foto
-        </button>
-        <input type="file" id="inputFotoPerfil" accept="image/jpeg,image/jpg,image/png,image/webp" style="display: none;" onchange="subirFotoPerfil(this)">
-    </div>
-    
-    <h1 class="nombre-perfil">
-        <?php echo htmlspecialchars($usuario['nombre_usuario'] . ' ' . $usuario['apellido_usuario']); ?>
-    </h1>
-    <p class="email-perfil"><?php echo htmlspecialchars($usuario['email_usuario']); ?></p>
-
-    <div class="badges-perfil">
-        <?php if ($es_veterinario): ?>
-            <span class="badge-usuario badge-veterinario">
-                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#DF9D9B">
-                    <path d="M236-118 117-236q-22-20.93-22-50.97Q95-317 117-338l506-504q20.67-21 50.34-21Q703-863 724-842l119 118q21 20.93 21 50.97Q864-643 843-622L337-118q-20.67 21-50.34 21Q257-97 236-118Z"/>
-                </svg>
-                Veterinario Certificado
-            </span>
-        <?php endif; ?>
-        <span class="badge-usuario badge-miembro">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#F19E39">
-                <path d="M216-192v-72h528v72H216Zm0-120-50-289q-2 1-4.5 1H156q-25 0-42.5-17.5T96-660q0-25 17.5-42.5T156-720q25 0 42.5 17.5T216-660q0 7-1.5 13t-4.5 12l126 59 112-177q-13-8-20.5-21.63Q420-788.27 420-804q0-25 17.5-42.5T480-864q25 0 42.5 17.5T540-804q0 16-7.5 29.5T512-753l112 177 126-59q-3-6-4.5-12t-1.5-13q0-25 17.5-42.5T804-720q25 0 42.5 17.5T864-660q0 25-17.5 42.5T804-600h-5.5q-2.5 0-4.5-1l-50 289H216Z"/>
-            </svg>
-            Miembro desde 2025
-        </span>
-        <?php if ($total_mascotas > 0): ?>
-            <span class="badge-usuario">
-                Dueño de <?php echo $total_mascotas; ?> mascota<?php echo $total_mascotas > 1 ? 's' : ''; ?>
-            </span>
-        <?php endif; ?>
-    </div>
-</section>
->>>>>>> Stashed changes
 
             <!-- Estadísticas del usuario -->
             <section class="estadisticas-perfil">
