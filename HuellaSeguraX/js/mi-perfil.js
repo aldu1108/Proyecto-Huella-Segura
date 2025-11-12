@@ -172,4 +172,191 @@ function copiarIDUsuario() {
     });
 }
 
+    /**
+     * Subir foto de perfil
+     * @param {HTMLInputElement} input - Input file element
+     */
+    function subirFotoPerfil(input) {
+        const archivo = input.files[0];
+
+        if (!archivo) {
+            return;
+        }
+
+        // Validar tipo de archivo
+        const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!tiposPermitidos.includes(archivo.type)) {
+            mostrarMensajeFoto('Solo se permiten imágenes JPG, PNG o WEBP', 'error');
+            input.value = '';
+            return;
+        }
+
+        // Validar tamaño (máximo 5MB)
+        const tamañoMaximo = 5 * 1024 * 1024; // 5MB en bytes
+        if (archivo.size > tamañoMaximo) {
+            mostrarMensajeFoto('La imagen no debe superar los 5MB', 'error');
+            input.value = '';
+            return;
+        }
+
+        // Mostrar preview inmediato
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const avatarPerfil = document.getElementById('avatarPerfil');
+            const imagenExistente = avatarPerfil.querySelector('img');
+
+            if (imagenExistente) {
+                imagenExistente.src = e.target.result;
+            } else {
+                // Si no hay imagen, crear una nueva
+                const svgExistente = avatarPerfil.querySelector('svg');
+                if (svgExistente) {
+                    svgExistente.remove();
+                }
+
+                const nuevaImagen = document.createElement('img');
+                nuevaImagen.src = e.target.result;
+                nuevaImagen.alt = 'Foto de perfil';
+                nuevaImagen.id = 'imagenPerfil';
+                avatarPerfil.appendChild(nuevaImagen);
+            }
+        };
+        reader.readAsDataURL(archivo);
+
+        // Preparar FormData para enviar
+        const formData = new FormData();
+        formData.append('foto_perfil', archivo);
+
+        // Mostrar indicador de carga
+        const avatarPerfil = document.getElementById('avatarPerfil');
+        avatarPerfil.classList.add('cargando');
+
+        const btnCambiarFoto = document.querySelector('.btn-cambiar-foto');
+        const textoOriginalBtn = btnCambiarFoto.innerHTML;
+        btnCambiarFoto.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q17 0 28.5 11.5T520-840q0 17-11.5 28.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-17 11.5-28.5T840-520q17 0 28.5 11.5T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Z"/></svg> Subiendo...';
+        btnCambiarFoto.disabled = true;
+
+        // Enviar al servidor
+        fetch('ajax/subir-foto-perfil.php', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log('Response raw:', text);
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                    console.error('Response was:', text);
+                    throw new Error('Respuesta del servidor no es JSON válido');
+                }
+            })
+            .then(data => {
+                console.log('Response data:', data);
+
+                // Mostrar información de debug si existe
+                if (data.debug) {
+                    console.group('Debug Info:');
+                    data.debug.forEach(msg => console.log(msg));
+                    console.groupEnd();
+                }
+
+                avatarPerfil.classList.remove('cargando');
+                btnCambiarFoto.innerHTML = textoOriginalBtn;
+                btnCambiarFoto.disabled = false;
+
+                if (data.success) {
+                    mostrarMensajeFoto(data.message, 'exito');
+
+                    // Actualizar la imagen con la URL del servidor
+                    const imagenPerfil = document.getElementById('imagenPerfil');
+                    if (imagenPerfil) {
+                        imagenPerfil.src = data.foto_url + '?t=' + new Date().getTime();
+                    }
+
+                    // Actualizar también el menú hamburguesa si existe
+                    const avatarMenu = document.querySelector('.usuario-info img');
+                    if (avatarMenu) {
+                        avatarMenu.src = data.foto_url + '?t=' + new Date().getTime();
+                    }
+                } else {
+                    console.error('Error del servidor:', data.message);
+                    mostrarMensajeFoto(data.message, 'error');
+                    // Revertir la imagen en caso de error
+                    setTimeout(() => location.reload(), 3000);
+                }
+            })
+            .catch(error => {
+                console.error('Error completo:', error);
+                avatarPerfil.classList.remove('cargando');
+                btnCambiarFoto.innerHTML = textoOriginalBtn;
+                btnCambiarFoto.disabled = false;
+                mostrarMensajeFoto('Error al subir la imagen. Revisa la consola para más detalles.', 'error');
+
+                // Recargar la página para mostrar la imagen anterior
+                setTimeout(() => location.reload(), 3000);
+            })
+            .finally(() => {
+                // Limpiar el input para permitir subir la misma imagen de nuevo si es necesario
+                input.value = '';
+            });
+    }
+
+    /**
+     * Mostrar mensaje temporal sobre la foto
+     * @param {string} mensaje - Mensaje a mostrar
+     * @param {string} tipo - 'exito' o 'error'
+     */
+    function mostrarMensajeFoto(mensaje, tipo = 'exito') {
+        // Eliminar mensajes anteriores
+        const mensajesAnteriores = document.querySelectorAll('.mensaje-foto');
+        mensajesAnteriores.forEach(m => m.remove());
+
+        const mensajeDiv = document.createElement('div');
+        mensajeDiv.className = `mensaje-foto ${tipo}`;
+
+        const icono = tipo === 'exito'
+            ? '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z"/></svg>'
+            : '<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56Z"/></svg>';
+
+        mensajeDiv.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            ${icono}
+            <span>${mensaje}</span>
+        </div>
+    `;
+
+        document.body.appendChild(mensajeDiv);
+
+        // Eliminar después de 4 segundos
+        setTimeout(() => {
+            mensajeDiv.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => mensajeDiv.remove(), 300);
+        }, 4000);
+    }
+
+    // Agregar animación de salida al CSS inline
+    const styleSlideOut = document.createElement('style');
+    styleSlideOut.textContent = `
+    @keyframes slideOutRight {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+`;
+    document.head.appendChild(styleSlideOut);
+
+    // Exportar funciones globalmente
+    window.subirFotoPerfil = subirFotoPerfil;
+    window.mostrarMensajeFoto = mostrarMensajeFoto;
+
 console.log('Perfil de usuario cargado correctamente - Huella Segura v1.0');});
