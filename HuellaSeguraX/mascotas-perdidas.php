@@ -342,8 +342,6 @@ function tiempoTranscurrido($fecha)
                                             <button class="boton-compartir-reporte"
                                                 onclick="compartirReporte('<?php echo htmlspecialchars($reporte['nombre_mascota']); ?>')"
                                                 title="Compartir"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0000F5"><path d="M648-96q-50 0-85-35t-35-85q0-9 4-29L295-390q-16 14-36.05 22-20.04 8-42.95 8-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 43 8t36 22l237-145q-2-7-3-13.81-1-6.81-1-15.19 0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-43-8t-36-22L332-509q2 7 3 13.81 1 6.81 1 15.19 0 8.38-1 15.19-1 6.81-3 13.81l237 145q16-14 36.05-22 20.04-8 42.95-8 50 0 85 35t35 85q0 50-35 85t-85 35Z"/></svg></button>
-                                            <button class="boton-ver-detalles" onclick="verDetallesReporte(<?php echo $reporte['id_anuncio']; ?>)"
-                                                title="Ver detalles">👁</button>
                                         <?php endif; ?>
                                     </div>
                             
