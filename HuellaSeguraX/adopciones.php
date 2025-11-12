@@ -243,8 +243,17 @@ function tiempoTranscurrido($fecha)
                                     <div class="contenido-reporte">
                                         <!-- Header con usuario y tiempo -->
                                         <div class="header-usuario-reporte">
-                                            <div class="avatar-usuario-reporte" style="background-image: url('imagenes/<?php echo htmlspecialchars($adopcion['foto_usuario'] ?? 'usuario-default.jpg'); ?>')">
-                                </div>
+                                            <div class="avatar-usuario-reporte">
+    <?php if (!empty($adopcion['foto_usuario']) && $adopcion['foto_usuario'] !== 'usuario-default.jpg'): ?>
+        <img src="<?php echo htmlspecialchars($adopcion['foto_usuario']); ?>" 
+             alt="Foto de <?php echo htmlspecialchars($adopcion['nombre_usuario']); ?>"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+    <?php else: ?>
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3">
+            <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+        </svg>
+    <?php endif; ?>
+</div>
                                 <div class="info-usuario-reporte">
                                     <h4 class="nombre-usuario-reporte">
                                         <?php echo htmlspecialchars($adopcion['nombre_usuario']); ?>

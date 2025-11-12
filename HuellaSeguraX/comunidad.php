@@ -172,7 +172,17 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                         <div class="post-card">
                             <!-- Header del post con menú de opciones -->
                             <div class="post-header">
-                                <div class="user-avatar" style="background-image: url('imagenes/<?php echo $post['foto_usuario']; ?>')"></div>
+                                <div class="user-avatar">
+    <?php if (!empty($post['foto_usuario']) && $post['foto_usuario'] !== 'usuario-default.jpg'): ?>
+        <img src="<?php echo htmlspecialchars($post['foto_usuario']); ?>" 
+             alt="Foto de <?php echo htmlspecialchars($post['nombre_usuario']); ?>"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+    <?php else: ?>
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e3e3e3">
+            <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+        </svg>
+    <?php endif; ?>
+</div>
                                 <div class="user-info">
                                     <h4><?php echo htmlspecialchars($post['nombre_usuario'] . ' ' . $post['apellido_usuario']); ?></h4>
                                     <p><?php echo date('d/m/Y H:i', strtotime($post['fecha'])); ?></p>
@@ -268,7 +278,17 @@ $resultado_grupos = $conexion->query($consulta_grupos);
                 $puede_eliminar = ($comentario['id_usuario'] == $usuario_id) || ($rol_usuario == 'admin');
             ?>
                 <div class="comentario-item">
-                    <div class="comentario-avatar" style="background-image: url('imagenes/<?php echo $comentario['foto_usuario']; ?>')"></div>
+                    <div class="comentario-avatar">
+    <?php if (!empty($comentario['foto_usuario']) && $comentario['foto_usuario'] !== 'usuario-default.jpg'): ?>
+        <img src="<?php echo htmlspecialchars($comentario['foto_usuario']); ?>" 
+             alt="Foto de <?php echo htmlspecialchars($comentario['nombre_usuario']); ?>"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+    <?php else: ?>
+        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#e3e3e3">
+            <path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/>
+        </svg>
+    <?php endif; ?>
+</div>
                     <div class="comentario-contenido">
                         <div class="comentario-header">
                             <span class="comentario-autor"><?php echo htmlspecialchars($comentario['nombre_usuario'] . ' ' . $comentario['apellido_usuario']); ?></span>
