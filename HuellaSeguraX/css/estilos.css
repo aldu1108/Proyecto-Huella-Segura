@@ -186,6 +186,10 @@ body {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .evento-info p {
@@ -212,6 +216,10 @@ body {
 .section-header h3 {
     font-size: 18px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .count {
@@ -275,6 +283,10 @@ body {
     font-size: 14px;
     margin-bottom: 10px;
     color: #666;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .proximo-item {
@@ -363,6 +375,10 @@ body {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .perdida-info p {
@@ -391,6 +407,10 @@ body {
     font-size: 14px;
     margin-bottom: 8px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .perdidas-help p {
@@ -473,6 +493,10 @@ body {
     font-size: 14px;
     color: #333;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .grupo-info p {
@@ -643,6 +667,10 @@ body {
     background: white;
     color: #D35400;
     transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .btn-demo:hover {
@@ -953,6 +981,10 @@ button:focus {
     font-size: 18px;
     margin-bottom: 4px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .mascota-info p {
@@ -972,6 +1004,10 @@ button:focus {
 .adopcion-banner h4 {
     color: #333;
     margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .adopcion-banner p {
@@ -1010,6 +1046,10 @@ button:focus {
     font-size: 18px;
     color: #333;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .calendario-title p {
@@ -1105,6 +1145,10 @@ button:focus {
 .eventos-header h4 {
     font-size: 16px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .evento-count {
@@ -1138,10 +1182,6 @@ button:focus {
 .evento-icon {
     font-size: 20px;
     margin-right: 12px;
-}
-
-.evento-details {
-    flex: 1;
 }
 
 .evento-title {
@@ -1248,6 +1288,10 @@ button:focus {
     border-radius: 8px;
     font-size: 14px;
     transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .section-btn.active {
@@ -1310,6 +1354,10 @@ button:focus {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .user-info p {
@@ -1448,12 +1496,21 @@ button:focus {
     font-size: 16px;
     color: #333;
     margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .evento-details {
     font-size: 12px;
     color: #666;
+    flex: 1;
     margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
    /* Alertas superiores */
@@ -1485,6 +1542,10 @@ button:focus {
 .alerta-emergencia h3, .alerta-adopcion h3 {
     margin-bottom: 4px;
     font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .alerta-emergencia p, .alerta-adopcion p {
@@ -1509,6 +1570,10 @@ button:focus {
     color: #856404;
     margin-bottom: 8px;
     font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .consejos-rapidos ul {
@@ -1542,9 +1607,10 @@ button:focus {
 
 /* Reportes activos */
 .seccion-reportes-activos h3 {
-    display: flex;
-    justify-content: space-between;
+   display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 6px;
     color: #333;
     margin-bottom: 20px;
 }
@@ -1625,6 +1691,10 @@ button:focus {
     color: #D35400;
     font-size: 16px;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .info-reporte p {
@@ -1678,6 +1748,10 @@ button:focus {
 .consejos-encontrar h4 {
     color: #27AE60;
     margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .consejos-encontrar ul {
@@ -1960,6 +2034,10 @@ body {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .evento-info p {
@@ -1986,6 +2064,10 @@ body {
 .section-header h3 {
     font-size: 18px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .count {
@@ -2049,6 +2131,10 @@ body {
     font-size: 14px;
     margin-bottom: 10px;
     color: #666;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .proximo-item {
@@ -2137,6 +2223,10 @@ body {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .perdida-info p {
@@ -2165,6 +2255,10 @@ body {
     font-size: 14px;
     margin-bottom: 8px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .perdidas-help p {
@@ -2247,6 +2341,10 @@ body {
     font-size: 14px;
     color: #333;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .grupo-info p {
@@ -2422,6 +2520,10 @@ body {
     background: white;
     color: #D35400;
     transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .btn-demo:hover {
@@ -2734,6 +2836,10 @@ button:focus {
     font-size: 18px;
     margin-bottom: 4px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .mascota-info p {
@@ -2753,6 +2859,10 @@ button:focus {
 .adopcion-banner h4 {
     color: #333;
     margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .adopcion-banner p {
@@ -2791,6 +2901,10 @@ button:focus {
     font-size: 18px;
     color: #333;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .calendario-title p {
@@ -2886,6 +3000,10 @@ button:focus {
 .eventos-header h4 {
     font-size: 16px;
     color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .evento-count {
@@ -2921,9 +3039,6 @@ button:focus {
     margin-right: 12px;
 }
 
-.evento-details {
-    flex: 1;
-}
 
 .evento-title {
     font-weight: 600;
@@ -3091,6 +3206,10 @@ button:focus {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .user-info p {
@@ -3229,12 +3348,21 @@ button:focus {
     font-size: 16px;
     color: #333;
     margin-bottom: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .evento-details {
     font-size: 12px;
     color: #666;
+    flex: 1;
     margin-bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .btn-join {
@@ -3786,6 +3914,10 @@ button:focus {
     color: #333;
     margin-bottom: 4px;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .detalles-basicos {
@@ -4498,6 +4630,10 @@ button:focus {
     color: #333;
     margin-bottom: 4px;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .detalles-basicos {
@@ -4668,9 +4804,10 @@ button:focus {
 }
 
 .seccion-reportes-activos h3 {
-    display: flex;
-    justify-content: space-between;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 6px;   
     color: #333;
     margin-bottom: 20px;
     font-size: 18px;
@@ -4764,6 +4901,10 @@ button:focus {
     font-size: 18px;
     margin-bottom: 6px;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .info-reporte p {
@@ -4847,6 +4988,10 @@ button:focus {
     margin-bottom: 16px;
     font-size: 16px;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .consejos-encontrar ul {

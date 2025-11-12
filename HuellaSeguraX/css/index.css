@@ -140,6 +140,10 @@
     font-size: 20px;
     margin-bottom: 8px;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .banner-adopcion p {
@@ -303,6 +307,10 @@
     font-size: 16px;
     color: #333;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .contador-eventos {
@@ -532,6 +540,7 @@
     font-size: 13px;
     color: #666;
     margin-bottom: 4px;
+    
 }
 
 .estado-perdida-index {
@@ -681,6 +690,10 @@
     font-size: 20px;
     color: #2c3e50;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .btn-cerrar {

@@ -237,6 +237,10 @@
     color: #000;
     border-radius: 6px;
     padding: 2px 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px
 }
 
 .badge-paseo {
@@ -244,6 +248,10 @@
     color: white;
     border-radius: 6px;
     padding: 2px 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px
 }
 
 .badge-ayuda {
@@ -251,6 +259,10 @@
     color: white;
     border-radius: 6px;
     padding: 2px 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 /* ============================================
