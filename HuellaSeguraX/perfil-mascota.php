@@ -244,7 +244,7 @@ $resultado_citas_proximas = $conexion->query($consulta_citas_proximas);
             <div class="info-grid">
                 <div class="info-item">
                     <label>Fecha de nacimiento:</label>
-                    <span><?php echo date('d/m/Y', strtotime($mascota['cumpleanos_mascota'] ?? '2021-03-15')); ?></span>
+                    <span><?php echo date('d/m/Y', strtotime($mascota['cumpleaños_mascota'])); ?></span>
                 </div>
                 <div class="info-item">
                     <label>Edad:</label>
