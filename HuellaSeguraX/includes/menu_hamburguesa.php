@@ -13,6 +13,23 @@ $es_demo = ($rol_usuario == 'demo');
 $nombre_usuario = $_SESSION['usuario_nombre'] ?? '';
 $usuario_id = $_SESSION['usuario_id'] ?? 0;
 
+// Obtener foto del usuario desde la base de datos
+$foto_usuario = '';
+if ($usuario_logueado && isset($conexion)) {
+    $consulta_foto = "SELECT foto_usuario FROM usuarios WHERE id_usuario = ?";
+    $stmt_foto = $conexion->prepare($consulta_foto);
+    if ($stmt_foto) {
+        $stmt_foto->bind_param("i", $usuario_id);
+        $stmt_foto->execute();
+        $resultado_foto = $stmt_foto->get_result();
+        if ($resultado_foto && $resultado_foto->num_rows > 0) {
+            $datos_foto = $resultado_foto->fetch_assoc();
+            $foto_usuario = $datos_foto['foto_usuario'];
+        }
+        $stmt_foto->close();
+    }
+}
+
 // Obtener contador de notificaciones no leídas (solo para usuarios autenticados)
 $notificaciones_no_leidas = 0;
 if ($usuario_logueado && isset($conexion)) {
@@ -75,7 +92,13 @@ if ($usuario_logueado && isset($conexion)) {
         <div class="encabezado-menu">
             <?php if ($usuario_logueado): ?>
                 <div class="info-usuario-menu">
-                    <div class="avatar-usuario"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg></div>
+                    <div class="avatar-usuario">
+                        <?php if (!empty($foto_usuario) && $foto_usuario !== 'usuario-default.jpg'): ?>
+                            <img src="<?php echo htmlspecialchars($foto_usuario); ?>" alt="Foto de perfil" class="usuario-info">
+                        <?php else: ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                        <?php endif; ?>
+                    </div>
                     <div class="datos-usuario">
                         <span class="nombre-usuario"><?php echo htmlspecialchars($nombre_usuario); ?></span>
                         <span class="estado-usuario">En línea</span>
@@ -169,7 +192,7 @@ if ($usuario_logueado && isset($conexion)) {
 
                 <div class="separador-menu"></div>
 
-                               <a href="index.php" class="opcion-menu">
+                <a href="index.php" class="opcion-menu">
                     <span class="icono-menu"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#d35400"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></span>
                     <span class="texto-menu">Inicio</span>
                 </a>
